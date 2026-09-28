@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f6f7fb">
+  <meta name="description" content="可可助手 · 角色知识管理后台">
+  <title>可可助手 · 角色知识管理</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="主导航">
+      <div class="sidebar-top">
+        <div class="brand-lockup">
+          <div class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></div>
+          <div>
+            <strong>可可助手</strong>
+            <small>角色知识管理</small>
+          </div>
+        </div>
+
+        <button class="workspace-switcher pressable" type="button" id="workspaceSwitch" aria-label="切换工作区">
+          <span class="workspace-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M5 7.5 12 4l7 3.5v9L12 20l-7-3.5v-9Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="m5 7.5 7 3.5 7-3.5M12 11v9" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+          </span>
+          <span class="workspace-name"><b>角色资料库</b><small>线上版本 · v0.9.2</small></span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m8 10 4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+
+      <nav class="nav-group" aria-label="领域导航">
+        <p class="nav-label">工作区</p>
+        <button class="nav-item" type="button" data-nav="工作台"><span class="nav-icon"><svg viewBox="0 0 24 24" fill="none"><rect x="4" y="4" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.6"/><rect x="14" y="4" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.6"/><rect x="4" y="14" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.6"/><rect x="14" y="14" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.6"/></svg></span><span>工作台</span></button>
+        <button class="nav-item is-active" type="button" data-nav="角色管理"><span class="nav-icon"><svg viewBox="0 0 24 24" fill="none"><circle cx="9" cy="8" r="3" stroke="currentColor" stroke-width="1.6"/><path d="M4 19c.8-3 2.5-4.5 5-4.5s4.2 1.5 5 4.5M16 5.5a3 3 0 0 1 0 5.8M16 14.5c2 .3 3.3 1.8 4 4.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span><span>角色管理</span><em>12</em></button>
+        <button class="nav-item" type="button" data-nav="标签词典"><span class="nav-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M4 7.5A2.5 2.5 0 0 1 6.5 5H19v13H6.5A2.5 2.5 0 0 0 4 20V7.5Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H19M8 9h7M8 12h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span><span>标签词典</span></button>
+        <button class="nav-item" type="button" data-nav="反应体系"><span class="nav-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M12 4v16M4 12h16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="1.6"/></svg></span><span>反应体系</span></button>
+        <button class="nav-item" type="button" data-nav="资料校验"><span class="nav-icon"><svg viewBox="0 0 24 24" fill="none"><rect x="4" y="5" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.6"/><rect x="14" y="5" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.6"/><rect x="4" y="14" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.6"/><rect x="14" y="14" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.6"/></svg></span><span>资料校验</span></button>
+        <button class="nav-item" type="button" data-nav="规则中心"><span class="nav-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M5 6h14M5 12h14M5 18h9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="17" cy="18" r="2" stroke="currentColor" stroke-width="1.6"/></svg></span><span>规则中心</span></button>
+        <button class="nav-item" type="button" data-nav="黄金测试"><span class="nav-icon"><svg viewBox="0 0 24 24" fill="none"><path d="m12 4 2.2 4.8 5.3.6-3.9 3.7 1.1 5.3-4.7-2.6-4.7 2.6 1.1-5.3-3.9-3.7 5.3-.6L12 4Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></span><span>黄金测试</span><i class="status-dot"></i></button>
+      </nav>
+
+      <div class="sidebar-bottom">
+        <div class="release-mini">
+          <div class="release-mini-head"><span><i class="status-dot"></i> 发布状态</span><b>稳定</b></div>
+          <p>当前线上知识包<br><strong>v0.9.2 · 2 小时前</strong></p>
+          <div class="mini-progress"><span></span></div>
+        </div>
+        <button class="profile-card pressable" type="button" id="profileButton">
+          <span class="avatar">林</span><span><b>林维护者</b><small>编辑者 · 在线</small></span><svg viewBox="0 0 24 24" fill="none"><path d="m8 10 4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div class="breadcrumb"><span>知识管理</span><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m9 5 7 7-7 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><strong>角色管理</strong></div>
+        <div class="topbar-actions">
+          <button class="ghost-button pressable" type="button" id="previewButton"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 12s3-5 8-5 8 5 8 5-3 5-8 5-8-5-8-5Z" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="12" r="2" stroke="currentColor" stroke-width="1.6"/></svg>预览求解器</button>
+          <button class="primary-button pressable" type="button" id="saveDraftButton"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 4h11l3 3v13H5V4Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M8 4v5h7V4M8 16h8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>保存草稿</button>
+        </div>
+      </header>
+
+      <section class="page-heading stagger-item" style="--delay: 20ms">
+        <div>
+          <div class="eyebrow"><span class="eyebrow-dot"></span> 知识编辑工作台</div>
+          <h1>角色管理 <span class="count-pill">1 个本地样板</span> <span class="local-data-badge">本地样板已接入</span></h1>
+          <p>把角色原始资料整理成本地可查看、可校验、可计算的角色知识。</p>
+        </div>
+        <div class="heading-meta"><span class="live-indicator"><i></i> 自动保存已开启</span><span class="updated-time">最后同步 10:42</span></div>
+      </section>
+
+      <div class="workspace-grid">
+        <section class="editor-column" aria-label="角色编辑区">
+          <div class="section-toolbar stagger-item" style="--delay: 80ms">
+            <label class="search-box"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="1.6"/><path d="m16 16 4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg><input id="characterSearch" type="search" placeholder="搜索角色或 ID" aria-label="搜索角色或 ID"></label>
+            <button class="filter-button pressable" type="button" id="filterButton"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 7h14M8 12h8M10 17h4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>筛选<span class="filter-count">2</span></button>
+          </div>
+
+          <div class="character-list" id="characterList" aria-label="角色列表">
+            <button class="character-card is-active stagger-item" style="--delay: 130ms" type="button" data-character="真红">
+              <span class="character-avatar avatar-fire"><img id="characterListAvatar" src="data/resources/characters/zhenhong/characters/zhenhong-icon.webp" alt="真红头像"></span><span class="character-info"><b>真红</b><small>主 C · 驻场输出</small></span><span class="element-badge element-light">光</span><span class="row-chevron"><svg viewBox="0 0 24 24" fill="none"><path d="m9 5 7 7-7 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            </button>
+            
+            
+            
+          </div>
+
+          <article class="editor-card stagger-item" style="--delay: 330ms" id="editorCard">
+            <div class="editor-header"><div class="editor-character-identity"><img id="characterPortrait" src="data/resources/characters/zhenhong/characters/zhenhong.webp" alt="真红立绘"><div><div class="editor-title-row"><h2 id="editorTitle"><span id="editorCharacterName">真红</span> <span class="draft-dot"></span></h2><span class="draft-label" id="draftLabel">草稿未保存</span></div><p>编辑角色公开资料与机制数据，右侧预览会同步更新。</p></div></div>
+              <button class="icon-button pressable" type="button" id="moreButton" aria-label="更多角色操作"><svg viewBox="0 0 24 24" fill="none"><circle cx="5" cy="12" r="1.5" fill="currentColor"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/><circle cx="19" cy="12" r="1.5" fill="currentColor"/></svg></button>
+            </div>
+
+            <div class="form-section">
+              <div class="form-section-heading"><span class="section-number">01</span><div><h3>基础资料</h3><p>这里是唯一编辑源，右侧会同步为用户预览</p></div></div>
+              <div class="form-grid">
+                <label class="field"><span>角色名称</span><input id="roleName" value="真红" type="text"></label>
+                <label class="field"><span>稳定 ID <em>不可变</em></span><input id="roleId" value="char_zenhong" type="text" readonly></label>
+                <label class="field"><span>稀有度</span><select id="roleRarity"><option>S</option><option>A</option><option>B</option></select></label>
+                <label class="field"><span>属性</span><select id="roleElement"><option>光</option><option>暗</option><option>灵</option><option>咒</option><option>魂</option><option>相</option></select></label>
+                <label class="field"><span>弧盘类型</span><input id="roleCassetteType" value="聚合" type="text"></label>
+                <label class="field"><span>角色定位</span><select id="rolePosition"><option>主 C · 驻场输出</option><option>副 C · 持续附着</option><option>辅助 · 全队增益</option><option>辅助 · 护盾保护</option></select></label>
+                <label class="field"><span>站位</span><select id="roleStation"><option>站场</option><option>速切</option><option>后台</option></select></label>
+                <label class="field"><span>强度评级</span><input id="roleRating" value="T0" type="text"></label>
+                <label class="field"><span>适用版本</span><div class="input-with-status"><input id="roleVersion" value="5.1.0" type="text"><span class="valid-icon">✓</span></div></label>
+              </div>
+            </div>
+
+            <div class="form-section split-section">
+              <div class="split-block">
+                <div class="form-section-heading"><span class="section-number">02</span><div><h3>反应强化</h3><p>角色强化哪条反应，以及作用方式</p></div></div>
+                <button class="reaction-select pressable" type="button" id="reactionSelect"><span class="reaction-glyph">✦</span><span><b>盈蓄</b><small>提高反应伤害 · 作用于全队</small></span><svg viewBox="0 0 24 24" fill="none"><path d="m8 10 4 4 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+              </div>
+              <div class="split-block">
+                <div class="form-section-heading"><span class="section-number">03</span><div><h3>站场模式</h3><p>决定体系中角色的时间结构</p></div></div>
+                <div class="segmented-control" role="group" aria-label="站场模式"><button class="segment is-active pressable" type="button" data-mode="站场">站场</button><button class="segment pressable" type="button" data-mode="速切">速切</button><button class="segment pressable" type="button" data-mode="后台">后台</button></div>
+              </div>
+            </div>
+
+
+                         <div class="imported-data-section">
+              <div class="imported-data-head"><div class="form-section-heading compact-heading"><span class="section-number">04</span><div><h3>角色资料全量导入</h3><p>基础资料、技能、觉醒、养成与卡带数据均来自本地快照</p></div></div><span class="source-actions"><a class="source-link" id="sourcePageLink" href="https://wiki.mysqil.com/characters/zhenhong" target="_blank" rel="noreferrer">打开来源页面 ↗</a><a class="source-link" id="localSnapshotLink" href="data/mysqil/characters/zhenhong/raw/page.html" target="_blank" rel="noreferrer">查看完整本地快照 ↗</a></span></div>
+              <div class="profile-grid">
+                <section class="data-block recommendation-block">
+                  <div class="data-block-heading"><span>推荐配置</span><small>来源页面记录</small></div>
+                  <div id="recommendedWeapon"></div>
+                  <div id="recommendedCassette"></div>
+                </section>
+                <section class="data-block stats-block">
+                  <div class="data-block-heading"><span>基础属性成长</span><small>等级上限 Lv.80</small></div>
+                  <div id="baseStats"></div>
+                </section>
+              </div>
+              <section class="data-block cassette-recommendation-editor">
+                <div class="data-block-heading"><span>卡带推荐属性</span><small>维护者选择 · 数字越大优先级越高</small></div>
+                <div id="cassetteRecommendationEditor"></div>
+              </section>
+              <section class="data-block skills-block">
+                <div class="data-block-heading"><span>技能描述与倍率</span><small>支持逐项展开查看</small></div>
+                <div id="skillsList"></div>
+              </section>
+              <section class="data-block awakenings-block">
+                <div class="data-block-heading"><span>觉醒</span><small>6 个觉醒节点</small></div>
+                <div class="awakening-grid" id="awakeningList"></div>
+              </section>
+              <section class="data-block cultivation-block">
+                <div class="data-block-heading"><span>养成计算</span><small>按目标等级汇总材料</small></div>
+                <div class="planner-controls"><label>目标角色等级<select id="targetLevel"><option value="1">Lv.1</option><option value="30">Lv.30</option><option value="40">Lv.40</option><option value="50">Lv.50</option><option value="60">Lv.60</option><option value="70">Lv.70</option><option value="80" selected>Lv.80</option></select></label><button class="outline-button pressable" type="button" id="recalculateButton">重新计算</button></div>
+                <div class="skill-targets" id="skillTargets"></div>
+                <div class="material-summary" id="materialSummary"></div>
+              </section>
+              <section class="data-block cassette-block">
+                <div class="data-block-heading"><span>卡带推荐与装配属性</span><small>用户展示预览 · 失落光芒</small></div>
+                <div id="cassetteDetails"></div>
+              </section>
+              <div class="asset-strip-label">本地资源画廊 · 独立资源目录</div>
+              <div class="asset-strip" id="assetStrip" aria-label="本地图片资源"></div>
+            </div>          </article>
+         </section>
+
+        <aside class="insights-column" aria-label="系统推导与发布信息">
+          <article class="insight-card understanding-card stagger-item" style="--delay: 120ms">
+            <div class="card-kicker"><span class="kicker-icon purple"><svg viewBox="0 0 24 24" fill="none"><path d="m12 3 1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3ZM18.5 16l.7 2 2 .7-2 .7-.7 2-.7-2-2-.7 2-.7.7-2Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></span><span>系统理解</span><span class="verified-pill"><i></i> 已校验</span></div>
+            <h2 id="understandingTitle">真红是一个「站场输出核心」</h2>
+            <p id="understandingCopy">来自本地角色资料的基础概览，技能、倍率、觉醒和养成数据均可继续展开查看。</p>
+            <div class="understanding-foot"><span>基于基础资料与技能机制</span><button class="text-button pressable" type="button" id="explainButton">为什么？ <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="1.6"/><path d="M10 10a2 2 0 1 1 3.3 1.5c-.8.6-1.3 1-1.3 2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="12" cy="16.5" r=".8" fill="currentColor"/></svg></button></div>
+          </article>
+                    <article class="insight-card reaction-chain-card stagger-item" style="--delay: 160ms">
+            <div class="card-kicker"><span class="kicker-icon orange">✦</span><span>用户预览 · 基础资料</span><span class="local-pill">公开字段</span></div>
+            <p class="chain-caption">展示左侧编辑后的基础资料。</p>
+            <div class="quick-facts" id="quickFacts"></div>
+          </article>          <article class="insight-card slot-card stagger-item" style="--delay: 180ms">
+            <div class="card-kicker"><span class="kicker-icon orange">✦</span><span>资料完整度</span><span class="info-badge">i</span></div>
+            <div class="slot-summary"><strong id="slotCount">5</strong><span>个资料模块</span></div>
+            <div class="slot-list" id="slotList"></div>
+          </article>          <article class="insight-card impact-card stagger-item" style="--delay: 240ms">
+            <div class="card-kicker"><span class="kicker-icon blue">⌁</span><span>养成概览</span><span class="analysis-state" id="analysisState">已导入</span></div>
+            <div class="impact-head"><div><strong id="impactSummary">Lv.80 / 技能 Lv.10</strong><small>可通过下方计算器调整目标</small></div><span class="impact-ring"><b>✓</b></span></div>
+            <div class="metric-grid"><div><span>技能条目</span><b id="metricSlots">9</b></div><div><span>倍率参数</span><b id="metricTeams">34</b></div><div><span>觉醒节点</span><b id="metricGold">6</b></div><div><span>材料种类</span><b class="metric-good" id="metricMaterials">11</b></div></div>
+            <button class="outline-button full pressable" type="button" id="runImpactButton">重新汇总材料</button>
+          </article>
+
+          <article class="publish-card stagger-item" style="--delay: 300ms">
+            <div class="publish-head"><div><span class="card-kicker plain">资料审核</span><h3>还有 1 个动作</h3></div><span class="publish-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M12 4v11M8 8l4-4 4 4M5 15v4h14v-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
+            <div class="publish-step"><span class="step-number">1</span><div><b>提交审核</b><small>角色资料已导入，可以交给审核者</small></div><span class="step-state">待提交</span></div>
+            <button class="publish-button pressable" type="button" id="submitReviewButton">提交审核 <svg viewBox="0 0 24 24" fill="none"><path d="m9 5 7 7-7 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          </article>
+        </aside>
+      </div>
+    </main>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"><span class="toast-mark">✓</span><span id="toastText">草稿已保存</span></div>
+  <script src="data/knowledge/characters/zhenhong.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+

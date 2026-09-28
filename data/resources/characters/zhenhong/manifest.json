@@ -1,0 +1,8 @@
+{
+  "resource_root": "data/resources/characters/zhenhong",
+  "entity_type": "character",
+  "entity_id": "zhenhong",
+  "asset_count": 41,
+  "source_snapshot": "data/mysqil/characters/zhenhong/raw/page.html",
+  "updated_at": "2026-09-29"
+}\n

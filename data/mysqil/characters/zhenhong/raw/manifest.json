@@ -1,0 +1,14 @@
+{
+  "source": "mysqil",
+  "source_url": "https://wiki.mysqil.com/characters/zhenhong",
+  "canonical_url": "https://wiki.mysqil.com/characters/zhenhong/",
+  "fetched_at": "2026-09-28T14:25:06.8682819Z",
+  "http_status": 200,
+  "content_type": [
+    "text/html"
+  ],
+  "raw_html": "raw/page.html",
+  "image_count": 27,
+  "note": "外部站点原始抓取快照，不直接作为配队算法事实。",
+  "resource_root": "data/resources/characters/zhenhong"
+}\n
