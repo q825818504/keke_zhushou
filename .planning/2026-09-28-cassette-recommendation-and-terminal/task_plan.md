@@ -6,11 +6,11 @@
 
 ## Next Step
 
-完成数据模型与资源目录迁移，然后接入维护者编辑控件和用户预览。
+本功能已完成并推送；后续可在同一数据边界上继续扩展其他角色和卡带。
 
 ## Current Phase
 
-Phase 2
+Phase 5 - Delivery & Git complete
 
 ## Phases
 
@@ -32,28 +32,28 @@ Phase 2
 
 ### Phase 3: Implementation
 
-- [ ] 扩展真红知识 JSON 与 JS 样板
-- [ ] 建立 data/resources/characters/zhenhong/ 独立资源目录并更新引用
-- [ ] 增加维护者推荐属性选择与优先级编辑
-- [ ] 将用户展示改为推荐主/副属性及排序关系
-- [ ] 增加卡带终端卡片
-- **Status:** in_progress
+- [x] 扩展真红知识 JSON 与 JS 样板
+- [x] 建立 data/resources/characters/zhenhong/ 独立资源目录并更新引用
+- [x] 增加维护者推荐属性选择与优先级编辑
+- [x] 将用户展示改为推荐主/副属性及排序关系
+- [x] 增加卡带终端卡片
+- **Status:** complete
 
 ### Phase 4: Testing & Verification
 
-- [ ] 运行 JavaScript 语法检查
-- [ ] 用本地浏览器检查推荐属性、优先级、并列关系、终端和资源引用
-- [ ] 检查原始可能属性池不再冒充用户推荐
-- [ ] 记录验证结果与错误
-- **Status:** pending
+- [x] 运行 JavaScript 语法检查
+- [x] 用本地浏览器检查推荐属性、优先级、并列关系、终端和资源引用
+- [x] 检查原始可能属性池不再冒充用户推荐
+- [x] 记录验证结果与错误
+- **Status:** complete
 
 ### Phase 5: Delivery & Git
 
-- [ ] 更新规划文件和 README
-- [ ] 检查工作区全部文件、资源和进度均纳入提交
-- [ ] 创建提交并推送到现有远程仓库
-- [ ] 返回提交/推送结果和预览入口
-- **Status:** pending
+- [x] 更新规划文件和 README
+- [x] 检查工作区全部文件、资源和进度均纳入提交
+- [x] 创建提交并推送到现有远程仓库
+- [x] 返回提交/推送结果和预览入口
+- **Status:** complete
 
 ## Key Questions
 

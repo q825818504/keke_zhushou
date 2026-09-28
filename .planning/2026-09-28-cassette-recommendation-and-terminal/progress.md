@@ -29,11 +29,21 @@
 
 ### Phase 3: Implementation
 
-- **Status:** in_progress
+- **Status:** complete
 - Actions taken:
-  - 待开始
+  - 在真红知识 JSON/JS 中新增推荐主属性、推荐副属性和终端字段。
+  - 将 41 个角色资源迁移到独立的 data/resources/characters/zhenhong/ 目录，并加入资源清单。
+  - 增加维护者编辑区：从原始可能属性池中选择推荐项，并为每项设置优先级。
+  - 用户展示区仅呈现推荐属性；优先级越大越靠前，同值使用“≈”。
+  - 增加卡带终端卡片，并保留用户截图来源说明。
 - Files created/modified:
-  - 待记录
+  - index.html
+  - app.js
+  - styles.css
+  - README.md
+  - data/knowledge/characters/zhenhong.json
+  - data/knowledge/characters/zhenhong.js
+  - data/resources/characters/zhenhong/
 
 ## Test Results
 
@@ -74,3 +84,13 @@
 - JSON/JS 首次生成时将结尾换行写成字面量 
 ，已清理并重新生成 zhenhong.js。
 - 一次替换将卡带编辑器初始化插入同步函数，已移除并放回 updateImportedPanel。
+### Phase 5: Delivery & Git
+
+- **Status:** complete
+- Actions taken:
+  - 更新 README、任务计划、发现记录和进度日志。
+  - 检查所有资源、知识数据、原始快照和规划文件均已纳入提交。
+  - 创建提交 b5c6ebd feat: add cassette recommendations and terminal data。
+  - 已推送至 origin/main：https://github.com/q825818504/keke_zhushou.git。
+- Verification:
+  - 推送输出确认 main -> main 成功。
