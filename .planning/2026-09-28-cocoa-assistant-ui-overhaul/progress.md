@@ -60,3 +60,8 @@
   - .planning/2026-09-28-cocoa-assistant-ui-overhaul/task_plan.md
   - .planning/2026-09-28-cocoa-assistant-ui-overhaul/findings.md
   - .planning/2026-09-28-cocoa-assistant-ui-overhaul/progress.md
+### Error Log Addendum
+
+| Error | Resolution |
+|---|---|
+| 第二次 push 报告 cannot lock ref，远程 main 已先于本地跟踪引用更新 | 执行 git fetch origin main 刷新 origin/main；确认本地 HEAD 与 GitHub 均为 7a5aa95，未使用强制推送 |
