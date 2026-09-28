@@ -46,3 +46,19 @@
 - emil-design-eng/SKILL.md
 - review-animations/SKILL.md + STANDARDS.md
 - webapp-testing/SKILL.md
+## Canonical Plan Consolidation
+
+- 当前项目唯一主计划目录为 .planning/2026-09-28-cocoa-assistant-ui-overhaul/。
+- 之前新增的 2026-09-28-cassette-recommendation-and-terminal/ 是本计划中的一个功能阶段，不是独立项目。
+- 本次已把该阶段的需求、数据决策、实现结果、验证结果和错误记录合并到本主计划。
+- 后续不再按功能创建同级计划目录，所有新发现继续追加到本 findings.md。
+
+## Current Role Data Findings
+
+- 真红知识数据位于 data/knowledge/characters/zhenhong.json 和 data/knowledge/characters/zhenhong.js。
+- 角色基础资料由维护者编辑，用户公开预览从维护后的资料同步生成。
+- 技能目标等级必须按不同技能分别维护，并汇总对应养成材料。
+- 卡带的 main_affix_pool 与 sub_affix_pool 表示原始可能出现属性；recommended_main_affixes 与 recommended_sub_affixes 表示维护者推荐属性。
+- 推荐属性结构为 name + priority；priority 越大越优先，同值用“≈”。
+- 卡带终端放在 recommended.cassette.terminal，并标记为用户截图补录来源。
+- 角色资源已迁移到 data/resources/characters/zhenhong/，抓取快照仍保留在 data/mysqil/characters/zhenhong/raw/。

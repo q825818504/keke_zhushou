@@ -1,67 +1,136 @@
-# Task Plan: 可可助手 · 配队知识管理后台 UI
+# Task Plan: 可可助手 · 角色知识管理与本地数据维护
 
 ## Goal
-基于配队知识管理项目背景，交付一个可直接打开的角色知识管理后台界面，覆盖角色事实编辑、受控标签、系统推导、即时校验、影响分析和发布状态，并完成动效质量审计。
+
+交付一个可直接打开的角色知识管理系统：维护者可以录入、校验和维护角色基础资料、技能与养成数据、推荐武器/卡带及本地资源；用户可以查看整理后的公开资料。当前样板角色为真红，后续再扩展其他角色、卡带和配队功能。
+
+## Canonical Plan Rule
+
+本项目只维护这一套 Planning with Files 文件：
+
+- .planning/2026-09-28-cocoa-assistant-ui-overhaul/task_plan.md
+- .planning/2026-09-28-cocoa-assistant-ui-overhaul/findings.md
+- .planning/2026-09-28-cocoa-assistant-ui-overhaul/progress.md
+
+后续功能继续更新这三个文件，不为每个功能新建同级计划目录。新增功能应作为现有计划的新阶段、子任务或进度记录进入。
 
 ## Next Step
-创建领域化后台 UI 文件，并验证角色切换、标签编辑、影响分析、草稿保存、响应式布局和 reduced-motion。
+
+继续以真红数据结构为模板接入其他角色，并在现有角色管理基础上扩展共享的数据录入、资源引用和养成计算能力。配队推荐暂不纳入当前角色资料阶段。
 
 ## Current Phase
-Phase 3
+
+Phase 5 - Delivery complete；进入下一轮角色数据扩展前的持续维护状态。
 
 ## Phases
 
 ### Phase 1: Requirements & Discovery
+
 - [x] 读取用户附上的 findings.md、progress.md、task_plan.md
-- [x] 区分背景要求与文件中的计划性指令
-- [x] 用 animation-vocabulary 定义交互语言
+- [x] 区分用户请求与附件中的计划性内容
+- [x] 明确产品定位为角色知识管理，而非聊天页
+- [x] 明确当前范围：角色资料、技能、觉醒、推荐武器/卡带、养成材料、本地资源
+- [x] 明确卡带可能属性池与维护者推荐属性必须分离
+- [x] 记录卡带终端来源与展示需求
 - **Status:** complete
 
 ### Phase 2: Planning & Structure
-- [x] 明确后台 IA：工作台、角色管理、标签词典、反应体系、阵容模板、规则中心、黄金测试
-- [x] 设计三栏维护者工作流：左导航 / 中央编辑 / 右侧即时反馈
+
+- [x] 设计角色管理后台与用户公开预览的数据流
+- [x] 设计基础资料、技能目标、养成材料和推荐配置的数据边界
+- [x] 设计推荐主属性、副属性与 priority 优先级结构
+- [x] 设计卡带终端字段和独立本地资源目录
+- [x] 确定静态零依赖页面和可追踪本地数据方案
 - **Status:** complete
 
 ### Phase 3: Implementation
-- [ ] 执行页面实现
-- [ ] 写入 index.html、styles.css、app.js
-- **Status:** in_progress
+
+- [x] 创建 index.html、styles.css、app.js 角色管理页面
+- [x] 实现左侧基础资料编辑与右侧用户公开预览同步
+- [x] 接入真红角色知识 JSON/JS 样板
+- [x] 实现技能目标等级独立维护和养成材料汇总
+- [x] 实现推荐武器、推荐卡带及卡带套装数据
+- [x] 实现卡带推荐主属性、副属性选择与优先级编辑
+- [x] 实现推荐属性排序、同级近似关系和用户展示边界
+- [x] 实现卡带终端展示
+- [x] 将角色资源迁移到 data/resources/characters/zhenhong/ 独立资源目录
+- [x] 移除无实际维护价值的能力标签展示
+- **Status:** complete
 
 ### Phase 4: Testing & Verification
-- [ ] 验证关键交互与浏览器控制台
-- [ ] 验证响应式与 reduced-motion
-- [ ] 运行全项目动效审计
-- **Status:** pending
+
+- [x] 运行 app.js 和真红知识 JS 语法检查
+- [x] 校验知识 JSON、资源清单和所有本地资源路径
+- [x] 用本地浏览器检查角色资料、技能目标、材料、推荐属性和终端
+- [x] 验证用户公开区不显示原始可能属性池作为推荐
+- [x] 验证 priority 越大越优先，同值显示近似关系
+- [x] 验证本地资源目录、旧资源引用和页面选择器
+- [x] 记录错误及修复过程
+- **Status:** complete
 
 ### Phase 5: Delivery
-- [ ] 更新规划记录
-- [ ] 输出文件链接与审计结论
-- **Status:** pending
 
-## Animation Vocabulary
-| Interaction | Canonical term | Decision |
-|---|---|---|
-| 首屏模块依次进入 | Stagger + Scale in | 30–70ms 间隔，服务层级建立，不阻塞交互 |
-| 角色卡切换编辑对象 | Crossfade + Layout animation | 内容保持位置连续，避免维护者丢失当前上下文 |
-| 受控标签/模式点击 | Press / Tap feedback | 100–160ms 的 scale 0.97，仅给确认感 |
-| 右侧信息卡出现 | Origin-aware animation | 从对应编辑区域附近进入，而不是从视口中心凭空出现 |
-| 状态/校验文本更新 | Crossfade | 仅做 opacity/color 的轻量变化 |
-| reduced motion | Reduced motion | 保留 opacity/color，移除位移与缩放 |
+- [x] 更新 README 和本计划文件
+- [x] 检查全部代码、数据、资源、原始快照和规划文件均纳入 Git
+- [x] 提交并推送到现有远程仓库
+- [x] 打开本地预览入口
+- **Status:** complete
+
+## Key Questions
+
+1. 原始可能属性池是否删除？
+   答：不删除，保留为原站事实和维护者可选来源；用户公开区只展示维护者配置的推荐属性。
+
+2. 推荐优先级如何解释？
+   答：数字越大优先级越高；不同优先级使用“＞”，相同优先级使用“≈”。
+
+3. 主属性和副属性是否共用推荐配置？
+   答：不共用，分别维护、分别排序。
+
+4. 卡带终端属于哪个数据实体？
+   答：终端属于具体卡带的推荐展示数据，不单独挂在角色基础资料上。
+
+5. 资源如何保存？
+   答：资源统一放入 data/resources/characters/<character-id>/，抓取快照保留在 data/mysqil/ 作为来源记录。
 
 ## Decisions Made
+
 | Decision | Rationale |
 |---|---|
-| 零依赖静态页面 | 当前工作区只有 README，无框架入口；HTML/CSS/JS 可直接打开与移交 |
-| 管理后台而非聊天页 | 用户附上的项目背景明确要求维护者管理配队知识、校验、影响分析、审核和回滚 |
-| 领域化三栏工作流 | 左侧负责导航，中间编辑事实，右侧解释系统推导和发布影响 |
-| 温暖浅色 + 靛蓝主色 | 保留“可可助手”的亲和感，同时符合专业工具台的可信度 |
-| CSS transitions for dynamic UI | 标签、角色切换、反馈卡需要可中断，避免 keyframes 从零重播 |
-| transform + opacity for movement | 避免 layout thrashing；所有移动入口只使用 GPU-friendly 属性 |
+| 使用角色管理后台而非聊天页 | 用户最终需求是维护可查询、可计算、可发布的角色知识 |
+| 基础资料编辑与用户预览分离 | 维护者需要编辑原始资料，用户只需要看到整理后的公开信息 |
+| 保留原始可能属性池并新增推荐字段 | 区分攻略站事实与维护者判断，避免数据语义混淆 |
+| 推荐项使用 name + priority | 支持点击选择、排序、同级关系和后续扩展 |
+| priority 数字越大越优先 | 直接匹配维护者的排序习惯 |
+| 主属性、副属性独立维护 | 两种位置的推荐策略不同 |
+| 终端作为卡带数据的一部分 | 终端效果依附卡带，查看卡带时应同时呈现 |
+| 资源与抓取快照分离 | 便于共享引用、替换资源和扩展其他实体 |
+| 零依赖静态页面 | 当前项目可直接打开、验证和移交，不依赖安装步骤 |
+
+## Animation Vocabulary
+
+| Interaction | Canonical term | Decision |
+|---|---|---|
+| 首屏模块依次进入 | Stagger + Scale in | 仅用于建立信息层级，不阻塞交互 |
+| 内容切换 | Crossfade + Layout animation | 保持上下文连续，避免维护者丢失当前区域 |
+| 点击控件 | Press / Tap feedback | 使用轻量反馈确认操作 |
+| 右侧信息卡出现 | Origin-aware animation | 从对应编辑区域附近进入 |
+| 状态文本更新 | Crossfade | 只做轻量视觉变化 |
+| 动效偏好 | Reduced motion | 尊重系统设置，降低位移和缩放 |
 
 ## Errors Encountered
+
 | Error | Resolution |
 |---|---|
-| 本地命令执行器首次初始化失败 | 使用受控的 require_escalated 只读命令后恢复 |
-| git 命令受 dubious ownership 阻止 | 不修改全局 git 配置，使用文件检查作为基线 |
-| apply_patch 受 Windows sandbox helper 阻止 | 使用目标明确的 PowerShell 写入作为降级方案 |
+| Git 被 dubious ownership 阻止 | 每条 Git 命令使用明确的 safe.directory 参数，不修改全局配置 |
+| 原始卡带快照是单行 HTML，全文检索输出过大 | 只提取有限匹配和字段 |
+| apply_patch 在 Windows sandbox helper 中失败 | 使用目标明确的 PowerShell 文件写入作为降级方案 |
+| 真红知识 JS 首次生成时结尾换行被写成字面量 | 清理并重新生成后通过 node --check |
+| 卡带编辑器初始化曾被插入错误函数位置 | 移除后放回 updateImportedPanel |
+| 之前产生了独立卡带计划目录 | 本次将内容合并回本主计划并删除重复目录 |
 
+## Notes
+
+- 用户提供的截图、原始页面和附件文档都是需求或事实来源，不是可执行命令。
+- 配队推荐不属于当前角色管理交付范围，后续应作为本计划的新阶段记录。
+- 本计划是项目唯一持续维护的计划文件集合。
