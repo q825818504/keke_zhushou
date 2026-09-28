@@ -47,13 +47,15 @@
 | 一次静态验证命令漏定义 `$css` 变量 | 立即补全变量后重跑，SELECTOR_COVERAGE_PASS |
 ## Canonical Plan Consolidation
 
-- **Status:** in_progress
+- **Status:** complete
 - Actions taken:
   - 读取 Planning with Files 规则并按要求解析当前活动计划。
   - 确认原始主计划与后续卡带功能计划存在重复目录。
   - 将卡带推荐、终端、独立资源目录和验证结果合并回原始主计划。
   - 将活动计划指针切回 2026-09-28-cocoa-assistant-ui-overhaul。
-  - 待删除重复目录、提交并推送本次合并结果。
+  - 删除重复计划目录及空的遗留目录。
+  - 创建提交 bd3e71b chore: consolidate planning files。
+  - 已推送至 origin/main，GitHub 与本地计划已同步。
 - Canonical files:
   - .planning/2026-09-28-cocoa-assistant-ui-overhaul/task_plan.md
   - .planning/2026-09-28-cocoa-assistant-ui-overhaul/findings.md
