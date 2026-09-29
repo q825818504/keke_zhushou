@@ -116,3 +116,25 @@
 ### Sync Preflight Errors
 - Direct GitHub page fetch returned a cache miss; repository visibility/license could not be confirmed through web search.
 - `git fetch origin main` failed before contacting the remote because the sandbox marks `.git/FETCH_HEAD` read-only. Git fetch/commit/push requires an approved filesystem escalation.
+
+## Session: 2026-09-29 — Encyclopedia Management and Arc Drive Catalog
+
+### Starting Point
+- Synced project state is clean at `origin/main`; no new implementation changes have been made yet.
+- The previous user request asks for a sibling 图鉴 area with 弧盘、空幕、驱动块 categories, then a complete local copy of the guide site's 弧盘 data.
+- The existing source downloader only follows equipment linked from character pages, so its 20 role-linked weapon pages do not establish complete catalog coverage.
+
+### Discovery Notes
+- The guide's global navigation groups 弧盘、空幕、驱动块 under 图鉴, and the item detail pages link back to a separate 弧盘 index. The guide page footer identifies CC BY-NC-SA 4.0 and credits Matsuzaka Yuki; preserve attribution in local files and user-facing source links.
+- The web search reader can retrieve individual item pages but times out on the likely category listing URL. Direct PowerShell HTTP access is blocked by the workspace's network policy; do not treat a partial search result list as a complete source inventory.
+- Existing app navigation is a left sidebar with placeholder click handlers, whereas the supplied reference depicts a hierarchical top navigation. Implementation must add a clear hierarchy without breaking the existing role-management workspace.
+- Existing imported role JSON already contains source-linked recommended weapons and raw snapshots, but no standalone weapon/arc-drive collection is loaded by the UI.
+
+### Current Status
+- **Phase:** 9 — Encyclopedia Management and Arc Drive Catalog
+- **Status:** discovery; complete listing acquisition is the current blocker to claiming a complete catalog.
+
+#### Arc-drive source inventory update
+- Browser navigation successfully opened the authoritative `/weapons/` index. It explicitly reports **51 items** and exposes all 51 detail-page links in a single list. The current inventory comprises S/A/B grades and five types; this full index supersedes the earlier limitation from the web reader.
+- A detail page contains the weapon image, grade/type, display name, level-80 base attributes, description, rank-dependent effect text, overview, and page scripts carrying level and rank values. The item icon path follows `/images/weapons/<slug>.webp` on the sampled page.
+- Source detail footers identify © 2026 Matsuzaka Yuki and CC BY-NC-SA 4.0. Keep a visible attribution/source link in the app and preserve page snapshots.

@@ -1,4 +1,5 @@
 const allKnowledge = window.characterKnowledge || {};
+const arcDriveCatalog = window.arcDriveKnowledge || { items: [], source: {} };
 const importedKnowledge = allKnowledge.zhenhong || null;
 let activeKnowledge = importedKnowledge;
 const importedAssetUrl = (asset) => asset?.local_path || "";
@@ -56,6 +57,12 @@ const toastText = $("#toastText");
 let toastTimer;
 let selectedCharacter = "真红";
 let currentMode = "站场";
+let selectedArcDriveId = arcDriveCatalog.items?.[0]?.id || "";
+let arcDriveRarityFilter = "all";
+let arcDriveTypeFilter = "all";
+let arcDriveSearchQuery = "";
+let selectedArcDriveLevel = 80;
+let selectedArcDriveRank = 1;
 
 function notify(message) {
   toastText.textContent = message;
@@ -709,11 +716,149 @@ function bindCharacterCards() {
   });
 }
 
+function formatArcDriveStat(value, isPercent) {
+  if (value === null || value === undefined || value === "") return "—";
+  const formatted = typeof value === "number" ? new Intl.NumberFormat("zh-CN", { maximumFractionDigits: 2 }).format(value) : String(value);
+  return isPercent && !formatted.endsWith("%") ? `${formatted}%` : formatted;
+}
+
+function arcDriveSearchText(item) {
+  return [item.name, item.rarity, item.type, item.description, item.overview, item.passive?.title, item.passive?.description_template, ...(item.passive?.rank_descriptions || [])].filter(Boolean).join(" ").toLowerCase();
+}
+
+function filteredArcDrives() {
+  return (arcDriveCatalog.items || []).filter((item) => {
+    if (arcDriveRarityFilter !== "all" && item.rarity !== arcDriveRarityFilter) return false;
+    if (arcDriveTypeFilter !== "all" && item.type !== arcDriveTypeFilter) return false;
+    return !arcDriveSearchQuery || arcDriveSearchText(item).includes(arcDriveSearchQuery);
+  });
+}
+
+function renderArcDriveList() {
+  const list = $("#arcDriveList");
+  if (!list) return;
+  const items = filteredArcDrives();
+  const count = $("#arcDriveCount");
+  if (count) count.textContent = `显示 ${items.length} / ${(arcDriveCatalog.items || []).length} 件`;
+  list.innerHTML = items.length ? items.map((item) => `<button class="arc-drive-card${item.id === selectedArcDriveId ? " is-active" : ""}" type="button" data-arc-drive-id="${escapeHtml(item.id)}" aria-pressed="${item.id === selectedArcDriveId}"><span class="arc-drive-card-image">${item.image?.local_path ? `<img src="${escapeHtml(item.image.local_path)}" alt="">` : "弧"}</span><span class="arc-drive-card-copy"><small>${escapeHtml(item.rarity)}级 · ${escapeHtml(item.type)}类</small><b>${escapeHtml(item.name)}</b></span></button>`).join("") : emptyState("没有符合条件的弧盘");
+  if (!items.some((item) => item.id === selectedArcDriveId)) selectedArcDriveId = items[0]?.id || "";
+  renderArcDriveDetail();
+}
+
+function renderArcDriveDetail() {
+  const target = $("#arcDriveDetail");
+  const item = (arcDriveCatalog.items || []).find((entry) => entry.id === selectedArcDriveId);
+  if (!target) return;
+  if (!item) {
+    target.innerHTML = emptyState("从左侧选择一件弧盘查看本地资料");
+    return;
+  }
+  const stats = item.stats || {};
+  const breakpoints = stats.level_breakpoints || [1, 20, 30, 40, 50, 60, 70, 80];
+  const levelIndex = Math.max(0, breakpoints.indexOf(selectedArcDriveLevel));
+  const statRows = stats.rows || [];
+  const rankDescriptions = item.passive?.rank_descriptions || [];
+  const currentEffect = rankDescriptions[selectedArcDriveRank - 1] || "来源页没有提供调弧效果数据。";
+  const sourceUrl = item.source?.url || "";
+  target.innerHTML = `<div class="arc-drive-detail-head"><div class="arc-drive-detail-image">${item.image?.local_path ? `<img src="${escapeHtml(item.image.local_path)}" alt="${escapeHtml(item.name)}">` : "弧"}</div><div class="arc-drive-detail-title"><span class="rarity-chip rarity-${escapeHtml(item.rarity.toLowerCase())}">${escapeHtml(item.rarity)}级 · ${escapeHtml(item.type)}类</span><h2>${escapeHtml(item.name)}</h2><p>${escapeHtml(item.overview || `${item.name} · ${item.rarity}级${item.type}类弧盘`)}</p>${sourceUrl ? `<a class="source-link" href="${escapeHtml(sourceUrl)}" target="_blank" rel="noreferrer">打开来源详情 ↗</a>` : ""}</div></div><section class="arc-drive-detail-section"><div class="arc-detail-section-head"><div><h3>等级属性</h3><small>来源等级成长数据</small></div><label class="arc-level-select">等级<select id="arcDriveLevel">${breakpoints.map((level) => `<option value="${level}"${Number(level) === Number(selectedArcDriveLevel) ? " selected" : ""}>Lv.${level}</option>`).join("")}</select></label></div><div class="arc-stat-grid">${statRows.length ? statRows.map((row) => { const value = row.values_at_breakpoints?.[levelIndex] ?? row.current_value; return `<div class="arc-stat-card"><span>${escapeHtml(row.name || "属性")}</span><b>${escapeHtml(formatArcDriveStat(value, row.is_percent))}</b></div>`; }).join("") : emptyState("来源页没有等级属性数据")}</div></section>${item.description ? `<section class="arc-drive-description"><h3>说明</h3><p>${escapeHtml(item.description)}</p></section>` : ""}<section class="arc-drive-detail-section"><div class="arc-detail-section-head"><div><h3>${escapeHtml(item.passive?.title || "调弧效果")}</h3><small>效果数值随调弧等级变化</small></div></div><div class="arc-rank-select" role="group" aria-label="调弧等级">${Array.from({ length: Math.max(rankDescriptions.length, 1) }, (_, index) => `<button type="button" class="${selectedArcDriveRank === index + 1 ? "is-active" : ""}" data-arc-rank="${index + 1}" aria-pressed="${selectedArcDriveRank === index + 1}">R${index + 1}</button>`).join("")}</div><p class="arc-effect-copy">${escapeHtml(currentEffect)}</p></section><section class="arc-drive-overview"><h3>图鉴概述</h3><p>${escapeHtml(item.overview || "来源页未提供概述。")}</p></section>`;
+}
+
+function initArcDriveCatalog() {
+  const entries = arcDriveCatalog.items || [];
+  if (!entries.some((item) => item.id === selectedArcDriveId)) selectedArcDriveId = entries[0]?.id || "";
+  const source = arcDriveCatalog.source || {};
+  const attribution = $("#arcDriveAttribution");
+  if (attribution) {
+    const indexUrl = arcDriveCatalog.source_index || "https://wiki.mysqil.com/weapons/";
+    attribution.innerHTML = `资料整理自 <a href="${escapeHtml(indexUrl)}" target="_blank" rel="noreferrer">${escapeHtml(source.site || "Mysqil · 环世全鉴")}</a>；作者 ${escapeHtml(source.author || "Matsuzaka Yuki")}；许可 ${escapeHtml(source.license || "CC BY-NC-SA 4.0")}。`;
+  }
+  renderArcDriveList();
+}
+
+function showRoleManagement() {
+  $("#roleManagementView").hidden = false;
+  $("#encyclopediaView").hidden = true;
+  $("#previewButton").hidden = false;
+  $("#saveDraftButton").hidden = false;
+  setText("#activeBreadcrumb", "角色管理");
+  $("[data-nav='角色管理']")?.classList.add("is-active");
+  $("#encyclopediaNavTrigger")?.classList.remove("is-active");
+  $$("[data-encyclopedia-kind]").forEach((item) => item.classList.remove("is-active"));
+}
+
+function showEncyclopediaCategory(kind) {
+  const labels = { "arc-drives": "弧盘", cassettes: "空幕", "drive-blocks": "驱动块" };
+  const label = labels[kind] || "图鉴";
+  const hasCatalog = kind === "arc-drives";
+  $$("[data-nav]").forEach((item) => item.classList.remove("is-active"));
+  $("#encyclopediaNavTrigger")?.classList.add("is-active");
+  $$("[data-encyclopedia-kind]").forEach((item) => item.classList.toggle("is-active", item.dataset.encyclopediaKind === kind));
+  $("#roleManagementView").hidden = true;
+  $("#encyclopediaView").hidden = false;
+  $("#previewButton").hidden = true;
+  $("#saveDraftButton").hidden = true;
+  $("#arcCatalogPanel").hidden = !hasCatalog;
+  $("#encyclopediaEmptyState").hidden = hasCatalog;
+  setText("#activeBreadcrumb", `图鉴 · ${label}`);
+  setText("#encyclopediaTitle", label);
+  setText("#encyclopediaCount", hasCatalog ? `${(arcDriveCatalog.items || []).length} 件本地资料` : "资料待接入");
+  setText("#encyclopediaDescription", hasCatalog ? "浏览弧盘属性、等级成长与调弧效果。" : `${label}分类入口已建立；本地资料接入后会在这里展示。`);
+  setText("#emptyCategoryTitle", label);
+}
+
+function bindArcDriveCatalog() {
+  $("#arcDriveSearch")?.addEventListener("input", (event) => {
+    arcDriveSearchQuery = event.target.value.trim().toLowerCase();
+    renderArcDriveList();
+  });
+  $$('[data-arc-rarity]').forEach((button) => button.addEventListener("click", () => {
+    arcDriveRarityFilter = button.dataset.arcRarity;
+    $$('[data-arc-rarity]').forEach((item) => item.classList.toggle("is-active", item === button));
+    renderArcDriveList();
+  }));
+  $$('[data-arc-type]').forEach((button) => button.addEventListener("click", () => {
+    arcDriveTypeFilter = button.dataset.arcType;
+    $$('[data-arc-type]').forEach((item) => item.classList.toggle("is-active", item === button));
+    renderArcDriveList();
+  }));
+  $("#arcDriveList")?.addEventListener("click", (event) => {
+    const card = event.target.closest("[data-arc-drive-id]");
+    if (!card) return;
+    selectedArcDriveId = card.dataset.arcDriveId;
+    selectedArcDriveLevel = 80;
+    selectedArcDriveRank = 1;
+    renderArcDriveList();
+  });
+  $("#arcDriveDetail")?.addEventListener("change", (event) => {
+    if (event.target.id !== "arcDriveLevel") return;
+    selectedArcDriveLevel = Number(event.target.value);
+    renderArcDriveDetail();
+  });
+  $("#arcDriveDetail")?.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-arc-rank]");
+    if (!button) return;
+    selectedArcDriveRank = Number(button.dataset.arcRank);
+    renderArcDriveDetail();
+  });
+}
+
+function bindEncyclopediaNavigation() {
+  const trigger = $("#encyclopediaNavTrigger");
+  const submenu = $("#encyclopediaSubnav");
+  trigger?.addEventListener("click", () => {
+    const expanded = trigger.getAttribute("aria-expanded") === "true";
+    trigger.setAttribute("aria-expanded", String(!expanded));
+    submenu.hidden = expanded;
+  });
+  $$("[data-encyclopedia-kind]").forEach((button) => button.addEventListener("click", () => showEncyclopediaCategory(button.dataset.encyclopediaKind)));
+}
+
 function bindNavigation() {
   $$("[data-nav]").forEach((item) => item.addEventListener("click", () => {
     $$("[data-nav]").forEach((nav) => nav.classList.remove("is-active"));
     item.classList.add("is-active");
-    if (item.dataset.nav !== "角色管理") notify(`「${item.dataset.nav}」模块将在下一阶段接入`);
+    if (item.dataset.nav === "角色管理") showRoleManagement();
+    else notify(`「${item.dataset.nav}」模块将在下一阶段接入`);
   }));
 }
 
@@ -777,6 +922,9 @@ function bindMisc() {
 renderCharacterCards();
 bindCharacterCards();
 bindNavigation();
+bindEncyclopediaNavigation();
+initArcDriveCatalog();
+bindArcDriveCatalog();
 bindSearch();
 bindBasicPreview();
 bindModes();

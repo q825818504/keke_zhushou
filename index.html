@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f6f7fb">
-  <meta name="description" content="可可助手 · 角色知识管理后台">
-  <title>可可助手 · 角色知识管理</title>
+  <meta name="description" content="可可助手 · 角色与图鉴管理后台">
+  <title>可可助手 · 角色与图鉴管理</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -16,7 +16,7 @@
           <div class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></div>
           <div>
             <strong>可可助手</strong>
-            <small>角色知识管理</small>
+            <small>角色与图鉴管理</small>
           </div>
         </div>
 
@@ -33,6 +33,14 @@
         <p class="nav-label">工作区</p>
         <button class="nav-item" type="button" data-nav="工作台"><span class="nav-icon"><svg viewBox="0 0 24 24" fill="none"><rect x="4" y="4" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.6"/><rect x="14" y="4" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.6"/><rect x="4" y="14" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.6"/><rect x="14" y="14" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.6"/></svg></span><span>工作台</span></button>
         <button class="nav-item is-active" type="button" data-nav="角色管理"><span class="nav-icon"><svg viewBox="0 0 24 24" fill="none"><circle cx="9" cy="8" r="3" stroke="currentColor" stroke-width="1.6"/><path d="M4 19c.8-3 2.5-4.5 5-4.5s4.2 1.5 5 4.5M16 5.5a3 3 0 0 1 0 5.8M16 14.5c2 .3 3.3 1.8 4 4.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span><span>角色管理</span><em>12</em></button>
+        <div class="nav-folder">
+          <button class="nav-item nav-folder-trigger" type="button" id="encyclopediaNavTrigger" aria-expanded="false" aria-controls="encyclopediaSubnav"><span class="nav-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M12 7v14M3 18V4a1 1 0 0 1 1-1h4a4 4 0 0 1 4 4 4 4 0 0 1 4-4h4a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1h-5a3 3 0 0 0-3 2 3 3 0 0 0-3-2H4a1 1 0 0 1-1-1Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></span><span>图鉴</span><svg class="nav-folder-chevron" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          <div class="nav-submenu" id="encyclopediaSubnav" hidden>
+            <button class="nav-subitem" type="button" data-encyclopedia-kind="arc-drives">弧盘</button>
+            <button class="nav-subitem" type="button" data-encyclopedia-kind="cassettes">空幕</button>
+            <button class="nav-subitem" type="button" data-encyclopedia-kind="drive-blocks">驱动块</button>
+          </div>
+        </div>
         <button class="nav-item" type="button" data-nav="标签词典"><span class="nav-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M4 7.5A2.5 2.5 0 0 1 6.5 5H19v13H6.5A2.5 2.5 0 0 0 4 20V7.5Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H19M8 9h7M8 12h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span><span>标签词典</span></button>
         <button class="nav-item" type="button" data-nav="反应体系"><span class="nav-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M12 4v16M4 12h16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="1.6"/></svg></span><span>反应体系</span></button>
         <button class="nav-item" type="button" data-nav="资料校验"><span class="nav-icon"><svg viewBox="0 0 24 24" fill="none"><rect x="4" y="5" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.6"/><rect x="14" y="5" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.6"/><rect x="4" y="14" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.6"/><rect x="14" y="14" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.6"/></svg></span><span>资料校验</span></button>
@@ -54,13 +62,14 @@
 
     <main class="main-content">
       <header class="topbar">
-        <div class="breadcrumb"><span>知识管理</span><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m9 5 7 7-7 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><strong>角色管理</strong></div>
+        <div class="breadcrumb"><span>知识管理</span><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m9 5 7 7-7 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><strong id="activeBreadcrumb">角色管理</strong></div>
         <div class="topbar-actions">
           <button class="ghost-button pressable" type="button" id="previewButton"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 12s3-5 8-5 8 5 8 5-3 5-8 5-8-5-8-5Z" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="12" r="2" stroke="currentColor" stroke-width="1.6"/></svg>预览求解器</button>
           <button class="primary-button pressable" type="button" id="saveDraftButton"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 4h11l3 3v13H5V4Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M8 4v5h7V4M8 16h8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>保存草稿</button>
         </div>
       </header>
 
+      <div id="roleManagementView">
       <section class="page-heading stagger-item" style="--delay: 20ms">
         <div>
           <div class="eyebrow"><span class="eyebrow-dot"></span> 知识编辑工作台</div>
@@ -195,11 +204,46 @@
           </article>
         </aside>
       </div>
+      </div>
+
+      <section class="encyclopedia-view" id="encyclopediaView" aria-labelledby="encyclopediaTitle" hidden>
+        <div class="page-heading stagger-item">
+          <div>
+            <div class="eyebrow"><span class="eyebrow-dot"></span> 本地图鉴 · 管理工作台</div>
+            <h1><span id="encyclopediaTitle">弧盘</span> <span class="count-pill" id="encyclopediaCount">51 件本地资料</span></h1>
+            <p id="encyclopediaDescription">浏览弧盘属性、等级成长与调弧效果。</p>
+          </div>
+          <div class="heading-meta"><span class="live-indicator"><i></i> 本地知识包</span><span class="updated-time" id="encyclopediaUpdated">来源快照已保存</span></div>
+        </div>
+
+        <div class="catalog-panel" id="arcCatalogPanel">
+          <div class="section-toolbar catalog-toolbar">
+            <label class="search-box"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="1.6"/><path d="m16 16 4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg><input id="arcDriveSearch" type="search" placeholder="搜索弧盘名称、类型或效果" aria-label="搜索弧盘"></label>
+            <span class="catalog-count" id="arcDriveCount">载入中</span>
+          </div>
+          <div class="catalog-filter-row" aria-label="弧盘筛选">
+            <div class="catalog-filter-group" aria-label="按稀有度筛选"><span>稀有度</span><button class="catalog-filter is-active" type="button" data-arc-rarity="all">全部</button><button class="catalog-filter" type="button" data-arc-rarity="S">S</button><button class="catalog-filter" type="button" data-arc-rarity="A">A</button><button class="catalog-filter" type="button" data-arc-rarity="B">B</button></div>
+            <div class="catalog-filter-group" aria-label="按类型筛选"><span>类型</span><button class="catalog-filter is-active" type="button" data-arc-type="all">全部</button><button class="catalog-filter" type="button" data-arc-type="聚合">聚合</button><button class="catalog-filter" type="button" data-arc-type="固态">固态</button><button class="catalog-filter" type="button" data-arc-type="液态">液态</button><button class="catalog-filter" type="button" data-arc-type="气态">气态</button><button class="catalog-filter" type="button" data-arc-type="等离子">等离子</button></div>
+          </div>
+          <div class="arc-catalog-layout">
+            <div class="arc-drive-grid" id="arcDriveList" aria-label="弧盘列表"></div>
+            <article class="arc-drive-detail" id="arcDriveDetail" aria-live="polite"><p class="empty-state">正在载入本地弧盘资料……</p></article>
+          </div>
+          <footer class="catalog-attribution" id="arcDriveAttribution"></footer>
+        </div>
+
+        <div class="encyclopedia-empty-panel" id="encyclopediaEmptyState" hidden>
+          <span class="empty-panel-icon" aria-hidden="true">▧</span>
+          <h2 id="emptyCategoryTitle">空幕</h2>
+          <p>分类入口已经建立，目前尚未接入可浏览的本地图鉴数据。整理成图鉴后会在这里展示。</p>
+        </div>
+      </section>
     </main>
   </div>
   <div class="toast" id="toast" role="status" aria-live="polite"><span class="toast-mark">✓</span><span id="toastText">草稿已保存</span></div>
   <script src="data/knowledge/characters/zhenhong.js"></script>
   <script src="data/knowledge/characters/other_characters.js"></script>
+  <script src="data/knowledge/encyclopedia/arc_drives.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

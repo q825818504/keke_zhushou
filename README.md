@@ -1,6 +1,6 @@
-# 可可助手 · 角色知识管理后台
+# 可可助手 · 角色与图鉴管理
 
-零依赖的本地角色知识管理页面。角色资料从 `data/knowledge/characters/` 加载，目前包含真红和 Mysqil 页面中列出的其他 24 名角色。选择角色可查看已导入的基础资料、技能、属性成长、觉醒、共鸣、养成材料、推荐装备及本地图片；源页面未提供的数据会标记待补充。
+零依赖的本地角色与图鉴管理页面。角色资料从 `data/knowledge/characters/` 加载，目前包含真红和 Mysqil 页面中列出的其他 24 名角色；图鉴目前接入完整的 51 件弧盘目录。选择角色可查看已导入的基础资料、技能、属性成长、觉醒、共鸣、养成材料、推荐装备及本地图片；弧盘可按稀有度、类型和关键字筛选，并查看成长属性与各调弧等级效果。空幕、驱动块入口已建立，数据待接入。源页面未提供的数据会标记待补充。
 
 ## 打开页面
 
@@ -17,11 +17,24 @@ python .\scripts\import_mysqil_characters.py --offline
 
 下载器会缓存角色页、相关武器/卡带页和图片；离线导入器从快照生成对应的角色 JSON 与 `other_characters.js`。如果要重新抓取已有来源，可在下载脚本后加 `-Refresh`，并在重新生成时去掉 `--offline`（仅在导入器可直连来源站的环境中使用）。
 
+## 更新弧盘来源数据
+
+在项目目录使用 PowerShell 7 和 Python 3.10+ 运行：
+
+```powershell
+.\scripts\download_mysqil_weapons.ps1 -Refresh
+python .\scripts\import_mysqil_weapons.py
+```
+
+下载器按来源站弧盘目录校验 51 项清单，保存目录页、每件详情页和独立本地图标；导入器将等级成长曲线及 R1–R5 调弧效果生成到图鉴知识包。日常增量下载可省略 `-Refresh`。
+
 ## 数据与来源
 
 - 结构化角色知识：`data/knowledge/characters/<角色 ID>.json`
+- 结构化弧盘图鉴：`data/knowledge/encyclopedia/arc_drives.json` 与 `arc_drives.js`
 - 原始页面快照与清单：`data/mysqil/`
 - 角色本地图片：`data/resources/characters/<角色 ID>/`
+- 弧盘本地图标：`data/resources/encyclopedia/weapons/<弧盘 ID>/`
 - 来源及许可说明：[`data/mysqil/ATTRIBUTION.md`](./data/mysqil/ATTRIBUTION.md)
 - 唯一项目计划与进度：`.planning/2026-09-28-cocoa-assistant-ui-overhaul/`
 

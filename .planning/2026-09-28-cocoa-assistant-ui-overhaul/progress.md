@@ -142,3 +142,21 @@
 - Git state: local `main` equals `origin/main` at `ba208f7`; previous app/data updates are present only in the working tree. The imported Mysqil source corpus is marked CC BY-NC-SA 4.0, so publishing that content needs a repository license/redistribution check before staging it.
 
 - Sync preflight: web reader could not retrieve the repository page; `git fetch` was blocked by read-only `.git/FETCH_HEAD`. No remote or git history was changed.
+
+## Session: 2026-09-29 — Encyclopedia Management and Arc Drive Catalog
+
+### Work Started
+- Re-read the single canonical plan, findings, and progress files; repository status is clean (`main...origin/main`).
+- Inspected navigation and data loading: the current app is a static HTML/CSS/JS app with placeholder sidebar navigation and character-only generated knowledge bundles.
+- Reviewed the source downloader: it follows recommended weapon links from role pages only, so it cannot prove or download the complete weapon catalog.
+- Confirmed the guide's detail page exposes a back-link to the arc-drive index and source attribution. The web reader timed out on the category index; a controlled, approved PowerShell request later fetched the index and all detail pages.
+- The source index declared 51 entries. Saved all 51 item pages and 51 item icons; the offline importer produced one structured record per source entry, including stat growth curves and rank 1–5 effect text.
+- Added `data/knowledge/encyclopedia/arc_drives.json` and `.js`, with visible author/license attribution and source links. Added downloader/importer scripts for future refreshes.
+- Added sibling 图鉴 navigation and 弧盘、空幕、驱动块 subcategories. The 弧盘 view has search, rarity/type filters, item selection, level selection, and rank selection. Empty states are explicit for 空幕 and 驱动块.
+- Updated README and canonical planning files. No Git commit or GitHub push was made in this task.
+
+### GitHub Delivery Plan — 2026-09-29
+- User requested planning before synchronization. Updated the canonical Phase 9 plan with an explicit delivery checklist.
+- Delivery scope is the complete Phase 9 implementation: app navigation and catalog UI, normalized data, Mysqil raw snapshots and attribution, local icon assets, import/download scripts, README, and canonical planning files.
+- First refresh `origin/main`; if it has advanced, reconcile without force-pushing. Then stage only the reviewed Phase 9 paths, create a feature commit, and push to `origin/main`.
+- Browser interaction/responsive verification remains unrun and is not represented as passed.

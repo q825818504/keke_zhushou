@@ -1,0 +1,775 @@
+{
+  "source": "Mysqil · 环世全鉴",
+  "source_index": "https://wiki.mysqil.com/weapons/",
+  "source_license": "CC BY-NC-SA 4.0",
+  "source_author": "Matsuzaka Yuki",
+  "retrieved_at": "2026-09-29T03:33:10.7737302Z",
+  "expected_count": 51,
+  "items": [
+    {
+      "id": "guangbo-xuanyun",
+      "name": "光波眩晕，迷走狂欢",
+      "rarity": "A",
+      "type": "气态",
+      "source_url": "https://wiki.mysqil.com/weapons/guangbo-xuanyun/",
+      "raw_page": "data/mysqil/weapons/guangbo-xuanyun/raw/page.html",
+      "assets": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/weapons/guangbo-xuanyun.webp",
+          "local_path": "data/resources/encyclopedia/weapons/guangbo-xuanyun/guangbo-xuanyun.webp",
+          "sha256": "f320967aa83dcbf3b7b066103a1f29cd2c9b27c37ca6222249111d9b61c1c080"
+        }
+      ]
+    },
+    {
+      "id": "wuwang-san",
+      "name": "勿忘伞",
+      "rarity": "A",
+      "type": "聚合",
+      "source_url": "https://wiki.mysqil.com/weapons/wuwang-san/",
+      "raw_page": "data/mysqil/weapons/wuwang-san/raw/page.html",
+      "assets": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/weapons/wuwang-san.webp",
+          "local_path": "data/resources/encyclopedia/weapons/wuwang-san/wuwang-san.webp",
+          "sha256": "600a0fb2c46425a4c1eba9fcb1d4635e481df20e58790bf6b6f758a8d0b3542f"
+        }
+      ]
+    },
+    {
+      "id": "kaishi-jingkong",
+      "name": "开始净空",
+      "rarity": "A",
+      "type": "液态",
+      "source_url": "https://wiki.mysqil.com/weapons/kaishi-jingkong/",
+      "raw_page": "data/mysqil/weapons/kaishi-jingkong/raw/page.html",
+      "assets": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/weapons/kaishi-jingkong.webp",
+          "local_path": "data/resources/encyclopedia/weapons/kaishi-jingkong/kaishi-jingkong.webp",
+          "sha256": "20eaef8076c7092dcd0413467d6c0f8478a873f499619a0e81c0f3fd852f3142"
+        }
+      ]
+    },
+    {
+      "id": "dangxin-touding",
+      "name": "当心头顶",
+      "rarity": "A",
+      "type": "气态",
+      "source_url": "https://wiki.mysqil.com/weapons/dangxin-touding/",
+      "raw_page": "data/mysqil/weapons/dangxin-touding/raw/page.html",
+      "assets": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/weapons/dangxin-touding.webp",
+          "local_path": "data/resources/encyclopedia/weapons/dangxin-touding/dangxin-touding.webp",
+          "sha256": "f749b27a2373693701365411b38b270cde2f3b77bfbbd07ce25bd9c8b6a4b000"
+        }
+      ]
+    },
+    {
+      "id": "yuzhe-zhongchun",
+      "name": "愚者种春",
+      "rarity": "A",
+      "type": "聚合",
+      "source_url": "https://wiki.mysqil.com/weapons/yuzhe-zhongchun/",
+      "raw_page": "data/mysqil/weapons/yuzhe-zhongchun/raw/page.html",
+      "assets": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/weapons/yuzhe-zhongchun.webp",
+          "local_path": "data/resources/encyclopedia/weapons/yuzhe-zhongchun/yuzhe-zhongchun.webp",
+          "sha256": "e7968920529f7aa3e6571ebfc8f421441f01ed29bf87e4859745af48d4dda081"
+        }
+      ]
+    },
+    {
+      "id": "niuquzhichengde-huhuan",
+      "name": "扭曲之城的呼唤",
+      "rarity": "A",
+      "type": "液态",
+      "source_url": "https://wiki.mysqil.com/weapons/niuquzhichengde-huhuan/",
+      "raw_page": "data/mysqil/weapons/niuquzhichengde-huhuan/raw/page.html",
+      "assets": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/weapons/niuquzhichengde-huhuan.webp",
+          "local_path": "data/resources/encyclopedia/weapons/niuquzhichengde-huhuan/niuquzhichengde-huhuan.webp",
+          "sha256": "7b6d7958d9ce1b8dae1527a8a5f855bd22cba3ab8340dec92954a58d711123b8"
+        }
+      ]
+    },
+    {
+      "id": "badao",
+      "name": "拔刀",
+      "rarity": "A",
+      "type": "等离子",
+      "source_url": "https://wiki.mysqil.com/weapons/badao/",
+      "raw_page": "data/mysqil/weapons/badao/raw/page.html",
+      "assets": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/weapons/badao.webp",
+          "local_path": "data/resources/encyclopedia/weapons/badao/badao.webp",
+          "sha256": "6b0b7299fa93eef2dfae66ecaad159a3bdfd81c8453ed6e36fb956bdd13ccbc1"
+        }
+      ]
+    },
+    {
+      "id": "guani-zaikinkounankai",
+      "name": "挂你在心口难开",
+      "rarity": "A",
+      "type": "气态",
+      "source_url": "https://wiki.mysqil.com/weapons/guani-zaikinkounankai/",
+      "raw_page": "data/mysqil/weapons/guani-zaikinkounankai/raw/page.html",
+      "assets": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/weapons/guani-zaikinkounankai.webp",
+          "local_path": "data/resources/encyclopedia/weapons/guani-zaikinkounankai/guani-zaikinkounankai.webp",
+          "sha256": "161a9ce1b0b413f71f36e04c70d8d3290117a09878648cd2483936a99a9917fc"
+        }
+      ]
+    },
+    {
+      "id": "shijiandadao",
+      "name": "时间大盗",
+      "rarity": "A",
+      "type": "固态",
+      "source_url": "https://wiki.mysqil.com/weapons/shijiandadao/",
+      "raw_page": "data/mysqil/weapons/shijiandadao/raw/page.html",
+      "assets": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/weapons/shijiandadao.webp",
+          "local_path": "data/resources/encyclopedia/weapons/shijiandadao/shijiandadao.webp",
+          "sha256": "5659435599acd41aa90e1c544e85f0d2dbfdd6cf8632041df7f981f79b48afc1"
+        }
+      ]
+    },
+    {
+      "id": "oula-oula",
+      "name": "欧拉欧拉！",
+      "rarity": "A",
+      "type": "等离子",
+      "source_url": "https://wiki.mysqil.com/weapons/oula-oula/",
+      "raw_page": "data/mysqil/weapons/oula-oula/raw/page.html",
+      "assets": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/weapons/oula-oula.webp",
+          "local_path": "data/resources/encyclopedia/weapons/oula-oula/oula-oula.webp",
+          "sha256": "bb1b0274f03ad25d75ef1e43303401375b74fa2263f8eeed684cc7a30dd8afeb"
+        }
+      ]
+    },
+    {
+      "id": "linggan-dataosha",
+      "name": "灵感大逃杀",
+      "rarity": "A",
+      "type": "液态",
+      "source_url": "https://wiki.mysqil.com/weapons/linggan-dataosha/",
+      "raw_page": "data/mysqil/weapons/linggan-dataosha/raw/page.html",
+      "assets": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/weapons/linggan-dataosha.webp",
+          "local_path": "data/resources/encyclopedia/weapons/linggan-dataosha/linggan-dataosha.webp",
+          "sha256": "2cfe42bc8ed730539c9b4e1c753529321218b2a09edae8d04228a0c85e1bd1c2"
+        }
+      ]
+    },
+    {
+      "id": "zhongyoushi",
+      "name": "终有时",
+      "rarity": "A",
+      "type": "聚合",
+      "source_url": "https://wiki.mysqil.com/weapons/zhongyoushi/",
+      "raw_page": "data/mysqil/weapons/zhongyoushi/raw/page.html",
+      "assets": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/weapons/zhongyoushi.webp",
+          "local_path": "data/resources/encyclopedia/weapons/zhongyoushi/zhongyoushi.webp",
+          "sha256": "3d0f806cfb5751242d3ab8e7a7572e7f829d5cf699bd906c791ab006fe6a48a7"
+        }
+      ]
+    },
+    {
+      "id": "liangyao-kukou",
+      "name": "良药苦口",
+      "rarity": "A",
+      "type": "聚合",
+      "source_url": "https://wiki.mysqil.com/weapons/liangyao-kukou/",
+      "raw_page": "data/mysqil/weapons/liangyao-kukou/raw/page.html",
+      "assets": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/weapons/liangyao-kukou.webp",
+          "local_path": "data/resources/encyclopedia/weapons/liangyao-kukou/liangyao-kukou.webp",
+          "sha256": "7dfa230c2b70504ad4ca631c5ec2fdddee592a134e927a400e41d0798389f3bf"
+        }
+      ]
+    },
+    {
+      "id": "beiyiwangzhe",
+      "name": "被遗忘者",
+      "rarity": "A",
+      "type": "固态",
+      "source_url": "https://wiki.mysqil.com/weapons/beiyiwangzhe/",
+      "raw_page": "data/mysqil/weapons/beiyiwangzhe/raw/page.html",
+      "assets": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/weapons/beiyiwangzhe.webp",
+          "local_path": "data/resources/encyclopedia/weapons/beiyiwangzhe/beiyiwangzhe.webp",
+          "sha256": "36d9f5e5d8eb8849c157a42bfc8ba83c14b2d86a7c7e3571ca81a1480575a287"
+        }
+      ]
+    },
+    {
+      "id": "gaiside-xiehou",
+      "name": "该死的邂逅",
+      "rarity": "A",
+      "type": "聚合",
+      "source_url": "https://wiki.mysqil.com/weapons/gaiside-xiehou/",
+      "raw_page": "data/mysqil/weapons/gaiside-xiehou/raw/page.html",
+      "assets": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/weapons/gaiside-xiehou.webp",
+          "local_path": "data/resources/encyclopedia/weapons/gaiside-xiehou/gaiside-xiehou.webp",
+          "sha256": "7b5edf45de0515d3406c8a00c6a87f9494f56d8856c265a3d47712d20d44f710"
+        }
+      ]
+    },
+    {
+      "id": "shanyao-de-meiyitian",
+      "name": "闪耀的每一天",
+      "rarity": "A",
+      "type": "液态",
+      "source_url": "https://wiki.mysqil.com/weapons/shanyao-de-meiyitian/",
+      "raw_page": "data/mysqil/weapons/shanyao-de-meiyitian/raw/page.html",
+      "assets": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/weapons/shanyao-de-meiyitian.webp",
+          "local_path": "data/resources/encyclopedia/weapons/shanyao-de-meiyitian/shanyao-de-meiyitian.webp",
+          "sha256": "5ef9bea7915db273f13905b9bb19e8080f3b7ebce68556edf0e8cd9ed2259e5b"
+        }
+      ]
+    },
+    {
+      "id": "women",
+      "name": "「我们。」",
+      "rarity": "B",
+      "type": "等离子",
+      "source_url": "https://wiki.mysqil.com/weapons/women/",
+      "raw_page": "data/mysqil/weapons/women/raw/page.html",
+      "assets": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/weapons/women.webp",
+          "local_path": "data/resources/encyclopedia/weapons/women/women.webp",
+          "sha256": "aa572f42a6e79306f4119869b4659febcd29435aa3a32cb001230798dc447ebb"
+        }
+      ]
+    },
+    {
+      "id": "dianyin-kuanghuan",
+      "name": "「电音」狂欢",
+      "rarity": "B",
+      "type": "液态",
+      "source_url": "https://wiki.mysqil.com/weapons/dianyin-kuanghuan/",
+      "raw_page": "data/mysqil/weapons/dianyin-kuanghuan/raw/page.html",
+      "assets": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/weapons/dianyin-kuanghuan.webp",
+          "local_path": "data/resources/encyclopedia/weapons/dianyin-kuanghuan/dianyin-kuanghuan.webp",
+          "sha256": "70ef1a4e2fee1fe481b40412d57526eb19048d195696beca64037edc9dbdad3e"
+        }
+      ]
+    },
+    {
+      "id": "weixian-youxi",
+      "name": "危险游戏",
+      "rarity": "B",
+      "type": "聚合",
+      "source_url": "https://wiki.mysqil.com/weapons/weixian-youxi/",
+      "raw_page": "data/mysqil/weapons/weixian-youxi/raw/page.html",
+      "assets": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/weapons/weixian-youxi.webp",
+          "local_path": "data/resources/encyclopedia/weapons/weixian-youxi/weixian-youxi.webp",
+          "sha256": "56d579d0db353ac74762d6560242919dfaa41017b77bf211a784a0e5950e6e27"
+        }
+      ]
+    },
+    {
+      "id": "chenggong-de-diyibu",
+      "name": "成功的第一步",
+      "rarity": "B",
+      "type": "固态",
+      "source_url": "https://wiki.mysqil.com/weapons/chenggong-de-diyibu/",
+      "raw_page": "data/mysqil/weapons/chenggong-de-diyibu/raw/page.html",
+      "assets": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/weapons/chenggong-de-diyibu.webp",
+          "local_path": "data/resources/encyclopedia/weapons/chenggong-de-diyibu/chenggong-de-diyibu.webp",
+          "sha256": "e8b7d49bbe0a4db2dc349ba87482d4c73681c30f7dcfff10624c4e533ab34b7e"
+        }
+      ]
+    },
+    {
+      "id": "xiaokou-changkai",
+      "name": "笑口常开",
+      "rarity": "B",
+      "type": "气态",
+      "source_url": "https://wiki.mysqil.com/weapons/xiaokou-changkai/",
+      "raw_page": "data/mysqil/weapons/xiaokou-changkai/raw/page.html",
+      "assets": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/weapons/xiaokou-changkai.webp",
+          "local_path": "data/resources/encyclopedia/weapons/xiaokou-changkai/xiaokou-changkai.webp",
+          "sha256": "408c6d478992bd7ec2db82668eb39f337fffd3ece4787e96bd3a2f0131d8aaa5"
+        }
+      ]
+    },
+    {
+      "id": "qingshi-zhiyu",
+      "name": "「倾世之雨」",
+      "rarity": "S",
+      "type": "固态",
+      "source_url": "https://wiki.mysqil.com/weapons/qingshi-zhiyu/",
+      "raw_page": "data/mysqil/weapons/qingshi-zhiyu/raw/page.html",
+      "assets": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/weapons/qingshi-zhiyu.webp",
+          "local_path": "data/resources/encyclopedia/weapons/qingshi-zhiyu/qingshi-zhiyu.webp",
+          "sha256": "131bdfe6cb3b060e75a8e2cb2b762fe2745a168494b968eaaaec0a7e535a27e3"
+        }
+      ]
+    },
+    {
+      "id": "zuihouyiduomeigui",
+      "name": "「最后一朵玫瑰」",
+      "rarity": "S",
+      "type": "液态",
+      "source_url": "https://wiki.mysqil.com/weapons/zuihouyiduomeigui/",
+      "raw_page": "data/mysqil/weapons/zuihouyiduomeigui/raw/page.html",
+      "assets": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/weapons/zuihouyiduomeigui.webp",
+          "local_path": "data/resources/encyclopedia/weapons/zuihouyiduomeigui/zuihouyiduomeigui.webp",
+          "sha256": "245f28c58d003de6f0902f45e108c7739666f72a32a2dfd5c9e0b22601fc3410"
+        }
+      ]
+    },
+    {
+      "id": "yinhe-zanliu",
+      "name": "「银河暂留」",
+      "rarity": "S",
+      "type": "等离子",
+      "source_url": "https://wiki.mysqil.com/weapons/yinhe-zanliu/",
+      "raw_page": "data/mysqil/weapons/yinhe-zanliu/raw/page.html",
+      "assets": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/weapons/yinhe-zanliu.webp",
+          "local_path": "data/resources/encyclopedia/weapons/yinhe-zanliu/yinhe-zanliu.webp",
+          "sha256": "e5a415d1ee643fec91df22414034d43672bf48255d7794214cf1fecb393cad77"
+        }
+      ]
+    },
+    {
+      "id": "buquzhimian",
+      "name": "不屈之绵",
+      "rarity": "S",
+      "type": "等离子",
+      "source_url": "https://wiki.mysqil.com/weapons/buquzhimian/",
+      "raw_page": "data/mysqil/weapons/buquzhimian/raw/page.html",
+      "assets": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/weapons/buquzhimian.webp",
+          "local_path": "data/resources/encyclopedia/weapons/buquzhimian/buquzhimian.webp",
+          "sha256": "3403c6b4c01293a70b34dfa381f16f71a4adcfc616533efaaf1404d0d90c1e49"
+        }
+      ]
+    },
+    {
+      "id": "xiuxiri",
+      "name": "休息日",
+      "rarity": "S",
+      "type": "固态",
+      "source_url": "https://wiki.mysqil.com/weapons/xiuxiri/",
+      "raw_page": "data/mysqil/weapons/xiuxiri/raw/page.html",
+      "assets": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/weapons/xiuxiri.webp",
+          "local_path": "data/resources/encyclopedia/weapons/xiuxiri/xiuxiri.webp",
+          "sha256": "bd0fc89302d9fa4e7e95f0d57c3f11b6c73b8f0f08212092c80c26c7ddbc111e"
+        }
+      ]
+    },
+    {
+      "id": "zhongrenzhuixunzhiwu",
+      "name": "众人追寻之物",
+      "rarity": "S",
+      "type": "聚合",
+      "source_url": "https://wiki.mysqil.com/weapons/zhongrenzhuixunzhiwu/",
+      "raw_page": "data/mysqil/weapons/zhongrenzhuixunzhiwu/raw/page.html",
+      "assets": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/weapons/zhongrenzhuixunzhiwu.webp",
+          "local_path": "data/resources/encyclopedia/weapons/zhongrenzhuixunzhiwu/zhongrenzhuixunzhiwu.webp",
+          "sha256": "7f1873db997b42b0063d0d3faeb5ac4d26783ea7a4e6c844b6a8eaae42f2727e"
+        }
+      ]
+    },
+    {
+      "id": "xiongmengzhimian",
+      "name": "凶猛之绵",
+      "rarity": "S",
+      "type": "聚合",
+      "source_url": "https://wiki.mysqil.com/weapons/xiongmengzhimian/",
+      "raw_page": "data/mysqil/weapons/xiongmengzhimian/raw/page.html",
+      "assets": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/weapons/xiongmengzhimian.webp",
+          "local_path": "data/resources/encyclopedia/weapons/xiongmengzhimian/xiongmengzhimian.webp",
+          "sha256": "3fb5130a2b3d1991eca8397b521fff7b5343a594e990907a1ae0e697ba51e42c"
+        }
+      ]
+    },
+    {
+      "id": "qianjinnanmainikaixin",
+      "name": "千金难买你开心",
+      "rarity": "S",
+      "type": "固态",
+      "source_url": "https://wiki.mysqil.com/weapons/qianjinnanmainikaixin/",
+      "raw_page": "data/mysqil/weapons/qianjinnanmainikaixin/raw/page.html",
+      "assets": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/weapons/qianjinnanmainikaixin.webp",
+          "local_path": "data/resources/encyclopedia/weapons/qianjinnanmainikaixin/qianjinnanmainikaixin.webp",
+          "sha256": "ef6a4ed60d5719ceff6bbb27aacc8800a15fa1c742cda5e70ae0042b9eeb7bf7"
+        }
+      ]
+    },
+    {
+      "id": "shixin-guiren",
+      "name": "噬心诡刃",
+      "rarity": "S",
+      "type": "气态",
+      "source_url": "https://wiki.mysqil.com/weapons/shixin-guiren/",
+      "raw_page": "data/mysqil/weapons/shixin-guiren/raw/page.html",
+      "assets": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/weapons/shixin-guiren.webp",
+          "local_path": "data/resources/encyclopedia/weapons/shixin-guiren/shixin-guiren.webp",
+          "sha256": "85b7cf68499e2519edac68dd1dda723988e119d0cdba0fd04fc9af7aa1550d3c"
+        }
+      ]
+    },
+    {
+      "id": "haogougouzousifang",
+      "name": "好狗狗走四方",
+      "rarity": "S",
+      "type": "气态",
+      "source_url": "https://wiki.mysqil.com/weapons/haogougouzousifang/",
+      "raw_page": "data/mysqil/weapons/haogougouzousifang/raw/page.html",
+      "assets": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/weapons/haogougouzousifang.webp",
+          "local_path": "data/resources/encyclopedia/weapons/haogougouzousifang/haogougouzousifang.webp",
+          "sha256": "8321dc43cc7dbc6b893b76094bfa6bc97dde8f5a250fa4e1e3a16ba4f05d448c"
+        }
+      ]
+    },
+    {
+      "id": "yinquanquanchang",
+      "name": "引爆全场",
+      "rarity": "S",
+      "type": "固态",
+      "source_url": "https://wiki.mysqil.com/weapons/yinquanquanchang/",
+      "raw_page": "data/mysqil/weapons/yinquanquanchang/raw/page.html",
+      "assets": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/weapons/yinquanquanchang.webp",
+          "local_path": "data/resources/encyclopedia/weapons/yinquanquanchang/yinquanquanchang.webp",
+          "sha256": "6071628941b82fff6afdcb747a56810be51bea1671a9af4c47fbfb8687d618d0"
+        }
+      ]
+    },
+    {
+      "id": "sikaomiao",
+      "name": "思考喵",
+      "rarity": "S",
+      "type": "气态",
+      "source_url": "https://wiki.mysqil.com/weapons/sikaomiao/",
+      "raw_page": "data/mysqil/weapons/sikaomiao/raw/page.html",
+      "assets": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/weapons/sikaomiao.webp",
+          "local_path": "data/resources/encyclopedia/weapons/sikaomiao/sikaomiao.webp",
+          "sha256": "e3a00dfdf6ee8588ae9c2de8947951870968b998690ddc482a9c33a8a030ee93"
+        }
+      ]
+    },
+    {
+      "id": "wuweizhimian",
+      "name": "无畏之绵",
+      "rarity": "S",
+      "type": "固态",
+      "source_url": "https://wiki.mysqil.com/weapons/wuweizhimian/",
+      "raw_page": "data/mysqil/weapons/wuweizhimian/raw/page.html",
+      "assets": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/weapons/wuweizhimian.webp",
+          "local_path": "data/resources/encyclopedia/weapons/wuweizhimian/wuweizhimian.webp",
+          "sha256": "23f701c1dc736b1145a07f769e13f66c5bb61a687a361962badd0f04d6833c2d"
+        }
+      ]
+    },
+    {
+      "id": "yuededuizhidian",
+      "name": "月的对跖点",
+      "rarity": "S",
+      "type": "液态",
+      "source_url": "https://wiki.mysqil.com/weapons/yuededuizhidian/",
+      "raw_page": "data/mysqil/weapons/yuededuizhidian/raw/page.html",
+      "assets": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/weapons/yuededuizhidian.webp",
+          "local_path": "data/resources/encyclopedia/weapons/yuededuizhidian/yuededuizhidian.webp",
+          "sha256": "d5f4c7f2fb35a4a2e133d50b107bba5b28e5c53a4db45f9f79e41bd3ef566499"
+        }
+      ]
+    },
+    {
+      "id": "jisuzhimian",
+      "name": "极速之绵",
+      "rarity": "S",
+      "type": "液态",
+      "source_url": "https://wiki.mysqil.com/weapons/jisuzhimian/",
+      "raw_page": "data/mysqil/weapons/jisuzhimian/raw/page.html",
+      "assets": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/weapons/jisuzhimian.webp",
+          "local_path": "data/resources/encyclopedia/weapons/jisuzhimian/jisuzhimian.webp",
+          "sha256": "22d591e4474c6bd5b2690ba756fc4477474eeec8dc2b28503ba0910b45ae95ad"
+        }
+      ]
+    },
+    {
+      "id": "yonhengyuanwuqv",
+      "name": "永恒圆舞曲",
+      "rarity": "S",
+      "type": "聚合",
+      "source_url": "https://wiki.mysqil.com/weapons/yonhengyuanwuqv/",
+      "raw_page": "data/mysqil/weapons/yonhengyuanwuqv/raw/page.html",
+      "assets": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/weapons/yonhengyuanwuqv.webp",
+          "local_path": "data/resources/encyclopedia/weapons/yonhengyuanwuqv/yonhengyuanwuqv.webp",
+          "sha256": "334bca8da4dee174b04b9b5222ef821624e2db98d5b8279129b81e3d49840dc3"
+        }
+      ]
+    },
+    {
+      "id": "haitailuoande-ning",
+      "name": "海特洛的安宁",
+      "rarity": "S",
+      "type": "固态",
+      "source_url": "https://wiki.mysqil.com/weapons/haitailuoande-ning/",
+      "raw_page": "data/mysqil/weapons/haitailuoande-ning/raw/page.html",
+      "assets": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/weapons/haitailuoande-ning.webp",
+          "local_path": "data/resources/encyclopedia/weapons/haitailuoande-ning/haitailuoande-ning.webp",
+          "sha256": "bcd60a0757c8f9c4e32dfd8d4fd29916c6facce7d569a450efe199e92984b69f"
+        }
+      ]
+    },
+    {
+      "id": "qihei-qingchunwangxiang",
+      "name": "漆黑青春妄想",
+      "rarity": "S",
+      "type": "液态",
+      "source_url": "https://wiki.mysqil.com/weapons/qihei-qingchunwangxiang/",
+      "raw_page": "data/mysqil/weapons/qihei-qingchunwangxiang/raw/page.html",
+      "assets": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/weapons/qihei-qingchunwangxiang.webp",
+          "local_path": "data/resources/encyclopedia/weapons/qihei-qingchunwangxiang/qihei-qingchunwangxiang.webp",
+          "sha256": "8c5bc8ff5d5c91304353414d1c21891301a4599d1adb06aa56b32a1c98eaebf2"
+        }
+      ]
+    },
+    {
+      "id": "lingminzhimian",
+      "name": "灵敏之绵",
+      "rarity": "S",
+      "type": "气态",
+      "source_url": "https://wiki.mysqil.com/weapons/lingminzhimian/",
+      "raw_page": "data/mysqil/weapons/lingminzhimian/raw/page.html",
+      "assets": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/weapons/lingminzhimian.webp",
+          "local_path": "data/resources/encyclopedia/weapons/lingminzhimian/lingminzhimian.webp",
+          "sha256": "458b7cdddc6c8a56f9243f6bed80a5405b0c60cabb3ce7d904382738efef9bc8"
+        }
+      ]
+    },
+    {
+      "id": "yanhun-kuangbiao",
+      "name": "焰魂狂飙",
+      "rarity": "S",
+      "type": "等离子",
+      "source_url": "https://wiki.mysqil.com/weapons/yanhun-kuangbiao/",
+      "raw_page": "data/mysqil/weapons/yanhun-kuangbiao/raw/page.html",
+      "assets": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/weapons/yanhun-kuangbiao.webp",
+          "local_path": "data/resources/encyclopedia/weapons/yanhun-kuangbiao/yanhun-kuangbiao.webp",
+          "sha256": "b9acbc929a2be891cafb25dd8739905e5acd5911fabb0650cb1965c21afce94a"
+        }
+      ]
+    },
+    {
+      "id": "xianshi-biliansuo",
+      "name": "现实避难所",
+      "rarity": "S",
+      "type": "固态",
+      "source_url": "https://wiki.mysqil.com/weapons/xianshi-biliansuo/",
+      "raw_page": "data/mysqil/weapons/xianshi-biliansuo/raw/page.html",
+      "assets": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/weapons/xianshi-biliansuo.webp",
+          "local_path": "data/resources/encyclopedia/weapons/xianshi-biliansuo/xianshi-biliansuo.webp",
+          "sha256": "8bb7bf88a52a2a0e4d52922b97134312d25d6a02d5c700f6236bf137015d7166"
+        }
+      ]
+    },
+    {
+      "id": "chuanguo-yanhong-shenjing",
+      "name": "穿过胭红蜃景",
+      "rarity": "S",
+      "type": "聚合",
+      "source_url": "https://wiki.mysqil.com/weapons/chuanguo-yanhong-shenjing/",
+      "raw_page": "data/mysqil/weapons/chuanguo-yanhong-shenjing/raw/page.html",
+      "assets": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/weapons/chuanguo-yanhong-shenjing.webp",
+          "local_path": "data/resources/encyclopedia/weapons/chuanguo-yanhong-shenjing/chuanguo-yanhong-shenjing.webp",
+          "sha256": "e2baa8a7c8dfc06ec91037604dc66d02aec7cc084b69aff9b5c39cfa136097df"
+        }
+      ]
+    },
+    {
+      "id": "zuiyufa",
+      "name": "罪与罚",
+      "rarity": "S",
+      "type": "气态",
+      "source_url": "https://wiki.mysqil.com/weapons/zuiyufa/",
+      "raw_page": "data/mysqil/weapons/zuiyufa/raw/page.html",
+      "assets": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/weapons/zuiyufa.webp",
+          "local_path": "data/resources/encyclopedia/weapons/zuiyufa/zuiyufa.webp",
+          "sha256": "90ab087abf635022c82f9c2fe7202a6e31e7cf535ce83688402517a54f9fb762"
+        }
+      ]
+    },
+    {
+      "id": "chahua-hui",
+      "name": "茶花会",
+      "rarity": "S",
+      "type": "聚合",
+      "source_url": "https://wiki.mysqil.com/weapons/chahua-hui/",
+      "raw_page": "data/mysqil/weapons/chahua-hui/raw/page.html",
+      "assets": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/weapons/chahua-hui.webp",
+          "local_path": "data/resources/encyclopedia/weapons/chahua-hui/chahua-hui.webp",
+          "sha256": "d316d16f9e08eabcd7692d6e8a382a3a51df9f1a83576b60de70304b00d2370d"
+        }
+      ]
+    },
+    {
+      "id": "xingjinyushijian-zhiwai",
+      "name": "行进于时间之外",
+      "rarity": "S",
+      "type": "固态",
+      "source_url": "https://wiki.mysqil.com/weapons/xingjinyushijian-zhiwai/",
+      "raw_page": "data/mysqil/weapons/xingjinyushijian-zhiwai/raw/page.html",
+      "assets": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/weapons/xingjinyushijian-zhiwai.webp",
+          "local_path": "data/resources/encyclopedia/weapons/xingjinyushijian-zhiwai/xingjinyushijian-zhiwai.webp",
+          "sha256": "d694a1470175265ac70009f856583811328c8fc969aa178e13956bf1fd444940"
+        }
+      ]
+    },
+    {
+      "id": "yuanxingzhezhisheng",
+      "name": "远行者之声",
+      "rarity": "S",
+      "type": "等离子",
+      "source_url": "https://wiki.mysqil.com/weapons/yuanxingzhezhisheng/",
+      "raw_page": "data/mysqil/weapons/yuanxingzhezhisheng/raw/page.html",
+      "assets": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/weapons/yuanxingzhezhisheng.webp",
+          "local_path": "data/resources/encyclopedia/weapons/yuanxingzhezhisheng/yuanxingzhezhisheng.webp",
+          "sha256": "e4a304bc4be7f03247b65104807925c3fd65ce625e2787de678a40e01ef72941"
+        }
+      ]
+    },
+    {
+      "id": "cuowu-de-men",
+      "name": "错误的门",
+      "rarity": "S",
+      "type": "液态",
+      "source_url": "https://wiki.mysqil.com/weapons/cuowu-de-men/",
+      "raw_page": "data/mysqil/weapons/cuowu-de-men/raw/page.html",
+      "assets": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/weapons/cuowu-de-men.webp",
+          "local_path": "data/resources/encyclopedia/weapons/cuowu-de-men/cuowu-de-men.webp",
+          "sha256": "5373a57fac3142f7aa0fd13608c07720f6b8465f1d2da0d36be5894bc9907832"
+        }
+      ]
+    },
+    {
+      "id": "mianjuxiade-lei",
+      "name": "面具下的泪",
+      "rarity": "S",
+      "type": "气态",
+      "source_url": "https://wiki.mysqil.com/weapons/mianjuxiade-lei/",
+      "raw_page": "data/mysqil/weapons/mianjuxiade-lei/raw/page.html",
+      "assets": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/weapons/mianjuxiade-lei.webp",
+          "local_path": "data/resources/encyclopedia/weapons/mianjuxiade-lei/mianjuxiade-lei.webp",
+          "sha256": "fa9c24597a391af174f4232a221d42c97faae663b831af8044ca6531bdec7d96"
+        }
+      ]
+    },
+    {
+      "id": "yubeibei",
+      "name": "预备备",
+      "rarity": "S",
+      "type": "等离子",
+      "source_url": "https://wiki.mysqil.com/weapons/yubeibei/",
+      "raw_page": "data/mysqil/weapons/yubeibei/raw/page.html",
+      "assets": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/weapons/yubeibei.webp",
+          "local_path": "data/resources/encyclopedia/weapons/yubeibei/yubeibei.webp",
+          "sha256": "762e1c1be1de2fa5f36041cb549a83e7e325c27a3c2e3eb4b5ab3082f7979a0f"
+        }
+      ]
+    },
+    {
+      "id": "jingzhige",
+      "name": "鲸之歌",
+      "rarity": "S",
+      "type": "等离子",
+      "source_url": "https://wiki.mysqil.com/weapons/jingzhige/",
+      "raw_page": "data/mysqil/weapons/jingzhige/raw/page.html",
+      "assets": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/weapons/jingzhige.webp",
+          "local_path": "data/resources/encyclopedia/weapons/jingzhige/jingzhige.webp",
+          "sha256": "87b0cc0654b93a564a8a5881f1ef5af90683f2f51b94492f3d128c0fe27ac8c9"
+        }
+      ]
+    }
+  ]
+}

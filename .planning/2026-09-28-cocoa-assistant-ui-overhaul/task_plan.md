@@ -1,8 +1,8 @@
-# Task Plan: 可可助手 · 角色知识管理与本地数据维护
+# Task Plan: 可可助手 · 角色与图鉴管理及本地数据维护
 
 ## Goal
 
-交付一个可直接打开的角色知识管理系统：维护者可以录入、校验和维护角色基础资料、技能与养成数据、推荐武器/卡带及本地资源；用户可以查看整理后的公开资料。角色知识采用真红的数据结构，当前已接入来源站列出的 25 名角色。
+交付一个可直接打开的角色与图鉴管理系统：维护者可以录入、校验和维护角色资料、图鉴数据及本地资源；用户可以查看整理后的资料。角色知识采用真红的数据结构，弧盘图鉴使用独立知识包，其他图鉴分类可以逐步接入。
 
 ## Canonical Plan Rule
 
@@ -16,11 +16,11 @@
 
 ## Next Step
 
-规划仓库持久化的驱动摆放图上传功能；此前终端槽位图修正与浏览器本地上传仍保持本地待同步。配队推荐仍属于单独阶段。
+Phase 9 图鉴与弧盘目录已完成本地实现；当前按本计划核对变更范围、刷新远端状态并提交推送至 GitHub。之后再继续处理 Phase 8 仓库持久化驱动摆放图上传。
 
 ## Current Phase
 
-Phase 8 - Repository-backed Drive Layout Uploads；planned。
+Phase 9 - Encyclopedia Management and Arc Drive Catalog；implementation complete, GitHub delivery in progress.
 
 ## Phases
 
@@ -130,6 +130,8 @@ Phase 8 - Repository-backed Drive Layout Uploads；planned。
 | 之前产生了独立卡带计划目录 | 本次将内容合并回本主计划并删除重复目录 |
 
 | 远程 main 引用竞争导致一次 push 拒绝 | 刷新 origin/main 后确认远程已包含最新提交，未执行强推 |
+| 首次弧盘下载路径校验把仓库根目录尾部分隔符算重 | 规范化根目录并改正 PowerShell 字符串中的反斜杠写法；重新下载 51 页和 51 张图标成功 |
+| 直接 PowerShell 网络请求被工作区策略拦截 | 通过受控的提权下载调用读取用户指定来源，内容只写入项目本地原始快照和资源目录 |
 
 ## Notes
 
@@ -169,3 +171,22 @@ Phase 8 - Repository-backed Drive Layout Uploads；planned。
 - [ ] Verify upload, reload, new browser profile, other role isolation, replacement/removal, malformed files, oversized files, path traversal, and regenerated bundle consistency.
 - [ ] Document local server startup and repository sync workflow; review licensing and source attribution before committing externally sourced images.
 - **Status:** planned; no repository persistence code implemented yet.
+
+
+### Phase 9: Encyclopedia Management and Arc Drive Catalog
+
+**Goal:** Add a top-level 图鉴 module beside 角色管理, with separate 弧盘、空幕、驱动块 entries. Integrate a locally stored, source-attributed 弧盘 catalog using the existing app patterns; keep the other two categories as honest empty/coming-soon sections until their data is imported.
+
+- [x] Inventory the repository's navigation, data-loading, resource, and source-snapshot conventions.
+- [x] Establish a dedicated catalog data model and source-preserving local directory for arc drives, including source URL and retrieval metadata.
+- [x] Determine the source site's complete arc-drive listing and collect each item page plus item-specific images/assets locally.
+- [x] Normalize every source-listed arc drive without replacing unknown/missing values with guesses; retain raw page snapshots and attribution.
+- [x] Add a top-level 图鉴 navigation with 弧盘、空幕、驱动块 sub-navigation matching the supplied reference.
+- [x] Implement the 弧盘 listing/detail view with useful filters/search and source links; clearly state when 空幕/驱动块 data is not yet imported.
+- [x] Reconcile the 51 source entries, normalized records, snapshots, and local icon files.
+- [x] Update canonical plan/findings/progress and document the source and import workflow.
+- [x] Review the complete code, data, source snapshots, assets, attribution, and planning change scope for Git delivery.
+- [x] Refresh `origin/main` and confirm the local feature can be pushed without rewriting remote history.
+- [ ] Commit the complete Phase 9 feature and push it to `origin/main`.
+- [ ] Browser interaction and responsive visual verification.
+- **Status:** implementation complete; GitHub delivery in progress; visual verification not run.
