@@ -1,0 +1,2609 @@
+{
+  "schema_version": "0.3",
+  "entity_type": "character",
+  "id": "kaesi",
+  "name": "卡厄斯",
+  "review_status": "draft",
+  "basic": {
+    "rarity": "S",
+    "element": "相",
+    "cassette_type": "聚合",
+    "role": "主C",
+    "position": "前排",
+    "rating": "T0",
+    "summary": "E.T.D六队现任队员，你最正直可靠的朋友之一。"
+  },
+  "recommended": {
+    "weapon": {
+      "id": "zhongrenzhuixunzhiwu",
+      "name": "众人追寻之物",
+      "source_url": "https://wiki.mysqil.com/weapons/zhongrenzhuixunzhiwu",
+      "rating": "S",
+      "asset": "data/resources/characters/kaesi/weapons/zhongrenzhuixunzhiwu.webp",
+      "description": "众人追寻之物是S级聚合类弧盘，卡厄斯的专属弧盘。 专属效果：卡厄斯装备时可改变武器外观。",
+      "detail_source_url": "https://wiki.mysqil.com/weapons/zhongrenzhuixunzhiwu"
+    },
+    "cassette": {
+      "id": "jietou-quanwang",
+      "name": "街头拳王",
+      "source_url": "https://wiki.mysqil.com/cassettes/jietou-quanwang",
+      "category": "属性专属",
+      "cassette_type": "空幕卡带",
+      "element": "相",
+      "icon": "data/resources/characters/kaesi/cassettes/street-boxer.webp",
+      "description": "街头拳王是相属性专属输出卡带，4件套提供 14% 暴击率，触发盈蓄或浸染反应后额外获得 14% 暴击率（共 28%），能快速拉满暴击。是哈索尔、翳等相属性输出角色的核心套装。",
+      "set_effects": [
+        {
+          "pieces": 2,
+          "description": "相属性伤害 +10%"
+        },
+        {
+          "pieces": 4,
+          "description": "暴击率 +14%。队伍触发盈蓄或浸染反应时，额外获得 14% 暴击率，持续 20 秒"
+        }
+      ],
+      "acquisition": "",
+      "main_affix_pool": [
+        "攻击力（% / 固定值）",
+        "生命值（% / 固定值）",
+        "防御力（% / 固定值）",
+        "暴击率",
+        "暴击伤害",
+        "元素伤害（光/暗/灵/咒/魂/相）",
+        "倾陷强度",
+        "环合强度"
+      ],
+      "sub_affix_pool": [
+        "暴击率",
+        "暴击伤害",
+        "攻击力（%）",
+        "攻击力（固定值）",
+        "生命值（%）",
+        "生命值（固定值）",
+        "防御力（%）",
+        "防御力（固定值）",
+        "元素伤害加成",
+        "全伤害加成",
+        "倾陷强度",
+        "环合强度"
+      ],
+      "quality": [
+        {
+          "tier": "金",
+          "description": "毕业 · 数值上限最高"
+        },
+        {
+          "tier": "金",
+          "description": "约为金色 80%"
+        },
+        {
+          "tier": "蓝",
+          "description": "前期过渡"
+        }
+      ],
+      "structure": {
+        "main_affix_count": 1,
+        "sub_affix_count": 4,
+        "rerollable": null
+      },
+      "recommended_main_affixes": [],
+      "recommended_sub_affixes": [],
+      "terminal": {
+        "id": "terminal",
+        "name": "「卡带」属性",
+        "description": "每装配一个Ⅲ型驱动，使暴击伤害增加16%",
+        "effects": [
+          "暴击伤害 +16%"
+        ],
+        "source_type": "mysqil_page",
+        "layout": {
+          "rows": 7,
+          "columns": 7,
+          "active_slots": [
+            {
+              "row": 1,
+              "column": 2
+            },
+            {
+              "row": 1,
+              "column": 3
+            },
+            {
+              "row": 1,
+              "column": 4
+            },
+            {
+              "row": 1,
+              "column": 5
+            },
+            {
+              "row": 2,
+              "column": 1
+            },
+            {
+              "row": 2,
+              "column": 2
+            },
+            {
+              "row": 2,
+              "column": 3
+            },
+            {
+              "row": 2,
+              "column": 4
+            },
+            {
+              "row": 2,
+              "column": 5
+            },
+            {
+              "row": 3,
+              "column": 1
+            },
+            {
+              "row": 3,
+              "column": 2
+            },
+            {
+              "row": 3,
+              "column": 3
+            },
+            {
+              "row": 3,
+              "column": 5
+            },
+            {
+              "row": 4,
+              "column": 1
+            },
+            {
+              "row": 4,
+              "column": 2
+            },
+            {
+              "row": 4,
+              "column": 5
+            },
+            {
+              "row": 5,
+              "column": 1
+            },
+            {
+              "row": 5,
+              "column": 2
+            },
+            {
+              "row": 5,
+              "column": 3
+            },
+            {
+              "row": 5,
+              "column": 4
+            }
+          ],
+          "source_type": "mysqil_page"
+        }
+      },
+      "detail_source_url": "https://wiki.mysqil.com/cassettes/jietou-quanwang"
+    }
+  },
+  "terminal": {
+    "id": "terminal",
+    "name": "「卡带」属性",
+    "description": "每装配一个Ⅲ型驱动，使暴击伤害增加16%",
+    "effects": [
+      "暴击伤害 +16%"
+    ],
+    "source_type": "mysqil_page",
+    "layout": {
+      "rows": 7,
+      "columns": 7,
+      "active_slots": [
+        {
+          "row": 1,
+          "column": 2
+        },
+        {
+          "row": 1,
+          "column": 3
+        },
+        {
+          "row": 1,
+          "column": 4
+        },
+        {
+          "row": 1,
+          "column": 5
+        },
+        {
+          "row": 2,
+          "column": 1
+        },
+        {
+          "row": 2,
+          "column": 2
+        },
+        {
+          "row": 2,
+          "column": 3
+        },
+        {
+          "row": 2,
+          "column": 4
+        },
+        {
+          "row": 2,
+          "column": 5
+        },
+        {
+          "row": 3,
+          "column": 1
+        },
+        {
+          "row": 3,
+          "column": 2
+        },
+        {
+          "row": 3,
+          "column": 3
+        },
+        {
+          "row": 3,
+          "column": 5
+        },
+        {
+          "row": 4,
+          "column": 1
+        },
+        {
+          "row": 4,
+          "column": 2
+        },
+        {
+          "row": 4,
+          "column": 5
+        },
+        {
+          "row": 5,
+          "column": 1
+        },
+        {
+          "row": 5,
+          "column": 2
+        },
+        {
+          "row": 5,
+          "column": 3
+        },
+        {
+          "row": 5,
+          "column": 4
+        }
+      ],
+      "source_type": "mysqil_page"
+    }
+  },
+  "drive_layout_image": "",
+  "base_stats": {
+    "level_cap": 80,
+    "stats": [
+      {
+        "id_stats": "HPMaxBase",
+        "name": "生命值",
+        "values": [
+          1300,
+          1404,
+          1508,
+          1612,
+          1716,
+          1820,
+          1924,
+          2028,
+          2132,
+          2236,
+          2340,
+          2444,
+          2548,
+          2652,
+          2756,
+          2860,
+          2964,
+          3068,
+          3172,
+          3276,
+          4420,
+          4524,
+          4628,
+          4732,
+          4836,
+          4940,
+          5044,
+          5148,
+          5252,
+          5356,
+          6500,
+          6604,
+          6708,
+          6812,
+          6916,
+          7020,
+          7124,
+          7228,
+          7332,
+          7436,
+          8580,
+          8684,
+          8788,
+          8892,
+          8996,
+          9100,
+          9204,
+          9308,
+          9412,
+          9516,
+          10660,
+          10764,
+          10868,
+          10972,
+          11076,
+          11180,
+          11284,
+          11388,
+          11492,
+          11596,
+          12740,
+          12844,
+          12948,
+          13052,
+          13156,
+          13260,
+          13364,
+          13468,
+          13572,
+          13676,
+          14820,
+          14924,
+          15028,
+          15132,
+          15236,
+          15340,
+          15444,
+          15548,
+          15652,
+          15756
+        ],
+        "icon": "/Game/UI/UI_Icon/Attribute/icon_attri_shengming"
+      },
+      {
+        "id_stats": "AtkBase",
+        "name": "攻击力",
+        "values": [
+          80,
+          84,
+          88,
+          92,
+          96,
+          100,
+          104,
+          108,
+          112,
+          116,
+          120,
+          124,
+          128,
+          132,
+          136,
+          140,
+          144,
+          148,
+          152,
+          156,
+          200,
+          204,
+          208,
+          212,
+          216,
+          220,
+          224,
+          228,
+          232,
+          236,
+          280,
+          284,
+          288,
+          292,
+          296,
+          300,
+          304,
+          308,
+          312,
+          316,
+          360,
+          364,
+          368,
+          372,
+          376,
+          380,
+          384,
+          388,
+          392,
+          396,
+          440,
+          444,
+          448,
+          452,
+          456,
+          460,
+          464,
+          468,
+          472,
+          476,
+          520,
+          524,
+          528,
+          532,
+          536,
+          540,
+          544,
+          548,
+          552,
+          556,
+          600,
+          604,
+          608,
+          612,
+          616,
+          620,
+          624,
+          628,
+          632,
+          636
+        ],
+        "icon": "/Game/UI/UI_Icon/Attribute/icon_attri_gongji"
+      },
+      {
+        "id_stats": "DefBase",
+        "name": "防御力",
+        "values": [
+          76,
+          82,
+          88,
+          94,
+          100,
+          106,
+          112,
+          119,
+          125,
+          131,
+          137,
+          143,
+          149,
+          155,
+          161,
+          167,
+          173,
+          179,
+          185,
+          192,
+          259,
+          265,
+          271,
+          277,
+          283,
+          289,
+          295,
+          301,
+          307,
+          313,
+          380,
+          386,
+          393,
+          399,
+          405,
+          411,
+          417,
+          423,
+          429,
+          435,
+          501,
+          507,
+          513,
+          519,
+          526,
+          532,
+          538,
+          544,
+          550,
+          556,
+          623,
+          629,
+          635,
+          641,
+          647,
+          653,
+          659,
+          666,
+          672,
+          678,
+          745,
+          751,
+          757,
+          763,
+          769,
+          775,
+          781,
+          787,
+          793,
+          800,
+          867,
+          873,
+          879,
+          885,
+          891,
+          897,
+          903,
+          909,
+          915,
+          921
+        ],
+        "icon": "/Game/UI/UI_Icon/Attribute/icon_attri_fangyu"
+      },
+      {
+        "id_stats": "CritBase",
+        "name": "暴击率",
+        "values": [
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5
+        ],
+        "icon": "/Game/UI/UI_Icon/Attribute/icon_attri_baoji"
+      },
+      {
+        "id_stats": "CritDamageBase",
+        "name": "暴击伤害",
+        "values": [
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50
+        ],
+        "icon": "/Game/UI/UI_Icon/Attribute/icon_attri_baojishanghai"
+      }
+    ]
+  },
+  "skills": [
+    {
+      "id": "追猎",
+      "name": "追猎",
+      "category": "Melee",
+      "description_parts": [
+        {
+          "name": "追猎",
+          "text": "经年累月的磨炼。"
+        }
+      ],
+      "raw_text": "追猎MeleeLv.12345678910111213普通攻击：追猎卡厄斯挥动武器，进行至多5段的连续攻击，造成相属性异能伤害的同时积累「罪状」。普通攻击：裁断你的罪状，已经一目了然。长按普通攻击，卡厄斯展开镰刀发动「普通攻击：裁断」。若当前「罪状」已达上限1000，则消耗全部「罪状」，追加第二段「裁断」，造成高额清算伤害；若「罪状」未达上限，则只进行第一段「裁断」，造成2次伤害。普通攻击：破局卡厄斯滞空时点按普攻，落地后造成1次范围性的相属性异能伤害，伤害随下落高度升高而提升，最高提升1倍。 与此同时卡厄斯集中精神，开启猎人般的觉察，短时间内能够感知到一定范围内的敌方单位。被感知目标会以特殊轮廓高亮显示。极限反击:直觉/本能触发极限闪避后使用「普通攻击：追猎」触发。卡厄斯挥动尖斧劈向目标，造成1次相属性异能伤害并额外扣除一定倾陷值。技能倍率一段伤害倍率18.2%二段伤害倍率15.1%+39%三段伤害倍率14.4%*2四段伤害倍率26.8%+10.2%*2+86%五段伤害倍率24.9%*2+79.8%下落伤害倍率45%分支一段伤害倍率57.5%*2分支二段清算伤害倍率400%*2极限反击倍率106%环合值30全套普通攻击积攒「罪状」300极限反击积攒「罪状」100下落攻击积攒「罪状」30经年累月的磨炼。",
+      "level_cap": 13,
+      "parameters": [
+        {
+          "label": "一段伤害倍率",
+          "source_key": "追猎",
+          "values": [
+            "18.2%",
+            "19.7%",
+            "21.2%",
+            "22.9%",
+            "24.8%",
+            "26.7%",
+            "28.9%",
+            "31.2%",
+            "33.7%",
+            "36.4%",
+            "39.3%",
+            "42.4%",
+            "45.8%"
+          ],
+          "current_value": "18.2%"
+        },
+        {
+          "label": "二段伤害倍率",
+          "source_key": "追猎",
+          "values": [
+            "15.1%+39%",
+            "16.3%+42.1%",
+            "17.6%+45.5%",
+            "19%+49.1%",
+            "20.5%+53.1%",
+            "22.2%+57.3%",
+            "24%+61.9%",
+            "25.9%+66.8%",
+            "27.9%+72.2%",
+            "30.2%+78%",
+            "32.6%+84.2%",
+            "35.2%+90.9%",
+            "38%+98.2%"
+          ],
+          "current_value": "15.1%+39%"
+        },
+        {
+          "label": "三段伤害倍率",
+          "source_key": "追猎",
+          "values": [
+            "14.4%*2",
+            "15.6%*2",
+            "16.8%*2",
+            "18.1%*2",
+            "19.6%*2",
+            "21.2%*2",
+            "22.9%*2",
+            "24.7%*2",
+            "26.7%*2",
+            "28.8%*2",
+            "31.1%*2",
+            "33.6%*2",
+            "36.3%*2"
+          ],
+          "current_value": "14.4%*2"
+        },
+        {
+          "label": "四段伤害倍率",
+          "source_key": "追猎",
+          "values": [
+            "26.8%+10.2%*2+86%",
+            "28.9%+11%*2+92.9%",
+            "31.3%+11.9%*2+100.3%",
+            "33.8%+12.8%*2+108.3%",
+            "36.5%+13.9%*2+117%",
+            "39.4%+15%*2+126.4%",
+            "42.5%+16.2%*2+136.5%",
+            "45.9%+17.5%*2+147.4%",
+            "49.6%+18.9%*2+159.2%",
+            "53.6%+20.4%*2+171.9%",
+            "57.9%+22%*2+185.7%",
+            "62.5%+23.8%*2+200.5%",
+            "67.5%+25.7%*2+216.6%"
+          ],
+          "current_value": "26.8%+10.2%*2+86%"
+        },
+        {
+          "label": "五段伤害倍率",
+          "source_key": "追猎",
+          "values": [
+            "24.9%*2+79.8%",
+            "26.9%*2+86.2%",
+            "29%*2+93.1%",
+            "31.4%*2+100.5%",
+            "33.9%*2+108.6%",
+            "36.6%*2+117.3%",
+            "39.5%*2+126.6%",
+            "42.7%*2+136.8%",
+            "46.1%*2+147.7%",
+            "49.8%*2+159.5%",
+            "53.8%*2+172.3%",
+            "58.1%*2+186.1%",
+            "62.7%*2+200.9%"
+          ],
+          "current_value": "24.9%*2+79.8%"
+        },
+        {
+          "label": "下落伤害倍率",
+          "source_key": "追猎",
+          "values": [
+            "45%",
+            "48.6%",
+            "52.5%",
+            "56.7%",
+            "61.2%",
+            "66.1%",
+            "71.4%",
+            "77.1%",
+            "83.3%",
+            "90%",
+            "97.2%",
+            "104.9%",
+            "113.3%"
+          ],
+          "current_value": "45%"
+        },
+        {
+          "label": "分支一段伤害倍率",
+          "source_key": "追猎",
+          "values": [
+            "57.5%*2",
+            "62.1%*2",
+            "67.1%*2",
+            "72.4%*2",
+            "78.2%*2",
+            "84.5%*2",
+            "91.2%*2",
+            "98.5%*2",
+            "106.4%*2",
+            "114.9%*2",
+            "124.1%*2",
+            "134.1%*2",
+            "144.8%*2"
+          ],
+          "current_value": "57.5%*2"
+        },
+        {
+          "label": "分支二段清算伤害倍率",
+          "source_key": "追猎",
+          "values": [
+            "400%*2",
+            "432%*2",
+            "466.6%*2",
+            "503.9%*2",
+            "544.2%*2",
+            "587.7%*2",
+            "634.7%*2",
+            "685.5%*2",
+            "740.4%*2",
+            "799.6%*2",
+            "863.6%*2",
+            "932.7%*2",
+            "1007.3%*2"
+          ],
+          "current_value": "400%*2"
+        },
+        {
+          "label": "极限反击倍率",
+          "source_key": "追猎",
+          "values": [
+            "106%",
+            "114.5%",
+            "123.6%",
+            "133.5%",
+            "144.2%",
+            "155.7%",
+            "168.2%",
+            "181.7%",
+            "196.2%",
+            "211.9%",
+            "228.8%",
+            "247.2%",
+            "266.9%"
+          ],
+          "current_value": "106%"
+        },
+        {
+          "label": "环合值",
+          "source_key": "追猎",
+          "values": [
+            "30",
+            "30",
+            "30",
+            "30",
+            "30",
+            "30",
+            "30",
+            "30",
+            "30",
+            "30",
+            "30",
+            "30",
+            "30"
+          ],
+          "current_value": "30"
+        },
+        {
+          "label": "全套普通攻击积攒「罪状」",
+          "source_key": "追猎",
+          "values": [
+            "300",
+            "300",
+            "300",
+            "300",
+            "300",
+            "300",
+            "300",
+            "300",
+            "300",
+            "300",
+            "300",
+            "300",
+            "300"
+          ],
+          "current_value": "300"
+        },
+        {
+          "label": "极限反击积攒「罪状」",
+          "source_key": "追猎",
+          "values": [
+            "100",
+            "100",
+            "100",
+            "100",
+            "100",
+            "100",
+            "100",
+            "100",
+            "100",
+            "100",
+            "100",
+            "100",
+            "100"
+          ],
+          "current_value": "100"
+        },
+        {
+          "label": "下落攻击积攒「罪状」",
+          "source_key": "追猎",
+          "values": [
+            "30",
+            "30",
+            "30",
+            "30",
+            "30",
+            "30",
+            "30",
+            "30",
+            "30",
+            "30",
+            "30",
+            "30",
+            "30"
+          ],
+          "current_value": "30"
+        }
+      ]
+    },
+    {
+      "id": "疑点锁定",
+      "name": "疑点锁定",
+      "category": "Skill",
+      "description_parts": [
+        {
+          "name": "疑点锁定",
+          "text": "卡厄斯不太记得这条猎犬是什么时候出现的了。似乎是某天，他突然开始想念从前家中的小狗，于是猎犬便出现了。"
+        }
+      ],
+      "raw_text": "疑点锁定SkillLv.12345678910111213疑点锁定已确认目标特征。卡厄斯使用手枪对前方目标进行射击，并召唤猎犬扑向目标，猎犬对目标进行来回2次撕咬攻击。技能命中目标后，为最多2名敌人施加「追缉许可」，持续15秒。卡厄斯攻击带有「追缉许可」的目标时，造成的伤害增加20%。技能倍率猎犬撕咬伤害倍率82.5%+217.5%施加「追缉许可」目标数量2环合值12积攒「罪状」100「追缉许可」持续时间15秒卡厄斯不太记得这条猎犬是什么时候出现的了。似乎是某天，他突然开始想念从前家中的小狗，于是猎犬便出现了。",
+      "level_cap": 13,
+      "parameters": [
+        {
+          "label": "猎犬撕咬伤害倍率",
+          "source_key": "疑点锁定",
+          "values": [
+            "82.5%+217.5%",
+            "89.1%+234.9%",
+            "96.2%+253.7%",
+            "103.9%+274%",
+            "112.2%+295.9%",
+            "121.2%+319.6%",
+            "130.9%+345.1%",
+            "141.4%+372.8%",
+            "152.7%+402.6%",
+            "164.9%+434.8%",
+            "178.1%+469.6%",
+            "192.4%+507.1%",
+            "207.7%+547.7%"
+          ],
+          "current_value": "82.5%+217.5%"
+        },
+        {
+          "label": "施加「追缉许可」目标数量",
+          "source_key": "疑点锁定",
+          "values": [
+            "2",
+            "2",
+            "2",
+            "2",
+            "2",
+            "2",
+            "2",
+            "2",
+            "2",
+            "2",
+            "2",
+            "2",
+            "2"
+          ],
+          "current_value": "2"
+        },
+        {
+          "label": "环合值",
+          "source_key": "疑点锁定",
+          "values": [
+            "12",
+            "12",
+            "12",
+            "12",
+            "12",
+            "12",
+            "12",
+            "12",
+            "12",
+            "12",
+            "12",
+            "12",
+            "12"
+          ],
+          "current_value": "12"
+        },
+        {
+          "label": "积攒「罪状」",
+          "source_key": "疑点锁定",
+          "values": [
+            "100",
+            "100",
+            "100",
+            "100",
+            "100",
+            "100",
+            "100",
+            "100",
+            "100",
+            "100",
+            "100",
+            "100",
+            "100"
+          ],
+          "current_value": "100"
+        },
+        {
+          "label": "「追缉许可」持续时间",
+          "source_key": "疑点锁定",
+          "values": [
+            "15秒",
+            "15秒",
+            "15秒",
+            "15秒",
+            "15秒",
+            "15秒",
+            "15秒",
+            "15秒",
+            "15秒",
+            "15秒",
+            "15秒",
+            "15秒",
+            "15秒"
+          ],
+          "current_value": "15秒"
+        }
+      ]
+    },
+    {
+      "id": "罪业清偿",
+      "name": "罪业清偿",
+      "category": "UltraSkill",
+      "description_parts": [
+        {
+          "name": "罪业清偿",
+          "text": "其实你隐约明白，善恶循环往复，这一切永远不会有尽头。"
+        }
+      ],
+      "raw_text": "罪业清偿UltraSkillLv.12345678910111213罪业清偿卡厄斯召唤猎犬压制周围敌人，对范围内所有敌人施加「追缉许可」，并进入「恶名往复」状态。卡厄斯在场上且处于「恶名往复」状态时，「罪状」会持续快速增长，可更频繁发动「裁断」造成高额清算伤害。技能倍率压制伤害倍率127.3%*4+290.9%「恶名往复」持续时间12秒「罪状」增长速度150/秒「追缉许可」持续时间15秒消耗终结能量100其实你隐约明白，善恶循环往复，这一切永远不会有尽头。",
+      "level_cap": 13,
+      "parameters": [
+        {
+          "label": "压制伤害倍率",
+          "source_key": "罪业清偿",
+          "values": [
+            "127.3%*4+290.9%",
+            "137.5%*4+314.2%",
+            "148.5%*4+339.3%",
+            "160.4%*4+366.5%",
+            "173.2%*4+395.8%",
+            "187%*4+427.4%",
+            "202%*4+461.6%",
+            "218.2%*4+498.6%",
+            "235.6%*4+538.4%",
+            "254.5%*4+581.5%",
+            "274.8%*4+628%",
+            "296.8%*4+678.3%",
+            "320.6%*4+732.5%"
+          ],
+          "current_value": "127.3%*4+290.9%"
+        },
+        {
+          "label": "「恶名往复」持续时间",
+          "source_key": "罪业清偿",
+          "values": [
+            "12秒",
+            "12秒",
+            "12秒",
+            "12秒",
+            "12秒",
+            "12秒",
+            "12秒",
+            "12秒",
+            "12秒",
+            "12秒",
+            "12秒",
+            "12秒",
+            "12秒"
+          ],
+          "current_value": "12秒"
+        },
+        {
+          "label": "「罪状」增长速度",
+          "source_key": "罪业清偿",
+          "values": [
+            "150/秒",
+            "150/秒",
+            "150/秒",
+            "150/秒",
+            "150/秒",
+            "150/秒",
+            "150/秒",
+            "150/秒",
+            "150/秒",
+            "150/秒",
+            "150/秒",
+            "150/秒",
+            "150/秒"
+          ],
+          "current_value": "150/秒"
+        },
+        {
+          "label": "「追缉许可」持续时间",
+          "source_key": "罪业清偿",
+          "values": [
+            "15秒",
+            "15秒",
+            "15秒",
+            "15秒",
+            "15秒",
+            "15秒",
+            "15秒",
+            "15秒",
+            "15秒",
+            "15秒",
+            "15秒",
+            "15秒",
+            "15秒"
+          ],
+          "current_value": "15秒"
+        },
+        {
+          "label": "消耗终结能量",
+          "source_key": "罪业清偿",
+          "values": [
+            "100",
+            "100",
+            "100",
+            "100",
+            "100",
+            "100",
+            "100",
+            "100",
+            "100",
+            "100",
+            "100",
+            "100",
+            "100"
+          ],
+          "current_value": "100"
+        }
+      ]
+    },
+    {
+      "id": "强袭",
+      "name": "强袭",
+      "category": "QTE",
+      "description_parts": [
+        {
+          "name": "强袭",
+          "text": "齐心协力、风雨同舟，从前也是如此。"
+        }
+      ],
+      "raw_text": "强袭QTELv.12345678910111213强袭别想逃跑！卡厄斯挥舞镰刀上劈，造成1次相属性异能伤害。技能倍率伤害倍率200%齐心协力、风雨同舟，从前也是如此。",
+      "level_cap": 13,
+      "parameters": [
+        {
+          "label": "伤害倍率",
+          "source_key": "强袭",
+          "values": [
+            "200%",
+            "216%",
+            "233.3%",
+            "251.9%",
+            "272.1%",
+            "293.9%",
+            "317.4%",
+            "342.8%",
+            "370.2%",
+            "399.8%",
+            "431.8%",
+            "466.3%",
+            "503.6%"
+          ],
+          "current_value": "200%"
+        }
+      ]
+    },
+    {
+      "id": "未迟到的正义",
+      "name": "未迟到的正义",
+      "category": "Skill",
+      "description_parts": [
+        {
+          "name": "未迟到的正义",
+          "text": "所以你仍旧相信，正确的答案一定能带来光明的结局？"
+        }
+      ],
+      "raw_text": "未迟到的正义Passive未迟到的正义「延滞」强化：当目标的「延滞」状态解除时，卡厄斯将会根据本次「延滞」持续时间对目标造成800%*攻击力的相属性异能伤害，基础5秒外，每额外持续1秒整体伤害提升45%，上限300%。重复施加「延滞」状态将重置持续时间。所以你仍旧相信，正确的答案一定能带来光明的结局？",
+      "level_cap": 1,
+      "parameters": []
+    },
+    {
+      "id": "重点关注！",
+      "name": "重点关注！",
+      "category": "Skill",
+      "description_parts": [
+        {
+          "name": "重点关注！",
+          "text": "「我已经走完流程和审批了！」"
+        }
+      ],
+      "raw_text": "重点关注！Passive重点关注！「追缉许可」的伤害增加效果提升至30%。「我已经走完流程和审批了！」",
+      "level_cap": 1,
+      "parameters": []
+    },
+    {
+      "id": "尘中影",
+      "name": "尘中影",
+      "category": "Skill",
+      "description_parts": [
+        {
+          "name": "尘中影",
+          "text": "但你追不上过去的影子。"
+        }
+      ],
+      "raw_text": "尘中影Peculiarity尘中影在大世界中，卡厄斯能通过长按瞄准键的方式留下猎犬作为传送锚点。需要传送时，通过地图交互，猎犬将撕咬出连通空间的门扉，卡厄斯由此回到锚点所在之处。但你追不上过去的影子。",
+      "level_cap": 1,
+      "parameters": []
+    },
+    {
+      "id": "垂钓大师",
+      "name": "垂钓大师",
+      "category": "City",
+      "description_parts": [],
+      "raw_text": "垂钓大师CityLv.1「海上钓客」中渔获市场每日额外增加1种鱼的高价收购。Lv.2「海上钓客」中使用特制鱼饵的效果提升25%。Lv.3「海上钓客」中贵重和珍稀品质的鱼的耐力减少1点。Lv.4「海上钓客」中渔获市场每日额外增加1种鱼的高价收购。Lv.5「海上钓客」中所有鱼的耐力减少1点。",
+      "level_cap": 1,
+      "parameters": []
+    },
+    {
+      "id": "记忆/船锚",
+      "name": "记忆/船锚",
+      "category": "City",
+      "description_parts": [],
+      "raw_text": "记忆/船锚CityLv.1传送锚点的放置上限增加至2个。",
+      "level_cap": 1,
+      "parameters": []
+    }
+  ],
+  "awakenings": [
+    {
+      "name": "灼见",
+      "description": "卡厄斯在攻击带有「追缉许可」的敌人时，能够额外获取40%的「罪状」。",
+      "asset": "data/resources/characters/kaesi/awaken/UI_UI_player_YH_UI_juexingICON_1071_1.webp"
+    },
+    {
+      "name": "罪名/恶行",
+      "description": "卡厄斯在攻击带有「追缉许可」的敌人时，无视目标20%防御力。",
+      "asset": "data/resources/characters/kaesi/awaken/UI_UI_player_YH_UI_juexingICON_1071_2.webp"
+    },
+    {
+      "name": "烟火",
+      "description": "卡厄斯使用「极轨终结：罪业清偿」后，暴击伤害提升30%，持续20秒。重复触发刷新持续时间。",
+      "asset": "data/resources/characters/kaesi/awaken/UI_UI_player_YH_UI_juexingICON_1071_3.webp"
+    },
+    {
+      "name": "海潮漫延",
+      "description": "卡厄斯击败带有「追缉许可」的目标时，该「追缉许可」会传递至附近未被标记的目标，重新计算持续时间。",
+      "asset": "data/resources/characters/kaesi/awaken/UI_UI_player_YH_UI_juexingICON_1071_4.webp"
+    },
+    {
+      "name": "独见虚空",
+      "description": "当场上仅剩1名带有「追缉许可」的目标时，卡厄斯对其造成的伤害提升20%。",
+      "asset": "data/resources/characters/kaesi/awaken/UI_UI_player_YH_UI_juexingICON_1071_5.webp"
+    },
+    {
+      "name": "伪原点",
+      "description": "卡厄斯使用「极轨终结：罪业清偿」后，立即将「罪状」补充至上限。",
+      "asset": "data/resources/characters/kaesi/awaken/UI_UI_player_YH_UI_juexingICON_1071_6.webp"
+    }
+  ],
+  "resonance": [
+    {
+      "name": "正义/正确「普通攻击：追猎」「变轨技能：疑点锁定」「极轨终结：罪业清偿」的技能等级提升1级。",
+      "description": "「普通攻击：追猎」「变轨技能：疑点锁定」「极轨终结：罪业清偿」的技能等级提升1级。",
+      "asset": "data/resources/characters/kaesi/awaken/UI_UI_player_YH_UI_juexingICON_1009_2.webp",
+      "level": 3
+    },
+    {
+      "name": "光明/白昼带有「追缉许可」的敌人相属性异能伤害抗性降低10%。",
+      "description": "带有「追缉许可」的敌人相属性异能伤害抗性降低10%。",
+      "asset": "data/resources/characters/kaesi/awaken/UI_UI_player_YH_UI_juexingICON_1009_2.webp",
+      "level": 6
+    }
+  ],
+  "voice_actors": {
+    "日文": "小西克幸",
+    "英文": "Rick Kumazawa",
+    "中文": "淦子齐",
+    "韩文": "원종준"
+  },
+  "cultivation": {
+    "ascension": [
+      {
+        "level": 30,
+        "items": [
+          {
+            "id": "OrdinaryMonMaterial_04_lv1",
+            "amount": 5
+          },
+          {
+            "id": "gold",
+            "amount": 25000
+          }
+        ]
+      },
+      {
+        "level": 40,
+        "items": [
+          {
+            "id": "OrdinaryMonMaterial_04_lv1",
+            "amount": 12
+          },
+          {
+            "id": "Worldboss_material_07",
+            "amount": 2
+          },
+          {
+            "id": "gold",
+            "amount": 50000
+          }
+        ]
+      },
+      {
+        "level": 50,
+        "items": [
+          {
+            "id": "OrdinaryMonMaterial_04_lv2",
+            "amount": 6
+          },
+          {
+            "id": "Worldboss_material_07",
+            "amount": 8
+          },
+          {
+            "id": "gold",
+            "amount": 75000
+          }
+        ]
+      },
+      {
+        "level": 60,
+        "items": [
+          {
+            "id": "OrdinaryMonMaterial_04_lv2",
+            "amount": 12
+          },
+          {
+            "id": "Worldboss_material_07",
+            "amount": 16
+          },
+          {
+            "id": "gold",
+            "amount": 100000
+          }
+        ]
+      },
+      {
+        "level": 70,
+        "items": [
+          {
+            "id": "OrdinaryMonMaterial_04_lv3",
+            "amount": 6
+          },
+          {
+            "id": "Worldboss_material_07",
+            "amount": 24
+          },
+          {
+            "id": "gold",
+            "amount": 125000
+          }
+        ]
+      },
+      {
+        "level": 80,
+        "items": [
+          {
+            "id": "OrdinaryMonMaterial_04_lv3",
+            "amount": 9
+          },
+          {
+            "id": "Worldboss_material_07",
+            "amount": 36
+          },
+          {
+            "id": "gold",
+            "amount": 150000
+          }
+        ]
+      }
+    ],
+    "skills": [
+      {
+        "name": "追猎",
+        "levels": [
+          {
+            "level": 2,
+            "require_breakthrough": 2,
+            "items": [
+              {
+                "id": "gold",
+                "amount": 2000
+              },
+              {
+                "id": "SkillUpMaterial_04_lv1",
+                "amount": 2
+              },
+              {
+                "id": "OrdinaryMonMaterial_04_lv1",
+                "amount": 2
+              }
+            ]
+          },
+          {
+            "level": 3,
+            "require_breakthrough": 3,
+            "items": [
+              {
+                "id": "gold",
+                "amount": 5000
+              },
+              {
+                "id": "SkillUpMaterial_04_lv1",
+                "amount": 3
+              },
+              {
+                "id": "OrdinaryMonMaterial_04_lv1",
+                "amount": 3
+              }
+            ]
+          },
+          {
+            "level": 4,
+            "require_breakthrough": 3,
+            "items": [
+              {
+                "id": "gold",
+                "amount": 10000
+              },
+              {
+                "id": "SkillUpMaterial_04_lv1",
+                "amount": 5
+              },
+              {
+                "id": "OrdinaryMonMaterial_04_lv1",
+                "amount": 5
+              }
+            ]
+          },
+          {
+            "level": 5,
+            "require_breakthrough": 4,
+            "items": [
+              {
+                "id": "gold",
+                "amount": 20000
+              },
+              {
+                "id": "SkillUpMaterial_04_lv2",
+                "amount": 2
+              },
+              {
+                "id": "OrdinaryMonMaterial_04_lv2",
+                "amount": 2
+              }
+            ]
+          },
+          {
+            "level": 6,
+            "require_breakthrough": 4,
+            "items": [
+              {
+                "id": "gold",
+                "amount": 40000
+              },
+              {
+                "id": "SkillUpMaterial_04_lv2",
+                "amount": 3
+              },
+              {
+                "id": "OrdinaryMonMaterial_04_lv2",
+                "amount": 3
+              }
+            ]
+          },
+          {
+            "level": 7,
+            "require_breakthrough": 5,
+            "items": [
+              {
+                "id": "gold",
+                "amount": 60000
+              },
+              {
+                "id": "SkillUpMaterial_04_lv2",
+                "amount": 5
+              },
+              {
+                "id": "OrdinaryMonMaterial_04_lv2",
+                "amount": 5
+              },
+              {
+                "id": "weeklycloneboss_a03_01",
+                "amount": 1
+              }
+            ]
+          },
+          {
+            "level": 8,
+            "require_breakthrough": 5,
+            "items": [
+              {
+                "id": "gold",
+                "amount": 80000
+              },
+              {
+                "id": "SkillUpMaterial_04_lv3",
+                "amount": 3
+              },
+              {
+                "id": "OrdinaryMonMaterial_04_lv3",
+                "amount": 3
+              },
+              {
+                "id": "weeklycloneboss_a03_01",
+                "amount": 1
+              }
+            ]
+          },
+          {
+            "level": 9,
+            "require_breakthrough": 6,
+            "items": [
+              {
+                "id": "gold",
+                "amount": 100000
+              },
+              {
+                "id": "SkillUpMaterial_04_lv3",
+                "amount": 5
+              },
+              {
+                "id": "OrdinaryMonMaterial_04_lv3",
+                "amount": 5
+              },
+              {
+                "id": "weeklycloneboss_a03_01",
+                "amount": 2
+              }
+            ]
+          },
+          {
+            "level": 10,
+            "require_breakthrough": 6,
+            "items": [
+              {
+                "id": "gold",
+                "amount": 120000
+              },
+              {
+                "id": "SkillUpMaterial_04_lv3",
+                "amount": 8
+              },
+              {
+                "id": "OrdinaryMonMaterial_04_lv3",
+                "amount": 8
+              },
+              {
+                "id": "weeklycloneboss_a03_01",
+                "amount": 4
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "疑点锁定",
+        "levels": [
+          {
+            "level": 2,
+            "require_breakthrough": 2,
+            "items": [
+              {
+                "id": "gold",
+                "amount": 2000
+              },
+              {
+                "id": "SkillUpMaterial_04_lv1",
+                "amount": 2
+              },
+              {
+                "id": "OrdinaryMonMaterial_04_lv1",
+                "amount": 2
+              }
+            ]
+          },
+          {
+            "level": 3,
+            "require_breakthrough": 3,
+            "items": [
+              {
+                "id": "gold",
+                "amount": 5000
+              },
+              {
+                "id": "SkillUpMaterial_04_lv1",
+                "amount": 3
+              },
+              {
+                "id": "OrdinaryMonMaterial_04_lv1",
+                "amount": 3
+              }
+            ]
+          },
+          {
+            "level": 4,
+            "require_breakthrough": 3,
+            "items": [
+              {
+                "id": "gold",
+                "amount": 10000
+              },
+              {
+                "id": "SkillUpMaterial_04_lv1",
+                "amount": 5
+              },
+              {
+                "id": "OrdinaryMonMaterial_04_lv1",
+                "amount": 5
+              }
+            ]
+          },
+          {
+            "level": 5,
+            "require_breakthrough": 4,
+            "items": [
+              {
+                "id": "gold",
+                "amount": 20000
+              },
+              {
+                "id": "SkillUpMaterial_04_lv2",
+                "amount": 2
+              },
+              {
+                "id": "OrdinaryMonMaterial_04_lv2",
+                "amount": 2
+              }
+            ]
+          },
+          {
+            "level": 6,
+            "require_breakthrough": 4,
+            "items": [
+              {
+                "id": "gold",
+                "amount": 40000
+              },
+              {
+                "id": "SkillUpMaterial_04_lv2",
+                "amount": 3
+              },
+              {
+                "id": "OrdinaryMonMaterial_04_lv2",
+                "amount": 3
+              }
+            ]
+          },
+          {
+            "level": 7,
+            "require_breakthrough": 5,
+            "items": [
+              {
+                "id": "gold",
+                "amount": 60000
+              },
+              {
+                "id": "SkillUpMaterial_04_lv2",
+                "amount": 5
+              },
+              {
+                "id": "OrdinaryMonMaterial_04_lv2",
+                "amount": 5
+              },
+              {
+                "id": "weeklycloneboss_a03_01",
+                "amount": 1
+              }
+            ]
+          },
+          {
+            "level": 8,
+            "require_breakthrough": 5,
+            "items": [
+              {
+                "id": "gold",
+                "amount": 80000
+              },
+              {
+                "id": "SkillUpMaterial_04_lv3",
+                "amount": 3
+              },
+              {
+                "id": "OrdinaryMonMaterial_04_lv3",
+                "amount": 3
+              },
+              {
+                "id": "weeklycloneboss_a03_01",
+                "amount": 1
+              }
+            ]
+          },
+          {
+            "level": 9,
+            "require_breakthrough": 6,
+            "items": [
+              {
+                "id": "gold",
+                "amount": 100000
+              },
+              {
+                "id": "SkillUpMaterial_04_lv3",
+                "amount": 5
+              },
+              {
+                "id": "OrdinaryMonMaterial_04_lv3",
+                "amount": 5
+              },
+              {
+                "id": "weeklycloneboss_a03_01",
+                "amount": 2
+              }
+            ]
+          },
+          {
+            "level": 10,
+            "require_breakthrough": 6,
+            "items": [
+              {
+                "id": "gold",
+                "amount": 120000
+              },
+              {
+                "id": "SkillUpMaterial_04_lv3",
+                "amount": 8
+              },
+              {
+                "id": "OrdinaryMonMaterial_04_lv3",
+                "amount": 8
+              },
+              {
+                "id": "weeklycloneboss_a03_01",
+                "amount": 4
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "罪业清偿",
+        "levels": [
+          {
+            "level": 2,
+            "require_breakthrough": 2,
+            "items": [
+              {
+                "id": "gold",
+                "amount": 2000
+              },
+              {
+                "id": "SkillUpMaterial_04_lv1",
+                "amount": 2
+              },
+              {
+                "id": "OrdinaryMonMaterial_04_lv1",
+                "amount": 2
+              }
+            ]
+          },
+          {
+            "level": 3,
+            "require_breakthrough": 3,
+            "items": [
+              {
+                "id": "gold",
+                "amount": 5000
+              },
+              {
+                "id": "SkillUpMaterial_04_lv1",
+                "amount": 3
+              },
+              {
+                "id": "OrdinaryMonMaterial_04_lv1",
+                "amount": 3
+              }
+            ]
+          },
+          {
+            "level": 4,
+            "require_breakthrough": 3,
+            "items": [
+              {
+                "id": "gold",
+                "amount": 10000
+              },
+              {
+                "id": "SkillUpMaterial_04_lv1",
+                "amount": 5
+              },
+              {
+                "id": "OrdinaryMonMaterial_04_lv1",
+                "amount": 5
+              }
+            ]
+          },
+          {
+            "level": 5,
+            "require_breakthrough": 4,
+            "items": [
+              {
+                "id": "gold",
+                "amount": 20000
+              },
+              {
+                "id": "SkillUpMaterial_04_lv2",
+                "amount": 2
+              },
+              {
+                "id": "OrdinaryMonMaterial_04_lv2",
+                "amount": 2
+              }
+            ]
+          },
+          {
+            "level": 6,
+            "require_breakthrough": 4,
+            "items": [
+              {
+                "id": "gold",
+                "amount": 40000
+              },
+              {
+                "id": "SkillUpMaterial_04_lv2",
+                "amount": 3
+              },
+              {
+                "id": "OrdinaryMonMaterial_04_lv2",
+                "amount": 3
+              }
+            ]
+          },
+          {
+            "level": 7,
+            "require_breakthrough": 5,
+            "items": [
+              {
+                "id": "gold",
+                "amount": 60000
+              },
+              {
+                "id": "SkillUpMaterial_04_lv2",
+                "amount": 5
+              },
+              {
+                "id": "OrdinaryMonMaterial_04_lv2",
+                "amount": 5
+              },
+              {
+                "id": "weeklycloneboss_a03_01",
+                "amount": 1
+              }
+            ]
+          },
+          {
+            "level": 8,
+            "require_breakthrough": 5,
+            "items": [
+              {
+                "id": "gold",
+                "amount": 80000
+              },
+              {
+                "id": "SkillUpMaterial_04_lv3",
+                "amount": 3
+              },
+              {
+                "id": "OrdinaryMonMaterial_04_lv3",
+                "amount": 3
+              },
+              {
+                "id": "weeklycloneboss_a03_01",
+                "amount": 1
+              }
+            ]
+          },
+          {
+            "level": 9,
+            "require_breakthrough": 6,
+            "items": [
+              {
+                "id": "gold",
+                "amount": 100000
+              },
+              {
+                "id": "SkillUpMaterial_04_lv3",
+                "amount": 5
+              },
+              {
+                "id": "OrdinaryMonMaterial_04_lv3",
+                "amount": 5
+              },
+              {
+                "id": "weeklycloneboss_a03_01",
+                "amount": 2
+              }
+            ]
+          },
+          {
+            "level": 10,
+            "require_breakthrough": 6,
+            "items": [
+              {
+                "id": "gold",
+                "amount": 120000
+              },
+              {
+                "id": "SkillUpMaterial_04_lv3",
+                "amount": 8
+              },
+              {
+                "id": "OrdinaryMonMaterial_04_lv3",
+                "amount": 8
+              },
+              {
+                "id": "weeklycloneboss_a03_01",
+                "amount": 4
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "强袭",
+        "levels": [
+          {
+            "level": 2,
+            "require_breakthrough": 2,
+            "items": [
+              {
+                "id": "gold",
+                "amount": 2000
+              },
+              {
+                "id": "SkillUpMaterial_04_lv1",
+                "amount": 2
+              },
+              {
+                "id": "OrdinaryMonMaterial_04_lv1",
+                "amount": 2
+              }
+            ]
+          },
+          {
+            "level": 3,
+            "require_breakthrough": 3,
+            "items": [
+              {
+                "id": "gold",
+                "amount": 5000
+              },
+              {
+                "id": "SkillUpMaterial_04_lv1",
+                "amount": 3
+              },
+              {
+                "id": "OrdinaryMonMaterial_04_lv1",
+                "amount": 3
+              }
+            ]
+          },
+          {
+            "level": 4,
+            "require_breakthrough": 3,
+            "items": [
+              {
+                "id": "gold",
+                "amount": 10000
+              },
+              {
+                "id": "SkillUpMaterial_04_lv1",
+                "amount": 5
+              },
+              {
+                "id": "OrdinaryMonMaterial_04_lv1",
+                "amount": 5
+              }
+            ]
+          },
+          {
+            "level": 5,
+            "require_breakthrough": 4,
+            "items": [
+              {
+                "id": "gold",
+                "amount": 20000
+              },
+              {
+                "id": "SkillUpMaterial_04_lv2",
+                "amount": 2
+              },
+              {
+                "id": "OrdinaryMonMaterial_04_lv2",
+                "amount": 2
+              }
+            ]
+          },
+          {
+            "level": 6,
+            "require_breakthrough": 4,
+            "items": [
+              {
+                "id": "gold",
+                "amount": 40000
+              },
+              {
+                "id": "SkillUpMaterial_04_lv2",
+                "amount": 3
+              },
+              {
+                "id": "OrdinaryMonMaterial_04_lv2",
+                "amount": 3
+              }
+            ]
+          },
+          {
+            "level": 7,
+            "require_breakthrough": 5,
+            "items": [
+              {
+                "id": "gold",
+                "amount": 60000
+              },
+              {
+                "id": "SkillUpMaterial_04_lv2",
+                "amount": 5
+              },
+              {
+                "id": "OrdinaryMonMaterial_04_lv2",
+                "amount": 5
+              },
+              {
+                "id": "weeklycloneboss_a03_01",
+                "amount": 1
+              }
+            ]
+          },
+          {
+            "level": 8,
+            "require_breakthrough": 5,
+            "items": [
+              {
+                "id": "gold",
+                "amount": 80000
+              },
+              {
+                "id": "SkillUpMaterial_04_lv3",
+                "amount": 3
+              },
+              {
+                "id": "OrdinaryMonMaterial_04_lv3",
+                "amount": 3
+              },
+              {
+                "id": "weeklycloneboss_a03_01",
+                "amount": 1
+              }
+            ]
+          },
+          {
+            "level": 9,
+            "require_breakthrough": 6,
+            "items": [
+              {
+                "id": "gold",
+                "amount": 100000
+              },
+              {
+                "id": "SkillUpMaterial_04_lv3",
+                "amount": 5
+              },
+              {
+                "id": "OrdinaryMonMaterial_04_lv3",
+                "amount": 5
+              },
+              {
+                "id": "weeklycloneboss_a03_01",
+                "amount": 2
+              }
+            ]
+          },
+          {
+            "level": 10,
+            "require_breakthrough": 6,
+            "items": [
+              {
+                "id": "gold",
+                "amount": 120000
+              },
+              {
+                "id": "SkillUpMaterial_04_lv3",
+                "amount": 8
+              },
+              {
+                "id": "OrdinaryMonMaterial_04_lv3",
+                "amount": 8
+              },
+              {
+                "id": "weeklycloneboss_a03_01",
+                "amount": 4
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "未迟到的正义",
+        "levels": [
+          {
+            "level": 1,
+            "require_breakthrough": 2,
+            "items": [
+              {
+                "id": "gold",
+                "amount": 30000
+              },
+              {
+                "id": "SkillUpMaterial_04_lv2",
+                "amount": 2
+              },
+              {
+                "id": "weeklycloneboss_a03_01",
+                "amount": 1
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "重点关注！",
+        "levels": [
+          {
+            "level": 1,
+            "require_breakthrough": 4,
+            "items": [
+              {
+                "id": "gold",
+                "amount": 40000
+              },
+              {
+                "id": "SkillUpMaterial_04_lv3",
+                "amount": 1
+              },
+              {
+                "id": "weeklycloneboss_a03_01",
+                "amount": 2
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "垂钓大师",
+        "levels": [
+          {
+            "level": 1,
+            "require_breakthrough": 0,
+            "items": [
+              {
+                "id": "CityAbility_UpMaterial",
+                "amount": 2
+              },
+              {
+                "id": "fons",
+                "amount": 500
+              }
+            ]
+          },
+          {
+            "level": 2,
+            "require_breakthrough": 0,
+            "items": [
+              {
+                "id": "CityAbility_UpMaterial",
+                "amount": 4
+              },
+              {
+                "id": "fons",
+                "amount": 1500
+              }
+            ]
+          },
+          {
+            "level": 3,
+            "require_breakthrough": 0,
+            "items": [
+              {
+                "id": "CityAbility_UpMaterial",
+                "amount": 10
+              },
+              {
+                "id": "fons",
+                "amount": 3600
+              }
+            ]
+          },
+          {
+            "level": 4,
+            "require_breakthrough": 0,
+            "items": [
+              {
+                "id": "CityAbility_UpMaterial",
+                "amount": 16
+              },
+              {
+                "id": "fons",
+                "amount": 6400
+              }
+            ]
+          },
+          {
+            "level": 5,
+            "require_breakthrough": 0,
+            "items": [
+              {
+                "id": "CityAbility_UpMaterial",
+                "amount": 24
+              },
+              {
+                "id": "fons",
+                "amount": 10000
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "记忆/船锚",
+        "levels": [
+          {
+            "level": 1,
+            "require_breakthrough": 0,
+            "items": [
+              {
+                "id": "CityAbility_UpMaterial",
+                "amount": 24
+              },
+              {
+                "id": "fons",
+                "amount": 10000
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "material_catalog": {
+      "OrdinaryMonMaterial_04_lv1": {
+        "name": "悬想幻妄",
+        "icon": "/Game/UI/UI_Icon/Item/material_xuannianwangning"
+      },
+      "gold": {
+        "name": "甲硬币",
+        "icon": "/Game/UI/UI_Icon/Item/item_Coin_Beetle"
+      },
+      "Worldboss_material_07": {
+        "name": "海之泪",
+        "icon": "/Game/UI/UI_Icon/Item/Worldboss_material_07"
+      },
+      "OrdinaryMonMaterial_04_lv2": {
+        "name": "渴念幻妄",
+        "icon": "/Game/UI/UI_Icon/Item/material_kewangwangning"
+      },
+      "OrdinaryMonMaterial_04_lv3": {
+        "name": "超验幻妄",
+        "icon": "/Game/UI/UI_Icon/Item/material_chaoyanwangning"
+      },
+      "SkillUpMaterial_04_lv1": {
+        "name": "思维的同频",
+        "icon": "/Game/UI/UI_Icon/Item/SkillUpMaterial_04_lv1"
+      },
+      "SkillUpMaterial_04_lv2": {
+        "name": "信仰的共鸣",
+        "icon": "/Game/UI/UI_Icon/Item/SkillUpMaterial_04_lv2"
+      },
+      "weeklycloneboss_a03_01": {
+        "name": "记忆的永恒",
+        "icon": "/Game/UI/UI_Icon/Item/weeklycloneboss_a03_01"
+      },
+      "SkillUpMaterial_04_lv3": {
+        "name": "「心跳夜」",
+        "icon": "/Game/UI/UI_Icon/Item/SkillUpMaterial_04_lv3"
+      },
+      "CityAbility_UpMaterial": {
+        "name": "无梦果核",
+        "icon": "/Game/UI/UI_Icon/Item/CityAbility_UpMaterial"
+      },
+      "fons": {
+        "name": "方斯",
+        "icon": "/Game/UI/UI_Icon/Item/Icon_Fonizie"
+      }
+    }
+  },
+  "assets": [
+    {
+      "type": "character_portrait",
+      "source_url": "https://wiki.mysqil.com/images/characters/kaesi.webp",
+      "local_path": "data/resources/characters/kaesi/characters/kaesi.webp",
+      "sha256": "1d4d8a9de8d9fc75ca6b582134feb30f8bbdee572dfed1210c2e41a88a7dad5e"
+    },
+    {
+      "type": "character_icon",
+      "source_url": "https://wiki.mysqil.com/images/characters/kaesi-icon.webp",
+      "local_path": "data/resources/characters/kaesi/characters/kaesi-icon.webp",
+      "sha256": "e99b31f4be109fdb8a3f38bca5373c042ae1510c029f95ffedd4bc11ca40a3e9"
+    },
+    {
+      "type": "element_icon",
+      "source_url": "https://wiki.mysqil.com/images/ui/element-lakshana.webp",
+      "local_path": "data/resources/characters/kaesi/ui/element-lakshana.webp",
+      "sha256": "f29d49ec67569ea91634b49242bf3f1109470d0660c59bf8844dc2f75490a00d"
+    },
+    {
+      "type": "weapon",
+      "source_url": "https://wiki.mysqil.com/images/weapons/zhongrenzhuixunzhiwu.webp",
+      "local_path": "data/resources/characters/kaesi/weapons/zhongrenzhuixunzhiwu.webp",
+      "sha256": "7f1873db997b42b0063d0d3faeb5ac4d26783ea7a4e6c844b6a8eaae42f2727e"
+    },
+    {
+      "type": "cassette",
+      "source_url": "https://wiki.mysqil.com/images/cassettes/street-boxer.webp",
+      "local_path": "data/resources/characters/kaesi/cassettes/street-boxer.webp",
+      "sha256": "1fff56ca50228c2143ed61f15662aa0ebca9832a38ba8a3ae5438430ed76588f"
+    },
+    {
+      "type": "stat_icon",
+      "source_url": "https://wiki.mysqil.com/images/ui/stat-hp.webp",
+      "local_path": "data/resources/characters/kaesi/ui/stat-hp.webp",
+      "sha256": "3ceda81fff27a8b1936f59ceb78ad4f4fe5680e41943ac00b43cad056bacec7b"
+    },
+    {
+      "type": "stat_icon",
+      "source_url": "https://wiki.mysqil.com/images/ui/stat-atk.webp",
+      "local_path": "data/resources/characters/kaesi/ui/stat-atk.webp",
+      "sha256": "72b1feed665760d7a7dbf9e5ba8887d779f81632e371fdafa2a04899a0f72437"
+    },
+    {
+      "type": "stat_icon",
+      "source_url": "https://wiki.mysqil.com/images/ui/stat-def.webp",
+      "local_path": "data/resources/characters/kaesi/ui/stat-def.webp",
+      "sha256": "cf059d0768996ca928593b881a064ee0fb00ed98d0dd1f6e63816024a4b081f2"
+    },
+    {
+      "type": "stat_icon",
+      "source_url": "https://wiki.mysqil.com/images/ui/stat-crit-rate.webp",
+      "local_path": "data/resources/characters/kaesi/ui/stat-crit-rate.webp",
+      "sha256": "631b406f0ef37e800698201e0184016a3db06c5858d4c31dc8c5ad6175ffeace"
+    },
+    {
+      "type": "stat_icon",
+      "source_url": "https://wiki.mysqil.com/images/ui/stat-crit-dmg.webp",
+      "local_path": "data/resources/characters/kaesi/ui/stat-crit-dmg.webp",
+      "sha256": "77552c153fc1fa8ceda73dc0aa8dcd37b52ae3b53474435858311c5ea35a852f"
+    },
+    {
+      "type": "awakening_icon",
+      "source_url": "https://wiki.mysqil.com/images/awaken/UI_UI_player_YH_UI_juexingICON_1071_1.webp",
+      "local_path": "data/resources/characters/kaesi/awaken/UI_UI_player_YH_UI_juexingICON_1071_1.webp",
+      "sha256": "349a2da64c381616b05fe956d04447914c089095a3d47cebcbcfb5b0e8e977db"
+    },
+    {
+      "type": "awakening_icon",
+      "source_url": "https://wiki.mysqil.com/images/awaken/UI_UI_player_YH_UI_juexingICON_1071_2.webp",
+      "local_path": "data/resources/characters/kaesi/awaken/UI_UI_player_YH_UI_juexingICON_1071_2.webp",
+      "sha256": "eddf9e9a5fb5127e1fd1b02cbacdee74ff30097c6ae7c62d7e863df0f541d1d1"
+    },
+    {
+      "type": "awakening_icon",
+      "source_url": "https://wiki.mysqil.com/images/awaken/UI_UI_player_YH_UI_juexingICON_1071_3.webp",
+      "local_path": "data/resources/characters/kaesi/awaken/UI_UI_player_YH_UI_juexingICON_1071_3.webp",
+      "sha256": "46bd8123f7e0dca9cf2a78ca72e9d28de7cd9062db10c4c35d23d8da5529f8a8"
+    },
+    {
+      "type": "awakening_icon",
+      "source_url": "https://wiki.mysqil.com/images/awaken/UI_UI_player_YH_UI_juexingICON_1071_4.webp",
+      "local_path": "data/resources/characters/kaesi/awaken/UI_UI_player_YH_UI_juexingICON_1071_4.webp",
+      "sha256": "e8a84d99a66ab55d63b11a5849d70892fbf3f99142a39f1002737b9eb386a55b"
+    },
+    {
+      "type": "awakening_icon",
+      "source_url": "https://wiki.mysqil.com/images/awaken/UI_UI_player_YH_UI_juexingICON_1071_5.webp",
+      "local_path": "data/resources/characters/kaesi/awaken/UI_UI_player_YH_UI_juexingICON_1071_5.webp",
+      "sha256": "81efb7a02619b2009c12857c418fafc1b536e1fdd04759e28f6679beb5829d4c"
+    },
+    {
+      "type": "awakening_icon",
+      "source_url": "https://wiki.mysqil.com/images/awaken/UI_UI_player_YH_UI_juexingICON_1071_6.webp",
+      "local_path": "data/resources/characters/kaesi/awaken/UI_UI_player_YH_UI_juexingICON_1071_6.webp",
+      "sha256": "e4c4c98dc677d10bff41e9910eab93ed0e42357ad8b4e2e42830dbbb44143d47"
+    },
+    {
+      "type": "awakening_icon",
+      "source_url": "https://wiki.mysqil.com/images/awaken/UI_UI_player_YH_UI_juexingICON_1009_2.webp",
+      "local_path": "data/resources/characters/kaesi/awaken/UI_UI_player_YH_UI_juexingICON_1009_2.webp",
+      "sha256": "1b6ce539ca6b5ad3a38ce01feb012a9f5daf70cdbd8e81d843c426ff7aed58c1"
+    },
+    {
+      "type": "material",
+      "source_url": "https://wiki.mysqil.com/images/items/material_xuannianwangning.webp",
+      "local_path": "data/resources/characters/kaesi/items/material_xuannianwangning.webp",
+      "sha256": "d7403891bdc9f6fbee49428a8fda78484a284c4b67a42c1f10e043c4ccb0b736"
+    },
+    {
+      "type": "material",
+      "source_url": "https://wiki.mysqil.com/images/items/item_Coin_Beetle.webp",
+      "local_path": "data/resources/characters/kaesi/items/item_Coin_Beetle.webp",
+      "sha256": "421220b8cfdede7170ca54ec9bfaffd034832dc462d3066c8a1604fbfdb69a74"
+    },
+    {
+      "type": "material",
+      "source_url": "https://wiki.mysqil.com/images/items/Worldboss_material_07.webp",
+      "local_path": "data/resources/characters/kaesi/items/Worldboss_material_07.webp",
+      "sha256": "75a64adf3173f4b043da38cbf8a7b13efc8c356226710a3aa7cb1f25b0b02d06"
+    },
+    {
+      "type": "material",
+      "source_url": "https://wiki.mysqil.com/images/items/material_kewangwangning.webp",
+      "local_path": "data/resources/characters/kaesi/items/material_kewangwangning.webp",
+      "sha256": "b952d99f76b076504fd6afdb3695f63b832e149428bfbc5d657677c57a6b0388"
+    },
+    {
+      "type": "material",
+      "source_url": "https://wiki.mysqil.com/images/items/material_chaoyanwangning.webp",
+      "local_path": "data/resources/characters/kaesi/items/material_chaoyanwangning.webp",
+      "sha256": "cb7552accae38c7c1d8da8ba8ce34d361b9aeeb4fce16fbbb617a5154bb61432"
+    },
+    {
+      "type": "material",
+      "source_url": "https://wiki.mysqil.com/images/items/SkillUpMaterial_04_lv1.webp",
+      "local_path": "data/resources/characters/kaesi/items/SkillUpMaterial_04_lv1.webp",
+      "sha256": "b64816bf501f60c09f314ea17932b7ad864aa087ad1dd49d8f457e83524bde91"
+    },
+    {
+      "type": "material",
+      "source_url": "https://wiki.mysqil.com/images/items/SkillUpMaterial_04_lv2.webp",
+      "local_path": "data/resources/characters/kaesi/items/SkillUpMaterial_04_lv2.webp",
+      "sha256": "d6f8fcca023dbab0d6ac8473b1501900efce6159c993edceebba2b2f5e20335e"
+    },
+    {
+      "type": "material",
+      "source_url": "https://wiki.mysqil.com/images/items/weeklycloneboss_a03_01.webp",
+      "local_path": "data/resources/characters/kaesi/items/weeklycloneboss_a03_01.webp",
+      "sha256": "34f156c20400eb718381d8820f81ee083468cb5c18c27fd34be662f408d5955d"
+    },
+    {
+      "type": "material",
+      "source_url": "https://wiki.mysqil.com/images/items/SkillUpMaterial_04_lv3.webp",
+      "local_path": "data/resources/characters/kaesi/items/SkillUpMaterial_04_lv3.webp",
+      "sha256": "08a9c2c842b711d5c419aa100a0a68cbef5c7f72a84da468bf8a807fd771ee89"
+    },
+    {
+      "type": "material",
+      "source_url": "https://wiki.mysqil.com/images/items/CityAbility_UpMaterial.webp",
+      "local_path": "data/resources/characters/kaesi/items/CityAbility_UpMaterial.webp",
+      "sha256": "501479698ec2ffeac57576097533330d6da38685a02ae58a953444a3fd154350"
+    },
+    {
+      "type": "material",
+      "source_url": "https://wiki.mysqil.com/images/items/Icon_Fonizie.webp",
+      "local_path": "data/resources/characters/kaesi/items/Icon_Fonizie.webp",
+      "sha256": "3c6221be0356fbae55d13ca560332afdc44a3bb9cbdde4e9d9ecace631fda9f8"
+    }
+  ],
+  "provenance": {
+    "source": "mysqil",
+    "source_name": "Mysqil · 环世全鉴",
+    "source_url": "https://wiki.mysqil.com/characters/kaesi/",
+    "imported_at": "2026-09-29T02:18:03Z",
+    "raw_snapshot": "data/mysqil/characters/kaesi/raw/page.html",
+    "source_license": "CC BY-NC-SA 4.0",
+    "user_supplied_sources": []
+  },
+  "scope": {
+    "included": [
+      "基础资料",
+      "推荐武器",
+      "推荐卡带",
+      "基础属性成长",
+      "技能描述与倍率",
+      "觉醒",
+      "共鸣",
+      "突破材料",
+      "技能升级材料",
+      "卡带词条机制",
+      "终端"
+    ],
+    "excluded": [
+      "配队推荐"
+    ],
+    "note": "社区维护页面导入；配队推荐只保留在原始快照中。"
+  },
+  "manual_review": [
+    {
+      "field": "source_review",
+      "value": "社区源导入，待人工核验",
+      "source_type": "community_source",
+      "status": "pending"
+    }
+  ]
+}

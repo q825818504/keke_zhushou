@@ -1,0 +1,174 @@
+{
+  "schema_version": "0.3",
+  "entity_type": "character",
+  "id": "tajiduo",
+  "name": "塔吉多",
+  "review_status": "draft",
+  "basic": {
+    "rarity": "S",
+    "element": "神",
+    "cassette_type": "等离子",
+    "role": "主C",
+    "position": "前排",
+    "rating": "T0",
+    "summary": "塔吉多！塔吉多！塔吉多！"
+  },
+  "recommended": {
+    "weapon": null,
+    "cassette": null
+  },
+  "terminal": null,
+  "drive_layout_image": "",
+  "base_stats": {
+    "level_cap": 0,
+    "stats": []
+  },
+  "skills": [
+    {
+      "id": "普攻 · 塔吉多",
+      "name": "普攻 · 塔吉多",
+      "category": "Melee",
+      "description_parts": [
+        {
+          "name": "普攻 · 塔吉多",
+          "text": "电视头闪烁雪花屏，发出一声清脆的「塔吉多」，对前方敌人造成精神伤害。"
+        }
+      ],
+      "raw_text": "普攻 · 塔吉多 电视头闪烁雪花屏，发出一声清脆的「塔吉多」，对前方敌人造成精神伤害。",
+      "level_cap": 1,
+      "parameters": []
+    },
+    {
+      "id": "E 技能 · 毒雾弥漫",
+      "name": "E 技能 · 毒雾弥漫",
+      "category": "Skill",
+      "description_parts": [
+        {
+          "name": "E 技能 · 毒雾弥漫",
+          "text": "塔吉多从电视机后盖喷出大量蓝绿色毒雾（据说是修家电时烧坏的电容产生的），对范围内所有单位施加「电视中毒」效果——屏幕出现横纹、画面偏色、偶尔还自动换台。持续 8 秒，期间敌人攻击力下降 30%。"
+        },
+        {
+          "name": "E 技能 · 毒雾弥漫",
+          "text": "目击者称闻起来像烧焦的二极管。"
+        }
+      ],
+      "raw_text": "E 技能 · 毒雾弥漫 塔吉多从电视机后盖喷出大量蓝绿色毒雾（据说是修家电时烧坏的电容产生的），对范围内所有单位施加「电视中毒」效果——屏幕出现横纹、画面偏色、偶尔还自动换台。持续 8 秒，期间敌人攻击力下降 30%。 目击者称闻起来像烧焦的二极管。",
+      "level_cap": 1,
+      "parameters": []
+    },
+    {
+      "id": "Q 大招 · 这里是伊波恩！",
+      "name": "Q 大招 · 这里是伊波恩！",
+      "category": "UltraSkill",
+      "description_parts": [
+        {
+          "name": "Q 大招 · 这里是伊波恩！",
+          "text": "塔吉多联系伊波恩快递公司，地面召唤 12 辆重型卡车 快速追击目标。每辆卡车都印着「伊波恩古董店——电视维修」广告。卡车落地后爆炸，造成超大范围伤害，并在地面留下电视机残骸，持续对踩上去的单位造成精神污染。"
+        },
+        {
+          "name": "Q 大招 · 这里是伊波恩！",
+          "text": "敌人：「等等，为什么是卡车？？？」 塔吉多：「塔吉多。」"
+        }
+      ],
+      "raw_text": "Q 大招 · 这里是伊波恩！ 塔吉多联系伊波恩快递公司，地面召唤 12 辆重型卡车 快速追击目标。每辆卡车都印着「伊波恩古董店——电视维修」广告。卡车落地后爆炸，造成超大范围伤害，并在地面留下电视机残骸，持续对踩上去的单位造成精神污染。 敌人：「等等，为什么是卡车？？？」 塔吉多：「塔吉多。」",
+      "level_cap": 1,
+      "parameters": []
+    },
+    {
+      "id": "被动 · 永不静音",
+      "name": "被动 · 永不静音",
+      "category": "Passive",
+      "description_parts": [
+        {
+          "name": "被动 · 永不静音",
+          "text": "塔吉多在场时，每隔 3 秒自动喊一次名字。此效果不可关闭、不可跳过、不受音量设置影响。如果玩家尝试在系统设置中关闭游戏声音，塔吉多的声音仍会通过潜意识直接传入大脑。"
+        }
+      ],
+      "raw_text": "被动 · 永不静音 塔吉多在场时，每隔 3 秒自动喊一次名字。此效果不可关闭、不可跳过、不受音量设置影响。如果玩家尝试在系统设置中关闭游戏声音，塔吉多的声音仍会通过潜意识直接传入大脑。",
+      "level_cap": 1,
+      "parameters": []
+    }
+  ],
+  "awakenings": [],
+  "resonance": [],
+  "voice_actors": {},
+  "cultivation": {
+    "ascension": [],
+    "skills": [],
+    "material_catalog": {}
+  },
+  "assets": [
+    {
+      "type": "character_icon",
+      "source_url": "https://wiki.mysqil.com/images/characters/tajiduo-icon.png",
+      "local_path": "data/resources/characters/tajiduo/characters/tajiduo-icon.png",
+      "sha256": "678b773f8facfee4c4e71af0696cdba779d39efbcb40478c974c6d5fa3281d68"
+    }
+  ],
+  "provenance": {
+    "source": "mysqil",
+    "source_name": "Mysqil · 环世全鉴",
+    "source_url": "https://wiki.mysqil.com/characters/tajiduo/",
+    "imported_at": "2026-09-29T02:18:03Z",
+    "raw_snapshot": "data/mysqil/characters/tajiduo/raw/page.html",
+    "source_license": "CC BY-NC-SA 4.0",
+    "user_supplied_sources": []
+  },
+  "scope": {
+    "included": [
+      "基础资料",
+      "推荐武器",
+      "推荐卡带",
+      "基础属性成长",
+      "技能描述与倍率",
+      "觉醒",
+      "共鸣",
+      "突破材料",
+      "技能升级材料",
+      "卡带词条机制",
+      "终端"
+    ],
+    "excluded": [
+      "配队推荐"
+    ],
+    "note": "社区维护页面导入；配队推荐只保留在原始快照中。"
+  },
+  "manual_review": [
+    {
+      "field": "source_review",
+      "value": "社区源导入，待人工核验",
+      "source_type": "community_source",
+      "status": "pending"
+    },
+    {
+      "field": "base_stats",
+      "value": "来源页结构未解析",
+      "source_type": "import_validation",
+      "status": "pending"
+    },
+    {
+      "field": "cultivation",
+      "value": "来源页未提供结构化养成数据",
+      "source_type": "import_validation",
+      "status": "pending"
+    },
+    {
+      "field": "recommended.weapon",
+      "value": "来源页未提供可导入的推荐项",
+      "source_type": "import_validation",
+      "status": "pending"
+    },
+    {
+      "field": "recommended.cassette",
+      "value": "来源页未提供可导入的推荐项",
+      "source_type": "import_validation",
+      "status": "pending"
+    },
+    {
+      "field": "terminal",
+      "value": "来源页未提供终端资料",
+      "source_type": "import_validation",
+      "status": "pending"
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "resource_root": "data/resources/characters/bohe",
+  "entity_type": "character",
+  "entity_id": "bohe",
+  "asset_count": 28,
+  "source_snapshot": "data/mysqil/characters/bohe/raw/page.html",
+  "source_license": "CC BY-NC-SA 4.0",
+  "updated_at": "2026-09-29"
+}

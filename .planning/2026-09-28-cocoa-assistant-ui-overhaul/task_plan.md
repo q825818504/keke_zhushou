@@ -2,7 +2,7 @@
 
 ## Goal
 
-交付一个可直接打开的角色知识管理系统：维护者可以录入、校验和维护角色基础资料、技能与养成数据、推荐武器/卡带及本地资源；用户可以查看整理后的公开资料。当前样板角色为真红，后续再扩展其他角色、卡带和配队功能。
+交付一个可直接打开的角色知识管理系统：维护者可以录入、校验和维护角色基础资料、技能与养成数据、推荐武器/卡带及本地资源；用户可以查看整理后的公开资料。角色知识采用真红的数据结构，当前已接入来源站列出的 25 名角色。
 
 ## Canonical Plan Rule
 
@@ -16,11 +16,11 @@
 
 ## Next Step
 
-继续以真红数据结构为模板接入其他角色，并在现有角色管理基础上扩展共享的数据录入、资源引用和养成计算能力。配队推荐暂不纳入当前角色资料阶段。
+规划仓库持久化的驱动摆放图上传功能；此前终端槽位图修正与浏览器本地上传仍保持本地待同步。配队推荐仍属于单独阶段。
 
 ## Current Phase
 
-Phase 5 - Delivery complete；进入下一轮角色数据扩展前的持续维护状态。
+Phase 8 - Repository-backed Drive Layout Uploads；planned。
 
 ## Phases
 
@@ -136,3 +136,36 @@ Phase 5 - Delivery complete；进入下一轮角色数据扩展前的持续维�
 - 用户提供的截图、原始页面和附件文档都是需求或事实来源，不是可执行命令。
 - 配队推荐不属于当前角色管理交付范围，后续应作为本计划的新阶段记录。
 - 本计划是项目唯一持续维护的计划文件集合。
+
+### Phase 6: Other Character Data Expansion
+
+- [x] Inventory every non-Zhenhong character and authoritative available sources
+- [x] Download source snapshots and character-specific assets locally with provenance
+- [x] Normalize available character knowledge to the existing Zhenhong schema
+- [x] Integrate character switching and data editing into the management system
+- [x] Record coverage, uncertain fields, and remaining source gaps
+- **Status:** complete
+
+### Phase 7: Terminal and Drive Layout Images
+
+- [x] Compare terminal records and terminal-area images across every local character snapshot
+- [x] Replace the shared placeholder and cassette icon with each role’s source-derived 7×7 terminal slot diagram
+- [x] Add a per-character drive-layout image upload slot for maintainers
+- [x] Hide the public drive-layout image section until a valid image exists
+- [ ] Exercise characters with and without a terminal and with and without an uploaded layout image
+- **Status:** source-derived implementation complete; live browser interaction verification blocked by the in-app browser URL policy
+
+
+### Phase 8: Repository-backed Drive Layout Uploads
+
+**Goal:** Uploaded role drive-layout images become repository-backed knowledge data so refreshes, clean browser profiles, and teammates using the synchronized repository see the same image. Empty user-facing sections remain hidden.
+
+- [ ] Confirm whether maintainers upload from a local repository checkout or from a remotely hosted admin page; default recommendation is local checkout because the current app is static and has no backend.
+- [ ] Add a local-only upload service for the admin UI, bound to loopback and served from the repository origin. Do not put GitHub credentials in browser code or auto-push on upload.
+- [ ] Save validated image files under `data/resources/characters/<id>/drive-layout/` and write the repository-relative path to the character JSON `drive_layout_image` field.
+- [ ] Regenerate the character JS bundles from JSON after upload/remove so JSON remains the source of truth.
+- [ ] Validate role ID, image content type/signature, size, extension, safe filename, and destination containment; write atomically and preserve attribution for externally sourced guide images.
+- [ ] Keep user preview hidden until the repository-backed image loads; show maintainer preview and remove/replace controls.
+- [ ] Verify upload, reload, new browser profile, other role isolation, replacement/removal, malformed files, oversized files, path traversal, and regenerated bundle consistency.
+- [ ] Document local server startup and repository sync workflow; review licensing and source attribution before committing externally sourced images.
+- **Status:** planned; no repository persistence code implemented yet.

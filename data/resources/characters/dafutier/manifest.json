@@ -1,0 +1,9 @@
+{
+  "resource_root": "data/resources/characters/dafutier",
+  "entity_type": "character",
+  "entity_id": "dafutier",
+  "asset_count": 28,
+  "source_snapshot": "data/mysqil/characters/dafutier/raw/page.html",
+  "source_license": "CC BY-NC-SA 4.0",
+  "updated_at": "2026-09-29"
+}

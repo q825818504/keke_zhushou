@@ -115,7 +115,94 @@
           "暴击伤害 +16%"
         ],
         "source_type": "user_screenshot",
-        "source_note": "根据用户提供的攻略站截图补录"
+        "source_note": "根据用户提供的攻略站截图补录",
+        "layout": {
+          "rows": 7,
+          "columns": 7,
+          "active_slots": [
+            {
+              "row": 2,
+              "column": 1
+            },
+            {
+              "row": 2,
+              "column": 2
+            },
+            {
+              "row": 2,
+              "column": 3
+            },
+            {
+              "row": 2,
+              "column": 4
+            },
+            {
+              "row": 2,
+              "column": 5
+            },
+            {
+              "row": 3,
+              "column": 1
+            },
+            {
+              "row": 3,
+              "column": 2
+            },
+            {
+              "row": 3,
+              "column": 3
+            },
+            {
+              "row": 3,
+              "column": 4
+            },
+            {
+              "row": 3,
+              "column": 5
+            },
+            {
+              "row": 4,
+              "column": 1
+            },
+            {
+              "row": 4,
+              "column": 2
+            },
+            {
+              "row": 4,
+              "column": 3
+            },
+            {
+              "row": 4,
+              "column": 4
+            },
+            {
+              "row": 4,
+              "column": 5
+            },
+            {
+              "row": 5,
+              "column": 1
+            },
+            {
+              "row": 5,
+              "column": 2
+            },
+            {
+              "row": 5,
+              "column": 3
+            },
+            {
+              "row": 5,
+              "column": 4
+            },
+            {
+              "row": 5,
+              "column": 5
+            }
+          ],
+          "source_type": "mysqil_page"
+        }
       }
     }
   },
@@ -2778,5 +2865,103 @@
       "source_type": "user_input",
       "status": "confirmed"
     }
-  ]
+  ],
+  "terminal": {
+    "id": "shiluo-guangmang-terminal",
+    "name": "[卡带] 属性",
+    "description": "每装配一个亚型驱动，使暴击伤害增加16%",
+    "effects": [
+      "暴击伤害 +16%"
+    ],
+    "source_type": "user_screenshot",
+    "source_note": "根据用户提供的攻略站截图补录",
+    "layout": {
+      "rows": 7,
+      "columns": 7,
+      "active_slots": [
+        {
+          "row": 2,
+          "column": 1
+        },
+        {
+          "row": 2,
+          "column": 2
+        },
+        {
+          "row": 2,
+          "column": 3
+        },
+        {
+          "row": 2,
+          "column": 4
+        },
+        {
+          "row": 2,
+          "column": 5
+        },
+        {
+          "row": 3,
+          "column": 1
+        },
+        {
+          "row": 3,
+          "column": 2
+        },
+        {
+          "row": 3,
+          "column": 3
+        },
+        {
+          "row": 3,
+          "column": 4
+        },
+        {
+          "row": 3,
+          "column": 5
+        },
+        {
+          "row": 4,
+          "column": 1
+        },
+        {
+          "row": 4,
+          "column": 2
+        },
+        {
+          "row": 4,
+          "column": 3
+        },
+        {
+          "row": 4,
+          "column": 4
+        },
+        {
+          "row": 4,
+          "column": 5
+        },
+        {
+          "row": 5,
+          "column": 1
+        },
+        {
+          "row": 5,
+          "column": 2
+        },
+        {
+          "row": 5,
+          "column": 3
+        },
+        {
+          "row": 5,
+          "column": 4
+        },
+        {
+          "row": 5,
+          "column": 5
+        }
+      ],
+      "source_type": "mysqil_page"
+    }
+  },
+  "drive_layout_image": ""
 }

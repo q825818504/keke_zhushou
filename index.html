@@ -64,7 +64,7 @@
       <section class="page-heading stagger-item" style="--delay: 20ms">
         <div>
           <div class="eyebrow"><span class="eyebrow-dot"></span> 知识编辑工作台</div>
-          <h1>角色管理 <span class="count-pill">1 个本地样板</span> <span class="local-data-badge">本地样板已接入</span></h1>
+          <h1>角色管理 <span class="count-pill">载入角色资料</span> <span class="local-data-badge">本地资料载入中</span></h1>
           <p>把角色原始资料整理成本地可查看、可校验、可计算的角色知识。</p>
         </div>
         <div class="heading-meta"><span class="live-indicator"><i></i> 自动保存已开启</span><span class="updated-time">最后同步 10:42</span></div>
@@ -78,12 +78,7 @@
           </div>
 
           <div class="character-list" id="characterList" aria-label="角色列表">
-            <button class="character-card is-active stagger-item" style="--delay: 130ms" type="button" data-character="真红">
-              <span class="character-avatar avatar-fire"><img id="characterListAvatar" src="data/resources/characters/zhenhong/characters/zhenhong-icon.webp" alt="真红头像"></span><span class="character-info"><b>真红</b><small>主 C · 驻场输出</small></span><span class="element-badge element-light">光</span><span class="row-chevron"><svg viewBox="0 0 24 24" fill="none"><path d="m9 5 7 7-7 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-            </button>
-            
-            
-            
+            <p class="empty-state">正在载入本地角色资料……</p>
           </div>
 
           <article class="editor-card stagger-item" style="--delay: 330ms" id="editorCard">
@@ -99,8 +94,8 @@
                 <label class="field"><span>稀有度</span><select id="roleRarity"><option>S</option><option>A</option><option>B</option></select></label>
                 <label class="field"><span>属性</span><select id="roleElement"><option>光</option><option>暗</option><option>灵</option><option>咒</option><option>魂</option><option>相</option></select></label>
                 <label class="field"><span>弧盘类型</span><input id="roleCassetteType" value="聚合" type="text"></label>
-                <label class="field"><span>角色定位</span><select id="rolePosition"><option>主 C · 驻场输出</option><option>副 C · 持续附着</option><option>辅助 · 全队增益</option><option>辅助 · 护盾保护</option></select></label>
-                <label class="field"><span>站位</span><select id="roleStation"><option>站场</option><option>速切</option><option>后台</option></select></label>
+                <label class="field"><span>角色定位</span><input id="rolePosition" type="text"></label>
+                <label class="field"><span>站位</span><input id="roleStation" type="text"></label>
                 <label class="field"><span>强度评级</span><input id="roleRating" value="T0" type="text"></label>
                 <label class="field"><span>适用版本</span><div class="input-with-status"><input id="roleVersion" value="5.1.0" type="text"><span class="valid-icon">✓</span></div></label>
               </div>
@@ -127,7 +122,7 @@
                   <div id="recommendedCassette"></div>
                 </section>
                 <section class="data-block stats-block">
-                  <div class="data-block-heading"><span>基础属性成长</span><small>等级上限 Lv.80</small></div>
+                  <div class="data-block-heading"><span>基础属性成长</span><small id="statsLevelLabel">等级上限 Lv.80</small></div>
                   <div id="baseStats"></div>
                 </section>
               </div>
@@ -140,8 +135,12 @@
                 <div id="skillsList"></div>
               </section>
               <section class="data-block awakenings-block">
-                <div class="data-block-heading"><span>觉醒</span><small>6 个觉醒节点</small></div>
+                <div class="data-block-heading"><span>觉醒</span><small id="awakeningCountLabel">6 个觉醒节点</small></div>
                 <div class="awakening-grid" id="awakeningList"></div>
+              </section>
+              <section class="data-block awakenings-block">
+                <div class="data-block-heading"><span>共鸣</span><small>角色共鸣节点</small></div>
+                <div class="awakening-grid" id="resonanceList"></div>
               </section>
               <section class="data-block cultivation-block">
                 <div class="data-block-heading"><span>养成计算</span><small>按目标等级汇总材料</small></div>
@@ -150,8 +149,17 @@
                 <div class="material-summary" id="materialSummary"></div>
               </section>
               <section class="data-block cassette-block">
-                <div class="data-block-heading"><span>卡带推荐与装配属性</span><small>用户展示预览 · 失落光芒</small></div>
+                <div class="data-block-heading"><span>卡带推荐与装配属性</span><small id="cassetteSummaryLabel">用户展示预览 · 失落光芒</small></div>
                 <div id="cassetteDetails"></div>
+                <section class="drive-layout-editor" aria-labelledby="driveLayoutEditorTitle">
+                  <div class="data-block-heading"><span id="driveLayoutEditorTitle">驱动摆放示意图</span><small>管理端上传 · 图片存在时才向用户预览展示</small></div>
+                  <label class="drive-layout-upload"><span>选择摆放示意图</span><input id="driveLayoutUpload" type="file" accept="image/png,image/jpeg,image/webp"><small>图片保存在当前浏览器并关联当前角色，不会同步到 GitHub。支持 PNG、JPG、WebP。</small></label>
+                  <div id="driveLayoutAdminPreview" class="drive-layout-admin-preview"></div>
+                </section>
+                <section id="driveLayoutPublic" class="drive-layout-public" aria-labelledby="driveLayoutPublicTitle" hidden>
+                  <div class="data-block-heading"><span id="driveLayoutPublicTitle">驱动摆放位置</span><small>攻略示意</small></div>
+                  <div id="driveLayoutPublicImage"></div>
+                </section>
               </section>
               <div class="asset-strip-label">本地资源画廊 · 独立资源目录</div>
               <div class="asset-strip" id="assetStrip" aria-label="本地图片资源"></div>
@@ -191,6 +199,7 @@
   </div>
   <div class="toast" id="toast" role="status" aria-live="polite"><span class="toast-mark">✓</span><span id="toastText">草稿已保存</span></div>
   <script src="data/knowledge/characters/zhenhong.js"></script>
+  <script src="data/knowledge/characters/other_characters.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

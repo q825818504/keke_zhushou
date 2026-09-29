@@ -1,0 +1,2507 @@
+{
+  "schema_version": "0.3",
+  "entity_type": "character",
+  "id": "haniya",
+  "name": "哈尼娅",
+  "review_status": "draft",
+  "basic": {
+    "rarity": "A",
+    "element": "魂",
+    "cassette_type": "固态",
+    "role": "辅助",
+    "position": "后排",
+    "rating": "T1",
+    "summary": "梦想是成为拯救世界的美少女高中生！"
+  },
+  "recommended": {
+    "weapon": {
+      "id": "yinquanquanchang",
+      "name": "引爆全场",
+      "source_url": "https://wiki.mysqil.com/weapons/yinquanquanchang",
+      "rating": "S",
+      "asset": "data/resources/characters/haniya/weapons/yinquanquanchang.webp",
+      "description": "引爆全场是S级固态类弧盘。",
+      "detail_source_url": "https://wiki.mysqil.com/weapons/yinquanquanchang"
+    },
+    "cassette": {
+      "id": "yinsu-lancìwei",
+      "name": "音速蓝刺猬",
+      "source_url": "https://wiki.mysqil.com/cassettes/yinsu-lanc%C3%ACwei",
+      "category": "通用",
+      "cassette_type": "空幕卡带",
+      "element": "魂",
+      "icon": "data/resources/characters/haniya/cassettes/speedy-hedgehog.webp",
+      "description": "音速蓝刺猬是通用辅助/增伤卡带，2件套提升充能效率（加速必杀技回能），4件套在佩戴者释放必杀技后为全队提供 15% 攻击力加成。是辅助/增伤位的优质通用选择。",
+      "set_effects": [
+        {
+          "pieces": 2,
+          "description": "充能效率 +12%"
+        },
+        {
+          "pieces": 4,
+          "description": "佩戴者施放必杀技后，全队攻击力 +15%，持续 20 秒（不可叠加）"
+        }
+      ],
+      "acquisition": "",
+      "main_affix_pool": [
+        "攻击力（% / 固定值）",
+        "生命值（% / 固定值）",
+        "防御力（% / 固定值）",
+        "暴击率",
+        "暴击伤害",
+        "元素伤害（光/暗/灵/咒/魂/相）",
+        "倾陷强度",
+        "环合强度"
+      ],
+      "sub_affix_pool": [
+        "暴击率",
+        "暴击伤害",
+        "攻击力（%）",
+        "攻击力（固定值）",
+        "生命值（%）",
+        "生命值（固定值）",
+        "防御力（%）",
+        "防御力（固定值）",
+        "元素伤害加成",
+        "全伤害加成",
+        "倾陷强度",
+        "环合强度"
+      ],
+      "quality": [
+        {
+          "tier": "金",
+          "description": "毕业 · 数值上限最高"
+        },
+        {
+          "tier": "金",
+          "description": "约为金色 80%"
+        },
+        {
+          "tier": "蓝",
+          "description": "前期过渡"
+        }
+      ],
+      "structure": {
+        "main_affix_count": 1,
+        "sub_affix_count": 4,
+        "rerollable": null
+      },
+      "recommended_main_affixes": [],
+      "recommended_sub_affixes": [],
+      "terminal": {
+        "id": "terminal",
+        "name": "「卡带」属性",
+        "description": "每装配一个Ⅲ型驱动，使攻击力百分比增加10%",
+        "effects": [
+          "攻击力百分比 +10%"
+        ],
+        "source_type": "mysqil_page",
+        "layout": {
+          "rows": 7,
+          "columns": 7,
+          "active_slots": [
+            {
+              "row": 1,
+              "column": 1
+            },
+            {
+              "row": 1,
+              "column": 2
+            },
+            {
+              "row": 1,
+              "column": 4
+            },
+            {
+              "row": 1,
+              "column": 5
+            },
+            {
+              "row": 2,
+              "column": 1
+            },
+            {
+              "row": 2,
+              "column": 2
+            },
+            {
+              "row": 2,
+              "column": 3
+            },
+            {
+              "row": 2,
+              "column": 4
+            },
+            {
+              "row": 2,
+              "column": 5
+            },
+            {
+              "row": 3,
+              "column": 1
+            },
+            {
+              "row": 3,
+              "column": 2
+            },
+            {
+              "row": 3,
+              "column": 3
+            },
+            {
+              "row": 3,
+              "column": 4
+            },
+            {
+              "row": 3,
+              "column": 5
+            },
+            {
+              "row": 4,
+              "column": 2
+            },
+            {
+              "row": 4,
+              "column": 3
+            },
+            {
+              "row": 4,
+              "column": 4
+            },
+            {
+              "row": 5,
+              "column": 2
+            },
+            {
+              "row": 5,
+              "column": 3
+            },
+            {
+              "row": 5,
+              "column": 4
+            }
+          ],
+          "source_type": "mysqil_page"
+        }
+      },
+      "detail_source_url": "https://wiki.mysqil.com/cassettes/yinsu-lanc%C3%ACwei"
+    }
+  },
+  "terminal": {
+    "id": "terminal",
+    "name": "「卡带」属性",
+    "description": "每装配一个Ⅲ型驱动，使攻击力百分比增加10%",
+    "effects": [
+      "攻击力百分比 +10%"
+    ],
+    "source_type": "mysqil_page",
+    "layout": {
+      "rows": 7,
+      "columns": 7,
+      "active_slots": [
+        {
+          "row": 1,
+          "column": 1
+        },
+        {
+          "row": 1,
+          "column": 2
+        },
+        {
+          "row": 1,
+          "column": 4
+        },
+        {
+          "row": 1,
+          "column": 5
+        },
+        {
+          "row": 2,
+          "column": 1
+        },
+        {
+          "row": 2,
+          "column": 2
+        },
+        {
+          "row": 2,
+          "column": 3
+        },
+        {
+          "row": 2,
+          "column": 4
+        },
+        {
+          "row": 2,
+          "column": 5
+        },
+        {
+          "row": 3,
+          "column": 1
+        },
+        {
+          "row": 3,
+          "column": 2
+        },
+        {
+          "row": 3,
+          "column": 3
+        },
+        {
+          "row": 3,
+          "column": 4
+        },
+        {
+          "row": 3,
+          "column": 5
+        },
+        {
+          "row": 4,
+          "column": 2
+        },
+        {
+          "row": 4,
+          "column": 3
+        },
+        {
+          "row": 4,
+          "column": 4
+        },
+        {
+          "row": 5,
+          "column": 2
+        },
+        {
+          "row": 5,
+          "column": 3
+        },
+        {
+          "row": 5,
+          "column": 4
+        }
+      ],
+      "source_type": "mysqil_page"
+    }
+  },
+  "drive_layout_image": "",
+  "base_stats": {
+    "level_cap": 80,
+    "stats": [
+      {
+        "id_stats": "HPMaxBase",
+        "name": "生命值",
+        "values": [
+          1130,
+          1220,
+          1311,
+          1401,
+          1492,
+          1582,
+          1672,
+          1763,
+          1853,
+          1944,
+          2034,
+          2124,
+          2215,
+          2305,
+          2396,
+          2486,
+          2576,
+          2667,
+          2757,
+          2848,
+          3842,
+          3932,
+          4023,
+          4113,
+          4204,
+          4294,
+          4384,
+          4475,
+          4565,
+          4656,
+          5650,
+          5740,
+          5831,
+          5921,
+          6012,
+          6102,
+          6192,
+          6283,
+          6373,
+          6464,
+          7458,
+          7548,
+          7639,
+          7729,
+          7820,
+          7910,
+          8000,
+          8091,
+          8181,
+          8272,
+          9266,
+          9356,
+          9447,
+          9537,
+          9628,
+          9718,
+          9808,
+          9899,
+          9989,
+          10080,
+          11074,
+          11164,
+          11255,
+          11345,
+          11436,
+          11526,
+          11616,
+          11707,
+          11797,
+          11888,
+          12882,
+          12972,
+          13063,
+          13153,
+          13244,
+          13334,
+          13424,
+          13515,
+          13605,
+          13696
+        ],
+        "icon": "/Game/UI/UI_Icon/Attribute/icon_attri_shengming"
+      },
+      {
+        "id_stats": "AtkBase",
+        "name": "攻击力",
+        "values": [
+          62,
+          65,
+          68,
+          71,
+          74,
+          78,
+          81,
+          84,
+          87,
+          90,
+          93,
+          96,
+          99,
+          102,
+          105,
+          109,
+          112,
+          115,
+          118,
+          121,
+          155,
+          158,
+          161,
+          164,
+          167,
+          171,
+          174,
+          177,
+          180,
+          183,
+          217,
+          220,
+          223,
+          226,
+          229,
+          233,
+          236,
+          239,
+          242,
+          245,
+          279,
+          282,
+          285,
+          288,
+          291,
+          295,
+          298,
+          301,
+          304,
+          307,
+          341,
+          344,
+          347,
+          350,
+          353,
+          357,
+          360,
+          363,
+          366,
+          369,
+          403,
+          406,
+          409,
+          412,
+          415,
+          419,
+          422,
+          425,
+          428,
+          431,
+          465,
+          468,
+          471,
+          474,
+          477,
+          481,
+          484,
+          487,
+          490,
+          493
+        ],
+        "icon": "/Game/UI/UI_Icon/Attribute/icon_attri_gongji"
+      },
+      {
+        "id_stats": "DefBase",
+        "name": "防御力",
+        "values": [
+          70,
+          76,
+          81,
+          87,
+          92,
+          98,
+          104,
+          109,
+          115,
+          120,
+          126,
+          132,
+          137,
+          143,
+          148,
+          154,
+          160,
+          165,
+          171,
+          176,
+          238,
+          244,
+          249,
+          255,
+          260,
+          266,
+          272,
+          277,
+          283,
+          288,
+          350,
+          356,
+          361,
+          367,
+          372,
+          378,
+          384,
+          389,
+          395,
+          400,
+          462,
+          468,
+          473,
+          479,
+          484,
+          490,
+          496,
+          501,
+          507,
+          512,
+          574,
+          580,
+          585,
+          591,
+          596,
+          602,
+          608,
+          613,
+          619,
+          624,
+          686,
+          692,
+          697,
+          703,
+          708,
+          714,
+          720,
+          725,
+          731,
+          736,
+          798,
+          804,
+          809,
+          815,
+          820,
+          826,
+          832,
+          837,
+          843,
+          848
+        ],
+        "icon": "/Game/UI/UI_Icon/Attribute/icon_attri_fangyu"
+      },
+      {
+        "id_stats": "CritBase",
+        "name": "暴击率",
+        "values": [
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5
+        ],
+        "icon": "/Game/UI/UI_Icon/Attribute/icon_attri_baoji"
+      },
+      {
+        "id_stats": "CritDamageBase",
+        "name": "暴击伤害",
+        "values": [
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50,
+          50
+        ],
+        "icon": "/Game/UI/UI_Icon/Attribute/icon_attri_baojishanghai"
+      }
+    ]
+  },
+  "skills": [
+    {
+      "id": "盖罗塞克特术法",
+      "name": "盖罗塞克特术法",
+      "category": "Melee",
+      "description_parts": [
+        {
+          "name": "盖罗塞克特术法",
+          "text": "魔术与魔法的区别在于，只要你相信魔法，它就存在……比如空手搓球？"
+        }
+      ],
+      "raw_text": "盖罗塞克特术法MeleeLv.12345678910111213普通攻击：盖罗塞克特术法哈尼娅抬手发射魔法弹，进行至多5段的连续攻击，造成魂属性异能伤害。普通攻击：超异科魔法炮哈尼娅在普攻第一段时长按普攻键可转身进入蓄力状态，并向前发射1枚蓄力炮。普通攻击：超异科登场哈尼娅滞空时点按普攻，落地后造成1次范围性的魂属性异能伤害，伤害随下落高度升高而提升，最高提升1倍。极限反击：王牌身法触发极限闪避后，使用「普通攻击：盖罗塞克特术法」发动。这么慢的话会被顾客投诉的哦？哈尼娅闪身躲过攻击，并立即向敌人发射一枚飞弹，造成1次魂属性异能伤害，并额外扣除一定倾陷值。技能倍率一段伤害倍率41.9%二段伤害倍率11.2%*2三段伤害倍率58.2%四段伤害倍率15.6%*4五段伤害倍率52.8%下落伤害倍率82%分支伤害倍率36%极限反击倍率105.2%环合值25魔术与魔法的区别在于，只要你相信魔法，它就存在……比如空手搓球？",
+      "level_cap": 13,
+      "parameters": [
+        {
+          "label": "一段伤害倍率",
+          "source_key": "盖罗塞克特术法",
+          "values": [
+            "41.9%",
+            "45.3%",
+            "48.9%",
+            "52.8%",
+            "57%",
+            "61.6%",
+            "66.5%",
+            "71.8%",
+            "77.6%",
+            "83.8%",
+            "90.5%",
+            "97.7%",
+            "105.5%"
+          ],
+          "current_value": "41.9%"
+        },
+        {
+          "label": "二段伤害倍率",
+          "source_key": "盖罗塞克特术法",
+          "values": [
+            "11.2%*2",
+            "12.1%*2",
+            "13.1%*2",
+            "14.1%*2",
+            "15.2%*2",
+            "16.5%*2",
+            "17.8%*2",
+            "19.2%*2",
+            "20.7%*2",
+            "22.4%*2",
+            "24.2%*2",
+            "26.1%*2",
+            "28.2%*2"
+          ],
+          "current_value": "11.2%*2"
+        },
+        {
+          "label": "三段伤害倍率",
+          "source_key": "盖罗塞克特术法",
+          "values": [
+            "58.2%",
+            "62.9%",
+            "67.9%",
+            "73.3%",
+            "79.2%",
+            "85.5%",
+            "92.4%",
+            "99.7%",
+            "107.7%",
+            "116.3%",
+            "125.6%",
+            "135.7%",
+            "146.6%"
+          ],
+          "current_value": "58.2%"
+        },
+        {
+          "label": "四段伤害倍率",
+          "source_key": "盖罗塞克特术法",
+          "values": [
+            "15.6%*4",
+            "16.8%*4",
+            "18.2%*4",
+            "19.7%*4",
+            "21.2%*4",
+            "22.9%*4",
+            "24.8%*4",
+            "26.7%*4",
+            "28.9%*4",
+            "31.2%*4",
+            "33.7%*4",
+            "36.4%*4",
+            "39.3%*4"
+          ],
+          "current_value": "15.6%*4"
+        },
+        {
+          "label": "五段伤害倍率",
+          "source_key": "盖罗塞克特术法",
+          "values": [
+            "52.8%",
+            "57%",
+            "61.6%",
+            "66.5%",
+            "71.8%",
+            "77.6%",
+            "83.8%",
+            "90.5%",
+            "97.7%",
+            "105.5%",
+            "114%",
+            "123.1%",
+            "133%"
+          ],
+          "current_value": "52.8%"
+        },
+        {
+          "label": "下落伤害倍率",
+          "source_key": "盖罗塞克特术法",
+          "values": [
+            "82%",
+            "88.6%",
+            "95.6%",
+            "103.3%",
+            "111.6%",
+            "120.5%",
+            "130.1%",
+            "140.5%",
+            "151.8%",
+            "163.9%",
+            "177%",
+            "191.2%",
+            "206.5%"
+          ],
+          "current_value": "82%"
+        },
+        {
+          "label": "分支伤害倍率",
+          "source_key": "盖罗塞克特术法",
+          "values": [
+            "36%",
+            "38.9%",
+            "42%",
+            "45.3%",
+            "49%",
+            "52.9%",
+            "57.1%",
+            "61.7%",
+            "66.6%",
+            "72%",
+            "77.7%",
+            "83.9%",
+            "90.7%"
+          ],
+          "current_value": "36%"
+        },
+        {
+          "label": "极限反击倍率",
+          "source_key": "盖罗塞克特术法",
+          "values": [
+            "105.2%",
+            "113.6%",
+            "122.7%",
+            "132.5%",
+            "143.1%",
+            "154.6%",
+            "166.9%",
+            "180.3%",
+            "194.7%",
+            "210.3%",
+            "227.1%",
+            "245.3%",
+            "264.9%"
+          ],
+          "current_value": "105.2%"
+        },
+        {
+          "label": "环合值",
+          "source_key": "盖罗塞克特术法",
+          "values": [
+            "25",
+            "25",
+            "25",
+            "25",
+            "25",
+            "25",
+            "25",
+            "25",
+            "25",
+            "25",
+            "25",
+            "25",
+            "25"
+          ],
+          "current_value": "25"
+        }
+      ]
+    },
+    {
+      "id": "静默月林的守护者",
+      "name": "静默月林的守护者",
+      "category": "Skill",
+      "description_parts": [
+        {
+          "name": "静默月林的守护者",
+          "text": "「沉谧深林的月下之鸮啊，我以哈尼娅之名，与你签订契约！……咕咕子，配合一下嘛。」"
+        }
+      ],
+      "raw_text": "静默月林的守护者SkillLv.12345678910111213静默月林的守护者沉谧深林的月下之鸮啊，响应我的召唤！哈尼娅掷出便携式音箱「咕咕子」并造成范围性魂属性异能伤害。 「咕咕子」在场时，全队角色获得基于哈尼娅基础攻击力的攻击力加成。 场上角色攻击时，会为「咕咕子」累积1层「四部和声」，每0.5秒至多累积1层。累积4层「四部和声」后将触发「合奏」，对「咕咕子」周围的敌人造成范围性魂属性异能伤害。 场上至多存在1个「咕咕子」音箱，重复释放将刷新「咕咕子」的持续时间。切换角色时，「咕咕子」会留在场上。技能倍率伤害倍率100%*2扩散伤害倍率20%攻击力加成比例10%持续时间8秒环合值6「沉谧深林的月下之鸮啊，我以哈尼娅之名，与你签订契约！……咕咕子，配合一下嘛。」",
+      "level_cap": 13,
+      "parameters": [
+        {
+          "label": "伤害倍率",
+          "source_key": "静默月林的守护者",
+          "values": [
+            "100%*2",
+            "108%*2",
+            "116.6%*2",
+            "126%*2",
+            "136%*2",
+            "146.9%*2",
+            "158.7%*2",
+            "171.4%*2",
+            "185.1%*2",
+            "199.9%*2",
+            "215.9%*2",
+            "233.2%*2",
+            "251.8%*2"
+          ],
+          "current_value": "100%*2"
+        },
+        {
+          "label": "扩散伤害倍率",
+          "source_key": "静默月林的守护者",
+          "values": [
+            "20%",
+            "21.6%",
+            "23.3%",
+            "25.2%",
+            "27.2%",
+            "29.4%",
+            "31.7%",
+            "34.3%",
+            "37%",
+            "40%",
+            "43.2%",
+            "46.6%",
+            "50.4%"
+          ],
+          "current_value": "20%"
+        },
+        {
+          "label": "攻击力加成比例",
+          "source_key": "静默月林的守护者",
+          "values": [
+            "10%",
+            "11%",
+            "12%",
+            "13%",
+            "14%",
+            "15%",
+            "16%",
+            "17%",
+            "18%",
+            "19%",
+            "20%",
+            "21%",
+            "22%"
+          ],
+          "current_value": "10%"
+        },
+        {
+          "label": "持续时间",
+          "source_key": "静默月林的守护者",
+          "values": [
+            "8秒",
+            "8秒",
+            "8秒",
+            "8秒",
+            "8秒",
+            "8秒",
+            "8秒",
+            "8秒",
+            "8秒",
+            "8秒",
+            "8秒",
+            "8秒",
+            "8秒"
+          ],
+          "current_value": "8秒"
+        },
+        {
+          "label": "环合值",
+          "source_key": "静默月林的守护者",
+          "values": [
+            "6",
+            "6",
+            "6",
+            "6",
+            "6",
+            "6",
+            "6",
+            "6",
+            "6",
+            "6",
+            "6",
+            "6",
+            "6"
+          ],
+          "current_value": "6"
+        }
+      ]
+    },
+    {
+      "id": "名为「哈尼娅」的旋律",
+      "name": "名为「哈尼娅」的旋律",
+      "category": "UltraSkill",
+      "description_parts": [
+        {
+          "name": "名为「哈尼娅」的旋律",
+          "text": "海特洛市的地图上可找不到盖罗塞克特女子学院，当然也找不到超异科，这个故事要从哈尼娅的第一本连载小说说起……"
+        }
+      ],
+      "raw_text": "名为「哈尼娅」的旋律UltraSkillLv.12345678910111213名为「哈尼娅」的旋律盖罗塞克特女子学院超异科已接管现场！哈尼娅释放以自身为中心的强化领域，进入「超异科王牌」状态，持续一段时间。 全队角色获得基于哈尼娅基础攻击力的攻击力加成。 触发「合奏」时，同时以角色自身为中心，额外触发1次范围更大伤害更高的「合奏·交响」。「合奏·交响」无法为哈尼娅叠加「主角光环」层数。触发「合奏」时，当前在场角色的下次攻击将附带额外伤害，持续3秒，该效果不可叠加。 「超异科王牌」状态存在期间，「咕咕子」的持续时间停止计时，直至哈尼娅退出「超异科王牌」状态后，恢复计时。技能倍率伤害倍率300%扩散伤害倍率30%强化攻击伤害倍率30%攻击力加成比例10%持续时间10秒消耗终结能量120海特洛市的地图上可找不到盖罗塞克特女子学院，当然也找不到超异科，这个故事要从哈尼娅的第一本连载小说说起……",
+      "level_cap": 13,
+      "parameters": [
+        {
+          "label": "伤害倍率",
+          "source_key": "名为「哈尼娅」的旋律",
+          "values": [
+            "300%",
+            "324%",
+            "349.9%",
+            "377.9%",
+            "408.1%",
+            "440.8%",
+            "476.1%",
+            "514.1%",
+            "555.3%",
+            "599.7%",
+            "647.7%",
+            "699.5%",
+            "755.5%"
+          ],
+          "current_value": "300%"
+        },
+        {
+          "label": "扩散伤害倍率",
+          "source_key": "名为「哈尼娅」的旋律",
+          "values": [
+            "30%",
+            "32.4%",
+            "35%",
+            "37.8%",
+            "40.8%",
+            "44.1%",
+            "47.6%",
+            "51.4%",
+            "55.5%",
+            "60%",
+            "64.8%",
+            "69.9%",
+            "75.5%"
+          ],
+          "current_value": "30%"
+        },
+        {
+          "label": "强化攻击伤害倍率",
+          "source_key": "名为「哈尼娅」的旋律",
+          "values": [
+            "30%",
+            "32.4%",
+            "35%",
+            "37.8%",
+            "40.8%",
+            "44.1%",
+            "47.6%",
+            "51.4%",
+            "55.5%",
+            "60%",
+            "64.8%",
+            "69.9%",
+            "75.5%"
+          ],
+          "current_value": "30%"
+        },
+        {
+          "label": "攻击力加成比例",
+          "source_key": "名为「哈尼娅」的旋律",
+          "values": [
+            "10%",
+            "11%",
+            "12%",
+            "13%",
+            "14%",
+            "15%",
+            "16%",
+            "17%",
+            "18%",
+            "19%",
+            "20%",
+            "21%",
+            "22%"
+          ],
+          "current_value": "10%"
+        },
+        {
+          "label": "持续时间",
+          "source_key": "名为「哈尼娅」的旋律",
+          "values": [
+            "10秒",
+            "10秒",
+            "10秒",
+            "10秒",
+            "10秒",
+            "10秒",
+            "10秒",
+            "10秒",
+            "10秒",
+            "10秒",
+            "10秒",
+            "10秒",
+            "10秒"
+          ],
+          "current_value": "10秒"
+        },
+        {
+          "label": "消耗终结能量",
+          "source_key": "名为「哈尼娅」的旋律",
+          "values": [
+            "120",
+            "120",
+            "120",
+            "120",
+            "120",
+            "120",
+            "120",
+            "120",
+            "120",
+            "120",
+            "120",
+            "120",
+            "120"
+          ],
+          "current_value": "120"
+        }
+      ]
+    },
+    {
+      "id": "彩蛋时间",
+      "name": "彩蛋时间",
+      "category": "QTE",
+      "description_parts": [
+        {
+          "name": "彩蛋时间",
+          "text": "哈尼娅是坚定的彩蛋完全派，就算影厅里的灯早早亮起，也会坚决看完影片的最后一秒。"
+        }
+      ],
+      "raw_text": "彩蛋时间QTELv.12345678910111213彩蛋时间别那么无趣嘛，来点彩蛋如何？哈尼娅向敌人掷出1枚魔法弹，造成1次魂属性异能伤害。技能倍率伤害倍率200%哈尼娅是坚定的彩蛋完全派，就算影厅里的灯早早亮起，也会坚决看完影片的最后一秒。",
+      "level_cap": 13,
+      "parameters": [
+        {
+          "label": "伤害倍率",
+          "source_key": "彩蛋时间",
+          "values": [
+            "200%",
+            "216%",
+            "233.3%",
+            "251.9%",
+            "272.1%",
+            "293.9%",
+            "317.4%",
+            "342.8%",
+            "370.2%",
+            "399.8%",
+            "431.8%",
+            "466.3%",
+            "503.6%"
+          ],
+          "current_value": "200%"
+        }
+      ]
+    },
+    {
+      "id": "是友情啊",
+      "name": "是友情啊",
+      "category": "Skill",
+      "description_parts": [
+        {
+          "name": "是友情啊",
+          "text": "对于哈尼娅来说，比起那些孤独的英雄主义小说，她还是更喜欢热热闹闹的伙伴故事，就算是一群热血笨蛋也不错。"
+        }
+      ],
+      "raw_text": "是友情啊Passive是友情啊「黯星」强化：「黯星」状态结束时，全队角色从目标汲取攻击力。目标损失相当于哈尼娅4%基础攻击力的攻击力，全队角色获得哈尼娅8%基础攻击力。累计汲取不超过哈尼娅16%基础攻击力，目标损失不超过20%初始攻击力。离开战斗状态时还原双方属性。对于哈尼娅来说，比起那些孤独的英雄主义小说，她还是更喜欢热热闹闹的伙伴故事，就算是一群热血笨蛋也不错。",
+      "level_cap": 1,
+      "parameters": []
+    },
+    {
+      "id": "是羁绊啊",
+      "name": "是羁绊啊",
+      "category": "Skill",
+      "description_parts": [
+        {
+          "name": "是羁绊啊",
+          "text": "看热血运动番想学运动，看热血乐队番想学乐器，看热血战斗番想……这个还是不建议学习了。"
+        }
+      ],
+      "raw_text": "是羁绊啊Passive是羁绊啊当在场角色触发「合奏」时，可以为哈尼娅累积1层「主角光环」，用以提高「超异科魔法炮」的弹射次数。每触发1次「合奏」使得哈尼娅获得1层「主角光环」。 当哈尼娅处于「超异科王牌」状态时，每触发1次「合奏」使得哈尼娅获得2层「主角光环」。 通过这种方式至多累积4层「主角光环」。看热血运动番想学运动，看热血乐队番想学乐器，看热血战斗番想……这个还是不建议学习了。",
+      "level_cap": 1,
+      "parameters": []
+    },
+    {
+      "id": "打工能手",
+      "name": "打工能手",
+      "category": "City",
+      "description_parts": [],
+      "raw_text": "打工能手CityLv.1哈尼娅上阵店铺后菜品售价额外增加0.12方斯。Lv.2哈尼娅上阵店铺后食材消耗速度降低1%。Lv.3哈尼娅上阵店铺后菜品售价额外增加0.12方斯。Lv.4哈尼娅上阵店铺后食材消耗速度降低1%。Lv.5哈尼娅上阵店铺后菜品售价额外增加0.18方斯。",
+      "level_cap": 1,
+      "parameters": []
+    }
+  ],
+  "awakenings": [
+    {
+      "name": "新人！天才转校生报道",
+      "description": "「主角光环」的累积上限提升至6层，使得「超异科魔法炮」最多可弹射6次。",
+      "asset": "data/resources/characters/haniya/awaken/UI_UI_player_YH_UI_juexingICON_1020_1.webp"
+    },
+    {
+      "name": "传说！后排靠窗的故乡",
+      "description": "「咕咕子」的持续时间增加4秒。",
+      "asset": "data/resources/characters/haniya/awaken/UI_UI_player_YH_UI_juexingICON_1020_2.webp"
+    },
+    {
+      "name": "集结！主角团正式成立",
+      "description": "处于「超异科王牌」状态时，使得哈尼娅自身的暴击率提升20%。",
+      "asset": "data/resources/characters/haniya/awaken/UI_UI_player_YH_UI_juexingICON_1020_3.webp"
+    },
+    {
+      "name": "海边！永恒的七八定律",
+      "description": "处于「超异科王牌」状态时，若由哈尼娅触发「合奏」，则哈尼娅下次攻击附加的额外伤害提升100%。",
+      "asset": "data/resources/characters/haniya/awaken/UI_UI_player_YH_UI_juexingICON_1020_4.webp"
+    },
+    {
+      "name": "危机！濒临破碎的信任",
+      "description": "处于「超异科王牌」状态时，哈尼娅自身造成的魂属性异能伤害增加30%。",
+      "asset": "data/resources/characters/haniya/awaken/UI_UI_player_YH_UI_juexingICON_1020_5.webp"
+    },
+    {
+      "name": "决战！终将到来的黎明",
+      "description": "「咕咕子」的冷却时间减少4秒。",
+      "asset": "data/resources/characters/haniya/awaken/UI_UI_player_YH_UI_juexingICON_1020_6.webp"
+    }
+  ],
+  "resonance": [
+    {
+      "name": "前传「普通攻击：盖罗塞克特术法」、「变轨技能：静默月林的守护者」、「极轨终结：名为『哈尼娅』的旋律」的技能等级提升1级。",
+      "description": "「普通攻击：盖罗塞克特术法」、「变轨技能：静默月林的守护者」、「极轨终结：名为『哈尼娅』的旋律」的技能等级提升1级。",
+      "asset": "data/resources/characters/haniya/awaken/UI_UI_player_YH_UI_juexingICON_1009_2.webp",
+      "level": 3
+    },
+    {
+      "name": "续作处于「超异科王牌」状态时，全队的暴击伤害提升12%。",
+      "description": "处于「超异科王牌」状态时，全队的暴击伤害提升12%。",
+      "asset": "data/resources/characters/haniya/awaken/UI_UI_player_YH_UI_juexingICON_1009_2.webp",
+      "level": 6
+    }
+  ],
+  "voice_actors": {
+    "日文": "石見舞菜香",
+    "英文": "Alexis Tipton",
+    "中文": "苏子芜",
+    "韩文": "김가령"
+  },
+  "cultivation": {
+    "ascension": [
+      {
+        "level": 30,
+        "items": [
+          {
+            "id": "OrdinaryMonMaterial_03_lv1",
+            "amount": 5
+          },
+          {
+            "id": "gold",
+            "amount": 25000
+          }
+        ]
+      },
+      {
+        "level": 40,
+        "items": [
+          {
+            "id": "OrdinaryMonMaterial_03_lv1",
+            "amount": 12
+          },
+          {
+            "id": "Worldboss_material_05",
+            "amount": 2
+          },
+          {
+            "id": "gold",
+            "amount": 50000
+          }
+        ]
+      },
+      {
+        "level": 50,
+        "items": [
+          {
+            "id": "OrdinaryMonMaterial_03_lv2",
+            "amount": 6
+          },
+          {
+            "id": "Worldboss_material_05",
+            "amount": 8
+          },
+          {
+            "id": "gold",
+            "amount": 75000
+          }
+        ]
+      },
+      {
+        "level": 60,
+        "items": [
+          {
+            "id": "OrdinaryMonMaterial_03_lv2",
+            "amount": 12
+          },
+          {
+            "id": "Worldboss_material_05",
+            "amount": 16
+          },
+          {
+            "id": "gold",
+            "amount": 100000
+          }
+        ]
+      },
+      {
+        "level": 70,
+        "items": [
+          {
+            "id": "OrdinaryMonMaterial_03_lv3",
+            "amount": 6
+          },
+          {
+            "id": "Worldboss_material_05",
+            "amount": 24
+          },
+          {
+            "id": "gold",
+            "amount": 125000
+          }
+        ]
+      },
+      {
+        "level": 80,
+        "items": [
+          {
+            "id": "OrdinaryMonMaterial_03_lv3",
+            "amount": 9
+          },
+          {
+            "id": "Worldboss_material_05",
+            "amount": 36
+          },
+          {
+            "id": "gold",
+            "amount": 150000
+          }
+        ]
+      }
+    ],
+    "skills": [
+      {
+        "name": "盖罗塞克特术法",
+        "levels": [
+          {
+            "level": 2,
+            "require_breakthrough": 2,
+            "items": [
+              {
+                "id": "gold",
+                "amount": 2000
+              },
+              {
+                "id": "SkillUpMaterial_05_lv1",
+                "amount": 2
+              },
+              {
+                "id": "OrdinaryMonMaterial_03_lv1",
+                "amount": 2
+              }
+            ]
+          },
+          {
+            "level": 3,
+            "require_breakthrough": 3,
+            "items": [
+              {
+                "id": "gold",
+                "amount": 5000
+              },
+              {
+                "id": "SkillUpMaterial_05_lv1",
+                "amount": 3
+              },
+              {
+                "id": "OrdinaryMonMaterial_03_lv1",
+                "amount": 3
+              }
+            ]
+          },
+          {
+            "level": 4,
+            "require_breakthrough": 3,
+            "items": [
+              {
+                "id": "gold",
+                "amount": 10000
+              },
+              {
+                "id": "SkillUpMaterial_05_lv1",
+                "amount": 5
+              },
+              {
+                "id": "OrdinaryMonMaterial_03_lv1",
+                "amount": 5
+              }
+            ]
+          },
+          {
+            "level": 5,
+            "require_breakthrough": 4,
+            "items": [
+              {
+                "id": "gold",
+                "amount": 20000
+              },
+              {
+                "id": "SkillUpMaterial_05_lv2",
+                "amount": 2
+              },
+              {
+                "id": "OrdinaryMonMaterial_03_lv2",
+                "amount": 2
+              }
+            ]
+          },
+          {
+            "level": 6,
+            "require_breakthrough": 4,
+            "items": [
+              {
+                "id": "gold",
+                "amount": 40000
+              },
+              {
+                "id": "SkillUpMaterial_05_lv2",
+                "amount": 3
+              },
+              {
+                "id": "OrdinaryMonMaterial_03_lv2",
+                "amount": 3
+              }
+            ]
+          },
+          {
+            "level": 7,
+            "require_breakthrough": 5,
+            "items": [
+              {
+                "id": "gold",
+                "amount": 60000
+              },
+              {
+                "id": "SkillUpMaterial_05_lv2",
+                "amount": 5
+              },
+              {
+                "id": "OrdinaryMonMaterial_03_lv2",
+                "amount": 5
+              },
+              {
+                "id": "weeklycloneboss_a02_01",
+                "amount": 1
+              }
+            ]
+          },
+          {
+            "level": 8,
+            "require_breakthrough": 5,
+            "items": [
+              {
+                "id": "gold",
+                "amount": 80000
+              },
+              {
+                "id": "SkillUpMaterial_05_lv3",
+                "amount": 3
+              },
+              {
+                "id": "OrdinaryMonMaterial_03_lv3",
+                "amount": 3
+              },
+              {
+                "id": "weeklycloneboss_a02_01",
+                "amount": 1
+              }
+            ]
+          },
+          {
+            "level": 9,
+            "require_breakthrough": 6,
+            "items": [
+              {
+                "id": "gold",
+                "amount": 100000
+              },
+              {
+                "id": "SkillUpMaterial_05_lv3",
+                "amount": 5
+              },
+              {
+                "id": "OrdinaryMonMaterial_03_lv3",
+                "amount": 5
+              },
+              {
+                "id": "weeklycloneboss_a02_01",
+                "amount": 2
+              }
+            ]
+          },
+          {
+            "level": 10,
+            "require_breakthrough": 6,
+            "items": [
+              {
+                "id": "gold",
+                "amount": 120000
+              },
+              {
+                "id": "SkillUpMaterial_05_lv3",
+                "amount": 8
+              },
+              {
+                "id": "OrdinaryMonMaterial_03_lv3",
+                "amount": 8
+              },
+              {
+                "id": "weeklycloneboss_a02_01",
+                "amount": 4
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "静默月林的守护者",
+        "levels": [
+          {
+            "level": 2,
+            "require_breakthrough": 2,
+            "items": [
+              {
+                "id": "gold",
+                "amount": 2000
+              },
+              {
+                "id": "SkillUpMaterial_05_lv1",
+                "amount": 2
+              },
+              {
+                "id": "OrdinaryMonMaterial_03_lv1",
+                "amount": 2
+              }
+            ]
+          },
+          {
+            "level": 3,
+            "require_breakthrough": 3,
+            "items": [
+              {
+                "id": "gold",
+                "amount": 5000
+              },
+              {
+                "id": "SkillUpMaterial_05_lv1",
+                "amount": 3
+              },
+              {
+                "id": "OrdinaryMonMaterial_03_lv1",
+                "amount": 3
+              }
+            ]
+          },
+          {
+            "level": 4,
+            "require_breakthrough": 3,
+            "items": [
+              {
+                "id": "gold",
+                "amount": 10000
+              },
+              {
+                "id": "SkillUpMaterial_05_lv1",
+                "amount": 5
+              },
+              {
+                "id": "OrdinaryMonMaterial_03_lv1",
+                "amount": 5
+              }
+            ]
+          },
+          {
+            "level": 5,
+            "require_breakthrough": 4,
+            "items": [
+              {
+                "id": "gold",
+                "amount": 20000
+              },
+              {
+                "id": "SkillUpMaterial_05_lv2",
+                "amount": 2
+              },
+              {
+                "id": "OrdinaryMonMaterial_03_lv2",
+                "amount": 2
+              }
+            ]
+          },
+          {
+            "level": 6,
+            "require_breakthrough": 4,
+            "items": [
+              {
+                "id": "gold",
+                "amount": 40000
+              },
+              {
+                "id": "SkillUpMaterial_05_lv2",
+                "amount": 3
+              },
+              {
+                "id": "OrdinaryMonMaterial_03_lv2",
+                "amount": 3
+              }
+            ]
+          },
+          {
+            "level": 7,
+            "require_breakthrough": 5,
+            "items": [
+              {
+                "id": "gold",
+                "amount": 60000
+              },
+              {
+                "id": "SkillUpMaterial_05_lv2",
+                "amount": 5
+              },
+              {
+                "id": "OrdinaryMonMaterial_03_lv2",
+                "amount": 5
+              },
+              {
+                "id": "weeklycloneboss_a02_01",
+                "amount": 1
+              }
+            ]
+          },
+          {
+            "level": 8,
+            "require_breakthrough": 5,
+            "items": [
+              {
+                "id": "gold",
+                "amount": 80000
+              },
+              {
+                "id": "SkillUpMaterial_05_lv3",
+                "amount": 3
+              },
+              {
+                "id": "OrdinaryMonMaterial_03_lv3",
+                "amount": 3
+              },
+              {
+                "id": "weeklycloneboss_a02_01",
+                "amount": 1
+              }
+            ]
+          },
+          {
+            "level": 9,
+            "require_breakthrough": 6,
+            "items": [
+              {
+                "id": "gold",
+                "amount": 100000
+              },
+              {
+                "id": "SkillUpMaterial_05_lv3",
+                "amount": 5
+              },
+              {
+                "id": "OrdinaryMonMaterial_03_lv3",
+                "amount": 5
+              },
+              {
+                "id": "weeklycloneboss_a02_01",
+                "amount": 2
+              }
+            ]
+          },
+          {
+            "level": 10,
+            "require_breakthrough": 6,
+            "items": [
+              {
+                "id": "gold",
+                "amount": 120000
+              },
+              {
+                "id": "SkillUpMaterial_05_lv3",
+                "amount": 8
+              },
+              {
+                "id": "OrdinaryMonMaterial_03_lv3",
+                "amount": 8
+              },
+              {
+                "id": "weeklycloneboss_a02_01",
+                "amount": 4
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "名为「哈尼娅」的旋律",
+        "levels": [
+          {
+            "level": 2,
+            "require_breakthrough": 2,
+            "items": [
+              {
+                "id": "gold",
+                "amount": 2000
+              },
+              {
+                "id": "SkillUpMaterial_05_lv1",
+                "amount": 2
+              },
+              {
+                "id": "OrdinaryMonMaterial_03_lv1",
+                "amount": 2
+              }
+            ]
+          },
+          {
+            "level": 3,
+            "require_breakthrough": 3,
+            "items": [
+              {
+                "id": "gold",
+                "amount": 5000
+              },
+              {
+                "id": "SkillUpMaterial_05_lv1",
+                "amount": 3
+              },
+              {
+                "id": "OrdinaryMonMaterial_03_lv1",
+                "amount": 3
+              }
+            ]
+          },
+          {
+            "level": 4,
+            "require_breakthrough": 3,
+            "items": [
+              {
+                "id": "gold",
+                "amount": 10000
+              },
+              {
+                "id": "SkillUpMaterial_05_lv1",
+                "amount": 5
+              },
+              {
+                "id": "OrdinaryMonMaterial_03_lv1",
+                "amount": 5
+              }
+            ]
+          },
+          {
+            "level": 5,
+            "require_breakthrough": 4,
+            "items": [
+              {
+                "id": "gold",
+                "amount": 20000
+              },
+              {
+                "id": "SkillUpMaterial_05_lv2",
+                "amount": 2
+              },
+              {
+                "id": "OrdinaryMonMaterial_03_lv2",
+                "amount": 2
+              }
+            ]
+          },
+          {
+            "level": 6,
+            "require_breakthrough": 4,
+            "items": [
+              {
+                "id": "gold",
+                "amount": 40000
+              },
+              {
+                "id": "SkillUpMaterial_05_lv2",
+                "amount": 3
+              },
+              {
+                "id": "OrdinaryMonMaterial_03_lv2",
+                "amount": 3
+              }
+            ]
+          },
+          {
+            "level": 7,
+            "require_breakthrough": 5,
+            "items": [
+              {
+                "id": "gold",
+                "amount": 60000
+              },
+              {
+                "id": "SkillUpMaterial_05_lv2",
+                "amount": 5
+              },
+              {
+                "id": "OrdinaryMonMaterial_03_lv2",
+                "amount": 5
+              },
+              {
+                "id": "weeklycloneboss_a02_01",
+                "amount": 1
+              }
+            ]
+          },
+          {
+            "level": 8,
+            "require_breakthrough": 5,
+            "items": [
+              {
+                "id": "gold",
+                "amount": 80000
+              },
+              {
+                "id": "SkillUpMaterial_05_lv3",
+                "amount": 3
+              },
+              {
+                "id": "OrdinaryMonMaterial_03_lv3",
+                "amount": 3
+              },
+              {
+                "id": "weeklycloneboss_a02_01",
+                "amount": 1
+              }
+            ]
+          },
+          {
+            "level": 9,
+            "require_breakthrough": 6,
+            "items": [
+              {
+                "id": "gold",
+                "amount": 100000
+              },
+              {
+                "id": "SkillUpMaterial_05_lv3",
+                "amount": 5
+              },
+              {
+                "id": "OrdinaryMonMaterial_03_lv3",
+                "amount": 5
+              },
+              {
+                "id": "weeklycloneboss_a02_01",
+                "amount": 2
+              }
+            ]
+          },
+          {
+            "level": 10,
+            "require_breakthrough": 6,
+            "items": [
+              {
+                "id": "gold",
+                "amount": 120000
+              },
+              {
+                "id": "SkillUpMaterial_05_lv3",
+                "amount": 8
+              },
+              {
+                "id": "OrdinaryMonMaterial_03_lv3",
+                "amount": 8
+              },
+              {
+                "id": "weeklycloneboss_a02_01",
+                "amount": 4
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "彩蛋时间",
+        "levels": [
+          {
+            "level": 2,
+            "require_breakthrough": 2,
+            "items": [
+              {
+                "id": "gold",
+                "amount": 2000
+              },
+              {
+                "id": "SkillUpMaterial_05_lv1",
+                "amount": 2
+              },
+              {
+                "id": "OrdinaryMonMaterial_03_lv1",
+                "amount": 2
+              }
+            ]
+          },
+          {
+            "level": 3,
+            "require_breakthrough": 3,
+            "items": [
+              {
+                "id": "gold",
+                "amount": 5000
+              },
+              {
+                "id": "SkillUpMaterial_05_lv1",
+                "amount": 3
+              },
+              {
+                "id": "OrdinaryMonMaterial_03_lv1",
+                "amount": 3
+              }
+            ]
+          },
+          {
+            "level": 4,
+            "require_breakthrough": 3,
+            "items": [
+              {
+                "id": "gold",
+                "amount": 10000
+              },
+              {
+                "id": "SkillUpMaterial_05_lv1",
+                "amount": 5
+              },
+              {
+                "id": "OrdinaryMonMaterial_03_lv1",
+                "amount": 5
+              }
+            ]
+          },
+          {
+            "level": 5,
+            "require_breakthrough": 4,
+            "items": [
+              {
+                "id": "gold",
+                "amount": 20000
+              },
+              {
+                "id": "SkillUpMaterial_05_lv2",
+                "amount": 2
+              },
+              {
+                "id": "OrdinaryMonMaterial_03_lv2",
+                "amount": 2
+              }
+            ]
+          },
+          {
+            "level": 6,
+            "require_breakthrough": 4,
+            "items": [
+              {
+                "id": "gold",
+                "amount": 40000
+              },
+              {
+                "id": "SkillUpMaterial_05_lv2",
+                "amount": 3
+              },
+              {
+                "id": "OrdinaryMonMaterial_03_lv2",
+                "amount": 3
+              }
+            ]
+          },
+          {
+            "level": 7,
+            "require_breakthrough": 5,
+            "items": [
+              {
+                "id": "gold",
+                "amount": 60000
+              },
+              {
+                "id": "SkillUpMaterial_05_lv2",
+                "amount": 5
+              },
+              {
+                "id": "OrdinaryMonMaterial_03_lv2",
+                "amount": 5
+              },
+              {
+                "id": "weeklycloneboss_a02_01",
+                "amount": 1
+              }
+            ]
+          },
+          {
+            "level": 8,
+            "require_breakthrough": 5,
+            "items": [
+              {
+                "id": "gold",
+                "amount": 80000
+              },
+              {
+                "id": "SkillUpMaterial_05_lv3",
+                "amount": 3
+              },
+              {
+                "id": "OrdinaryMonMaterial_03_lv3",
+                "amount": 3
+              },
+              {
+                "id": "weeklycloneboss_a02_01",
+                "amount": 1
+              }
+            ]
+          },
+          {
+            "level": 9,
+            "require_breakthrough": 6,
+            "items": [
+              {
+                "id": "gold",
+                "amount": 100000
+              },
+              {
+                "id": "SkillUpMaterial_05_lv3",
+                "amount": 5
+              },
+              {
+                "id": "OrdinaryMonMaterial_03_lv3",
+                "amount": 5
+              },
+              {
+                "id": "weeklycloneboss_a02_01",
+                "amount": 2
+              }
+            ]
+          },
+          {
+            "level": 10,
+            "require_breakthrough": 6,
+            "items": [
+              {
+                "id": "gold",
+                "amount": 120000
+              },
+              {
+                "id": "SkillUpMaterial_05_lv3",
+                "amount": 8
+              },
+              {
+                "id": "OrdinaryMonMaterial_03_lv3",
+                "amount": 8
+              },
+              {
+                "id": "weeklycloneboss_a02_01",
+                "amount": 4
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "是友情啊",
+        "levels": [
+          {
+            "level": 1,
+            "require_breakthrough": 2,
+            "items": [
+              {
+                "id": "gold",
+                "amount": 30000
+              },
+              {
+                "id": "SkillUpMaterial_05_lv2",
+                "amount": 2
+              },
+              {
+                "id": "weeklycloneboss_a02_01",
+                "amount": 1
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "是羁绊啊",
+        "levels": [
+          {
+            "level": 1,
+            "require_breakthrough": 4,
+            "items": [
+              {
+                "id": "gold",
+                "amount": 40000
+              },
+              {
+                "id": "SkillUpMaterial_05_lv3",
+                "amount": 1
+              },
+              {
+                "id": "weeklycloneboss_a02_01",
+                "amount": 2
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "打工能手",
+        "levels": [
+          {
+            "level": 1,
+            "require_breakthrough": 0,
+            "items": [
+              {
+                "id": "CityAbility_UpMaterial",
+                "amount": 2
+              },
+              {
+                "id": "fons",
+                "amount": 500
+              }
+            ]
+          },
+          {
+            "level": 2,
+            "require_breakthrough": 0,
+            "items": [
+              {
+                "id": "CityAbility_UpMaterial",
+                "amount": 4
+              },
+              {
+                "id": "fons",
+                "amount": 1500
+              }
+            ]
+          },
+          {
+            "level": 3,
+            "require_breakthrough": 0,
+            "items": [
+              {
+                "id": "CityAbility_UpMaterial",
+                "amount": 10
+              },
+              {
+                "id": "fons",
+                "amount": 3600
+              }
+            ]
+          },
+          {
+            "level": 4,
+            "require_breakthrough": 0,
+            "items": [
+              {
+                "id": "CityAbility_UpMaterial",
+                "amount": 16
+              },
+              {
+                "id": "fons",
+                "amount": 6400
+              }
+            ]
+          },
+          {
+            "level": 5,
+            "require_breakthrough": 0,
+            "items": [
+              {
+                "id": "CityAbility_UpMaterial",
+                "amount": 24
+              },
+              {
+                "id": "fons",
+                "amount": 10000
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "material_catalog": {
+      "OrdinaryMonMaterial_03_lv1": {
+        "name": "模糊数符",
+        "icon": "/Game/UI/UI_Icon/Item/material_mohushufu"
+      },
+      "gold": {
+        "name": "甲硬币",
+        "icon": "/Game/UI/UI_Icon/Item/item_Coin_Beetle"
+      },
+      "Worldboss_material_05": {
+        "name": "护巢残片",
+        "icon": "/Game/UI/UI_Icon/Item/Worldboss_material_05"
+      },
+      "OrdinaryMonMaterial_03_lv2": {
+        "name": "未解数符",
+        "icon": "/Game/UI/UI_Icon/Item/material_bianxingshufu"
+      },
+      "OrdinaryMonMaterial_03_lv3": {
+        "name": "扭曲数符",
+        "icon": "/Game/UI/UI_Icon/Item/material_niuqushufu"
+      },
+      "SkillUpMaterial_05_lv1": {
+        "name": "水波的迟疑",
+        "icon": "/Game/UI/UI_Icon/Item/SkillUpMaterial_05_lv1"
+      },
+      "SkillUpMaterial_05_lv2": {
+        "name": "倒悬的轻响",
+        "icon": "/Game/UI/UI_Icon/Item/SkillUpMaterial_05_lv2"
+      },
+      "weeklycloneboss_a02_01": {
+        "name": "名为炫耀的裙袂",
+        "icon": "/Game/UI/UI_Icon/Item/weeklycloneboss_a02_01"
+      },
+      "SkillUpMaterial_05_lv3": {
+        "name": "「第二人」",
+        "icon": "/Game/UI/UI_Icon/Item/SkillUpMaterial_05_lv3"
+      },
+      "CityAbility_UpMaterial": {
+        "name": "无梦果核",
+        "icon": "/Game/UI/UI_Icon/Item/CityAbility_UpMaterial"
+      },
+      "fons": {
+        "name": "方斯",
+        "icon": "/Game/UI/UI_Icon/Item/Icon_Fonizie"
+      }
+    }
+  },
+  "assets": [
+    {
+      "type": "character_portrait",
+      "source_url": "https://wiki.mysqil.com/images/characters/haniya.webp",
+      "local_path": "data/resources/characters/haniya/characters/haniya.webp",
+      "sha256": "5b421500c3847edd83ba372c49aa282d4a1ca06002b48a1b1f8119616d04557c"
+    },
+    {
+      "type": "character_icon",
+      "source_url": "https://wiki.mysqil.com/images/characters/haniya-icon.webp",
+      "local_path": "data/resources/characters/haniya/characters/haniya-icon.webp",
+      "sha256": "f2ccf712e476ffb4438ebd6b7a66297192007bc1b50fb77eb157c8c0938a608e"
+    },
+    {
+      "type": "element_icon",
+      "source_url": "https://wiki.mysqil.com/images/ui/element-psyche.webp",
+      "local_path": "data/resources/characters/haniya/ui/element-psyche.webp",
+      "sha256": "8ad159a37fb066b481003b00999f7859eb04e49a84db0da9b414fdd41e1714b8"
+    },
+    {
+      "type": "weapon",
+      "source_url": "https://wiki.mysqil.com/images/weapons/yinquanquanchang.webp",
+      "local_path": "data/resources/characters/haniya/weapons/yinquanquanchang.webp",
+      "sha256": "6071628941b82fff6afdcb747a56810be51bea1671a9af4c47fbfb8687d618d0"
+    },
+    {
+      "type": "cassette",
+      "source_url": "https://wiki.mysqil.com/images/cassettes/speedy-hedgehog.webp",
+      "local_path": "data/resources/characters/haniya/cassettes/speedy-hedgehog.webp",
+      "sha256": "95842c568384df3b14c70bb2a87f8b9e7c0a59741f4bbec8f4c0f8b1412975f2"
+    },
+    {
+      "type": "stat_icon",
+      "source_url": "https://wiki.mysqil.com/images/ui/stat-hp.webp",
+      "local_path": "data/resources/characters/haniya/ui/stat-hp.webp",
+      "sha256": "3ceda81fff27a8b1936f59ceb78ad4f4fe5680e41943ac00b43cad056bacec7b"
+    },
+    {
+      "type": "stat_icon",
+      "source_url": "https://wiki.mysqil.com/images/ui/stat-atk.webp",
+      "local_path": "data/resources/characters/haniya/ui/stat-atk.webp",
+      "sha256": "72b1feed665760d7a7dbf9e5ba8887d779f81632e371fdafa2a04899a0f72437"
+    },
+    {
+      "type": "stat_icon",
+      "source_url": "https://wiki.mysqil.com/images/ui/stat-def.webp",
+      "local_path": "data/resources/characters/haniya/ui/stat-def.webp",
+      "sha256": "cf059d0768996ca928593b881a064ee0fb00ed98d0dd1f6e63816024a4b081f2"
+    },
+    {
+      "type": "stat_icon",
+      "source_url": "https://wiki.mysqil.com/images/ui/stat-crit-rate.webp",
+      "local_path": "data/resources/characters/haniya/ui/stat-crit-rate.webp",
+      "sha256": "631b406f0ef37e800698201e0184016a3db06c5858d4c31dc8c5ad6175ffeace"
+    },
+    {
+      "type": "stat_icon",
+      "source_url": "https://wiki.mysqil.com/images/ui/stat-crit-dmg.webp",
+      "local_path": "data/resources/characters/haniya/ui/stat-crit-dmg.webp",
+      "sha256": "77552c153fc1fa8ceda73dc0aa8dcd37b52ae3b53474435858311c5ea35a852f"
+    },
+    {
+      "type": "awakening_icon",
+      "source_url": "https://wiki.mysqil.com/images/awaken/UI_UI_player_YH_UI_juexingICON_1020_1.webp",
+      "local_path": "data/resources/characters/haniya/awaken/UI_UI_player_YH_UI_juexingICON_1020_1.webp",
+      "sha256": "370c31b9223a0232f62a3bb345d41b96c8464ed9758d1dd0b7b4e846dcbdd5ff"
+    },
+    {
+      "type": "awakening_icon",
+      "source_url": "https://wiki.mysqil.com/images/awaken/UI_UI_player_YH_UI_juexingICON_1020_2.webp",
+      "local_path": "data/resources/characters/haniya/awaken/UI_UI_player_YH_UI_juexingICON_1020_2.webp",
+      "sha256": "1f922b7a0aaa412cc12e449bb5c429c2436a6d20955f5fafe12d061626fa7447"
+    },
+    {
+      "type": "awakening_icon",
+      "source_url": "https://wiki.mysqil.com/images/awaken/UI_UI_player_YH_UI_juexingICON_1020_3.webp",
+      "local_path": "data/resources/characters/haniya/awaken/UI_UI_player_YH_UI_juexingICON_1020_3.webp",
+      "sha256": "d409b2f3f6b41d9267aebe89af7ee5130ff9c22301faefaa210c9b9973f78c5d"
+    },
+    {
+      "type": "awakening_icon",
+      "source_url": "https://wiki.mysqil.com/images/awaken/UI_UI_player_YH_UI_juexingICON_1020_4.webp",
+      "local_path": "data/resources/characters/haniya/awaken/UI_UI_player_YH_UI_juexingICON_1020_4.webp",
+      "sha256": "7fc50b4db1ffd94e92c27c1e6de7577830e6a0f5921d19ec24f7cec20a06a487"
+    },
+    {
+      "type": "awakening_icon",
+      "source_url": "https://wiki.mysqil.com/images/awaken/UI_UI_player_YH_UI_juexingICON_1020_5.webp",
+      "local_path": "data/resources/characters/haniya/awaken/UI_UI_player_YH_UI_juexingICON_1020_5.webp",
+      "sha256": "8004ba590ba4d97270204081ef57310c1b7d3eee68e201a17e8b6e390561eebe"
+    },
+    {
+      "type": "awakening_icon",
+      "source_url": "https://wiki.mysqil.com/images/awaken/UI_UI_player_YH_UI_juexingICON_1020_6.webp",
+      "local_path": "data/resources/characters/haniya/awaken/UI_UI_player_YH_UI_juexingICON_1020_6.webp",
+      "sha256": "8ab149d40a98f9939a219215b628c27cd3ebecd2f26477f4cdd03cce688f1254"
+    },
+    {
+      "type": "awakening_icon",
+      "source_url": "https://wiki.mysqil.com/images/awaken/UI_UI_player_YH_UI_juexingICON_1009_2.webp",
+      "local_path": "data/resources/characters/haniya/awaken/UI_UI_player_YH_UI_juexingICON_1009_2.webp",
+      "sha256": "1b6ce539ca6b5ad3a38ce01feb012a9f5daf70cdbd8e81d843c426ff7aed58c1"
+    },
+    {
+      "type": "material",
+      "source_url": "https://wiki.mysqil.com/images/items/material_mohushufu.webp",
+      "local_path": "data/resources/characters/haniya/items/material_mohushufu.webp",
+      "sha256": "83a3bdec1d8ae41471b619c31b5067eae486678ad22884d196411baa52730640"
+    },
+    {
+      "type": "material",
+      "source_url": "https://wiki.mysqil.com/images/items/item_Coin_Beetle.webp",
+      "local_path": "data/resources/characters/haniya/items/item_Coin_Beetle.webp",
+      "sha256": "421220b8cfdede7170ca54ec9bfaffd034832dc462d3066c8a1604fbfdb69a74"
+    },
+    {
+      "type": "material",
+      "source_url": "https://wiki.mysqil.com/images/items/Worldboss_material_05.webp",
+      "local_path": "data/resources/characters/haniya/items/Worldboss_material_05.webp",
+      "sha256": "8282f6f5d2541a15e69c2bc890fd63a33ee71e93632929d00ac3ed0d7a65de46"
+    },
+    {
+      "type": "material",
+      "source_url": "https://wiki.mysqil.com/images/items/material_bianxingshufu.webp",
+      "local_path": "data/resources/characters/haniya/items/material_bianxingshufu.webp",
+      "sha256": "ba7f874bbbb2d323c6f18040a9a6651ed8ce2530bfd8c1ca24b594d43334c74e"
+    },
+    {
+      "type": "material",
+      "source_url": "https://wiki.mysqil.com/images/items/material_niuqushufu.webp",
+      "local_path": "data/resources/characters/haniya/items/material_niuqushufu.webp",
+      "sha256": "7a86c0694f5e5b282b4a038c534f1135b48d56e921c4b69db381fc2549372571"
+    },
+    {
+      "type": "material",
+      "source_url": "https://wiki.mysqil.com/images/items/SkillUpMaterial_05_lv1.webp",
+      "local_path": "data/resources/characters/haniya/items/SkillUpMaterial_05_lv1.webp",
+      "sha256": "20e837c24d8ee7885c073f5d81610a4d5cef70c16272879dfee8e572b8f6bbfd"
+    },
+    {
+      "type": "material",
+      "source_url": "https://wiki.mysqil.com/images/items/SkillUpMaterial_05_lv2.webp",
+      "local_path": "data/resources/characters/haniya/items/SkillUpMaterial_05_lv2.webp",
+      "sha256": "d88356a4c921995b0404e3762c76442fda6ff2b54af955153b30442f3f6bb3cd"
+    },
+    {
+      "type": "material",
+      "source_url": "https://wiki.mysqil.com/images/items/weeklycloneboss_a02_01.webp",
+      "local_path": "data/resources/characters/haniya/items/weeklycloneboss_a02_01.webp",
+      "sha256": "4068f26f01c9ffbde94d86d86bfc083a5471f26c8ea0f51d8b5a1be34e947de4"
+    },
+    {
+      "type": "material",
+      "source_url": "https://wiki.mysqil.com/images/items/SkillUpMaterial_05_lv3.webp",
+      "local_path": "data/resources/characters/haniya/items/SkillUpMaterial_05_lv3.webp",
+      "sha256": "15b302465a74027a2d39b147e715feb1ffb520165e2955909cee548b37d6401e"
+    },
+    {
+      "type": "material",
+      "source_url": "https://wiki.mysqil.com/images/items/CityAbility_UpMaterial.webp",
+      "local_path": "data/resources/characters/haniya/items/CityAbility_UpMaterial.webp",
+      "sha256": "501479698ec2ffeac57576097533330d6da38685a02ae58a953444a3fd154350"
+    },
+    {
+      "type": "material",
+      "source_url": "https://wiki.mysqil.com/images/items/Icon_Fonizie.webp",
+      "local_path": "data/resources/characters/haniya/items/Icon_Fonizie.webp",
+      "sha256": "3c6221be0356fbae55d13ca560332afdc44a3bb9cbdde4e9d9ecace631fda9f8"
+    }
+  ],
+  "provenance": {
+    "source": "mysqil",
+    "source_name": "Mysqil · 环世全鉴",
+    "source_url": "https://wiki.mysqil.com/characters/haniya/",
+    "imported_at": "2026-09-29T02:18:03Z",
+    "raw_snapshot": "data/mysqil/characters/haniya/raw/page.html",
+    "source_license": "CC BY-NC-SA 4.0",
+    "user_supplied_sources": []
+  },
+  "scope": {
+    "included": [
+      "基础资料",
+      "推荐武器",
+      "推荐卡带",
+      "基础属性成长",
+      "技能描述与倍率",
+      "觉醒",
+      "共鸣",
+      "突破材料",
+      "技能升级材料",
+      "卡带词条机制",
+      "终端"
+    ],
+    "excluded": [
+      "配队推荐"
+    ],
+    "note": "社区维护页面导入；配队推荐只保留在原始快照中。"
+  },
+  "manual_review": [
+    {
+      "field": "source_review",
+      "value": "社区源导入，待人工核验",
+      "source_type": "community_source",
+      "status": "pending"
+    }
+  ]
+}
