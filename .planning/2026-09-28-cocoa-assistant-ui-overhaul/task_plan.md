@@ -305,6 +305,6 @@ Phase 15 - User-facing Navigation and Module Routing；implementation complete, 
 - [ ] 响应式视觉验证（本轮未执行）
 - [x] 确认本地工作区仅包含本阶段功能、界面样式和 canonical planning 变更
 - [x] fetch origin/main 并确认远端没有领先提交
-- [ ] 创建交付提交并推送到 origin/main
-- [ ] 推送后核对本地 HEAD、origin/main 与工作区状态
-- **Status:** implementation and desktop browser interaction complete; ready for commit and push; responsive visual verification not run
+- [x] 创建交付提交并推送到 origin/main（c256750）
+- [x] 推送后核对本地 HEAD、origin/main 与工作区状态
+- **Status:** complete; pushed to origin/main at c256750; desktop browser interaction complete; responsive visual verification not run
