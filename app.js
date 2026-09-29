@@ -75,6 +75,14 @@ let selectedDriverBlockLevel = 20;
 let driverBlockModelFilter = "all";
 let driverBlockSearchQuery = "";
 let selectedSkyCurtainQuality = "gold";
+let userActiveTab = "overview";
+let userCharacterSearchQuery = "";
+let userTargetLevel = 80;
+let userSkillTargets = {};
+let userCarouselCursor = 0;
+let userCarouselDrag = null;
+let userCarouselDragOffset = 0;
+let userCarouselSuppressClick = false;
 
 function notify(message) {
   toastText.textContent = message;
@@ -647,7 +655,7 @@ function setSelectValue(selector, value) {
   field.value = normalized;
 }
 
-function applyCharacter(name) {
+function applyCharacter(name, options = {}) {
   const data = characterData[name];
   if (!data) return;
   selectedCharacter = name;
@@ -669,9 +677,15 @@ function applyCharacter(name) {
   setText("#understandingCopy", data.summary);
   $$(".segment").forEach((segment) => segment.classList.toggle("is-active", segment.dataset.mode === data.mode));
   updateImportedPanel(data);
-  notify(`已切换到 ${name} 的本地资料`);
-}
+  if (options.skipUserRail) {
+    renderUserHero(data.knowledge);
+    renderUserTabPanel(data.knowledge);
+  } else {
+    renderUserExperience(data.knowledge);
+  }
+  if (!options.silent) notify(`已切换到 ${name} 的本地资料`);
 
+}
 function renderCharacterCards() {
   const list = $("#characterList");
   if (!list) return;
@@ -959,6 +973,10 @@ function initDriverBlockCatalog() {
 }
 
 function showRoleManagement() {
+  document.body.classList.remove("user-mode");
+  $("#userExperienceView").hidden = true;
+  $("#adminTopbarActions").hidden = false;
+  $("#userTopbarActions").hidden = true;
   $("#roleManagementView").hidden = false;
   $("#encyclopediaView").hidden = true;
   $("#previewButton").hidden = false;
@@ -966,10 +984,14 @@ function showRoleManagement() {
   setText("#activeBreadcrumb", "角色管理");
   $("[data-nav='角色管理']")?.classList.add("is-active");
   $("#encyclopediaNavTrigger")?.classList.remove("is-active");
-  $$("[data-encyclopedia-kind]").forEach((item) => item.classList.remove("is-active"));
+  $$('[data-encyclopedia-kind]').forEach((item) => item.classList.remove("is-active"));
 }
-
 function showEncyclopediaCategory(kind) {
+  document.body.classList.remove("user-mode");
+  $("#userExperienceView").hidden = true;
+  $("#adminTopbarActions").hidden = true;
+  $("#userTopbarActions").hidden = true;
+
   const labels = { "arc-drives": "弧盘", cassettes: "空幕", "drive-blocks": "驱动块" };
   const label = labels[kind] || "图鉴";
   const hasArcDriveCatalog = kind === "arc-drives";
@@ -1167,7 +1189,7 @@ function bindMisc() {
   const optionalBindings = [
     ["#workspaceSwitch", () => notify("当前工作区：角色资料库")],
     ["#profileButton", () => notify("林维护者 · 编辑权限")],
-    ["#previewButton", () => notify("角色资料预览已准备")],
+    ["#previewButton", showUserExperience],
     ["#explainButton", () => notify("概览来自基础资料、技能和觉醒数据")],
     ["#moreButton", () => notify("更多操作：停用、复制为新角色、查看历史版本")],
     ["#reactionSelect", () => notify(activeKnowledge?.mechanism_facts?.reaction_enhancement_text || "当前角色来源页未提供反应强化资料")],
@@ -1194,4 +1216,354 @@ bindSave();
 bindImpact();
 bindMisc();
 bindDriveLayoutUpload();
+bindUserExperience();
+showUserExperience();
 applyCharacter(selectedCharacter);
+
+function userAsset(knowledge, type) {
+  const asset = (knowledge.assets || []).find((item) => item.type === type);
+  return asset ? importedAssetUrl(asset) : "";
+}
+
+function userMediaMarkup(src, alt, fallback) {
+  return src ? `<img src="${escapeHtml(src)}" alt="${escapeHtml(alt)}" loading="lazy">` : `<span class="user-media-fallback">${escapeHtml(fallback)}</span>`;
+}
+
+function userSkillTargetValue(knowledge, skill, index, targets = userSkillTargets) {
+  const levels = skillTargetOptions(skill);
+  const key = `${knowledge?.id || "unknown"}:${index}`;
+  const selected = Number(targets?.[key]);
+  return levels.includes(selected) ? selected : Math.max(...levels);
+}
+
+function userMaterialEntries(knowledge, targetLevel, targets = userSkillTargets) {
+  const totals = new Map();
+  const add = (id, amount) => totals.set(id, (totals.get(id) || 0) + amount);
+  (knowledge.cultivation?.ascension || []).filter((step) => step.level <= targetLevel).forEach((step) => (step.items || []).forEach((item) => add(item.id, item.amount)));
+  (knowledge.cultivation?.skills || []).forEach((skill, index) => {
+    const skillTargetLevel = userSkillTargetValue(knowledge, skill, index, targets);
+    (skill.levels || []).filter((step) => step.level <= skillTargetLevel).forEach((step) => (step.items || []).forEach((item) => add(item.id, item.amount)));
+  });
+  const catalog = knowledge.cultivation?.material_catalog || {};
+  return [...totals.entries()].map(([id, amount]) => ({ id, amount, name: catalog[id]?.name || id, icon: materialAsset(knowledge, id) }));
+}
+
+function userCharacterEntries() {
+  const entries = Object.entries(characterData).sort(([nameA, a], [nameB, b]) => {
+    const rarityOrder = { S: 0, A: 1, B: 2 };
+    return (rarityOrder[a.rarity] ?? 3) - (rarityOrder[b.rarity] ?? 3) || nameA.localeCompare(nameB, "zh-CN");
+  });
+  return entries.filter(([name, data]) => {
+    if (!userCharacterSearchQuery) return true;
+    return [name, data.role, data.element, data.sourcePosition].filter(Boolean).join(" ").toLowerCase().includes(userCharacterSearchQuery);
+  });
+}
+
+function userCarouselNormalize(index, length) {
+  return ((index % length) + length) % length;
+}
+
+function userCarouselSetPosition(animate = true) {
+  const viewport = $("#userCharacterCarouselViewport");
+  const track = $("#userCharacterCarouselTrack");
+  const firstCard = track?.querySelector(".user-character-card");
+  if (!viewport || !track || !firstCard) return;
+  const cardWidth = firstCard.offsetWidth;
+  const gap = Number.parseFloat(getComputedStyle(track).gap) || 12;
+  const offset = viewport.clientWidth / 2 - (userCarouselCursor * (cardWidth + gap) + cardWidth / 2) + userCarouselDragOffset;
+  if (animate) track.style.removeProperty("transition");
+  else track.style.transition = "none";
+  track.style.transform = `translate3d(${offset}px, 0, 0)`;
+  if (!animate) window.requestAnimationFrame(() => {
+    if (!userCarouselDrag && track.isConnected) track.style.removeProperty("transition");
+  });
+}
+
+function userCarouselUpdateActive(entries) {
+  const track = $("#userCharacterCarouselTrack");
+  if (!track || !entries.length) return;
+  const activeIndex = userCarouselNormalize(userCarouselCursor, entries.length);
+  track.querySelectorAll("[data-user-character]").forEach((card) => {
+    const position = Number(card.dataset.carouselPosition);
+    const isActive = position === userCarouselCursor;
+    const isNear = Math.abs(position - userCarouselCursor) <= 2;
+    card.classList.toggle("is-active", isActive);
+    card.classList.toggle("is-near", !isActive && isNear);
+    card.setAttribute("aria-pressed", String(isActive));
+  });
+
+}
+
+function renderUserCharacterRail() {
+  const rail = $("#userCharacterRail");
+  if (!rail) return;
+  const entries = userCharacterEntries();
+  const totalEntries = Object.keys(characterData).length;
+  setText("#userCharacterCount", `${entries.length} / ${totalEntries} 位角色`);
+  if (!entries.length) {
+    rail.innerHTML = `<div class="user-empty user-carousel-empty">没有找到匹配的角色。</div>`;
+    return;
+  }
+  const selectedIndex = Math.max(0, entries.findIndex(([name]) => name === selectedCharacter));
+  userCarouselCursor = entries.length + selectedIndex;
+  const cards = [...entries, ...entries, ...entries].map(([name, data], position) => `
+    <button class="user-character-card" type="button" data-user-character="${escapeHtml(name)}" data-carousel-position="${position}" aria-pressed="false" aria-label="打开${escapeHtml(name)}角色资料">
+      <span class="user-character-avatar">${data.icon ? `<img src="${escapeHtml(data.icon)}" alt="" loading="lazy">` : escapeHtml(name.slice(0, 1))}</span>
+      <span class="user-character-copy"><b>${escapeHtml(name)}</b><span>${escapeHtml([data.role, data.sourcePosition].filter(Boolean).join(" · ") || "定位待补充")}</span></span>
+      <span class="user-character-element">${escapeHtml(data.element || "?")}</span>
+    </button>`).join("");
+  rail.innerHTML = `<button class="user-carousel-arrow pressable" type="button" data-user-carousel="prev" aria-label="上一个角色"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m14.5 5-7 7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="user-character-carousel-viewport" id="userCharacterCarouselViewport"><div class="user-character-carousel-track" id="userCharacterCarouselTrack">${cards}</div></div><button class="user-carousel-arrow pressable" type="button" data-user-carousel="next" aria-label="下一个角色"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m9.5 5 7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>`;
+  window.requestAnimationFrame(() => {
+    userCarouselSetPosition(false);
+    userCarouselUpdateActive(entries);
+  });
+}
+
+function userCarouselCommit(entries, cursor) {
+  const [name] = entries[userCarouselNormalize(cursor, entries.length)];
+  applyCharacter(name, { skipUserRail: true, silent: true });
+  userCarouselUpdateActive(entries);
+}
+
+function userCarouselMove(direction) {
+  const entries = userCharacterEntries();
+  if (entries.length < 2 || !direction) return;
+  const length = entries.length;
+  if (direction > 0 && userCarouselCursor >= length * 2 - 1) {
+    userCarouselCursor = length - 1;
+    userCarouselSetPosition(false);
+  } else if (direction < 0 && userCarouselCursor <= length) {
+    userCarouselCursor = length * 2;
+    userCarouselSetPosition(false);
+  }
+  userCarouselCursor += direction;
+  userCarouselDragOffset = 0;
+  userCarouselSetPosition(true);
+  userCarouselCommit(entries, userCarouselCursor);
+}
+
+function userCarouselMoveTo(position) {
+  const entries = userCharacterEntries();
+  if (entries.length < 2) return;
+  const targetIndex = userCarouselNormalize(Number(position), entries.length);
+  const currentIndex = userCarouselNormalize(userCarouselCursor, entries.length);
+  let delta = targetIndex - currentIndex;
+  if (delta > entries.length / 2) delta -= entries.length;
+  if (delta < -entries.length / 2) delta += entries.length;
+  if (!delta) return;
+  if (Math.abs(delta) === 1) {
+    userCarouselMove(Math.sign(delta));
+    return;
+  }
+  userCarouselCursor = entries.length + targetIndex;
+  userCarouselDragOffset = 0;
+  userCarouselSetPosition(true);
+  userCarouselCommit(entries, userCarouselCursor);
+}
+
+function userCarouselSelectCard(name) {
+  const entries = userCharacterEntries();
+  if (entries.length < 2 || !name) return;
+  const targetIndex = entries.findIndex(([entryName]) => entryName === name);
+  if (targetIndex < 0) return;
+  const currentIndex = userCarouselNormalize(userCarouselCursor, entries.length);
+  if (targetIndex === currentIndex && name === selectedCharacter) return;
+  userCarouselCursor = entries.length + targetIndex;
+  userCarouselDragOffset = 0;
+  userCarouselSetPosition(true);
+  userCarouselCommit(entries, userCarouselCursor);
+}
+function bindUserCarouselPointer() {
+  const rail = $("#userCharacterRail");
+  if (!rail) return;
+  const finish = (event) => {
+    if (!userCarouselDrag || event.pointerId !== userCarouselDrag.pointerId) return;
+    const drag = userCarouselDrag;
+    const dx = event.clientX - drag.startX;
+    const elapsed = Math.max(1, performance.now() - drag.startTime);
+    const velocity = (dx / elapsed) * 1000;
+    const viewport = $("#userCharacterCarouselViewport");
+    const threshold = Math.max(28, (viewport?.clientWidth || 320) * 0.08);
+    const direction = Math.abs(dx) >= threshold || Math.abs(velocity) >= 420 ? (dx < 0 ? 1 : -1) : 0;
+    userCarouselDrag = null;
+    userCarouselDragOffset = 0;
+    rail.querySelector(".user-character-carousel-track")?.classList.remove("is-dragging");
+    if (rail.hasPointerCapture?.(event.pointerId)) rail.releasePointerCapture(event.pointerId);
+    if (drag.moved) {
+      userCarouselSuppressClick = true;
+      window.setTimeout(() => { userCarouselSuppressClick = false; }, 0);
+      if (direction) userCarouselMove(direction);
+      else {
+        userCarouselSetPosition(true);
+        userCarouselUpdateActive(userCharacterEntries());
+      }
+    } else if (drag.tapName) {
+      userCarouselSelectCard(drag.tapName);
+    }
+  };
+  rail.addEventListener("pointerdown", (event) => {
+    const viewport = event.target.closest(".user-character-carousel-viewport");
+    if (!viewport || (event.pointerType === "mouse" && event.button !== 0)) return;
+    const track = viewport.querySelector(".user-character-carousel-track");
+    userCarouselDrag = { pointerId: event.pointerId, startX: event.clientX, startTime: performance.now(), moved: false, tapName: event.target.closest("[data-user-character]")?.dataset.userCharacter || "" };
+    userCarouselDragOffset = 0;
+    rail.setPointerCapture?.(event.pointerId);
+    track?.classList.add("is-dragging");
+  });
+  rail.addEventListener("pointermove", (event) => {
+    if (!userCarouselDrag || event.pointerId !== userCarouselDrag.pointerId) return;
+    const dx = event.clientX - userCarouselDrag.startX;
+    if (Math.abs(dx) < 8 && !userCarouselDrag.moved) return;
+    userCarouselDrag.moved = true;
+    userCarouselDragOffset = dx;
+    userCarouselSetPosition(false);
+  });
+  rail.addEventListener("pointerup", finish);
+  rail.addEventListener("pointercancel", finish);
+}
+
+function renderUserHero(knowledge) {
+  const target = $("#userHeroCard");
+  if (!target || !knowledge) return;
+  const basic = knowledge.basic || {};
+  const facts = knowledge.mechanism_facts || {};
+  const portrait = userAsset(knowledge, "character_portrait");
+  const tags = [basic.element, basic.role, basic.position, basic.cassette_type].filter(Boolean);
+  target.innerHTML = `<div class="user-hero-copy"><span class="user-hero-kicker"><i></i>${escapeHtml(basic.rarity || "角色")} · ${escapeHtml(basic.rating || "资料已整理")}</span><h2>${escapeHtml(knowledge.name)}</h2><p>${escapeHtml(basic.summary || "从技能机制、推荐配装到养成材料，查看这名角色的完整资料。")}</p><div class="user-hero-tags">${tags.map((tag) => `<span class="user-hero-tag">${escapeHtml(tag)}</span>`).join("")}</div><div class="user-hero-actions"><button class="user-hero-action pressable" type="button" data-user-action="build">查看推荐配装</button><button class="user-hero-action secondary pressable" type="button" data-user-action="skills">${escapeHtml(facts.primary_reaction || "查看技能机制")}</button></div></div><div class="user-hero-art">${portrait ? `<img src="${escapeHtml(portrait)}" alt="${escapeHtml(knowledge.name)}立绘">` : `<span class="user-hero-art-fallback">${escapeHtml(knowledge.name.slice(0, 1))}</span>`}</div>`;
+}
+
+function userBuildCard(data, type, fallback, extra = "") {
+  if (!data) return `<div class="user-empty">暂无${escapeHtml(type)}建议。</div>`;
+  const image = data.asset || data.icon || "";
+  return `<article class="user-build-card">${userMediaMarkup(image, data.name || type, fallback)}<div class="user-build-card-copy"><span>${escapeHtml(type)}${data.rating ? ` · ${escapeHtml(data.rating)}级` : ""}</span><b>${escapeHtml(data.name || "待补充")}</b><small>${escapeHtml(extra || data.description || data.cassette_type || "来源资料已整理")}</small></div></article>`;
+}
+
+function factsForUser(knowledge) {
+  const facts = knowledge.mechanism_facts || {};
+  return facts.primary_reaction ? `${knowledge.name}围绕「${facts.primary_reaction}」展开。` : `${knowledge.name}的技能和养成资料已准备好。`;
+}
+
+function renderUserOverview(knowledge) {
+  const basic = knowledge.basic || {};
+  const skills = knowledge.skills || [];
+  const materials = userMaterialEntries(knowledge, knowledge.base_stats?.level_cap || 80, userSkillTargets);
+  const recommended = knowledge.recommended || {};
+  return `<section class="user-section-heading"><div><span class="user-section-kicker">角色概览</span><h2>先知道怎么用，再决定怎么养。</h2><p>${escapeHtml(factsForUser(knowledge))}</p></div></section><div class="user-overview-grid"><article class="user-metric-card"><span>定位</span><b>${escapeHtml(basic.role || "待补充")}</b><small>${escapeHtml(basic.position || "站位待补充")}</small></article><article class="user-metric-card"><span>技能资料</span><b>${skills.length}</b><small>项结构化技能</small></article><article class="user-metric-card"><span>养成材料</span><b>${materials.length}</b><small>种材料汇总</small></article><article class="user-metric-card"><span>等级上限</span><b>Lv.${knowledge.base_stats?.level_cap || "—"}</b><small>基础属性成长</small></article></div><div class="user-overview-columns"><section class="user-surface"><div class="user-section-heading"><div><span class="user-section-kicker">推荐起点</span><h2>先从这套配置开始。</h2></div><button class="user-text-action pressable" type="button" data-user-action="build">查看完整配装 →</button></div><div class="user-build-grid">${userBuildCard(recommended.weapon, "推荐武器", "武", recommended.weapon?.rating ? `${recommended.weapon.rating}级推荐` : "来源资料已整理")}${userBuildCard(recommended.cassette, "推荐空幕", "幕", recommended.cassette?.acquisition || "获取方式待补充")}</div></section><section class="user-surface user-highlight-card"><span class="user-section-kicker">玩法提示</span><div><h3>${escapeHtml(basic.role || "这个角色")}的核心是把机制用在正确时机。</h3><p>进入技能页查看完整描述，再到养成页按你的实际目标规划材料。</p></div><div class="user-highlight-foot"><span>资料来源</span><strong>本地知识包</strong></div></section></div>`;
+}
+
+function userSkillCard(skill, index) {
+  const summary = skill.description_parts?.map((part) => `${part.name || ""}${part.text || ""}`).join(" ") || skill.raw_text || "来源页未提供技能摘要。";
+  const parameters = skill.parameters || [];
+  return `<article class="user-skill-card"><div class="user-skill-card-head"><div><span>${escapeHtml(skill.category || `技能 ${index + 1}`)}</span><b>${escapeHtml(skill.name || "未命名技能")}</b></div><span class="user-skill-level">${skill.level_cap ? `Lv.${skill.level_cap}` : "机制"}</span></div><p>${escapeHtml(summary.slice(0, 180))}</p>${parameters.length ? `<div class="user-skill-parameters">${parameters.slice(0, 3).map((parameter) => `<span class="user-skill-parameter">${escapeHtml(parameter.label)} · ${escapeHtml(parameter.current_value || parameter.values?.[0] || "—")}</span>`).join("")}</div>` : ""}</article>`;
+}
+
+function renderUserSkills(knowledge) {
+  const skills = knowledge.skills || [];
+  return `<section class="user-section-heading"><div><span class="user-section-kicker">技能资料</span><h2>把机制讲清楚。</h2><p>先看每项技能的作用，再展开完整倍率和升级信息。</p></div></section>${skills.length ? `<div class="user-skills-grid">${skills.map((skill, index) => userSkillCard(skill, index)).join("")}</div>` : `<div class="user-empty">当前角色暂无可展示的技能资料。</div>`}`;
+}
+
+function renderUserBuild(knowledge) {
+  const recommended = knowledge.recommended || {};
+  const cassette = recommended.cassette;
+  const mainAffixes = renderAffixRanking(recommendedAffixes(cassette, "main"));
+  const subAffixes = renderAffixRanking(recommendedAffixes(cassette, "sub"));
+  return `<section class="user-section-heading"><div><span class="user-section-kicker">配装建议</span><h2>从一套舒服的配置开始。</h2><p>推荐属性按优先级排列；同一优先级代表近似选择，不等于唯一答案。</p></div></section><div class="user-build-layout"><section class="user-surface user-build-large"><div class="user-build-grid">${userBuildCard(recommended.weapon, "推荐武器", "武", recommended.weapon?.rating ? `${recommended.weapon.rating}级推荐` : "来源资料已整理")}${userBuildCard(cassette, "推荐空幕", "幕", cassette?.acquisition || "获取方式待补充")}</div><div class="user-affix-groups"><div class="user-affix-group"><span>推荐主属性</span><div class="user-affix-ranking">${mainAffixes}</div></div><div class="user-affix-group"><span>推荐副属性</span><div class="user-affix-ranking">${subAffixes}</div></div></div><div class="user-source-note"><i></i><span>原始可能词条池与维护者推荐已分开保存。</span></div></section><div class="user-surface user-empty">终端与细节资料请在来源页核对。</div></div>`;
+}
+
+function renderUserCultivation(knowledge) {
+  const levelCap = knowledge.base_stats?.level_cap || 80;
+  const levelOptions = [...new Set([30, 40, 50, 60, 70, levelCap].filter((level) => level <= levelCap))];
+  if (!levelOptions.includes(Number(userTargetLevel))) userTargetLevel = levelOptions[levelOptions.length - 1] || levelCap;
+  const entries = userMaterialEntries(knowledge, userTargetLevel, userSkillTargets);
+  const skills = knowledge.cultivation?.skills || [];
+  const skillTargetMarkup = skills.length ? `<div class="user-skill-targets"><div class="user-skill-targets-head"><div><span>技能目标</span><b>每项技能单独规划</b><small>默认按各技能最高等级计算，调整后材料会立即更新。</small></div><em>${skills.length} 项</em></div><div class="user-skill-target-grid">${skills.map((skill, index) => { const levels = skillTargetOptions(skill); const selected = userSkillTargetValue(knowledge, skill, index); const fixed = levels.length === 1; return `<label class="user-skill-target-row"><span><b>${escapeHtml(skill.name || `技能 ${index + 1}`)}</b><small>${fixed ? "固定节点" : `可选至 Lv.${Math.max(...levels)}`}</small></span><select data-user-skill-target="${index}" ${fixed ? "disabled" : ""}>${levels.map((level) => `<option value="${level}"${level === selected ? " selected" : ""}>Lv.${level}</option>`).join("")}</select></label>`; }).join("")}</div></div>` : `<div class="user-skill-targets user-empty">当前角色暂无结构化技能养成节点。</div>`;
+  return `<section class="user-section-heading"><div><span class="user-section-kicker">养成规划</span><h2>知道还差多少。</h2><p>角色等级与每项技能目标分开设置，材料汇总会跟着你的选择变化。</p></div><label class="user-level-control"><span>角色目标</span><select id="userTargetLevel">${levelOptions.map((level) => `<option value="${level}"${level === userTargetLevel ? " selected" : ""}>Lv.${level}</option>`).join("")}</select></label></section><div class="user-cultivation-layout"><section class="user-surface"><div class="user-section-heading"><div><span class="user-section-kicker">材料清单</span><h2>${entries.length} 种材料</h2></div></div>${skillTargetMarkup}${entries.length ? `<div class="user-material-grid">${entries.map((entry) => `<article class="user-material-card">${userMediaMarkup(entry.icon, entry.name, "材")}<div><b>${escapeHtml(entry.name)}</b><span>${entry.amount.toLocaleString()}</span></div></article>`).join("")}</div>` : `<div class="user-empty">来源页暂未提供结构化养成材料。</div>`}</section><aside class="user-surface user-cultivation-summary"><span class="user-section-kicker">目标状态</span><h3>Lv.${userTargetLevel}</h3><p>角色等级与 ${skills.length || 0} 项技能目标已分别计入材料汇总。</p><ul><li><span>角色等级上限</span><b>Lv.${levelCap}</b></li><li><span>技能目标</span><b>${skills.length ? `${skills.length} 项已设置` : "暂无"}</b></li><li><span>预计材料种类</span><b>${entries.length} 种</b></li></ul></aside></div>`;
+}
+
+function renderUserTabPanel(knowledge) {
+  const panel = $("#userTabPanel");
+  if (!panel || !knowledge) return;
+  $$('[data-user-tab]').forEach((button) => button.classList.toggle('is-active', button.dataset.userTab === userActiveTab));
+  panel.innerHTML = userActiveTab === "skills" ? renderUserSkills(knowledge) : userActiveTab === "build" ? renderUserBuild(knowledge) : userActiveTab === "cultivation" ? renderUserCultivation(knowledge) : renderUserOverview(knowledge);
+}
+
+function renderUserExperience(knowledge) {
+  if (!knowledge) return;
+  renderUserCharacterRail();
+  renderUserHero(knowledge);
+  renderUserTabPanel(knowledge);
+}
+
+function showUserExperience() {
+  document.body.classList.add("user-mode");
+  $("#userExperienceView").hidden = false;
+  $("#roleManagementView").hidden = true;
+  $("#encyclopediaView").hidden = true;
+  $("#adminTopbarActions").hidden = true;
+  $("#userTopbarActions").hidden = false;
+  setText("#activeBreadcrumb", "用户端");
+  $$('[data-nav]').forEach((item) => item.classList.remove('is-active'));
+  $("#encyclopediaNavTrigger")?.classList.remove('is-active');
+  $$('[data-encyclopedia-kind]').forEach((item) => item.classList.remove('is-active'));
+}
+
+function bindUserExperience() {
+  $("#userCharacterSearch")?.addEventListener("input", (event) => {
+    userCharacterSearchQuery = event.target.value.trim().toLowerCase();
+    const entries = userCharacterEntries();
+    if (entries.length && !entries.some(([name]) => name === selectedCharacter)) applyCharacter(entries[0][0], { skipUserRail: true, silent: true });
+    renderUserCharacterRail();
+  });
+  $("#userCharacterRail")?.addEventListener("click", (event) => {
+    if (userCarouselSuppressClick) {
+      userCarouselSuppressClick = false;
+      return;
+    }
+    const carouselAction = event.target.closest("[data-user-carousel]");
+    if (carouselAction) {
+      userCarouselMove(carouselAction.dataset.userCarousel === "next" ? 1 : -1);
+      return;
+    }
+    const card = event.target.closest("[data-user-character]");
+    if (!card) return;
+    userCarouselSelectCard(card.dataset.userCharacter);
+  });
+  bindUserCarouselPointer();
+  window.addEventListener("resize", () => userCarouselSetPosition(false), { passive: true });
+  $("#userTabNav")?.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-user-tab]");
+    if (!button) return;
+    userActiveTab = button.dataset.userTab;
+    renderUserTabPanel(activeKnowledge);
+  });
+  $("#userTabPanel")?.addEventListener("click", (event) => {
+    const action = event.target.closest("[data-user-action]");
+    if (!action) return;
+    userActiveTab = action.dataset.userAction;
+    renderUserTabPanel(activeKnowledge);
+    $("#userTabNav")?.scrollIntoView({ behavior: "smooth", block: "center" });
+  });
+  $("#userTabPanel")?.addEventListener("change", (event) => {
+    if (event.target.matches("[data-user-skill-target]")) {
+      const index = Number(event.target.dataset.userSkillTarget);
+      const skill = activeKnowledge?.cultivation?.skills?.[index];
+      const options = skill ? skillTargetOptions(skill) : [];
+      const value = Number(event.target.value);
+      if (activeKnowledge && skill && options.includes(value)) userSkillTargets[`${activeKnowledge.id}:${index}`] = value;
+      renderUserTabPanel(activeKnowledge);
+      return;
+    }
+    if (event.target.id !== "userTargetLevel") return;
+    userTargetLevel = Number(event.target.value) || 80;
+    renderUserTabPanel(activeKnowledge);
+  });
+  $("#userHeroCard")?.addEventListener("click", (event) => {
+    const action = event.target.closest("[data-user-action]");
+    if (!action) return;
+    userActiveTab = action.dataset.userAction;
+    renderUserTabPanel(activeKnowledge);
+    $("#userTabNav")?.scrollIntoView({ behavior: "smooth", block: "center" });
+  });
+  $("#userAdminButton")?.addEventListener("click", showRoleManagement);
+  $("#userEncyclopediaButton")?.addEventListener("click", () => showEncyclopediaCategory("arc-drives"));
+}

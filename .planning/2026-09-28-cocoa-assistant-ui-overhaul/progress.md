@@ -266,3 +266,94 @@ ame to a PSCustomObject without a declared property. No roster was written; add 
 - Reviewed the staged scope: 97 files, including all 36 raw quality pages, 46 local images, the index/guide/roster, normalized bundle, importer/downloader, UI, docs, and canonical plan updates. No unrelated changes were present.
 - Refreshed `origin/main` with no remote advancement. Committed as `aeb5179 feat: import complete driver block catalog` and pushed without rewriting history.
 - Fetched after push and confirmed both local `main` and `origin/main` at `aeb5179`. Now committing this post-push planning record so the delivery log is also versioned.
+
+## Session: 2026-09-29 — User-facing Apple-style Experience
+
+### Implementation
+- 识别现有默认入口完全偏向维护者管理端，新增用户端默认视图 `#userExperienceView`；首次打开页面直接展示角色指南，管理端通过右上角“进入管理端”进入。
+- 用户端复用现有本地 `characterKnowledge` 数据，新增角色搜索/横向角色选择、英雄首屏、概览、技能、配装、养成四个分段视图。
+- 概览展示角色定位、属性、技能/倍率规模、养成材料种类、推荐武器、推荐空幕、终端和玩法提示；配装展示维护者推荐属性的优先级关系；养成支持目标等级切换并汇总材料。
+- 使用 Apple 风格的系统字体、留白、悬浮半透明导航、大图聚焦、分段控件、轻量 press feedback，以及 `prefers-reduced-motion` / `prefers-reduced-transparency` / `prefers-contrast` 兼容。
+- 保留现有角色管理和图鉴逻辑；管理端预览按钮可返回用户端，用户端管理入口可返回编辑工作台。
+- 更新 README，说明用户端默认入口与管理端边界。
+
+### Verification
+| Check | Result | Status |
+|---|---|---|
+| `node --check app.js` | 通过 | PASS |
+| HTML/JS 关键 ID 与模式接线检查 | 通过 | PASS |
+| `git diff --check` | 通过；仅有工作区换行风格提示 | PASS |
+| Python Playwright | 包未安装，测试未执行 | BLOCKED |
+| CUA 浏览器 helper | Windows sandbox 初始化失败，未执行浏览器操作 | BLOCKED |
+
+### Errors
+| Error | Resolution |
+|---|---|
+| `apply_patch` Windows sandbox helper 初始化失败 | 改用带唯一匹配断言的 PowerShell 定点更新；未做宽范围覆盖 |
+| 首次以项目相对路径调用 `with_server.py` | 改用技能目录中的完整路径；随后确认 Playwright 包缺失 |
+| Playwright `ModuleNotFoundError` | 未安装依赖，未擅自下载；保留为浏览器验证阻塞 |
+| CUA helper `helper_unknown_error` / kernel exited | 未继续使用旧状态或坐标；保留为环境阻塞 |
+## Session: 2026-09-29 — User cultivation skill targets
+
+### Implementation
+- 修复用户端养成只能选择角色等级的问题：现在角色目标等级与每项技能目标等级独立设置。
+- 默认仍按每项技能的最高可用目标计算，用户下调任一技能后，材料种类与数量即时重算；不同角色的选择按角色 ID 隔离。
+- 固定等级/觉醒节点以禁用选择器呈现，避免暗示这些节点可以自由升级；概览页也复用同一套技能目标状态。
+- 新增用户端技能目标卡片，延续现有 Apple 风格的材质、圆角和紧凑表单控件。
+
+### Verification
+| Check | Result | Status |
+|---|---|---|
+| `node --check app.js` | 通过 | PASS |
+| 用户端技能状态、选择器、材料汇总链路静态检查 | 通过 | PASS |
+| `git diff --check` | 通过；仅有工作区换行风格提示 | PASS |
+| 浏览器交互/响应式验证 | 仍受 Playwright 缺失与 CUA helper 初始化失败影响 | BLOCKED |
+## Session: 2026-09-29 — User-facing Character Carousel
+
+### Implementation
+- 将用户端角色 rail 升级为中心角色轮盘：当前角色居中突出，左右显示相邻角色，轨道使用三段重复数据并通过索引取模实现首尾连续循环。
+- 增加“上一个/下一个”按钮、当前角色与位置状态、相邻卡片点击，以及基于 Pointer Events 的横向拖拽/触摸切换。
+- 拖拽过程通过 `transform` 直接跟手，释放时按位移和速度决定切换方向；角色切换复用同一 `applyCharacter` 数据流，不会让 hero、技能、配装和养成状态失步。
+- 不加入自动播放；轮盘只响应用户的按钮、点击和滑动，避免阅读时被强制切换。
+- 增加 `touch-action: pan-y`、鼠标 hover 能力门控、按钮按压反馈和 reduced-motion 处理。
+
+### Verification
+| Check | Result | Status |
+|---|---|---|
+| `node --check app.js` | 通过 | PASS |
+| 轮盘函数/启动接线/技能目标链路静态检查 | 通过；函数唯一、入口完整 | PASS |
+| HTML/CSS 轮盘 ID、触控和 reduced-motion 检查 | 通过 | PASS |
+| `git diff --check` | 通过；仅有工作区换行风格提示 | PASS |
+| 浏览器交互/真实触控验证 | 本地 Playwright 未安装，CUA helper 仍受 Windows sandbox 初始化失败影响 | BLOCKED |
+
+### Recovery note
+- 一次跨行贪婪正则误把 `app.js` 截断到角色切换函数；Git 安全策略拒绝了直接覆盖恢复。随后仅追加 Git 基线缺失后半段并重建用户端函数，未覆盖当前文件前缀；恢复后语法和静态检查均通过。
+## Session: 2026-09-29 — User-facing Character Carousel Polish
+
+### Implementation
+- 移除轮盘下方的当前角色/序号提示文案，避免重复信息干扰角色选择。
+- 修正居中计算：使用卡片未缩放的布局宽度 `offsetWidth`，不再把视觉缩放后的 `getBoundingClientRect().width` 当作轨道步长。
+- 将角色卡默认状态改为清晰白底与接近完全不透明；仅保留很轻的相邻层级和当前卡片强调，去除导致图片与文字发糊的低透明度/过度缩放。
+- 新增按角色名称直接选择的卡片点击链路；点击任意头像、文字或卡片区域都会切换角色，并同步 hero、技能、配装和养成内容。
+
+### Verification
+| Check | Result | Status |
+|---|---|---|
+| `node --check app.js` | 通过 | PASS |
+| 轮盘文案移除、offsetWidth 居中、卡片点击与清晰样式静态检查 | 通过 | PASS |
+| `git diff --check` | 通过；仅有工作区换行风格提示 | PASS |
+| 浏览器交互/真实触控验证 | Playwright 未安装，CUA helper 仍受 Windows sandbox 初始化失败影响 | BLOCKED |- 额外兼容 Pointer Capture：点击卡片后即使浏览器把后续 click 目标归到 rail，也会使用 pointerdown 记录的角色名完成直接选择。
+## Session: 2026-09-29 — Phase 14 Plan and GitHub Delivery
+
+### Plan
+- 已将轮盘体验修复与 GitHub 同步写入 canonical `task_plan.md` 的 Phase 14。
+- 交付范围限定为当前已存在的用户端/轮盘代码、README、index、styles、app 和 canonical planning 变更；不引入新的外部依赖，不重置或覆盖远端历史。
+- 下一步先 fetch 远端并检查 `origin/main` 是否领先；若无冲突则创建单个交付提交并推送，推送后再次核对本地与远端提交一致。
+### Remote preflight
+- 已执行 `git fetch origin`；`origin/main` 与本地 `HEAD` 均为 `fd096dc`，远端没有新提交，本地没有未推送提交。
+- 当前工作区的 7 个修改文件均属于用户端/轮盘功能、文档或 canonical planning；没有发现未跟踪文件。
+### Local commit
+- 已完成最终静态检查并创建本地交付提交 `98c7e10 feat: deliver Apple-style user experience`；该提交尚未推送，下一步只做 `origin/main` 同步与远端核对。
+### Push blocker
+- 尝试执行 `git push origin main` 时被当前环境安全策略拒绝；策略要求针对该具体 GitHub 远端和完整本地 payload 再获得一次明确用户授权。
+- 未使用任何绕过方式；当前本地交付提交仍保留，GitHub 尚未收到本次更新。

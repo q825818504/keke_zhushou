@@ -4,11 +4,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f6f7fb">
-  <meta name="description" content="可可助手 · 角色与图鉴管理后台">
-  <title>可可助手 · 角色与图鉴管理</title>
+  <meta name="description" content="可可助手 · 角色与图鉴用户端">
+  <title>可可助手 · 角色资料与养成指南</title>
   <link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body class="user-mode">
   <div class="app-shell">
     <aside class="sidebar" aria-label="主导航">
       <div class="sidebar-top">
@@ -63,13 +63,44 @@
     <main class="main-content">
       <header class="topbar">
         <div class="breadcrumb"><span>知识管理</span><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m9 5 7 7-7 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><strong id="activeBreadcrumb">角色管理</strong></div>
-        <div class="topbar-actions">
-          <button class="ghost-button pressable" type="button" id="previewButton"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 12s3-5 8-5 8 5 8 5-3 5-8 5-8-5-8-5Z" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="12" r="2" stroke="currentColor" stroke-width="1.6"/></svg>预览求解器</button>
+        <div class="topbar-actions" id="adminTopbarActions">
+          <button class="ghost-button pressable" type="button" id="previewButton"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 12s3-5 8-5 8 5 8 5-3 5-8 5-8-5-8-5Z" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="12" r="2" stroke="currentColor" stroke-width="1.6"/></svg>用户端预览</button>
           <button class="primary-button pressable" type="button" id="saveDraftButton"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 4h11l3 3v13H5V4Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M8 4v5h7V4M8 16h8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>保存草稿</button>
         </div>
-      </header>
+        <div class="topbar-actions user-topbar-actions" id="userTopbarActions" hidden>
+          <button class="user-topbar-link pressable" type="button" id="userEncyclopediaButton">图鉴</button>
+          <button class="user-topbar-link pressable" type="button" id="userAdminButton"><span class="admin-link-mark">⌘</span>进入管理端</button>
+        </div>      </header>
 
-      <div id="roleManagementView">
+      <section class="user-experience-view" id="userExperienceView" aria-labelledby="userPageTitle">
+        <div class="user-page-intro">
+          <div>
+            <div class="user-eyebrow"><span class="user-eyebrow-mark">✦</span> 可可助手 · 角色指南</div>
+            <h1 id="userPageTitle">把每一次养成都算得明白。</h1>
+            <p>从角色机制到配装建议，把复杂的资料整理成你现在就能用的答案。</p>
+          </div>
+          <div class="user-intro-note"><span class="user-note-dot"></span><span>本地知识包持续更新</span></div>
+        </div>
+
+        <div class="user-character-toolbar">
+          <label class="user-search"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="1.7"/><path d="m16 16 4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg><input id="userCharacterSearch" type="search" placeholder="搜索角色" aria-label="搜索角色"></label>
+          <span id="userCharacterCount" class="user-character-count">载入中</span>
+        </div>
+        <div class="user-character-rail" id="userCharacterRail" aria-label="角色选择"></div>
+
+        <section class="user-hero-card" id="userHeroCard" aria-live="polite"></section>
+
+        <nav class="user-tab-nav" id="userTabNav" aria-label="角色资料分区">
+          <button class="user-tab is-active pressable" type="button" data-user-tab="overview">概览</button>
+          <button class="user-tab pressable" type="button" data-user-tab="skills">技能</button>
+          <button class="user-tab pressable" type="button" data-user-tab="build">配装</button>
+          <button class="user-tab pressable" type="button" data-user-tab="cultivation">养成</button>
+        </nav>
+        <div class="user-tab-panel" id="userTabPanel"></div>
+
+        <footer class="user-footer"><span>可可助手 · 为每一次选择保留证据</span><span>角色资料来自本地知识包</span></footer>
+      </section>
+      <div id="roleManagementView" hidden>
       <section class="page-heading stagger-item" style="--delay: 20ms">
         <div>
           <div class="eyebrow"><span class="eyebrow-dot"></span> 知识编辑工作台</div>

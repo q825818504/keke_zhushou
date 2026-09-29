@@ -16,11 +16,11 @@
 
 ## Next Step
 
-Phase 10 已推送至 `origin/main`。当前开始 Phase 11：完整导入驱动块攻略数据，并接入图鉴；完成本地成果后再确定交付同步方式。
+Phase 14 轮盘体验修复已完成，本地提交已创建；GitHub push 被环境安全策略拦截，等待用户明确授权。
 
 ## Current Phase
 
-Phase 11 - Complete Driver Block Catalog；planning complete, source discovery in progress.
+Phase 14 - Carousel Polish and GitHub Delivery；plan created, implementation complete, remote synchronization in progress.
 
 ## Phases
 
@@ -240,3 +240,41 @@ Phase 11 - Complete Driver Block Catalog；planning complete, source discovery i
 - [x] Update canonical planning files with the post-push result and include this delivery record in the GitHub synchronization.
 - [ ] Browser interaction and responsive visual verification (not run; no browser pass claimed).
 - **Status:** implementation, source reconciliation, and feature synchronization complete; `aeb5179` is on `origin/main`. Browser interaction/responsive verification was not run.
+
+### Phase 12: User-facing Apple-style Experience
+
+**Goal:** 将当前以维护者编辑为中心的默认入口拆出用户端体验。用户首次打开页面时直接进入可浏览、可搜索、可理解的角色资料界面；管理端保留为明确的次级入口。用户端使用 Apple 风格的层级、系统字体、半透明导航、轻量反馈和 reduced-motion 兼容，不暴露编辑、审核、来源快照等维护者工作流。
+
+- [x] 设计用户端信息架构：角色首页、角色详情、技能、配装与养成
+- [x] 新增用户端默认视图，并复用现有本地角色知识数据
+- [x] 实现角色切换、搜索、用户端分段导航和管理端返回入口
+- [x] 以 Apple 风格重做用户端层级、材质、响应式布局与可访问状态
+- [x] 保持管理端与图鉴入口可访问且不破坏现有数据编辑逻辑
+- [x] 完成静态检查
+- [x] 支持角色目标等级与技能目标等级独立选择，并让材料汇总实时联动
+- [ ] 完成本地浏览器交互/响应式验证（Playwright 缺失；备用 CUA helper 初始化失败）
+- **Status:** implementation complete; browser verification blocked by environment
+### Phase 13: User-facing Character Carousel
+
+**Goal:** 将截图中的单向角色 rail 升级为可循环的角色轮盘。当前角色居中突出，左右露出相邻角色；用户可通过左右按钮、相邻卡片或横向拖拽切换，保持 Apple 风格的直接操控、可中断过渡和移动端触控边界。
+
+- [x] 设计并实现循环角色索引与当前卡片居中布局
+- [x] 增加上一个/下一个按钮、可访问标签和当前状态
+- [x] 支持相邻卡片点击与 Pointer Events 横向滑动
+- [x] 加入 `touch-action: pan-y`、按压反馈和 reduced-motion 兼容
+- [x] 保持搜索、角色切换、hero 和后续用户端内容同步
+- [x] 完成静态检查；浏览器/触控验证仍受环境阻塞
+- **Status:** implementation complete; browser/touch verification blocked by environment
+### Phase 14: Carousel Polish and GitHub Delivery
+
+**Goal:** 收口用户端角色轮盘的视觉与交互问题，并把当前工作区中属于本次用户端功能的代码、文档和 canonical planning 一并安全同步到 GitHub 的 `origin/main`。
+
+- [x] 移除轮盘下方重复的当前角色/序号状态文案
+- [x] 修正卡片居中测量，使用未缩放的布局宽度
+- [x] 让角色图片与文字保持清晰，降低磨砂透明感
+- [x] 支持点击任意角色卡、头像和文字切换，并兼容 Pointer Capture
+- [x] 运行 JavaScript 语法检查与 Git 差异检查
+- [x] 检查远端是否有新提交，确认不会覆盖远端工作
+- [x] 创建本地交付提交；推送到 `origin/main` 待完成
+- [ ] 推送后确认本地 HEAD 与 `origin/main` 一致，并记录提交信息
+- **Status:** blocked pending explicit authorization; local commit is ready, GitHub push not executed

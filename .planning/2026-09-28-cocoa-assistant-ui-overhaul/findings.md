@@ -254,3 +254,53 @@
 - Final offline import reports 12 shapes, 36 quality pages, 46 unique local images, and `guide=imported`. The importer checks source-page labels and IDs, all three image variants, local asset SHA-256 values, 21 levels × 2 main stats, 4 random slots, 11 stat choices, six guide sections, and JSON/JS generation.
 - Static checks passed: `node --check app.js`, `node --check data/knowledge/encyclopedia/driver_blocks.js`, PowerShell parser for the downloader, and `git diff --check`. Browser interaction/responsive verification was not run.
 - Source and integration scope contains only Phase 11 code, data, documentation, and canonical plan updates. The feature commit `aeb5179` was pushed to `origin/main`; a follow-on planning record captures the post-push confirmation.
+
+## User-facing Apple-style Experience
+
+### Product boundary
+- 当前项目已有的角色管理和图鉴页面属于维护者工作台；用户端不应默认看到草稿、审核、编辑表单、来源快照或导入状态。
+- 用户端首屏任务是选择角色并快速回答三个问题：这个角色做什么、怎么装、要准备什么。默认入口因此切换为用户端，管理端变成显式的右上角入口。
+
+### Apple-style decisions
+- 使用平台系统字体和动态 `clamp()` 字号，标题采用紧 tracking、正文使用更宽松 leading。
+- 顶部导航是轻量半透明材质，配合 `backdrop-filter`；大 hero 使用深色渐变承托角色立绘，避免内容卡片堆叠。
+- 角色选择使用横向滚动 rail，角色卡保持明确的 active 状态；内容区使用分段控件承载概览、技能、配装和养成，逐层暴露复杂信息。
+- 交互反馈使用 pointer/press 状态和短促 transform，不在输入路径加入延迟；用户端仅使用可逆、可打断的普通过渡，不引入不可控的循环动效。
+- 加入 reduced-motion、reduced-transparency 和 prefers-contrast 处理；移动端把 hero、卡片和分段控件压缩为单列，并检查横向溢出风险。
+
+### Changed files
+- `index.html`：新增用户端结构、用户/管理端模式入口，默认 `body.user-mode`。
+- `styles.css`：新增用户端 Apple 风格视觉、材质、响应式和可访问性规则。
+- `app.js`：新增用户端数据渲染、角色搜索/切换、四个分段、材料汇总和模式切换。
+- `README.md`：更新默认入口和用户端/管理端边界。
+
+### Verification limitation
+- 静态检查通过；本轮没有声称浏览器交互或响应式验证通过。Python Playwright 未安装，备用 CUA helper 受到 Windows sandbox 初始化错误影响。
+## User cultivation skill-target correction
+
+- 用户端的养成目标不是单一的角色等级问题：角色突破和每项技能升级应分别表达，材料汇总需要同时读取两层目标。
+- `userSkillTargets` 以 `角色 ID + 技能索引` 为键保存选择；未做过选择时回退到该技能的最高可用等级，因此不会改变原有默认结果。
+- 用户端使用 `data-user-skill-target` 事件委托处理选择变化，直接重新渲染当前养成面板；固定只有一个可用等级的技能节点保持禁用。
+- 已完成静态验证；浏览器操作与响应式验证仍未执行，原因与上一轮相同：本地 Playwright 未安装，CUA helper 受 Windows sandbox 初始化错误影响。
+## User screenshot — carousel direction
+
+- 截图显示当前角色列表是单向横向 rail：活动卡片在左侧突出，右侧继续露出角色卡，右上角有总数统计；这让用户能浏览，但不够像“选择当前角色”的核心控件。
+- 轮盘化的核心应是空间层级而不是自动播放：当前角色居中并突出，左右各露出相邻角色，左右按钮负责明确的上/下一个，首尾通过索引取模循环。
+- 交互决策：不做自动旋转，避免用户阅读时被强行切换；支持左右按钮、点击相邻卡片和横向触摸/指针滑动。拖拽时 1:1 跟手，释放后按方向切换并回到稳定位置。
+## Character carousel implementation
+
+- 轮盘使用三段重复角色列表，逻辑游标初始位于中段；到达边界时先无动画换到等价副本，再继续做一个方向一致的位移动画，因此首尾不会出现长距离跳跃。
+- 中心卡片通过 `is-active` 放大并提高不透明度，前后两张通过 `is-near` 保留空间层级；左右箭头、卡片点击和滑动统一调用 `userCarouselMove` / `userCarouselMoveTo`。
+- Pointer Events 仅在轮盘 viewport 内捕获；`touch-action: pan-y` 将横向手势交给轮盘、保留页面纵向滚动。短拖会回到当前位置，超过位移/速度阈值才切换。
+- 轮盘不自动旋转，符合用户阅读资料时的控制权和 Apple 风格的低干扰原则。
+
+## Recovery error
+
+- 本轮一次带 `Singleline` 的贪婪正则将 `app.js` 从 `applyCharacter` 后截断；已记录为错误，不再使用跨越函数边界的 `.+` 替换。恢复方式改为 Git 基线后半段追加 + 用户端函数追加，并用函数唯一性、入口接线和 `node --check` 复核。
+- 一次批量验证调用因调用编排字符串解析失败，没有修改文件；随后拆成独立验证调用并成功完成，未重复失败调用。
+## Carousel polish findings
+
+- 轮盘居中必须按 flex 布局宽度计算，而不是按经过 `transform: scale(...)` 后的视觉包围盒计算；后者会让中心卡片逐步向一侧偏移。
+- 轮盘的状态序号属于辅助信息，不应在角色卡片附近重复展示；角色计数保留在搜索区，选择反馈由居中卡片和 hero 内容承担。
+- 非当前卡片不需要用低透明度模拟景深；对资料型角色选择器来说，图片、角色名和定位文本应保持可读，层级可以通过轻微缩放、边框和阴影表达。
+- 卡片点击使用 `data-user-character` 直接解析角色名称，再把游标放回重复轨道的中段副本；这样点击任意克隆卡都能稳定切换，不依赖点击位置是否恰好落在相邻卡片。
