@@ -304,3 +304,21 @@
 - 轮盘的状态序号属于辅助信息，不应在角色卡片附近重复展示；角色计数保留在搜索区，选择反馈由居中卡片和 hero 内容承担。
 - 非当前卡片不需要用低透明度模拟景深；对资料型角色选择器来说，图片、角色名和定位文本应保持可读，层级可以通过轻微缩放、边框和阴影表达。
 - 卡片点击使用 `data-user-character` 直接解析角色名称，再把游标放回重复轨道的中段副本；这样点击任意克隆卡都能稳定切换，不依赖点击位置是否恰好落在相邻卡片。
+## User-facing navigation direction
+
+- 当前用户端只有角色展示与角色分段资料；顶部“图鉴”按钮直接调用 `showEncyclopediaCategory("arc-drives")`，会移除 `body.user-mode` 并显示管理工作台，这是用户路径与权限边界混淆的根因。
+- 用户端主导航应采用轻量胶囊式 segmented navigation：`角色`、`自动配队`、`弧盘`、`空幕`；管理端只保留一个低强调的显式入口，不与用户任务混在同一组导航里。
+- 用户端导航切换应只控制 `userExperienceView` 内的 route panels；管理端 `showRoleManagement` 与 `showEncyclopediaCategory` 继续服务维护者侧，不能被用户端详情按钮复用。
+- 当前角色知识包的 `scope.excluded` 明确写有“配队推荐”，因此自动配队首版应标记为基于本地角色定位的候选/规则结果，不能把它描述成已导入的官方阵容推荐。
+## User-facing navigation initialization failure
+
+- 用户截图中的“载入中”、空 Hero 和无响应顶部按钮由同一个启动错误造成，不是角色知识包缺失。
+- showUserExperience() 在启动阶段调用 renderUserRouteView("characters")；该函数读取 userRouteLabels。当 userRouteLabels 仍处于 const 的暂时性死区时，后续用户端绑定和渲染全部被跳过。
+- 修复原则：所有被启动调用直接读取的用户端路由常量，必须在启动调用之前初始化；函数声明虽会提升，const 不会提升。
+- Chrome CDP 回归确认：初始用户端角色计数为 25/25、Hero 为真红；四个顶部路线均可切换；点击角色卡可切换为白藏；无运行时异常。
+## Team solver and catalog synchronization findings
+
+- 参考站点的一键配队页把“拥有角色池”作为输入，把“显式点击生成”作为计算边界，输出 4 人队，并把定位结构与属性环合作为可读的结果依据；这比单纯按稀有度或元素随机取三人更接近用户真正要解决的问题。
+- 本项目的角色知识 scope 明确排除配队推荐，所以本地实现采用规则候选而不是抄录外站阵容；后续若导入经过核验的阵容模板，可在同一候选层增加模板优先级。
+- 管理端和用户端原本已经共享三份全局 catalog：arcDriveCatalog、skyCurtainCatalog、driverBlockCatalog。用户端不一致的主要原因是展示层只取了部分字段，且没有驱动块路线；修复方向是补齐用户层展示，不建立第二份数据。
+- 当前对照结果：弧盘 51 件、空幕 12 套、驱动块 12 种形状，管理端计数和用户端 catalog 完全一致。

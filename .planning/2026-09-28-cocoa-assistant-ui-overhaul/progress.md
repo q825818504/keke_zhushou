@@ -361,3 +361,89 @@ ame to a PSCustomObject without a declared property. No roster was written; add 
 - 用户已明确授权后，已成功执行 `git push origin main`。
 - GitHub 仓库 `q825818504/keke_zhushou` 的 `origin/main` 已更新到 `1ad17aa feat: deliver Apple-style user experience`。
 - 推送后核对通过：本地 `HEAD` 与 `origin/main` 完全一致，工作区干净。
+## Session: 2026-09-30 — User-facing Navigation and Module Routing
+
+### Plan
+- 新增 Phase 15，目标是让用户端拥有清晰的主导航和真实的用户侧模块入口。
+- 本阶段优先解决路由边界：用户端的角色详情、弧盘和空幕不再进入管理端；管理端入口继续存在但只作为显式次级入口。
+- 自动配队先基于现有公开角色定位字段提供可解释候选，等待后续正式配队模板或来源数据接入。
+### Implementation
+- 用户端顶栏改为 `角色 / 自动配队 / 弧盘 / 空幕` 主导航，当前路线由同一组 capsule 状态表达；管理端只保留为显式次级入口。
+- 角色、自动配队、弧盘、空幕均在 `userExperienceView` 内切换；弧盘和空幕使用本地知识包渲染用户侧卡片与详情，不再调用管理端 `showEncyclopediaCategory`。
+- 自动配队首版支持核心角色选择、均衡/速切/生存偏好和候选重新生成；候选结果基于公开角色定位、属性、站位字段，并明确显示为候选。
+- 新增用户端移动横向导航、资料库卡片、详情面板、reduced-motion 和 reduced-transparency 样式。
+
+### Verification
+| Check | Result | Status |
+|---|---|---|
+| `node --check app.js` | 通过 | PASS |
+| 用户端路由与管理端边界静态检查 | 通过；旧 `userEncyclopediaButton` 与用户侧管理图鉴调用均已移除 | PASS |
+| `git diff --check` | 通过；仅有工作区换行风格提示 | PASS |
+| 浏览器交互/响应式验证 | Playwright 未安装，CUA helper 受 Windows sandbox 初始化失败影响 | BLOCKED |
+
+### Error log
+- 一次静态审计调用的 `rg` 正则转义不完整导致命令失败；随后改用固定字符串 `rg -F` 重跑并通过，未修改源代码。- 另一次 ID 唯一性检查首次因 PowerShell 字符串引号转义不正确而失败；改用动态固定字符串重新执行后，5 个用户路由 ID 与 6 个路由函数均唯一，管理端跳转边界检查通过。
+## Session: 2026-09-30 — User-facing initialization fix
+
+### Root cause and fix
+- Chrome 控制台确认用户端启动在 showUserExperience() 内中断：Cannot access userRouteLabels before initialization。
+- 原因是 const userRouteLabels 位于启动调用 showUserExperience() 之后，进入用户端时触发暂时性死区；管理端角色列表已经渲染，但用户端轮盘、Hero、导航事件尚未完成初始化。
+- 将导航标签常量移到启动调用之前；没有改变数据模型或管理端路由边界。
+
+### Verification
+| Check | Result | Status |
+|---|---|---|
+| node --check app.js | 通过 | PASS |
+| Chrome headless 控制台 | 无 ReferenceError / TypeError / Uncaught | PASS |
+| 用户端初始渲染 | 25 / 25 位角色、真红 Hero、概览面板正常出现 | PASS |
+| 顶部导航交互 | 角色 / 自动配队 / 弧盘 / 空幕 均切换到对应用户面板，面包屑同步 | PASS |
+| 用户端角色卡点击 | 点击白藏后 Hero 切换为白藏 | PASS |
+| 响应式视觉验证 | 本轮未执行 | NOT RUN |
+
+### Error log
+- apply_patch 的 Windows sandbox helper 再次初始化失败；改用带精确锚点和唯一性断言的 PowerShell/.NET 定点替换。
+- 第一次定点替换的换行上下文断言未匹配，未写入文件；随后改用不依赖换行格式的精确移动操作。
+## Session: 2026-09-30 — Rule-based Team Solver and Catalog Synchronization
+
+### Reference logic
+- 参考站点的一键配队流程是先选“已经拥有”的角色，再显式点击生成；输出是 4 人队，并检查主C/副C/辅助/生存结构与相邻属性环合，同时可基于剩余角色继续考虑第二队。
+- 本地角色知识包的 scope 明确排除了配队推荐，因此没有直接复制外站的成型阵容数据；本轮只吸收交互与可解释规则，结果标记为本地规则候选。
+
+### Implementation
+- 自动配队新增角色池选择，默认纳入本地全部角色；用户可以取消未拥有角色，也可以清空后重新选择。
+- 候选引擎从核心角色出发，枚举 3 人组合，综合主C/副C/辅助/生存结构、核心角色的主反应、相邻属性、派生三属性反应、队伍偏好和基础强度字段，返回 4 人候选及定位/属性解释。
+- 用户端顶部导航新增“驱动块”；用户端弧盘、空幕、驱动块都直接读取 arcDriveCatalog、skyCurtainCatalog、driverBlockCatalog，与管理端展示同一份本地数据。
+- 用户端图鉴补齐了弧盘等级与调弧等级、空幕三档品质和完整词条池、驱动块型号/品质/强化等级/随机副属性池。
+
+### Verification
+| Check | Result | Status |
+|---|---|---|
+| node --check app.js | 通过 | PASS |
+| Chrome CDP 初始用户端 | 25 / 25 角色、真红 Hero | PASS |
+| 自动配队交互 | 25 人角色池、4 人候选、定位依据 3 项、偏好切换可用 | PASS |
+| 用户弧盘 | 51 / 51 件、卡片/详情/等级选择正常 | PASS |
+| 用户空幕 | 12 / 12 套、品质切换、主/副词条池正常 | PASS |
+| 用户驱动块 | 12 种形状、型号筛选、品质与随机副属性池正常 | PASS |
+| 管理端/用户端数据对照 | 管理端 51/12/12 与 catalog 51/12/12 一致 | PASS |
+| Chrome 控制台运行时异常 | 未发现 | PASS |
+| 响应式视觉验证 | 本轮未执行 | NOT RUN |
+
+### Error log
+- 一次大段替换的编排字符串因内嵌模板字符串解析失败，未写入文件；随后改用不含模板字符串的精确函数替换，代码未依赖失败产物。
+- apply_patch Windows helper 仍无法启动；所有源文件更新均使用带边界检查的 PowerShell/.NET 定点替换。## Session: 2026-09-30 — Phase 16 GitHub Delivery
+
+### Plan
+- 本阶段交付范围为自动配队规则候选、用户端弧盘/空幕/驱动块同步展示、用户端驱动块路由，以及对应 canonical planning 记录。
+- 已确认当前分支为 main，远端为 q825818504/keke_zhushou 的 origin/main；先 fetch 再提交，不改写远端历史。
+- 交付前保留响应式视觉验证未执行的事实，不把桌面 CDP 结果扩展为移动端结论。
+
+### Preflight and verification
+- git fetch origin 成功；fetch 后本地与 origin/main 均为 3904575，ahead/behind 为 0/0。
+- 工作区仅有本阶段的 6 个修改文件：app.js、index.html、styles.css 和三份 canonical planning 文件。
+- node --check app.js 通过；git diff --check 通过，只有 Git 的 LF/CRLF 提示。
+- 此前 Chrome CDP 回归已确认：25/25 角色、4 人自动配队候选、弧盘 51/51、空幕 12/12、驱动块 12 种形状，管理端与用户端 catalog 数量一致，控制台无运行时异常。
+
+### Error log
+- 规划会话元数据脚本和首次计划读取在默认沙箱启动时遇到 helper_unknown_error；改用同一命令的受控提升权限重试后成功，未改动文件。
+- apply_patch Windows helper 再次无法初始化；改用带唯一匹配断言的 PowerShell/.NET 定点更新，未做宽范围覆盖。
+- 第一次计划更新的编排字符串被 JavaScript 模板字面量中的 PowerShell 换行转义打断，未执行写入；随后改用不含反引号的精确替换并成功。

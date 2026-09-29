@@ -83,6 +83,35 @@ let userCarouselCursor = 0;
 let userCarouselDrag = null;
 let userCarouselDragOffset = 0;
 let userCarouselSuppressClick = false;
+let userActiveRoute = "characters";
+let userTeamCore = selectedCharacter;
+let userTeamGoal = "均衡";
+let userArcDriveSearchQuery = "";
+let userSkyCurtainSearchQuery = "";
+let userDriverBlockSearchQuery = "";
+let userDriverBlockModelFilter = "all";
+let userSelectedArcDriveId = arcDriveCatalog.items?.[0]?.id || "";
+let userSelectedSkyCurtainId = skyCurtainCatalog.items?.[0]?.id || "";
+let userSelectedDriverBlockId = driverBlockCatalog.items?.[0]?.id || "";
+let userSelectedDriverBlockQuality = "gold";
+let userSelectedDriverBlockLevel = 20;
+let userArcDriveLevel = 80;
+let userArcDriveRank = 1;
+let userSkyCurtainQuality = "gold";
+let userTeamOwnedNames = new Set(Object.keys(characterData));
+let userTeamGenerated = false;
+const userRouteLabels = { characters: "角色", team: "自动配队", "arc-drives": "弧盘", cassettes: "空幕", "drive-blocks": "驱动块" };
+const userTeamElementRing = ["光", "灵", "咒", "暗", "魂", "相"];
+const userTeamReactionRules = [
+  { name: "创生", attrs: ["光", "灵"] },
+  { name: "延滞", attrs: ["光", "相"] },
+  { name: "覆纹", attrs: ["灵", "咒"] },
+  { name: "浊燃", attrs: ["咒", "暗"] },
+  { name: "黯星", attrs: ["暗", "魂"] },
+  { name: "浸染", attrs: ["魂", "相"] },
+  { name: "盈蓄", attrs: ["光", "灵", "相"] },
+  { name: "失谐", attrs: ["咒", "暗", "魂"] }
+];
 
 function notify(message) {
   toastText.textContent = message;
@@ -1501,10 +1530,12 @@ function showUserExperience() {
   $("#encyclopediaView").hidden = true;
   $("#adminTopbarActions").hidden = true;
   $("#userTopbarActions").hidden = false;
-  setText("#activeBreadcrumb", "用户端");
+  userActiveRoute = "characters";
+  setText("#activeBreadcrumb", "用户端 · 角色");
   $$('[data-nav]').forEach((item) => item.classList.remove('is-active'));
   $("#encyclopediaNavTrigger")?.classList.remove('is-active');
   $$('[data-encyclopedia-kind]').forEach((item) => item.classList.remove('is-active'));
+  renderUserRouteView("characters");
 }
 
 function bindUserExperience() {
@@ -1565,5 +1596,379 @@ function bindUserExperience() {
     $("#userTabNav")?.scrollIntoView({ behavior: "smooth", block: "center" });
   });
   $("#userAdminButton")?.addEventListener("click", showRoleManagement);
-  $("#userEncyclopediaButton")?.addEventListener("click", () => showEncyclopediaCategory("arc-drives"));
+  bindUserRouteNavigation();
+  bindUserCatalogRoutes();
+}
+
+
+function userTeamRoleKind(data) {
+  const text = [data?.role, data?.position, data?.sourcePosition].filter(Boolean).join(" ");
+  if (/主C|主输出|站场主C/.test(text)) return "main";
+  if (/副C|副输出|爆发|破韧|DOT/.test(text)) return "secondary";
+  if (/生存|治疗|护盾|防御|分摊/.test(text)) return "sustain";
+  if (/辅助|支援|增益|减益|功能|聚怪|控场|回能/.test(text)) return "support";
+  return "flex";
+}
+
+function userTeamRoleLabel(data) {
+  return { main: "主C", secondary: "副C", support: "辅助", sustain: "生存", flex: "功能" }[userTeamRoleKind(data)] || "功能";
+}
+
+function userTeamAvailableNames() {
+  const allNames = Object.keys(characterData);
+  const selectedNames = allNames.filter((name) => userTeamOwnedNames.has(name));
+  return selectedNames.length ? selectedNames : allNames;
+}
+
+function userTeamIsElement(element) {
+  return userTeamElementRing.includes(element);
+}
+
+function userTeamAdjacent(first, second) {
+  const firstIndex = userTeamElementRing.indexOf(first);
+  const secondIndex = userTeamElementRing.indexOf(second);
+  if (firstIndex < 0 || secondIndex < 0) return false;
+  const distance = Math.abs(firstIndex - secondIndex);
+  return distance === 1 || distance === userTeamElementRing.length - 1;
+}
+
+function userTeamReactionProfile(names) {
+  const attrs = [...new Set(names.map((name) => characterData[name]?.element).filter(userTeamIsElement))];
+  const reactions = userTeamReactionRules.filter((rule) => rule.attrs.every((attr) => attrs.includes(attr)));
+  const adjacentPairs = reactions.filter((rule) => rule.attrs.length === 2).map((rule) => rule.name);
+  const derivedReactions = reactions.filter((rule) => rule.attrs.length === 3).map((rule) => rule.name);
+  return { attrs, reactions: reactions.map((rule) => rule.name), adjacentPairs, derivedReactions };
+}
+
+function userTeamTierScore(data) {
+  const rarityScore = { S: 3, A: 2, B: 1 }[data?.rarity] || 0;
+  const ratingMatch = String(data?.rating || "").match(/T(\d)/i);
+  const ratingScore = ratingMatch ? Math.max(0, 4 - Number(ratingMatch[1])) : 0;
+  return rarityScore + ratingScore;
+}
+
+function userTeamEvaluate(coreName, memberNames) {
+  const core = characterData[coreName] || {};
+  const members = memberNames.map((name) => characterData[name]).filter(Boolean);
+  const roleKinds = members.map(userTeamRoleKind);
+  const counts = {
+    secondary: roleKinds.filter((kind) => kind === "secondary").length,
+    support: roleKinds.filter((kind) => kind === "support").length,
+    sustain: roleKinds.filter((kind) => kind === "sustain").length,
+    flex: roleKinds.filter((kind) => kind === "flex").length
+  };
+  const profile = userTeamReactionProfile([coreName, ...memberNames]);
+  const coreKind = userTeamRoleKind(core);
+  const primaryReaction = core.knowledge?.mechanism_facts?.primary_reaction || "";
+  let score = 0;
+  if (coreKind === "main" || coreKind === "secondary") score += 7;
+  if (counts.secondary) score += 10;
+  if (counts.support) score += 9;
+  if (counts.sustain) score += 9;
+  if (counts.support >= 2) score += 3;
+  if (counts.sustain >= 2) score += 2;
+  if (!counts.secondary) score -= 5;
+  if (!counts.support && !counts.sustain) score -= 8;
+  if (primaryReaction && profile.reactions.includes(primaryReaction)) score += 10;
+  score += profile.adjacentPairs.length * 5;
+  score += profile.derivedReactions.length * 7;
+  if (members.some((member) => userTeamAdjacent(core.element, member.element))) score += 4;
+  if (userTeamGoal === "速切") score += counts.secondary * 4 + counts.support * 3 - counts.sustain * 1;
+  if (userTeamGoal === "生存") score += counts.sustain * 5 + counts.support * 2 + counts.secondary * 1;
+  if (userTeamGoal === "均衡") score += counts.support + counts.sustain * 2;
+  score += members.reduce((sum, member) => sum + userTeamTierScore(member), 0) * 0.4;
+  score += new Set(members.map((member) => member.element).filter(userTeamIsElement)).size;
+  score -= members.filter((member) => member.element === core.element).length * 0.75;
+  return { score, members, memberNames, counts, profile, coreKind, primaryReaction };
+}
+
+function userTeamBuildPlan(coreName) {
+  const pool = userTeamAvailableNames().filter((name) => name !== coreName);
+  if (pool.length < 3) {
+    const partial = userTeamEvaluate(coreName, pool);
+    return { ...partial, missing: 3 - pool.length, members: pool.map((name) => ({ name, data: characterData[name] })) };
+  }
+  let best = null;
+  for (let first = 0; first < pool.length - 2; first += 1) {
+    for (let second = first + 1; second < pool.length - 1; second += 1) {
+      for (let third = second + 1; third < pool.length; third += 1) {
+        const candidate = userTeamEvaluate(coreName, [pool[first], pool[second], pool[third]]);
+        if (!best || candidate.score > best.score) best = candidate;
+      }
+    }
+  }
+  return { ...best, missing: 0, members: best.memberNames.map((name) => ({ name, data: characterData[name] })) };
+}
+
+function userTeamMemberCard(entry, label) {
+  const role = userTeamRoleLabel(entry.data);
+  const element = entry.data.element && entry.data.element !== "待补充" ? " · " + entry.data.element : "";
+  return '<article class="user-team-member ' + (label === "核心角色" ? "is-core" : "") + '">' + '<div class="user-team-member-art">' + userMediaMarkup(entry.data.icon, entry.name, entry.name.slice(0, 1)) + '</div><div class="user-team-member-copy"><span>' + escapeHtml(label) + " · " + escapeHtml(role) + '</span><b>' + escapeHtml(entry.name) + '</b><small>' + escapeHtml(role + element) + '</small></div></article>';
+}
+
+function userTeamRosterCard(name, data) {
+  const selected = userTeamOwnedNames.has(name);
+  const core = userTeamCore === name;
+  return '<button class="user-team-roster-card' + (selected ? " is-selected" : "") + (core ? " is-core-choice" : "") + '" type="button" data-user-team-roster="' + escapeHtml(name) + '" aria-pressed="' + String(selected) + '"><span class="user-team-roster-avatar">' + (data.icon ? '<img src="' + escapeHtml(data.icon) + '" alt="">' : escapeHtml(name.slice(0, 1))) + '</span><span><b>' + escapeHtml(name) + '</b><small>' + escapeHtml(userTeamRoleLabel(data) + " · " + (data.element || "属性待补充")) + '</small></span><i aria-hidden="true">' + (selected ? "✓" : "+") + '</i></button>';
+}
+
+function userTeamReasonMarkup(plan) {
+  const reactionText = plan.profile.reactions.length ? plan.profile.reactions.join(" · ") : "尚未形成相邻属性环合";
+  const structure = [
+    "主C " + (plan.coreKind === "main" || plan.coreKind === "secondary" ? "已确定" : "需留意"),
+    "副C " + (plan.counts.secondary ? "已补齐" : "缺少"),
+    "辅助 " + (plan.counts.support ? "已补齐" : "缺少"),
+    "生存 " + (plan.counts.sustain ? "已补齐" : "缺少")
+  ].join(" · ");
+  return '<div class="user-team-reason-grid"><div><span>定位结构</span><b>' + escapeHtml(structure) + '</b></div><div><span>属性环合</span><b>' + escapeHtml(reactionText) + '</b></div><div><span>属性组合</span><b>' + escapeHtml(plan.profile.attrs.join(" · ") || "待补充") + '</b></div></div>';
+}
+
+function renderUserTeamRoute() {
+  const target = $("#userTeamRoute");
+  if (!target) return;
+  const allEntries = Object.entries(characterData).sort(([nameA, a], [nameB, b]) => {
+    const rarityOrder = { S: 0, A: 1, B: 2 };
+    return (rarityOrder[a.rarity] ?? 3) - (rarityOrder[b.rarity] ?? 3) || nameA.localeCompare(nameB, "zh-CN");
+  });
+  const allNames = allEntries.map(([name]) => name);
+  if (!allNames.length) {
+    target.innerHTML = '<div class="user-empty">当前没有可用于配队的角色资料。</div>';
+    return;
+  }
+  if (!characterData[userTeamCore]) userTeamCore = selectedCharacter && characterData[selectedCharacter] ? selectedCharacter : allNames[0];
+  const plan = userTeamBuildPlan(userTeamCore);
+  const selectedCount = userTeamOwnedNames.size;
+  const rosterStatus = selectedCount ? selectedCount + " / " + allNames.length + " 人已纳入角色池" : "未限定角色池 · 使用全部本地角色";
+  const options = allNames.map((name) => '<option value="' + escapeHtml(name) + '"' + (name === userTeamCore ? " selected" : "") + '>' + escapeHtml(name) + '</option>').join("");
+  const goalOptions = ["均衡", "速切", "生存"].map((goal) => '<button class="user-route-segment ' + (goal === userTeamGoal ? "is-active" : "") + ' pressable" type="button" data-user-team-goal="' + goal + '" aria-pressed="' + String(goal === userTeamGoal) + '">' + goal + '</button>').join("");
+  const rosterCards = allEntries.map(([name, data]) => userTeamRosterCard(name, data)).join("");
+  const memberEntries = [{ name: userTeamCore, data: characterData[userTeamCore] }, ...plan.members];
+  const memberMarkup = memberEntries.map((entry, index) => { const roleLabels = { secondary: "候选副C", support: "候选辅助", sustain: "候选生存", flex: "候选功能" }; return userTeamMemberCard(entry, index === 0 ? "核心角色" : roleLabels[userTeamRoleKind(entry.data)] || "候选功能"); }).join("");
+  const missingMarkup = plan.missing ? '<div class="user-team-missing"><b>还差 ' + plan.missing + ' 位角色</b><span>继续纳入更多角色后，才能组成完整的 4 人候选队。</span></div>' : "";
+  target.innerHTML = '<div class="user-route-intro"><div><span class="user-section-kicker">规则型候选</span><h1 id="userTeamTitle">自动配队</h1><p>先选你拥有的角色，再让角色定位和相邻属性一起参与计算。</p></div><div class="user-route-status"><i></i><span>' + escapeHtml(rosterStatus) + '</span></div></div><section class="user-surface user-team-builder"><div class="user-team-builder-head"><div><span class="user-section-kicker">01 · 角色池</span><h2>把你有的人交给助手。</h2><p>默认纳入本地全部角色；取消角色即可模拟自己的持有情况。</p></div><div class="user-team-roster-actions"><button class="user-secondary-action pressable" type="button" data-user-team-roster-action="all">全部纳入</button><button class="user-secondary-action pressable" type="button" data-user-team-roster-action="clear">清空重选</button></div></div><div class="user-team-roster-grid">' + rosterCards + '</div></section><section class="user-surface user-team-builder user-team-controls-surface"><div class="user-team-controls"><label class="user-route-select"><span>核心角色</span><select data-user-team-core aria-label="选择配队核心角色">' + options + '</select></label><div class="user-route-control"><span>配队偏好</span><div class="user-route-segments" role="group" aria-label="配队偏好">' + goalOptions + '</div></div><button class="user-primary-action pressable" type="button" data-user-team-generate>生成候选</button></div><div class="user-team-rule-note"><span class="user-section-kicker">计算依据</span><p>优先满足「主C + 副C + 辅助 + 生存」的 4 人结构，再奖励相邻属性环合；这是基于当前本地角色字段的候选，不是官方阵容模板。</p></div></section><section class="user-team-result"><div class="user-section-heading"><div><span class="user-section-kicker">02 · 候选结果</span><h2>' + escapeHtml(userTeamCore) + ' 的起点</h2><p>结果会随角色池、核心角色和偏好重新计算。</p></div><span class="user-result-pill">' + (plan.missing ? "队伍未满" : "4 人候选") + '</span></div><div class="user-team-grid">' + memberMarkup + '</div>' + missingMarkup + userTeamReasonMarkup(plan) + '</section>';
+}
+
+function renderUserArcDriveRoute() {
+  const target = $("#userArcDriveRoute");
+  if (!target) return;
+  const items = (arcDriveCatalog.items || []).filter((item) => !userArcDriveSearchQuery || arcDriveSearchText(item).includes(userArcDriveSearchQuery));
+  if (!items.some((item) => item.id === userSelectedArcDriveId)) userSelectedArcDriveId = items[0]?.id || "";
+  const selected = items.find((item) => item.id === userSelectedArcDriveId);
+  const stats = selected?.stats || {};
+  const breakpoints = stats.level_breakpoints || [1, 20, 30, 40, 50, 60, 70, 80];
+  if (!breakpoints.some((level) => Number(level) === Number(userArcDriveLevel))) userArcDriveLevel = Number(breakpoints[breakpoints.length - 1] || 80);
+  const levelIndex = Math.max(0, breakpoints.findIndex((level) => Number(level) === Number(userArcDriveLevel)));
+  const statRows = stats.rows || [];
+  const rankDescriptions = selected?.passive?.rank_descriptions || [];
+  const currentEffect = rankDescriptions[userArcDriveRank - 1] || selected?.passive?.description_template || "来源页没有提供调弧效果数据。";
+  const cards = items.map((item) => {
+    const image = item.image?.local_path ? '<img src="' + escapeHtml(item.image.local_path) + '" alt=""> ' : "弧";
+    return '<button class="user-library-card' + (item.id === userSelectedArcDriveId ? " is-active" : "") + '" type="button" data-user-arc-drive-id="' + escapeHtml(item.id) + '" aria-pressed="' + String(item.id === userSelectedArcDriveId) + '"><span class="user-library-image">' + image + '</span><span><small>' + escapeHtml((item.rarity || "—") + "级 · " + (item.type || "弧盘")) + '</small><b>' + escapeHtml(item.name) + '</b></span></button>';
+  }).join("");
+  const levels = breakpoints.map((level) => '<option value="' + escapeHtml(level) + '"' + (Number(level) === Number(userArcDriveLevel) ? " selected" : "") + '>Lv.' + escapeHtml(level) + '</option>').join("");
+  const ranks = Array.from({ length: Math.max(rankDescriptions.length, 1) }, (_, index) => '<button type="button" class="' + (userArcDriveRank === index + 1 ? "is-active" : "") + '" data-user-arc-rank="' + (index + 1) + '" aria-pressed="' + String(userArcDriveRank === index + 1) + '">R' + (index + 1) + '</button>').join("");
+  const statMarkup = statRows.length ? statRows.map((row) => {
+    const value = row.values_at_breakpoints?.[levelIndex] ?? row.current_value;
+    return '<div><span>' + escapeHtml(row.name || "属性") + '</span><b>' + escapeHtml(formatArcDriveStat(value, row.is_percent)) + '</b></div>';
+  }).join("") : emptyState("来源页没有等级属性数据");
+  const detail = selected ? '<article class="user-library-detail"><div class="user-library-detail-head"><div class="user-library-detail-image">' + (selected.image?.local_path ? '<img src="' + escapeHtml(selected.image.local_path) + '" alt="' + escapeHtml(selected.name) + '">' : "弧") + '</div><div><span class="user-result-pill">' + escapeHtml((selected.rarity || "—") + "级 · " + (selected.type || "弧盘")) + '</span><h2>' + escapeHtml(selected.name) + '</h2><p>' + escapeHtml(selected.overview || selected.description || "这件弧盘的公开资料已整理在本地知识包中。") + '</p>' + (selected.source?.url ? '<a class="source-link" href="' + escapeHtml(selected.source.url) + '" target="_blank" rel="noreferrer">查看来源资料 ↗</a>' : "") + '</div></div><section class="arc-drive-detail-section"><div class="arc-detail-section-head"><div><h3>等级属性</h3><small>与管理端使用同一份等级成长数据</small></div><label class="arc-level-select">等级<select data-user-arc-level aria-label="弧盘等级">' + levels + '</select></label></div><div class="user-library-stat-grid">' + statMarkup + '</div></section>' + (selected.description ? '<section class="user-library-copy"><span>说明</span><p>' + escapeHtml(selected.description) + '</p></section>' : "") + '<section class="user-library-copy"><span>' + escapeHtml(selected.passive?.title || "调弧效果") + '</span><div class="arc-rank-select" role="group" aria-label="用户端调弧等级">' + ranks + '</div><p>' + escapeHtml(currentEffect) + '</p></section><section class="user-library-copy"><span>资料来源</span><p>用户端与管理端均同步自本地弧盘 catalog，不另存一份用户数据。</p></section></article>' : '<div class="user-empty">没有找到符合条件的弧盘。</div>';
+  target.innerHTML = '<div class="user-route-intro"><div><span class="user-section-kicker">同步图鉴</span><h1 id="userArcDriveTitle">弧盘</h1><p>与管理端图鉴使用同一份弧盘目录，用户端只负责浏览与理解。</p></div><div class="user-route-status"><i></i><span>' + items.length + ' / ' + (arcDriveCatalog.items || []).length + ' 件</span></div></div><div class="user-library-toolbar"><label class="user-search"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="1.7"/><path d="m16 16 4 4" stroke="currentColor" stroke-linecap="round"/></svg><input id="userArcDriveSearch" type="search" value="' + escapeHtml(userArcDriveSearchQuery) + '" placeholder="搜索弧盘名称、类型或效果" aria-label="搜索弧盘"></label></div><div class="user-library-layout"><div class="user-library-grid" aria-label="用户端弧盘列表">' + (cards || '<div class="user-empty">没有找到符合条件的弧盘。</div>') + '</div>' + detail + '</div>';
+}
+
+function renderUserSkyCurtainRoute() {
+  const target = $("#userSkyCurtainRoute");
+  if (!target) return;
+  const items = (skyCurtainCatalog.items || []).filter((item) => !userSkyCurtainSearchQuery || skyCurtainSearchText(item).includes(userSkyCurtainSearchQuery));
+  if (!items.some((item) => item.id === userSelectedSkyCurtainId)) userSelectedSkyCurtainId = items[0]?.id || "";
+  const selected = items.find((item) => item.id === userSelectedSkyCurtainId);
+  const qualityLabels = { gold: "金", purple: "紫", blue: "蓝" };
+  if (selected && !selected.images?.[userSkyCurtainQuality]) userSkyCurtainQuality = "gold";
+  const image = selected?.images?.[userSkyCurtainQuality] || selected?.images?.gold || Object.values(selected?.images || {})[0];
+  const cards = items.map((item) => {
+    const cardImage = item.images?.gold?.local_path || Object.values(item.images || {})[0]?.local_path || "";
+    return '<button class="user-library-card' + (item.id === userSelectedSkyCurtainId ? " is-active" : "") + '" type="button" data-user-sky-curtain-id="' + escapeHtml(item.id) + '" aria-pressed="' + String(item.id === userSelectedSkyCurtainId) + '"><span class="user-library-image">' + (cardImage ? '<img src="' + escapeHtml(cardImage) + '" alt="">' : "幕") + '</span><span><small>' + escapeHtml([item.category, item.element].filter(Boolean).join(" · ") || "空幕套装") + '</small><b>' + escapeHtml(item.name) + '</b></span></button>';
+  }).join("");
+  const qualityButtons = Object.entries(qualityLabels).map(([qualityId, label]) => '<button type="button" class="' + (userSkyCurtainQuality === qualityId ? "is-active" : "") + '" data-user-sky-quality="' + qualityId + '" aria-pressed="' + String(userSkyCurtainQuality === qualityId) + '">' + label + '</button>').join("");
+  const renderPool = (title, pool) => {
+    const values = pool?.items || [];
+    return '<section class="user-library-copy"><span>' + escapeHtml(title) + '</span>' + (pool?.note ? '<p>' + escapeHtml(pool.note) + '</p>' : "") + '<div class="user-affix-chip-list">' + (values.length ? values.map((value) => '<span>' + escapeHtml(value) + '</span>').join("") : '<span>来源页未提供词条池</span>') + '</div></section>';
+  };
+  const effects = selected?.set_effects || {};
+  const tierNotes = selected?.quality?.tiers || [];
+  const detail = selected ? '<article class="user-library-detail"><div class="user-library-detail-head"><div class="user-library-detail-image">' + (image?.local_path ? '<img src="' + escapeHtml(image.local_path) + '" alt="' + escapeHtml(selected.name) + '">' : "幕") + '</div><div><span class="user-result-pill">' + escapeHtml(selected.category || "空幕") + (selected.element ? " · " + escapeHtml(selected.element) : "") + '</span><h2>' + escapeHtml(selected.name) + '</h2><p>' + escapeHtml(selected.overview || "套装效果与词条资料已整理在本地知识包中。") + '</p>' + (selected.source?.url ? '<a class="source-link" href="' + escapeHtml(selected.source.url) + '" target="_blank" rel="noreferrer">查看来源资料 ↗</a>' : "") + '</div></div><section class="arc-drive-detail-section"><div class="arc-detail-section-head"><div><h3>品质图片</h3><small>与管理端使用同一组三档品质图</small></div></div><div class="sky-curtain-quality-selector" role="group" aria-label="用户端空幕品质">' + qualityButtons + '</div></section><div class="user-sky-effects"><div><span>2 件套</span><p>' + escapeHtml(effects.two_piece || "来源页未提供") + '</p></div><div><span>4 件套</span><p>' + escapeHtml(effects.four_piece || "来源页未提供") + '</p></div></div>' + (selected.acquisition ? '<section class="user-library-copy"><span>获取途径</span><p>' + escapeHtml(selected.acquisition) + '</p></section>' : "") + renderPool("主属性可能词条", selected.main_affix_pool) + renderPool("副属性可能词条", selected.sub_affix_pool) + '<section class="user-library-copy"><span>品质说明</span>' + (selected.quality?.role_note ? '<p><b>品质定位：</b>' + escapeHtml(selected.quality.role_note) + '</p>' : "") + (selected.quality?.source_note ? '<p><b>品质来源：</b>' + escapeHtml(selected.quality.source_note) + '</p>' : "") + (selected.quality?.note ? '<p>' + escapeHtml(selected.quality.note) + '</p>' : "") + (tierNotes.length ? '<ul>' + tierNotes.map((tier) => '<li><b>' + escapeHtml(tier.quality) + '</b><span>' + escapeHtml(tier.description) + '</span></li>').join("") + '</ul>' : "") + '</section><section class="user-library-copy"><span>资料来源</span><p>用户端与管理端均同步自本地空幕 catalog，不另存一份用户数据。</p></section></article>' : '<div class="user-empty">没有找到符合条件的空幕。</div>';
+  target.innerHTML = '<div class="user-route-intro"><div><span class="user-section-kicker">同步图鉴</span><h1 id="userSkyCurtainTitle">空幕</h1><p>与管理端图鉴使用同一份空幕目录，品质、套装效果和词条池保持一致。</p></div><div class="user-route-status"><i></i><span>' + items.length + ' / ' + (skyCurtainCatalog.items || []).length + ' 套</span></div></div><div class="user-library-toolbar"><label class="user-search"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="1.7"/><path d="m16 16 4 4" stroke="currentColor" stroke-linecap="round"/></svg><input id="userSkyCurtainSearch" type="search" value="' + escapeHtml(userSkyCurtainSearchQuery) + '" placeholder="搜索空幕名称、效果或属性" aria-label="搜索空幕"></label></div><div class="user-library-layout"><div class="user-library-grid" aria-label="用户端空幕列表">' + (cards || '<div class="user-empty">没有找到符合条件的空幕。</div>') + '</div>' + detail + '</div>';
+}
+
+function renderUserDriverBlockRoute() {
+  const target = $("#userDriverBlockRoute");
+  if (!target) return;
+  const qualityLabels = { gold: "金", purple: "紫", blue: "蓝" };
+  const items = (driverBlockCatalog.items || []).filter((item) => {
+    if (userDriverBlockModelFilter !== "all" && item.model !== userDriverBlockModelFilter) return false;
+    return !userDriverBlockSearchQuery || driverBlockSearchText(item).includes(userDriverBlockSearchQuery);
+  });
+  if (!items.some((item) => item.id === userSelectedDriverBlockId)) userSelectedDriverBlockId = items[0]?.id || "";
+  const selected = items.find((item) => item.id === userSelectedDriverBlockId);
+  const tier = selected?.qualities?.[userSelectedDriverBlockQuality] || selected?.qualities?.gold;
+  if (selected && !selected.qualities?.[userSelectedDriverBlockQuality]) userSelectedDriverBlockQuality = "gold";
+  const activeTier = selected?.qualities?.[userSelectedDriverBlockQuality] || tier;
+  const level = activeTier ? Math.min(activeTier.level?.max ?? 20, Math.max(activeTier.level?.min ?? 0, userSelectedDriverBlockLevel)) : 20;
+  userSelectedDriverBlockLevel = level;
+  const levelIndex = activeTier ? level - (activeTier.level?.min ?? 0) : 0;
+  const modelButtons = ["all", "Ⅱ型", "Ⅲ型", "Ⅳ型"].map((model) => '<button type="button" class="' + (userDriverBlockModelFilter === model ? "is-active" : "") + '" data-user-driver-model="' + model + '" aria-pressed="' + String(userDriverBlockModelFilter === model) + '">' + (model === "all" ? "全部" : model) + '</button>').join("");
+  const qualityButtons = Object.entries(qualityLabels).map(([qualityId, label]) => '<button type="button" class="' + (userSelectedDriverBlockQuality === qualityId ? "is-active" : "") + '" data-user-driver-quality="' + qualityId + '" aria-pressed="' + String(userSelectedDriverBlockQuality === qualityId) + '">' + label + (selected?.qualities?.[qualityId]?.grade ? " " + escapeHtml(selected.qualities[qualityId].grade) : "") + '</button>').join("");
+  const cards = items.map((item) => {
+    const itemTier = item.qualities?.[userSelectedDriverBlockQuality] || item.qualities?.gold;
+    const image = itemTier?.images?.[userSelectedDriverBlockQuality]?.local_path || itemTier?.images?.gold?.local_path || "";
+    return '<button class="user-library-card' + (item.id === userSelectedDriverBlockId ? " is-active" : "") + '" type="button" data-user-driver-block-id="' + escapeHtml(item.id) + '" aria-pressed="' + String(item.id === userSelectedDriverBlockId) + '"><span class="user-library-image">' + (image ? '<img src="' + escapeHtml(image) + '" alt="">' : "块") + '</span><span><small>' + escapeHtml(item.model + " · " + (item.shape || item.grid_count + " 格")) + '</small><b>' + escapeHtml(item.name || "驱动块") + '</b></span></button>';
+  }).join("");
+  const mainStats = activeTier?.main_stats || [];
+  const randomStats = activeTier?.random_stats || [];
+  const statMarkup = mainStats.map((stat) => '<div><span>' + escapeHtml(stat.name || "主属性") + '</span><b>' + escapeHtml(formatDriverBlockValue(stat.values?.[levelIndex], stat.is_percent)) + '</b></div>').join("");
+  const randomMarkup = randomStats.map((stat) => '<span>' + escapeHtml(stat.name) + ' · ' + escapeHtml(formatDriverBlockValue(stat.value, stat.is_percent)) + '</span>').join("");
+  const detail = selected && activeTier ? '<article class="user-library-detail"><div class="user-library-detail-head"><div class="user-library-detail-image">' + (activeTier.images?.[userSelectedDriverBlockQuality]?.local_path ? '<img src="' + escapeHtml(activeTier.images[userSelectedDriverBlockQuality].local_path) + '" alt="' + escapeHtml(selected.name || "驱动块") + '">' : "块") + '</div><div><span class="user-result-pill">' + escapeHtml(selected.model + " · " + qualityLabels[userSelectedDriverBlockQuality] + "色 " + activeTier.grade + "级") + '</span><h2>' + escapeHtml(selected.model + " · " + (selected.shape || selected.grid_count + " 格")) + '</h2><p>' + escapeHtml(selected.grid_count + " 格 · " + activeTier.random_slot_count + " 个随机副词条槽 · " + randomStats.length + " 种候选词条") + '</p>' + (activeTier.source_page?.url ? '<a class="source-link" href="' + escapeHtml(activeTier.source_page.url) + '" target="_blank" rel="noreferrer">查看来源资料 ↗</a>' : "") + '</div></div><section class="arc-drive-detail-section"><div class="arc-detail-section-head"><div><h3>品质与形状图</h3><small>与管理端使用同一份三档品质数据</small></div></div><div class="sky-curtain-quality-selector" role="group" aria-label="用户端驱动块品质">' + qualityButtons + '</div></section><section class="arc-drive-detail-section"><div class="arc-detail-section-head"><div><h3>固定主属性</h3><small>强化 +0 至 +' + (activeTier.level?.max ?? 20) + '</small></div><label class="driver-block-level-control">强化 +<output>' + level + '</output><input data-user-driver-level type="range" min="' + (activeTier.level?.min ?? 0) + '" max="' + (activeTier.level?.max ?? 20) + '" value="' + level + '" aria-label="驱动块强化等级"></label></div><div class="user-library-stat-grid">' + statMarkup + '</div></section><section class="user-library-copy"><span>随机副属性池 · ' + randomStats.length + ' 种</span><div class="user-affix-chip-list">' + (randomMarkup || "<span>来源页未提供随机副属性</span>") + '</div></section><section class="user-library-copy"><span>资料来源</span><p>用户端与管理端均同步自本地驱动块 catalog，品质、强化成长和副属性池保持一致。</p></section></article>' : '<div class="user-empty">没有找到符合条件的驱动块。</div>';
+  target.innerHTML = '<div class="user-route-intro"><div><span class="user-section-kicker">同步图鉴</span><h1 id="userDriverBlockTitle">驱动块</h1><p>浏览型号、形状、品质成长和随机副属性；用户端不编辑，只与管理端图鉴同步展示。</p></div><div class="user-route-status"><i></i><span>' + items.length + ' / ' + (driverBlockCatalog.items || []).length + ' 种形状</span></div></div><div class="user-library-toolbar"><label class="user-search"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="1.7"/><path d="m16 16 4 4" stroke="currentColor" stroke-linecap="round"/></svg><input id="userDriverBlockSearch" type="search" value="' + escapeHtml(userDriverBlockSearchQuery) + '" placeholder="搜索型号、形状或副属性" aria-label="搜索驱动块"></label><div class="user-library-filters" role="group" aria-label="驱动块型号筛选">' + modelButtons + '</div></div><div class="user-library-layout"><div class="user-library-grid" aria-label="用户端驱动块列表">' + (cards || '<div class="user-empty">没有找到符合条件的驱动块。</div>') + '</div>' + detail + '</div>';
+}
+
+function renderUserRouteView(route = userActiveRoute) {
+  const safeRoute = userRouteLabels[route] ? route : "characters";
+  userActiveRoute = safeRoute;
+  $$('[data-user-route-panel]').forEach((panel) => { panel.hidden = panel.dataset.userRoutePanel !== safeRoute; });
+  $$('[data-user-route]').forEach((button) => { const active = button.dataset.userRoute === safeRoute; button.classList.toggle("is-active", active); if (active) button.setAttribute("aria-current", "page"); else button.removeAttribute("aria-current"); });
+  setText("#activeBreadcrumb", `用户端 · ${userRouteLabels[safeRoute]}`);
+  if (safeRoute === "characters") renderUserExperience(activeKnowledge);
+  if (safeRoute === "team") renderUserTeamRoute();
+  if (safeRoute === "arc-drives") renderUserArcDriveRoute();
+  if (safeRoute === "cassettes") renderUserSkyCurtainRoute();
+  if (safeRoute === "drive-blocks") renderUserDriverBlockRoute();
+}
+
+function showUserRoute(route) {
+  if (!userRouteLabels[route]) return;
+  renderUserRouteView(route);
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function bindUserRouteNavigation() {
+  $("#userPrimaryNav")?.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-user-route]");
+    if (!button) return;
+    showUserRoute(button.dataset.userRoute);
+  });
+}
+
+function bindUserCatalogRoutes() {
+  $("#userTeamRoute")?.addEventListener("change", (event) => {
+    if (!event.target.matches("[data-user-team-core]")) return;
+    userTeamCore = event.target.value;
+    userTeamOwnedNames.add(userTeamCore);
+    if (characterData[userTeamCore]) applyCharacter(userTeamCore, { skipUserRail: true, silent: true });
+    renderUserTeamRoute();
+  });
+  $("#userTeamRoute")?.addEventListener("click", (event) => {
+    const rosterAction = event.target.closest("[data-user-team-roster-action]");
+    if (rosterAction) {
+      const allNames = Object.keys(characterData);
+      if (rosterAction.dataset.userTeamRosterAction === "all") userTeamOwnedNames = new Set(allNames);
+      if (rosterAction.dataset.userTeamRosterAction === "clear") userTeamOwnedNames = new Set();
+      renderUserTeamRoute();
+      return;
+    }
+    const rosterCard = event.target.closest("[data-user-team-roster]");
+    if (rosterCard) {
+      const name = rosterCard.dataset.userTeamRoster;
+      if (userTeamOwnedNames.has(name)) userTeamOwnedNames.delete(name);
+      else userTeamOwnedNames.add(name);
+      if (userTeamOwnedNames.size && !userTeamOwnedNames.has(userTeamCore)) {
+        userTeamCore = [...userTeamOwnedNames][0];
+        applyCharacter(userTeamCore, { skipUserRail: true, silent: true });
+      }
+      renderUserTeamRoute();
+      return;
+    }
+    const goal = event.target.closest("[data-user-team-goal]");
+    if (goal) {
+      userTeamGoal = goal.dataset.userTeamGoal;
+      renderUserTeamRoute();
+      return;
+    }
+    if (event.target.closest("[data-user-team-generate]")) {
+      userTeamGenerated = true;
+      renderUserTeamRoute();
+      notify("已按角色池、定位结构和相邻属性重新生成候选队伍");
+    }
+  });
+  $("#userArcDriveRoute")?.addEventListener("input", (event) => {
+    if (event.target.id !== "userArcDriveSearch") return;
+    userArcDriveSearchQuery = event.target.value.trim().toLowerCase();
+    renderUserArcDriveRoute();
+  });
+  $("#userArcDriveRoute")?.addEventListener("change", (event) => {
+    if (event.target.matches("[data-user-arc-level]")) {
+      userArcDriveLevel = Number(event.target.value);
+      renderUserArcDriveRoute();
+    }
+  });
+  $("#userArcDriveRoute")?.addEventListener("click", (event) => {
+    const card = event.target.closest("[data-user-arc-drive-id]");
+    const rank = event.target.closest("[data-user-arc-rank]");
+    if (card) {
+      userSelectedArcDriveId = card.dataset.userArcDriveId;
+      renderUserArcDriveRoute();
+      return;
+    }
+    if (rank) {
+      userArcDriveRank = Number(rank.dataset.userArcRank) || 1;
+      renderUserArcDriveRoute();
+    }
+  });
+  $("#userSkyCurtainRoute")?.addEventListener("input", (event) => {
+    if (event.target.id !== "userSkyCurtainSearch") return;
+    userSkyCurtainSearchQuery = event.target.value.trim().toLowerCase();
+    renderUserSkyCurtainRoute();
+  });
+  $("#userSkyCurtainRoute")?.addEventListener("click", (event) => {
+    const card = event.target.closest("[data-user-sky-curtain-id]");
+    const quality = event.target.closest("[data-user-sky-quality]");
+    if (card) {
+      userSelectedSkyCurtainId = card.dataset.userSkyCurtainId;
+      renderUserSkyCurtainRoute();
+      return;
+    }
+    if (quality) {
+      userSkyCurtainQuality = quality.dataset.userSkyQuality;
+      renderUserSkyCurtainRoute();
+    }
+  });
+  $("#userDriverBlockRoute")?.addEventListener("input", (event) => {
+    if (event.target.id !== "userDriverBlockSearch") return;
+    userDriverBlockSearchQuery = event.target.value.trim().toLowerCase();
+    renderUserDriverBlockRoute();
+  });
+  $("#userDriverBlockRoute")?.addEventListener("change", (event) => {
+    if (event.target.matches("[data-user-driver-level]")) {
+      userSelectedDriverBlockLevel = Number(event.target.value);
+      renderUserDriverBlockRoute();
+    }
+  });
+  $("#userDriverBlockRoute")?.addEventListener("click", (event) => {
+    const card = event.target.closest("[data-user-driver-block-id]");
+    const model = event.target.closest("[data-user-driver-model]");
+    const quality = event.target.closest("[data-user-driver-quality]");
+    if (card) {
+      userSelectedDriverBlockId = card.dataset.userDriverBlockId;
+      renderUserDriverBlockRoute();
+      return;
+    }
+    if (model) {
+      userDriverBlockModelFilter = model.dataset.userDriverModel;
+      renderUserDriverBlockRoute();
+      return;
+    }
+    if (quality) {
+      userSelectedDriverBlockQuality = quality.dataset.userDriverQuality;
+      userSelectedDriverBlockLevel = 20;
+      renderUserDriverBlockRoute();
+    }
+  });
 }

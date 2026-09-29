@@ -16,11 +16,11 @@
 
 ## Next Step
 
-Phase 14 轮盘体验修复与 GitHub 同步已完成；浏览器/触控验证仍受本机自动化环境阻塞。
+Phase 15 用户端主导航与多模块路由实现完成；浏览器交互验证仍受本机自动化环境阻塞。
 
 ## Current Phase
 
-Phase 14 - Carousel Polish and GitHub Delivery；implementation and GitHub synchronization complete, browser verification blocked by environment.
+Phase 15 - User-facing Navigation and Module Routing；implementation complete, browser verification blocked by environment.
 
 ## Phases
 
@@ -278,3 +278,33 @@ Phase 14 - Carousel Polish and GitHub Delivery；implementation and GitHub synch
 - [x] 创建本地交付提交并推送到 `origin/main`
 - [x] 推送后确认本地 HEAD 与 `origin/main` 一致（`1ad17aa`），并记录提交信息
 - **Status:** complete; pushed to `origin/main` at `1ad17aa`, browser verification remains blocked by environment
+### Phase 15: User-facing Navigation and Module Routing
+
+**Goal:** 把用户端从单一角色展示页升级为可进入主要任务的产品入口。顶部导航统一承载角色资料、自动配队、弧盘和空幕；用户端详情只在用户端内切换，不再误入管理端。自动配队首版基于当前本地角色公开定位生成可解释候选，并明确资料边界，等待后续接入正式阵容模板。
+
+- [x] 设计并实现简洁的用户端顶部主导航与当前路线状态
+- [x] 将角色、自动配队、弧盘、空幕接入用户端路由容器
+- [x] 让用户端弧盘/空幕详情复用本地知识数据，但使用用户端展示层，不调用管理端图鉴视图
+- [x] 实现自动配队入口的候选生成、核心角色选择和资料依据说明
+- [x] 保持管理端入口为显式次级入口，用户端角色详情不再调用管理端路由
+- [x] 加入移动端横向导航、键盘焦点、reduced-motion 和 reduced-transparency 处理
+- [x] 运行 JavaScript 语法检查、静态路由接线检查与 Git 差异检查
+- [x] 完成本地浏览器交互验证（Chrome DevTools Protocol）；响应式视觉验证未执行
+- **Status:** implementation complete; browser interaction verification passed with Chrome CDP; responsive visual verification not run
+### Phase 16: Rule-based Team Solver and Catalog Synchronization
+
+**Goal:** 参考公开的一键配队交互，把用户端自动配队从“核心角色 + 随机三人”升级为角色池、四人定位结构和相邻属性环合候选；同时让弧盘、空幕、驱动块用户端直接复用管理端 catalog，保证数量、详情字段和品质数据一致。
+
+- [x] 研究参考站点的一键配队入口：拥有角色池、显式生成、四人队结构、定位检查和属性环合
+- [x] 将自动配队升级为角色池选择、核心角色、均衡/速切/生存偏好和候选生成
+- [x] 以主C/副C/辅助/生存结构与属性环合作为可解释评分依据
+- [x] 明确结果是基于本地角色字段的规则候选，不伪装成官方阵容模板
+- [x] 用户端新增驱动块路线，并与弧盘/空幕共用管理端 catalog 全局数据
+- [x] 用户端补齐弧盘等级/调弧、空幕品质/词条池、驱动块型号/品质/强化展示
+- [x] 完成 JavaScript 静态检查、Chrome CDP 交互回归和管理端/用户端目录数量对照
+- [ ] 响应式视觉验证（本轮未执行）
+- [x] 确认本地工作区仅包含本阶段功能、界面样式和 canonical planning 变更
+- [x] fetch origin/main 并确认远端没有领先提交
+- [ ] 创建交付提交并推送到 origin/main
+- [ ] 推送后核对本地 HEAD、origin/main 与工作区状态
+- **Status:** implementation and desktop browser interaction complete; ready for commit and push; responsive visual verification not run

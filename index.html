@@ -68,11 +68,17 @@
           <button class="primary-button pressable" type="button" id="saveDraftButton"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 4h11l3 3v13H5V4Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M8 4v5h7V4M8 16h8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>保存草稿</button>
         </div>
         <div class="topbar-actions user-topbar-actions" id="userTopbarActions" hidden>
-          <button class="user-topbar-link pressable" type="button" id="userEncyclopediaButton">图鉴</button>
-          <button class="user-topbar-link pressable" type="button" id="userAdminButton"><span class="admin-link-mark">⌘</span>进入管理端</button>
+          <nav class="user-primary-nav" id="userPrimaryNav" aria-label="用户端主导航">
+            <button class="user-primary-nav-item is-active pressable" type="button" data-user-route="characters" aria-current="page">角色</button>
+            <button class="user-primary-nav-item pressable" type="button" data-user-route="team"><span>自动配队</span><span class="user-nav-badge">主功能</span></button>
+            <button class="user-primary-nav-item pressable" type="button" data-user-route="arc-drives">弧盘</button>
+            <button class="user-primary-nav-item pressable" type="button" data-user-route="cassettes">空幕</button><button class="user-primary-nav-item pressable" type="button" data-user-route="drive-blocks">驱动块</button>
+          </nav>
+          <button class="user-topbar-link user-admin-link pressable" type="button" id="userAdminButton"><span class="admin-link-mark">⌘</span>管理端</button>
         </div>      </header>
 
       <section class="user-experience-view" id="userExperienceView" aria-labelledby="userPageTitle">
+        <div class="user-route-panel user-characters-route" id="userCharactersRoute" data-user-route-panel="characters">
         <div class="user-page-intro">
           <div>
             <div class="user-eyebrow"><span class="user-eyebrow-mark">✦</span> 可可助手 · 角色指南</div>
@@ -97,7 +103,11 @@
           <button class="user-tab pressable" type="button" data-user-tab="cultivation">养成</button>
         </nav>
         <div class="user-tab-panel" id="userTabPanel"></div>
+      </div>
 
+        <section class="user-route-panel" id="userTeamRoute" data-user-route-panel="team" hidden aria-labelledby="userTeamTitle"></section>
+        <section class="user-route-panel" id="userArcDriveRoute" data-user-route-panel="arc-drives" hidden aria-labelledby="userArcDriveTitle"></section>
+        <section class="user-route-panel" id="userSkyCurtainRoute" data-user-route-panel="cassettes" hidden aria-labelledby="userSkyCurtainTitle"></section><section class="user-route-panel" id="userDriverBlockRoute" data-user-route-panel="drive-blocks" hidden aria-labelledby="userDriverBlockTitle"></section>
         <footer class="user-footer"><span>可可助手 · 为每一次选择保留证据</span><span>角色资料来自本地知识包</span></footer>
       </section>
       <div id="roleManagementView" hidden>
