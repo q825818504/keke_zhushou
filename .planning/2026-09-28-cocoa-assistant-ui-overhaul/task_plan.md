@@ -16,11 +16,11 @@
 
 ## Next Step
 
-Phase 14 轮盘体验修复已完成，本地提交已创建；GitHub push 被环境安全策略拦截，等待用户明确授权。
+Phase 14 轮盘体验修复与 GitHub 同步已完成；浏览器/触控验证仍受本机自动化环境阻塞。
 
 ## Current Phase
 
-Phase 14 - Carousel Polish and GitHub Delivery；plan created, implementation complete, remote synchronization in progress.
+Phase 14 - Carousel Polish and GitHub Delivery；implementation and GitHub synchronization complete, browser verification blocked by environment.
 
 ## Phases
 
@@ -275,6 +275,6 @@ Phase 14 - Carousel Polish and GitHub Delivery；plan created, implementation co
 - [x] 支持点击任意角色卡、头像和文字切换，并兼容 Pointer Capture
 - [x] 运行 JavaScript 语法检查与 Git 差异检查
 - [x] 检查远端是否有新提交，确认不会覆盖远端工作
-- [x] 创建本地交付提交；推送到 `origin/main` 待完成
-- [ ] 推送后确认本地 HEAD 与 `origin/main` 一致，并记录提交信息
-- **Status:** blocked pending explicit authorization; local commit is ready, GitHub push not executed
+- [x] 创建本地交付提交并推送到 `origin/main`
+- [x] 推送后确认本地 HEAD 与 `origin/main` 一致（`1ad17aa`），并记录提交信息
+- **Status:** complete; pushed to `origin/main` at `1ad17aa`, browser verification remains blocked by environment
