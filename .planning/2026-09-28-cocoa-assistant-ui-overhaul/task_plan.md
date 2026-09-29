@@ -16,11 +16,11 @@
 
 ## Next Step
 
-Phase 10 本地提交待推送；自动审查要求直接授权。同步后再继续 Phase 8 仓库持久化驱动摆放图上传。
+Phase 10 已推送至 `origin/main`，计划文件已在推送后更新并同步。之后继续 Phase 8 仓库持久化驱动摆放图上传。
 
 ## Current Phase
 
-Phase 10 - Sky Curtain Catalog；implementation complete in local commit `b190533`; push to `origin/main` rejected by auto-review pending direct user approval; browser verification not run.
+Phase 10 - Sky Curtain Catalog；implementation and post-push planning update synced to `origin/main`; browser interaction/responsive verification not run.
 
 ## Phases
 
@@ -220,6 +220,6 @@ Phase 10 - Sky Curtain Catalog；implementation complete in local commit `b19053
 - [x] Run code/data/resource checks and record the results in canonical planning files.
 - [ ] Browser interaction and responsive visual verification; report only if actually run.
 - [x] Review the exact delivery scope, refresh `origin/main` at `b4e560e` (no remote advancement), and commit the feature as `b190533` without rewriting history.
-- [ ] Push `b190533` to `origin/main` without force-pushing. The direct push was rejected by auto-review; await explicit user approval.
-- [ ] After the push, update canonical planning files and confirm local/remote synchronization.
-- **Status:** implementation complete in local commit `b190533`; GitHub push blocked by auto-review pending explicit user approval; browser verification not run.
+- [x] After direct user approval, push `b190533` and the recorded approval-state commit to `origin/main` without force-pushing; GitHub accepted the update.
+- [x] After the push, update canonical planning files and confirm local/remote synchronization.
+- **Status:** implementation and post-push planning update synced to `origin/main`; browser interaction/responsive verification not run.
