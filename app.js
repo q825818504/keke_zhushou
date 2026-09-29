@@ -1,6 +1,7 @@
 const allKnowledge = window.characterKnowledge || {};
 const arcDriveCatalog = window.arcDriveKnowledge || { items: [], source: {} };
 const skyCurtainCatalog = window.skyCurtainKnowledge || { items: [], source: {} };
+const driverBlockCatalog = window.driverBlockKnowledge || { items: [], source: {}, mechanism_guide: {} };
 const importedKnowledge = allKnowledge.zhenhong || null;
 let activeKnowledge = importedKnowledge;
 const importedAssetUrl = (asset) => asset?.local_path || "";
@@ -68,6 +69,11 @@ let selectedSkyCurtainId = skyCurtainCatalog.items?.[0]?.id || "";
 let skyCurtainCategoryFilter = "all";
 let skyCurtainElementFilter = "all";
 let skyCurtainSearchQuery = "";
+let selectedDriverBlockId = driverBlockCatalog.items?.[0]?.id || "";
+let selectedDriverBlockQuality = "gold";
+let selectedDriverBlockLevel = 20;
+let driverBlockModelFilter = "all";
+let driverBlockSearchQuery = "";
 let selectedSkyCurtainQuality = "gold";
 
 function notify(message) {
@@ -856,6 +862,102 @@ function initSkyCurtainCatalog() {
   renderSkyCurtainList();
 }
 
+function formatDriverBlockValue(value, isPercent = false) {
+  if (value === null || value === undefined || value === "") return "—";
+  const number = Number(value);
+  const formatted = Number.isFinite(number) ? new Intl.NumberFormat("zh-CN", { maximumFractionDigits: 2 }).format(number) : String(value);
+  return `${formatted}${isPercent ? "%" : ""}`;
+}
+
+function driverBlockSearchText(item) {
+  const tierText = Object.values(item.qualities || {}).flatMap((tier) => [
+    tier.grade,
+    ...(tier.main_stats || []).map((stat) => stat.name),
+    ...(tier.random_stats || []).flatMap((stat) => [stat.name, stat.value])
+  ]);
+  return [item.name, item.model, item.shape, item.source_index_label, ...(item.qualities ? Object.keys(item.qualities) : []), ...tierText].filter(Boolean).join(" ").toLowerCase();
+}
+
+function filteredDriverBlocks() {
+  return (driverBlockCatalog.items || []).filter((item) => {
+    if (driverBlockModelFilter !== "all" && item.model !== driverBlockModelFilter) return false;
+    return !driverBlockSearchQuery || driverBlockSearchText(item).includes(driverBlockSearchQuery);
+  });
+}
+
+function renderDriverBlockList() {
+  const list = $("#driverBlockList");
+  if (!list) return;
+  const items = filteredDriverBlocks();
+  if (!items.some((item) => item.id === selectedDriverBlockId)) selectedDriverBlockId = items[0]?.id || "";
+  const count = $("#driverBlockCount");
+  if (count) count.textContent = `显示 ${items.length} / ${(driverBlockCatalog.items || []).length} 种形状 · 每种 3 档`;
+  list.innerHTML = items.length ? items.map((item) => {
+    const tier = item.qualities?.[selectedDriverBlockQuality] || item.qualities?.gold;
+    const image = tier?.images?.[selectedDriverBlockQuality]?.local_path || tier?.images?.gold?.local_path || "";
+    return `<button class="arc-drive-card driver-block-card${item.id === selectedDriverBlockId ? " is-active" : ""}" type="button" data-driver-block-id="${escapeHtml(item.id)}" aria-pressed="${item.id === selectedDriverBlockId}"><span class="arc-drive-card-image">${image ? `<img src="${escapeHtml(image)}" alt="">` : "块"}</span><span class="arc-drive-card-copy"><small>${escapeHtml(item.model)} · ${escapeHtml(item.shape || `${item.grid_count} 格`)}</small><b>${escapeHtml(item.name || "驱动块")}</b></span></button>`;
+  }).join("") : emptyState("没有符合条件的驱动块");
+  renderDriverBlockDetail();
+}
+
+function renderDriverBlockDetail() {
+  const target = $("#driverBlockDetail");
+  const item = (driverBlockCatalog.items || []).find((entry) => entry.id === selectedDriverBlockId);
+  if (!target) return;
+  if (!item) {
+    target.innerHTML = emptyState("从左侧选择一种驱动块形状查看本地资料");
+    return;
+  }
+  const qualityLabels = { gold: "金", purple: "紫", blue: "蓝" };
+  const tier = item.qualities?.[selectedDriverBlockQuality] || item.qualities?.gold;
+  if (!tier) {
+    target.innerHTML = emptyState("来源页没有这档品质的数据");
+    return;
+  }
+  const level = Math.min(tier.level?.max ?? 20, Math.max(tier.level?.min ?? 0, selectedDriverBlockLevel));
+  selectedDriverBlockLevel = level;
+  const levelIndex = level - (tier.level?.min ?? 0);
+  const image = tier.images?.[selectedDriverBlockQuality];
+  const sourceUrl = tier.source_page?.url || "";
+  const mainStats = tier.main_stats || [];
+  const randomStats = tier.random_stats || [];
+  target.innerHTML = `<div class="arc-drive-detail-head"><div class="arc-drive-detail-image driver-block-artwork">${image?.local_path ? `<img src="${escapeHtml(image.local_path)}" alt="${escapeHtml(item.model)} ${escapeHtml(item.shape)} · ${qualityLabels[selectedDriverBlockQuality]}">` : "块"}</div><div class="arc-drive-detail-title"><span class="rarity-chip rarity-${escapeHtml(tier.grade.toLowerCase())}">${escapeHtml(item.model)} · ${escapeHtml(qualityLabels[selectedDriverBlockQuality])}色 ${escapeHtml(tier.grade)}级</span><h2>${escapeHtml(item.model)} · ${escapeHtml(item.shape || `${item.grid_count} 格`)}</h2><p>${escapeHtml(item.grid_count)} 格 · ${tier.random_slot_count} 个随机副词条槽 · ${randomStats.length} 种候选词条</p>${sourceUrl ? `<a class="source-link" href="${escapeHtml(sourceUrl)}" target="_blank" rel="noreferrer">打开当前品质来源 ↗</a>` : ""}</div></div><section class="arc-drive-detail-section"><div class="arc-detail-section-head"><div><h3>品质与形状图</h3><small>来源页保留了三档品质的原图</small></div></div><div class="sky-curtain-quality-selector" role="group" aria-label="驱动块品质">${Object.entries(qualityLabels).map(([qualityId, label]) => { const qualityTier = item.qualities?.[qualityId]; return `<button type="button" class="${selectedDriverBlockQuality === qualityId ? "is-active" : ""}" data-driver-quality="${qualityId}" aria-pressed="${selectedDriverBlockQuality === qualityId}">${label} ${escapeHtml(qualityTier?.grade || "")}</button>`; }).join("")}</div></section><section class="arc-drive-detail-section"><div class="arc-detail-section-head"><div><h3>固定主属性</h3><small>来源页记录的强化等级成长值</small></div><label class="driver-block-level-control">强化 +<output id="driverBlockLevelValue">${level}</output><input id="driverBlockLevel" type="range" min="${tier.level?.min ?? 0}" max="${tier.level?.max ?? 20}" value="${level}" aria-label="驱动块强化等级"></label></div><div class="arc-stat-grid">${mainStats.map((stat, index) => `<div class="arc-stat-card"><span>${escapeHtml(stat.name || "主属性")}</span><b data-driver-main-stat="${index}">${escapeHtml(formatDriverBlockValue(stat.values?.[levelIndex]))}</b></div>`).join("")}</div></section><section class="arc-drive-detail-section"><div class="arc-detail-section-head"><div><h3>随机副属性</h3><small>每块装备 ${tier.random_slot_count} 条；以下为来源页列出的候选值</small></div><span class="driver-block-pool-count">${randomStats.length} 种</span></div><div class="driver-block-stat-grid">${randomStats.map((stat) => `<div class="driver-block-stat-option">${stat.icon?.local_path ? `<img src="${escapeHtml(stat.icon.local_path)}" alt="">` : ""}<span>${escapeHtml(stat.name)}</span><b>${escapeHtml(formatDriverBlockValue(stat.value, stat.is_percent))}</b></div>`).join("")}</div></section>`;
+}
+
+function renderDriverBlockGuide() {
+  const target = $("#driverBlockGuideContent");
+  if (!target) return;
+  const guide = driverBlockCatalog.mechanism_guide || {};
+  const sections = guide.sections || [];
+  const renderBlock = (block) => {
+    if (block.type === "paragraph") return `<p>${escapeHtml(block.text)}</p>`;
+    if (block.type === "heading") return `<h4>${escapeHtml(block.text)}</h4>`;
+    if (block.type === "list") return `<ul>${(block.items || []).map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>`;
+    if (block.type === "table") {
+      const [head, ...rows] = block.rows || [];
+      return `<div class="driver-block-guide-table-wrap"><table><thead><tr>${(head || []).map((cell) => `<th>${escapeHtml(cell)}</th>`).join("")}</tr></thead><tbody>${rows.map((row) => `<tr>${row.map((cell) => `<td>${escapeHtml(cell)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
+    }
+    return "";
+  };
+  target.innerHTML = sections.length ? sections.map((section) => `<section class="driver-block-guide-section"><h3>${escapeHtml(section.title)}</h3>${(section.content || []).map(renderBlock).join("")}</section>`).join("") : `<p class="empty-state">机制说明快照暂不可用。</p>`;
+  const sourceNotes = guide.secondary_source_notes || [];
+  if (sourceNotes.length) target.insertAdjacentHTML("beforeend", `<p class="driver-block-guide-note">${sourceNotes.map(escapeHtml).join("<br>")}</p>`);
+}
+
+function initDriverBlockCatalog() {
+  const entries = driverBlockCatalog.items || [];
+  if (!entries.some((item) => item.id === selectedDriverBlockId)) selectedDriverBlockId = entries[0]?.id || "";
+  const source = driverBlockCatalog.source || {};
+  const indexUrl = driverBlockCatalog.source_index || "https://wiki.mysqil.com/drivers";
+  const guideUrl = driverBlockCatalog.mechanism_guide?.source?.url || "https://wiki.mysqil.com/cassettes/drivers";
+  const attribution = $("#driverBlockAttribution");
+  if (attribution) {
+    attribution.innerHTML = `资料整理自 <a href="${escapeHtml(indexUrl)}" target="_blank" rel="noreferrer">${escapeHtml(source.site || "Mysqil · 环世全鉴")}</a>，机制说明见<a href="${escapeHtml(guideUrl)}" target="_blank" rel="noreferrer">攻略原文</a>；作者 ${escapeHtml(source.source_author || "Matsuzaka Yuki")}；许可 <a href="${escapeHtml(source.source_license_url || "https://creativecommons.org/licenses/by-nc-sa/4.0/")}" target="_blank" rel="noreferrer">${escapeHtml(source.source_license || "CC BY-NC-SA 4.0")}</a>；本地图鉴从来源页提取并结构化，攻略页列出的二级资料来源与“以游戏内为准”说明已保留。`;
+  }
+  renderDriverBlockList();
+  renderDriverBlockGuide();
+}
+
 function showRoleManagement() {
   $("#roleManagementView").hidden = false;
   $("#encyclopediaView").hidden = true;
@@ -872,7 +974,8 @@ function showEncyclopediaCategory(kind) {
   const label = labels[kind] || "图鉴";
   const hasArcDriveCatalog = kind === "arc-drives";
   const hasSkyCurtainCatalog = kind === "cassettes";
-  const hasCatalog = hasArcDriveCatalog || hasSkyCurtainCatalog;
+  const hasDriverBlockCatalog = kind === "drive-blocks";
+  const hasCatalog = hasArcDriveCatalog || hasSkyCurtainCatalog || hasDriverBlockCatalog;
   $$("[data-nav]").forEach((item) => item.classList.remove("is-active"));
   $("#encyclopediaNavTrigger")?.classList.add("is-active");
   $$("[data-encyclopedia-kind]").forEach((item) => item.classList.toggle("is-active", item.dataset.encyclopediaKind === kind));
@@ -882,11 +985,12 @@ function showEncyclopediaCategory(kind) {
   $("#saveDraftButton").hidden = true;
   $("#arcCatalogPanel").hidden = !hasArcDriveCatalog;
   $("#skyCurtainPanel").hidden = !hasSkyCurtainCatalog;
+  $("#driverBlockPanel").hidden = !hasDriverBlockCatalog;
   $("#encyclopediaEmptyState").hidden = hasCatalog;
   setText("#activeBreadcrumb", `图鉴 · ${label}`);
   setText("#encyclopediaTitle", label);
-  setText("#encyclopediaCount", hasArcDriveCatalog ? `${(arcDriveCatalog.items || []).length} 件本地资料` : hasSkyCurtainCatalog ? `${(skyCurtainCatalog.items || []).length} 套本地资料` : "资料待接入");
-  setText("#encyclopediaDescription", hasArcDriveCatalog ? "浏览弧盘属性、等级成长与调弧效果。" : hasSkyCurtainCatalog ? "浏览空幕套装效果、可能词条与品质图片。" : `${label}分类入口已建立；本地资料接入后会在这里展示。`);
+  setText("#encyclopediaCount", hasArcDriveCatalog ? `${(arcDriveCatalog.items || []).length} 件本地资料` : hasSkyCurtainCatalog ? `${(skyCurtainCatalog.items || []).length} 套本地资料` : hasDriverBlockCatalog ? `${(driverBlockCatalog.items || []).length} 种形状 · ${driverBlockCatalog.page_count || 0} 档品质` : "资料待接入");
+  setText("#encyclopediaDescription", hasArcDriveCatalog ? "浏览弧盘属性、等级成长与调弧效果。" : hasSkyCurtainCatalog ? "浏览空幕套装效果、可能词条与品质图片。" : hasDriverBlockCatalog ? "查看驱动块形状、三档品质成长、4 槽随机词条与来源机制说明。" : `${label}分类入口已建立；本地资料接入后会在这里展示。`);
   setText("#emptyCategoryTitle", label);
 }
 
@@ -953,6 +1057,46 @@ function bindSkyCurtainCatalog() {
     if (!button) return;
     selectedSkyCurtainQuality = button.dataset.skyQuality;
     renderSkyCurtainDetail();
+  });
+}
+
+function bindDriverBlockCatalog() {
+  $("#driverBlockSearch")?.addEventListener("input", (event) => {
+    driverBlockSearchQuery = event.target.value.trim().toLowerCase();
+    renderDriverBlockList();
+  });
+  $$('[data-driver-model]').forEach((button) => button.addEventListener("click", () => {
+    driverBlockModelFilter = button.dataset.driverModel;
+    $$('[data-driver-model]').forEach((item) => item.classList.toggle("is-active", item === button));
+    renderDriverBlockList();
+  }));
+  $("#driverBlockList")?.addEventListener("click", (event) => {
+    const card = event.target.closest("[data-driver-block-id]");
+    if (!card) return;
+    selectedDriverBlockId = card.dataset.driverBlockId;
+    selectedDriverBlockQuality = "gold";
+    selectedDriverBlockLevel = 20;
+    renderDriverBlockList();
+  });
+  $("#driverBlockDetail")?.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-driver-quality]");
+    if (!button) return;
+    selectedDriverBlockQuality = button.dataset.driverQuality;
+    selectedDriverBlockLevel = 20;
+    renderDriverBlockList();
+  });
+  $("#driverBlockDetail")?.addEventListener("input", (event) => {
+    if (event.target.id !== "driverBlockLevel") return;
+    selectedDriverBlockLevel = Number(event.target.value);
+    const item = driverBlockCatalog.items.find((entry) => entry.id === selectedDriverBlockId);
+    const tier = item?.qualities?.[selectedDriverBlockQuality];
+    const levelIndex = selectedDriverBlockLevel - (tier?.level?.min ?? 0);
+    const output = $("#driverBlockLevelValue");
+    if (output) output.value = String(selectedDriverBlockLevel);
+    (tier?.main_stats || []).forEach((stat, index) => {
+      const value = $(`[data-driver-main-stat="${index}"]`);
+      if (value) value.textContent = formatDriverBlockValue(stat.values?.[levelIndex]);
+    });
   });
 }
 
@@ -1041,6 +1185,8 @@ initArcDriveCatalog();
 bindArcDriveCatalog();
 initSkyCurtainCatalog();
 bindSkyCurtainCatalog();
+initDriverBlockCatalog();
+bindDriverBlockCatalog();
 bindSearch();
 bindBasicPreview();
 bindModes();

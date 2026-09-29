@@ -248,6 +248,25 @@
           <footer class="catalog-attribution" id="skyCurtainAttribution"></footer>
         </div>
 
+        <div class="catalog-panel" id="driverBlockPanel" hidden>
+          <div class="section-toolbar catalog-toolbar">
+            <label class="search-box"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="1.6"/><path d="m16 16 4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg><input id="driverBlockSearch" type="search" placeholder="搜索型号、形状或副词条" aria-label="搜索驱动块"></label>
+            <span class="catalog-count" id="driverBlockCount">载入中</span>
+          </div>
+          <div class="catalog-filter-row" aria-label="驱动块型号筛选">
+            <div class="catalog-filter-group" aria-label="按驱动块型号筛选"><span>型号</span><button class="catalog-filter is-active" type="button" data-driver-model="all">全部</button><button class="catalog-filter" type="button" data-driver-model="Ⅱ型">Ⅱ型</button><button class="catalog-filter" type="button" data-driver-model="Ⅲ型">Ⅲ型</button><button class="catalog-filter" type="button" data-driver-model="Ⅳ型">Ⅳ型</button></div>
+          </div>
+          <div class="arc-catalog-layout">
+            <div class="arc-drive-grid" id="driverBlockList" aria-label="驱动块形状列表"></div>
+            <article class="arc-drive-detail" id="driverBlockDetail" aria-live="polite"><p class="empty-state">正在载入本地驱动块资料……</p></article>
+          </div>
+          <details class="driver-block-guide">
+            <summary>驱动块机制、词条优先级与获取说明</summary>
+            <div id="driverBlockGuideContent"></div>
+          </details>
+          <footer class="catalog-attribution" id="driverBlockAttribution"></footer>
+        </div>
+
         <div class="encyclopedia-empty-panel" id="encyclopediaEmptyState" hidden>
           <span class="empty-panel-icon" aria-hidden="true">▧</span>
           <h2 id="emptyCategoryTitle">空幕</h2>
@@ -261,6 +280,7 @@
   <script src="data/knowledge/characters/other_characters.js"></script>
   <script src="data/knowledge/encyclopedia/arc_drives.js"></script>
   <script src="data/knowledge/encyclopedia/sky_curtains.js"></script>
+  <script src="data/knowledge/encyclopedia/driver_blocks.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

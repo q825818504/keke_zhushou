@@ -16,11 +16,11 @@
 
 ## Next Step
 
-Phase 10 已推送至 `origin/main`，计划文件已在推送后更新并同步。之后继续 Phase 8 仓库持久化驱动摆放图上传。
+Phase 10 已推送至 `origin/main`。当前开始 Phase 11：完整导入驱动块攻略数据，并接入图鉴；完成本地成果后再确定交付同步方式。
 
 ## Current Phase
 
-Phase 10 - Sky Curtain Catalog；implementation and post-push planning update synced to `origin/main`; browser interaction/responsive verification not run.
+Phase 11 - Complete Driver Block Catalog；planning complete, source discovery in progress.
 
 ## Phases
 
@@ -223,3 +223,20 @@ Phase 10 - Sky Curtain Catalog；implementation and post-push planning update sy
 - [x] After direct user approval, push `b190533` and the recorded approval-state commit to `origin/main` without force-pushing; GitHub accepted the update.
 - [x] After the push, update canonical planning files and confirm local/remote synchronization.
 - **Status:** implementation and post-push planning update synced to `origin/main`; browser interaction/responsive verification not run.
+
+### Phase 11: Complete Driver Block Catalog
+
+**Goal:** Import the complete driver-block catalog from the guide site's authoritative listing, preserve its source pages, imagery, attribution, and license locally, normalize every listed item into the existing encyclopedia data model, and replace the current 驱动块 empty state with a useful browsable catalog. Keep 空幕 and 弧盘 behavior intact and do not infer missing source data.
+
+- [x] Identify the authoritative driver-block catalog/listing, its declared or verifiable item count, all detail URLs, and source attribution/license.
+- [x] Inspect representative and exceptional detail pages to identify every reusable source field, image/variant, and page-layout difference.
+- [x] Download and preserve the index, all 36 quality-specific item pages, the linked mechanism guide, and all referenced driver images using a deterministic roster and retrieval metadata.
+- [x] Add an offline importer that validates source count and page/resource coverage, preserves unknown or absent values, and emits canonical JSON plus the generated JS bundle with provenance.
+- [x] Replace only the 驱动块 empty state with an integrated catalog listing/detail experience consistent with 弧盘 and 空幕; expose useful source fields, search/filtering, image variants, source links, and attribution as supported by the data.
+- [x] Document attribution, license, local paths, and repeatable refresh/import workflow; review the complete redistribution scope.
+- [x] Reconcile the complete source listing against local snapshots, normalized records, and images; record any source gaps without fabricating content.
+- [x] Run appropriate code/data/resource checks and record their actual results; report browser verification only if it is actually run.
+- [ ] Review the complete local change scope, refresh `origin/main`, and commit/push the feature to GitHub as requested.
+- [ ] Update canonical planning files after delivery and confirm local/remote synchronization.
+- [ ] Browser interaction and responsive visual verification (not run; no browser pass claimed).
+- **Status:** implementation and source reconciliation complete; delivery scope review and GitHub synchronization are in progress.

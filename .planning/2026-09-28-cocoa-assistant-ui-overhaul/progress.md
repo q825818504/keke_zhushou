@@ -243,3 +243,24 @@ ame to a PSCustomObject without a declared property. No roster was written; add 
 - User approved pushing the prepared commits to `origin/main` without force. Before push, the working tree was clean and local `main` was two commits ahead of `origin/main` (`b4e560e`).
 - `git push origin main` succeeded and updated GitHub from `b4e560e` to `9777d32`.
 - Updated this canonical plan after the successful push. Browser interaction/responsive verification remains unrun and is not claimed as passed.
+
+## Session: 2026-09-29 — Driver Block Catalog Planning
+- Re-read the canonical task plan, findings, and progress from the prior conversation; confirmed the latest repository state is clean and synchronized at `1c35cf3`.
+- Added Phase 11 to the existing canonical plan before source research, covering source inventory, full local archival, normalization/import, UI integration, attribution, completeness checks, and local change review.
+- Next: inspect Mysqil's driver-block guide/catalog and determine whether `/cassettes/drivers` is an explainer, an actual complete listing, or a link to another catalog route.
+- Confirmed `/drivers` is the complete shape catalog and wrote `scripts/download_mysqil_driver_blocks.ps1` to enumerate its actual card routes and download pages/assets with path and SHA-256 tracking.
+- Ran the downloader successfully: 12 shapes, 36 source pages, 46 unique image assets, zero download failures. All source pages include the expected CC BY-NC-SA 4.0 footer.
+- Raw HTML inspection found embedded JSON for level-dependent main stats and the selectable random-stat pool, plus a level slider. Next inspect these fields and determine whether the separate `/cassettes/drivers` mechanism explainer has additional data to include.
+- Used the configured bundled Python runtime after the system `python` alias was absent; escaped JSON output confirmed 21 main-stat values per stat, 4 random slots, and 11 grade-dependent options.
+- Retrieved the linked `/cassettes/drivers` explainer directly with HTTP 200 after web-reader timeouts and preserved it at `data/mysqil/driver-blocks/raw/mechanism-guide.html`. It adds overview, model/affix mechanics, roll priority, acquisition guidance, shape guidance, and secondary-community source caveat; the repeatable downloader still needs to include it.
+- Extended the repeatable downloader to preserve the mechanism guide metadata and source index labels; reran it successfully against the refreshed index. It reports 12 shapes, 36 detail pages, 46 unique source images, and zero failures. The roster includes the guide snapshot reference and all quality pages.
+- Implemented and ran the offline importer; it reconciled 36 quality pages into 12 shape records and verified all source image hashes. The JSON/JS knowledge bundle includes all per-quality level curves, 11 random-stat values per tier, four-slot capacity, artwork paths, full guide sections/priority table, and per-page provenance.
+- Next: connect the generated bundle to the existing 驱动块 category, show shape/quality/level data, expose the mechanism guide, and update source/license documentation.
+
+### Integration, documentation, and checks — 2026-09-29
+- Connected the bundle to the 驱动块 encyclopedia panel with model filtering, search, selected shape, three quality variants, source links, level control, fixed-stat values, random-stat pool, and the saved mechanism guide.
+- Added styles for the detail view and guide, including small-screen layouts. Fixed selection synchronization after filtering and made the level slider update value cells in place.
+- Updated README refresh/import instructions and paths, plus Mysqil attribution and license records for 36 quality pages and 46 assets.
+- Re-ran the offline importer: 12 shapes, 36 quality pages, 46 images, guide imported. Importer reconciles all snapshots/assets and emits matching JSON/JS packages.
+- `node --check app.js`, `node --check data/knowledge/encyclopedia/driver_blocks.js`, the PowerShell parser, and `git diff --check` passed. Browser interaction/responsive verification was not run.
+- Next: review the tracked/untracked delivery scope, refresh origin/main, commit, and push the feature as requested.

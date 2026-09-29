@@ -1,0 +1,3174 @@
+{
+  "source": "Mysqil · 环世全鉴",
+  "source_index": "https://wiki.mysqil.com/drivers",
+  "source_license": "CC BY-NC-SA 4.0",
+  "source_license_url": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+  "source_author": "Matsuzaka Yuki",
+  "retrieved_at": "2026-09-29T06:38:07.8637799Z",
+  "mechanism_guide": {
+    "source_url": "https://wiki.mysqil.com/cassettes/drivers",
+    "status": "saved",
+    "raw_page": "data/mysqil/driver-blocks/raw/mechanism-guide.html",
+    "error": ""
+  },
+  "expected_shape_count": 12,
+  "expected_page_count": 36,
+  "model_counts": {
+    "Ⅱ": 2,
+    "Ⅲ": 6,
+    "Ⅳ": 4
+  },
+  "index_raw_page": "data/mysqil/driver-blocks/raw/index.html",
+  "index_images": [
+    {
+      "source_url": "https://wiki.mysqil.com/images/drivers/gold/type2-h.webp",
+      "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/gold/type2-h.webp",
+      "sha256": "d31a7e546732b60a6a6baae89e426bb54acf2a7551a9a178ebb13106f37afb79"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/drivers/purple/type2-h.webp",
+      "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/purple/type2-h.webp",
+      "sha256": "4281b38a9a908ee597fa4c84f9f2a9e41803e305ce973585fc43716b799a4154"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/drivers/blue/type2-h.webp",
+      "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/blue/type2-h.webp",
+      "sha256": "c1d86b25d591f8968138b50b5f0defceb9c7dea004a6db4591adf5c602438961"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/drivers/gold/type2-v.webp",
+      "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/gold/type2-v.webp",
+      "sha256": "97e131cbe43595f2259581b21c12a03671693cfc49352e69ca8fdca566418da2"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/drivers/purple/type2-v.webp",
+      "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/purple/type2-v.webp",
+      "sha256": "4e43581c5a4b229a2989f57888626e31c89a7dd29343816d2e8273288b09936f"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/drivers/blue/type2-v.webp",
+      "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/blue/type2-v.webp",
+      "sha256": "b6802c8e97f800353c20048ec87d513a2edee499d526ff643a24a1e5873697bc"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/drivers/gold/type3-h.webp",
+      "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/gold/type3-h.webp",
+      "sha256": "71c730ee03b14c6b737d8a9556a4d141a7bd7252df08564b06c634c91900f615"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/drivers/purple/type3-h.webp",
+      "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/purple/type3-h.webp",
+      "sha256": "449e3196fecee68325e14f2f919486940dca42fc6da8e326a2f58298f88c35d8"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/drivers/blue/type3-h.webp",
+      "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/blue/type3-h.webp",
+      "sha256": "be8dffdf628dd0ee7e614b4ae25cbb3c5957d2b36d49b4c8e2a5bc6f14ee498f"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/drivers/gold/type3-v.webp",
+      "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/gold/type3-v.webp",
+      "sha256": "f5a586eda5b8f8e9d5b0f175ae8f6a260349499bd701dfdf5605432a0ae63419"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/drivers/purple/type3-v.webp",
+      "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/purple/type3-v.webp",
+      "sha256": "e29332e0d57e39d339eb41b1781b47cf933531c20effd4981aa3114290c7f5d0"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/drivers/blue/type3-v.webp",
+      "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/blue/type3-v.webp",
+      "sha256": "9672471bb29155ee466e73c8e1eaebae6a2fdc487dc64e9588bda515a13d9da2"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/drivers/gold/type3-l-rb.webp",
+      "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/gold/type3-l-rb.webp",
+      "sha256": "f1f9aae148cff546daf690c966be54dacfb08a5bd5fba3d97b60ca621633d12d"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/drivers/purple/type3-l-rb.webp",
+      "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/purple/type3-l-rb.webp",
+      "sha256": "17290b07314d351510393b2afea72a271d87274e1a671ddf03a2c30c28b9912e"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/drivers/blue/type3-l-rb.webp",
+      "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/blue/type3-l-rb.webp",
+      "sha256": "26a4ebbd1bf560c6924dcb339194b6052d5e4b75d7e01ebba39a480511675c20"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/drivers/gold/type3-l-rt.webp",
+      "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/gold/type3-l-rt.webp",
+      "sha256": "a23fe8f33a35aea5603a8ba44c6524c85d5391871e83f9130e613bc1e41c30df"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/drivers/purple/type3-l-rt.webp",
+      "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/purple/type3-l-rt.webp",
+      "sha256": "542bbfc625494b67d783b5c9c6c17183a3686035993f04ac7db2976e154e6268"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/drivers/blue/type3-l-rt.webp",
+      "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/blue/type3-l-rt.webp",
+      "sha256": "7b173e07377040c1d55708b35cc2b70eddeec82c2829e6f4cffd685f8dadd903"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/drivers/gold/type3-l-lb.webp",
+      "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/gold/type3-l-lb.webp",
+      "sha256": "a6176db79beebca4edb5d1c48e340a3e594d9c1fe55347139e50e76f4095abbc"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/drivers/purple/type3-l-lb.webp",
+      "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/purple/type3-l-lb.webp",
+      "sha256": "1f185fc5625adc78d8b526c8f6c7f2ccb2fe2c6f0e370c7e72779d06e4b6ae2c"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/drivers/blue/type3-l-lb.webp",
+      "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/blue/type3-l-lb.webp",
+      "sha256": "3a19b4abcf2424bae09c0a2ff855b30db4dae21933cf49a5e6c044577c4d8a64"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/drivers/gold/type3-l-lt.webp",
+      "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/gold/type3-l-lt.webp",
+      "sha256": "a052422ee3f57595c9b659416debc6703255679d1150839bc4c557f3e8e2f6d3"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/drivers/purple/type3-l-lt.webp",
+      "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/purple/type3-l-lt.webp",
+      "sha256": "5fec04b01ed642481ee264b8b054a0caf790ff0f44e220f319bbfd0239076de1"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/drivers/blue/type3-l-lt.webp",
+      "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/blue/type3-l-lt.webp",
+      "sha256": "b3e25941d95e58e41df200cd1883c8d0d501757229dd0b9d5f776742c75b5b69"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/drivers/gold/type4-h.webp",
+      "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/gold/type4-h.webp",
+      "sha256": "706168ca0e3e5b7e631568ccf27b00068c5051e90d8a94fb363e7e35a19b53d0"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/drivers/purple/type4-h.webp",
+      "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/purple/type4-h.webp",
+      "sha256": "48db2a6d6c83a938bab557c36e1db7aa06deed0ebce54dee282b4bf8baf78e8c"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/drivers/blue/type4-h.webp",
+      "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/blue/type4-h.webp",
+      "sha256": "3b2b0427dcc4fed1d17d4e6407192809bba81438e9bbf4943ca5d3094a7a829c"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/drivers/gold/type4-v.webp",
+      "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/gold/type4-v.webp",
+      "sha256": "13601e2834adc257f23f302b933c29b94fde3a55be7891cd19551ebac08189b1"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/drivers/purple/type4-v.webp",
+      "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/purple/type4-v.webp",
+      "sha256": "bd9aba3fdd931300786d6de0f88fbe7f568c3e9fa5e1a0733d1907ac05f7c63b"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/drivers/blue/type4-v.webp",
+      "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/blue/type4-v.webp",
+      "sha256": "3ae701984a0be534ec12228ec59aafc32180d11008a71da7371d4373fca9e511"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/drivers/gold/type4-z-h.webp",
+      "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/gold/type4-z-h.webp",
+      "sha256": "e9138d2b16ba001deae8eddc688468e78c82077e9338c37a990b09cbb32265f2"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/drivers/purple/type4-z-h.webp",
+      "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/purple/type4-z-h.webp",
+      "sha256": "59b4a35e0c783883d6ef2ded21905378f0955b829de394ec338b449dff475c2d"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/drivers/blue/type4-z-h.webp",
+      "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/blue/type4-z-h.webp",
+      "sha256": "1a8b215900798eae2be9fc6641ebd5dfe94a811ca20945dd434539234e583c8c"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/drivers/gold/type4-z-v.webp",
+      "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/gold/type4-z-v.webp",
+      "sha256": "5c0293ede4c27dfb2731c9f8a6e0a695c32a32e542d2b3664e10290e9066c904"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/drivers/purple/type4-z-v.webp",
+      "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/purple/type4-z-v.webp",
+      "sha256": "d0a82920b6e20324c9a113a781cc9647e0d39e0e3ba68b592d30e77331729d8d"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/drivers/blue/type4-z-v.webp",
+      "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/blue/type4-z-v.webp",
+      "sha256": "293a4ee6bfc46307f6960a662564d5591380033610f4a9ff80503986513d035a"
+    }
+  ],
+  "assets": [
+    {
+      "source_url": "https://wiki.mysqil.com/images/drivers/blue/type2-h.webp",
+      "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/blue/type2-h.webp",
+      "sha256": "c1d86b25d591f8968138b50b5f0defceb9c7dea004a6db4591adf5c602438961"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/drivers/purple/type2-h.webp",
+      "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/purple/type2-h.webp",
+      "sha256": "4281b38a9a908ee597fa4c84f9f2a9e41803e305ce973585fc43716b799a4154"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/drivers/gold/type2-h.webp",
+      "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/gold/type2-h.webp",
+      "sha256": "d31a7e546732b60a6a6baae89e426bb54acf2a7551a9a178ebb13106f37afb79"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/drivers/gold/type2-v.webp",
+      "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/gold/type2-v.webp",
+      "sha256": "97e131cbe43595f2259581b21c12a03671693cfc49352e69ca8fdca566418da2"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/drivers/purple/type2-v.webp",
+      "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/purple/type2-v.webp",
+      "sha256": "4e43581c5a4b229a2989f57888626e31c89a7dd29343816d2e8273288b09936f"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/drivers/blue/type2-v.webp",
+      "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/blue/type2-v.webp",
+      "sha256": "b6802c8e97f800353c20048ec87d513a2edee499d526ff643a24a1e5873697bc"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/drivers/gold/type3-h.webp",
+      "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/gold/type3-h.webp",
+      "sha256": "71c730ee03b14c6b737d8a9556a4d141a7bd7252df08564b06c634c91900f615"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/drivers/purple/type3-h.webp",
+      "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/purple/type3-h.webp",
+      "sha256": "449e3196fecee68325e14f2f919486940dca42fc6da8e326a2f58298f88c35d8"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/drivers/blue/type3-h.webp",
+      "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/blue/type3-h.webp",
+      "sha256": "be8dffdf628dd0ee7e614b4ae25cbb3c5957d2b36d49b4c8e2a5bc6f14ee498f"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/drivers/gold/type3-v.webp",
+      "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/gold/type3-v.webp",
+      "sha256": "f5a586eda5b8f8e9d5b0f175ae8f6a260349499bd701dfdf5605432a0ae63419"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/drivers/purple/type3-v.webp",
+      "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/purple/type3-v.webp",
+      "sha256": "e29332e0d57e39d339eb41b1781b47cf933531c20effd4981aa3114290c7f5d0"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/drivers/blue/type3-v.webp",
+      "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/blue/type3-v.webp",
+      "sha256": "9672471bb29155ee466e73c8e1eaebae6a2fdc487dc64e9588bda515a13d9da2"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/drivers/gold/type3-l-rb.webp",
+      "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/gold/type3-l-rb.webp",
+      "sha256": "f1f9aae148cff546daf690c966be54dacfb08a5bd5fba3d97b60ca621633d12d"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/drivers/purple/type3-l-rb.webp",
+      "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/purple/type3-l-rb.webp",
+      "sha256": "17290b07314d351510393b2afea72a271d87274e1a671ddf03a2c30c28b9912e"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/drivers/blue/type3-l-rb.webp",
+      "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/blue/type3-l-rb.webp",
+      "sha256": "26a4ebbd1bf560c6924dcb339194b6052d5e4b75d7e01ebba39a480511675c20"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/drivers/gold/type3-l-rt.webp",
+      "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/gold/type3-l-rt.webp",
+      "sha256": "a23fe8f33a35aea5603a8ba44c6524c85d5391871e83f9130e613bc1e41c30df"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/drivers/purple/type3-l-rt.webp",
+      "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/purple/type3-l-rt.webp",
+      "sha256": "542bbfc625494b67d783b5c9c6c17183a3686035993f04ac7db2976e154e6268"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/drivers/blue/type3-l-rt.webp",
+      "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/blue/type3-l-rt.webp",
+      "sha256": "7b173e07377040c1d55708b35cc2b70eddeec82c2829e6f4cffd685f8dadd903"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/drivers/gold/type3-l-lb.webp",
+      "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/gold/type3-l-lb.webp",
+      "sha256": "a6176db79beebca4edb5d1c48e340a3e594d9c1fe55347139e50e76f4095abbc"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/drivers/purple/type3-l-lb.webp",
+      "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/purple/type3-l-lb.webp",
+      "sha256": "1f185fc5625adc78d8b526c8f6c7f2ccb2fe2c6f0e370c7e72779d06e4b6ae2c"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/drivers/blue/type3-l-lb.webp",
+      "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/blue/type3-l-lb.webp",
+      "sha256": "3a19b4abcf2424bae09c0a2ff855b30db4dae21933cf49a5e6c044577c4d8a64"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/drivers/gold/type3-l-lt.webp",
+      "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/gold/type3-l-lt.webp",
+      "sha256": "a052422ee3f57595c9b659416debc6703255679d1150839bc4c557f3e8e2f6d3"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/drivers/purple/type3-l-lt.webp",
+      "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/purple/type3-l-lt.webp",
+      "sha256": "5fec04b01ed642481ee264b8b054a0caf790ff0f44e220f319bbfd0239076de1"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/drivers/blue/type3-l-lt.webp",
+      "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/blue/type3-l-lt.webp",
+      "sha256": "b3e25941d95e58e41df200cd1883c8d0d501757229dd0b9d5f776742c75b5b69"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/drivers/gold/type4-h.webp",
+      "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/gold/type4-h.webp",
+      "sha256": "706168ca0e3e5b7e631568ccf27b00068c5051e90d8a94fb363e7e35a19b53d0"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/drivers/purple/type4-h.webp",
+      "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/purple/type4-h.webp",
+      "sha256": "48db2a6d6c83a938bab557c36e1db7aa06deed0ebce54dee282b4bf8baf78e8c"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/drivers/blue/type4-h.webp",
+      "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/blue/type4-h.webp",
+      "sha256": "3b2b0427dcc4fed1d17d4e6407192809bba81438e9bbf4943ca5d3094a7a829c"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/drivers/gold/type4-v.webp",
+      "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/gold/type4-v.webp",
+      "sha256": "13601e2834adc257f23f302b933c29b94fde3a55be7891cd19551ebac08189b1"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/drivers/purple/type4-v.webp",
+      "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/purple/type4-v.webp",
+      "sha256": "bd9aba3fdd931300786d6de0f88fbe7f568c3e9fa5e1a0733d1907ac05f7c63b"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/drivers/blue/type4-v.webp",
+      "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/blue/type4-v.webp",
+      "sha256": "3ae701984a0be534ec12228ec59aafc32180d11008a71da7371d4373fca9e511"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/drivers/gold/type4-z-h.webp",
+      "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/gold/type4-z-h.webp",
+      "sha256": "e9138d2b16ba001deae8eddc688468e78c82077e9338c37a990b09cbb32265f2"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/drivers/purple/type4-z-h.webp",
+      "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/purple/type4-z-h.webp",
+      "sha256": "59b4a35e0c783883d6ef2ded21905378f0955b829de394ec338b449dff475c2d"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/drivers/blue/type4-z-h.webp",
+      "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/blue/type4-z-h.webp",
+      "sha256": "1a8b215900798eae2be9fc6641ebd5dfe94a811ca20945dd434539234e583c8c"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/drivers/gold/type4-z-v.webp",
+      "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/gold/type4-z-v.webp",
+      "sha256": "5c0293ede4c27dfb2731c9f8a6e0a695c32a32e542d2b3664e10290e9066c904"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/drivers/purple/type4-z-v.webp",
+      "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/purple/type4-z-v.webp",
+      "sha256": "d0a82920b6e20324c9a113a781cc9647e0d39e0e3ba68b592d30e77331729d8d"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/drivers/blue/type4-z-v.webp",
+      "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/blue/type4-z-v.webp",
+      "sha256": "293a4ee6bfc46307f6960a662564d5591380033610f4a9ff80503986513d035a"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/ui/stat-atk.webp",
+      "local_path": "data/resources/encyclopedia/driver_blocks/site/images/ui/stat-atk.webp",
+      "sha256": "72b1feed665760d7a7dbf9e5ba8887d779f81632e371fdafa2a04899a0f72437"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/ui/stat-hp.webp",
+      "local_path": "data/resources/encyclopedia/driver_blocks/site/images/ui/stat-hp.webp",
+      "sha256": "3ceda81fff27a8b1936f59ceb78ad4f4fe5680e41943ac00b43cad056bacec7b"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_gongji.webp",
+      "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_gongji.webp",
+      "sha256": "4a609b3c0226e128508be98a47875d3001a47ca868beef1b5e55eaa1a00c40f4"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_shengming.webp",
+      "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_shengming.webp",
+      "sha256": "5cf1f97ac3af4881b0cd50c4d3566bbeb809a5601f8f5ab23f590f6929d6c3ed"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_fangyu.webp",
+      "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_fangyu.webp",
+      "sha256": "669257ef1e8dc4f2bea153e900098c0b865deada32c5464d4a059cdeb1b8a1df"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_baoji.webp",
+      "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_baoji.webp",
+      "sha256": "67725ab778e876565e048de2ba3332e57dacfa97769c6f7fbb2f0d7029c70503"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_baojishanghai.webp",
+      "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_baojishanghai.webp",
+      "sha256": "18bd8e3972dde7a7e0b67a498a389b63ef333432ea010bc1a64affcac19f70a3"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_kangxing.webp",
+      "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_kangxing.webp",
+      "sha256": "0e98a1296562daf0dcc75b1daff42c64337e425c18eb6a121ca8cd72918def13"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/drivers/icons/Icon_attri_surpass.webp",
+      "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/Icon_attri_surpass.webp",
+      "sha256": "b70868d23f56198c00dc649014bc85b80988f1234b81be10d1848ef284f9f044"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/drivers/icons/Icon_attri_strength_qingxian.webp",
+      "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/Icon_attri_strength_qingxian.webp",
+      "sha256": "8f7d63687adb6d77777846fe29e8cc6c924579d0d528b5dc4c232b7552a8bc56"
+    }
+  ],
+  "items": [
+    {
+      "id": "cell2_style1_1_orange",
+      "shape_id": "cell2_style1_1",
+      "quality": "gold",
+      "source_url": "https://wiki.mysqil.com/drivers/cell2_style1_1_Orange",
+      "name": "Ⅱ型驱动",
+      "index_label": "Ⅱ型驱动 2格 横向 2 格",
+      "raw_page": "data/mysqil/driver-blocks/cell2_style1_1_orange/raw/page.html",
+      "images": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/gold/type2-h.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/gold/type2-h.webp",
+          "sha256": "d31a7e546732b60a6a6baae89e426bb54acf2a7551a9a178ebb13106f37afb79"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/blue/type2-h.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/blue/type2-h.webp",
+          "sha256": "c1d86b25d591f8968138b50b5f0defceb9c7dea004a6db4591adf5c602438961"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/purple/type2-h.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/purple/type2-h.webp",
+          "sha256": "4281b38a9a908ee597fa4c84f9f2a9e41803e305ce973585fc43716b799a4154"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/ui/stat-atk.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/ui/stat-atk.webp",
+          "sha256": "72b1feed665760d7a7dbf9e5ba8887d779f81632e371fdafa2a04899a0f72437"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/ui/stat-hp.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/ui/stat-hp.webp",
+          "sha256": "3ceda81fff27a8b1936f59ceb78ad4f4fe5680e41943ac00b43cad056bacec7b"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_gongji.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_gongji.webp",
+          "sha256": "4a609b3c0226e128508be98a47875d3001a47ca868beef1b5e55eaa1a00c40f4"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_shengming.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_shengming.webp",
+          "sha256": "5cf1f97ac3af4881b0cd50c4d3566bbeb809a5601f8f5ab23f590f6929d6c3ed"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_fangyu.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_fangyu.webp",
+          "sha256": "669257ef1e8dc4f2bea153e900098c0b865deada32c5464d4a059cdeb1b8a1df"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_baoji.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_baoji.webp",
+          "sha256": "67725ab778e876565e048de2ba3332e57dacfa97769c6f7fbb2f0d7029c70503"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_baojishanghai.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_baojishanghai.webp",
+          "sha256": "18bd8e3972dde7a7e0b67a498a389b63ef333432ea010bc1a64affcac19f70a3"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_kangxing.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_kangxing.webp",
+          "sha256": "0e98a1296562daf0dcc75b1daff42c64337e425c18eb6a121ca8cd72918def13"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/Icon_attri_surpass.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/Icon_attri_surpass.webp",
+          "sha256": "b70868d23f56198c00dc649014bc85b80988f1234b81be10d1848ef284f9f044"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/Icon_attri_strength_qingxian.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/Icon_attri_strength_qingxian.webp",
+          "sha256": "8f7d63687adb6d77777846fe29e8cc6c924579d0d528b5dc4c232b7552a8bc56"
+        }
+      ]
+    },
+    {
+      "id": "cell2_style1_1_purple",
+      "shape_id": "cell2_style1_1",
+      "quality": "purple",
+      "source_url": "https://wiki.mysqil.com/drivers/cell2_style1_1_Purple",
+      "name": "Ⅱ型驱动",
+      "index_label": "Ⅱ型驱动 2格 横向 2 格",
+      "raw_page": "data/mysqil/driver-blocks/cell2_style1_1_purple/raw/page.html",
+      "images": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/purple/type2-h.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/purple/type2-h.webp",
+          "sha256": "4281b38a9a908ee597fa4c84f9f2a9e41803e305ce973585fc43716b799a4154"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/blue/type2-h.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/blue/type2-h.webp",
+          "sha256": "c1d86b25d591f8968138b50b5f0defceb9c7dea004a6db4591adf5c602438961"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/gold/type2-h.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/gold/type2-h.webp",
+          "sha256": "d31a7e546732b60a6a6baae89e426bb54acf2a7551a9a178ebb13106f37afb79"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/ui/stat-atk.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/ui/stat-atk.webp",
+          "sha256": "72b1feed665760d7a7dbf9e5ba8887d779f81632e371fdafa2a04899a0f72437"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/ui/stat-hp.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/ui/stat-hp.webp",
+          "sha256": "3ceda81fff27a8b1936f59ceb78ad4f4fe5680e41943ac00b43cad056bacec7b"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_gongji.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_gongji.webp",
+          "sha256": "4a609b3c0226e128508be98a47875d3001a47ca868beef1b5e55eaa1a00c40f4"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_shengming.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_shengming.webp",
+          "sha256": "5cf1f97ac3af4881b0cd50c4d3566bbeb809a5601f8f5ab23f590f6929d6c3ed"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_fangyu.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_fangyu.webp",
+          "sha256": "669257ef1e8dc4f2bea153e900098c0b865deada32c5464d4a059cdeb1b8a1df"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_baoji.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_baoji.webp",
+          "sha256": "67725ab778e876565e048de2ba3332e57dacfa97769c6f7fbb2f0d7029c70503"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_baojishanghai.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_baojishanghai.webp",
+          "sha256": "18bd8e3972dde7a7e0b67a498a389b63ef333432ea010bc1a64affcac19f70a3"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_kangxing.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_kangxing.webp",
+          "sha256": "0e98a1296562daf0dcc75b1daff42c64337e425c18eb6a121ca8cd72918def13"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/Icon_attri_surpass.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/Icon_attri_surpass.webp",
+          "sha256": "b70868d23f56198c00dc649014bc85b80988f1234b81be10d1848ef284f9f044"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/Icon_attri_strength_qingxian.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/Icon_attri_strength_qingxian.webp",
+          "sha256": "8f7d63687adb6d77777846fe29e8cc6c924579d0d528b5dc4c232b7552a8bc56"
+        }
+      ]
+    },
+    {
+      "id": "cell2_style1_1_blue",
+      "shape_id": "cell2_style1_1",
+      "quality": "blue",
+      "source_url": "https://wiki.mysqil.com/drivers/cell2_style1_1_Blue",
+      "name": "Ⅱ型驱动",
+      "index_label": "Ⅱ型驱动 2格 横向 2 格",
+      "raw_page": "data/mysqil/driver-blocks/cell2_style1_1_blue/raw/page.html",
+      "images": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/blue/type2-h.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/blue/type2-h.webp",
+          "sha256": "c1d86b25d591f8968138b50b5f0defceb9c7dea004a6db4591adf5c602438961"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/purple/type2-h.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/purple/type2-h.webp",
+          "sha256": "4281b38a9a908ee597fa4c84f9f2a9e41803e305ce973585fc43716b799a4154"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/gold/type2-h.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/gold/type2-h.webp",
+          "sha256": "d31a7e546732b60a6a6baae89e426bb54acf2a7551a9a178ebb13106f37afb79"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/ui/stat-atk.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/ui/stat-atk.webp",
+          "sha256": "72b1feed665760d7a7dbf9e5ba8887d779f81632e371fdafa2a04899a0f72437"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/ui/stat-hp.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/ui/stat-hp.webp",
+          "sha256": "3ceda81fff27a8b1936f59ceb78ad4f4fe5680e41943ac00b43cad056bacec7b"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_gongji.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_gongji.webp",
+          "sha256": "4a609b3c0226e128508be98a47875d3001a47ca868beef1b5e55eaa1a00c40f4"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_shengming.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_shengming.webp",
+          "sha256": "5cf1f97ac3af4881b0cd50c4d3566bbeb809a5601f8f5ab23f590f6929d6c3ed"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_fangyu.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_fangyu.webp",
+          "sha256": "669257ef1e8dc4f2bea153e900098c0b865deada32c5464d4a059cdeb1b8a1df"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_baoji.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_baoji.webp",
+          "sha256": "67725ab778e876565e048de2ba3332e57dacfa97769c6f7fbb2f0d7029c70503"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_baojishanghai.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_baojishanghai.webp",
+          "sha256": "18bd8e3972dde7a7e0b67a498a389b63ef333432ea010bc1a64affcac19f70a3"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_kangxing.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_kangxing.webp",
+          "sha256": "0e98a1296562daf0dcc75b1daff42c64337e425c18eb6a121ca8cd72918def13"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/Icon_attri_surpass.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/Icon_attri_surpass.webp",
+          "sha256": "b70868d23f56198c00dc649014bc85b80988f1234b81be10d1848ef284f9f044"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/Icon_attri_strength_qingxian.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/Icon_attri_strength_qingxian.webp",
+          "sha256": "8f7d63687adb6d77777846fe29e8cc6c924579d0d528b5dc4c232b7552a8bc56"
+        }
+      ]
+    },
+    {
+      "id": "cell2_style2_1_orange",
+      "shape_id": "cell2_style2_1",
+      "quality": "gold",
+      "source_url": "https://wiki.mysqil.com/drivers/cell2_style2_1_Orange",
+      "name": "Ⅱ型驱动",
+      "index_label": "Ⅱ型驱动 2格 竖向 2 格",
+      "raw_page": "data/mysqil/driver-blocks/cell2_style2_1_orange/raw/page.html",
+      "images": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/gold/type2-v.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/gold/type2-v.webp",
+          "sha256": "97e131cbe43595f2259581b21c12a03671693cfc49352e69ca8fdca566418da2"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/blue/type2-v.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/blue/type2-v.webp",
+          "sha256": "b6802c8e97f800353c20048ec87d513a2edee499d526ff643a24a1e5873697bc"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/purple/type2-v.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/purple/type2-v.webp",
+          "sha256": "4e43581c5a4b229a2989f57888626e31c89a7dd29343816d2e8273288b09936f"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/ui/stat-atk.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/ui/stat-atk.webp",
+          "sha256": "72b1feed665760d7a7dbf9e5ba8887d779f81632e371fdafa2a04899a0f72437"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/ui/stat-hp.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/ui/stat-hp.webp",
+          "sha256": "3ceda81fff27a8b1936f59ceb78ad4f4fe5680e41943ac00b43cad056bacec7b"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_gongji.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_gongji.webp",
+          "sha256": "4a609b3c0226e128508be98a47875d3001a47ca868beef1b5e55eaa1a00c40f4"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_shengming.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_shengming.webp",
+          "sha256": "5cf1f97ac3af4881b0cd50c4d3566bbeb809a5601f8f5ab23f590f6929d6c3ed"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_fangyu.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_fangyu.webp",
+          "sha256": "669257ef1e8dc4f2bea153e900098c0b865deada32c5464d4a059cdeb1b8a1df"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_baoji.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_baoji.webp",
+          "sha256": "67725ab778e876565e048de2ba3332e57dacfa97769c6f7fbb2f0d7029c70503"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_baojishanghai.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_baojishanghai.webp",
+          "sha256": "18bd8e3972dde7a7e0b67a498a389b63ef333432ea010bc1a64affcac19f70a3"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_kangxing.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_kangxing.webp",
+          "sha256": "0e98a1296562daf0dcc75b1daff42c64337e425c18eb6a121ca8cd72918def13"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/Icon_attri_surpass.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/Icon_attri_surpass.webp",
+          "sha256": "b70868d23f56198c00dc649014bc85b80988f1234b81be10d1848ef284f9f044"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/Icon_attri_strength_qingxian.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/Icon_attri_strength_qingxian.webp",
+          "sha256": "8f7d63687adb6d77777846fe29e8cc6c924579d0d528b5dc4c232b7552a8bc56"
+        }
+      ]
+    },
+    {
+      "id": "cell2_style2_1_purple",
+      "shape_id": "cell2_style2_1",
+      "quality": "purple",
+      "source_url": "https://wiki.mysqil.com/drivers/cell2_style2_1_Purple",
+      "name": "Ⅱ型驱动",
+      "index_label": "Ⅱ型驱动 2格 竖向 2 格",
+      "raw_page": "data/mysqil/driver-blocks/cell2_style2_1_purple/raw/page.html",
+      "images": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/purple/type2-v.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/purple/type2-v.webp",
+          "sha256": "4e43581c5a4b229a2989f57888626e31c89a7dd29343816d2e8273288b09936f"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/blue/type2-v.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/blue/type2-v.webp",
+          "sha256": "b6802c8e97f800353c20048ec87d513a2edee499d526ff643a24a1e5873697bc"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/gold/type2-v.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/gold/type2-v.webp",
+          "sha256": "97e131cbe43595f2259581b21c12a03671693cfc49352e69ca8fdca566418da2"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/ui/stat-atk.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/ui/stat-atk.webp",
+          "sha256": "72b1feed665760d7a7dbf9e5ba8887d779f81632e371fdafa2a04899a0f72437"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/ui/stat-hp.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/ui/stat-hp.webp",
+          "sha256": "3ceda81fff27a8b1936f59ceb78ad4f4fe5680e41943ac00b43cad056bacec7b"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_gongji.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_gongji.webp",
+          "sha256": "4a609b3c0226e128508be98a47875d3001a47ca868beef1b5e55eaa1a00c40f4"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_shengming.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_shengming.webp",
+          "sha256": "5cf1f97ac3af4881b0cd50c4d3566bbeb809a5601f8f5ab23f590f6929d6c3ed"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_fangyu.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_fangyu.webp",
+          "sha256": "669257ef1e8dc4f2bea153e900098c0b865deada32c5464d4a059cdeb1b8a1df"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_baoji.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_baoji.webp",
+          "sha256": "67725ab778e876565e048de2ba3332e57dacfa97769c6f7fbb2f0d7029c70503"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_baojishanghai.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_baojishanghai.webp",
+          "sha256": "18bd8e3972dde7a7e0b67a498a389b63ef333432ea010bc1a64affcac19f70a3"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_kangxing.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_kangxing.webp",
+          "sha256": "0e98a1296562daf0dcc75b1daff42c64337e425c18eb6a121ca8cd72918def13"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/Icon_attri_surpass.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/Icon_attri_surpass.webp",
+          "sha256": "b70868d23f56198c00dc649014bc85b80988f1234b81be10d1848ef284f9f044"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/Icon_attri_strength_qingxian.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/Icon_attri_strength_qingxian.webp",
+          "sha256": "8f7d63687adb6d77777846fe29e8cc6c924579d0d528b5dc4c232b7552a8bc56"
+        }
+      ]
+    },
+    {
+      "id": "cell2_style2_1_blue",
+      "shape_id": "cell2_style2_1",
+      "quality": "blue",
+      "source_url": "https://wiki.mysqil.com/drivers/cell2_style2_1_Blue",
+      "name": "Ⅱ型驱动",
+      "index_label": "Ⅱ型驱动 2格 竖向 2 格",
+      "raw_page": "data/mysqil/driver-blocks/cell2_style2_1_blue/raw/page.html",
+      "images": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/blue/type2-v.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/blue/type2-v.webp",
+          "sha256": "b6802c8e97f800353c20048ec87d513a2edee499d526ff643a24a1e5873697bc"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/purple/type2-v.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/purple/type2-v.webp",
+          "sha256": "4e43581c5a4b229a2989f57888626e31c89a7dd29343816d2e8273288b09936f"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/gold/type2-v.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/gold/type2-v.webp",
+          "sha256": "97e131cbe43595f2259581b21c12a03671693cfc49352e69ca8fdca566418da2"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/ui/stat-atk.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/ui/stat-atk.webp",
+          "sha256": "72b1feed665760d7a7dbf9e5ba8887d779f81632e371fdafa2a04899a0f72437"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/ui/stat-hp.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/ui/stat-hp.webp",
+          "sha256": "3ceda81fff27a8b1936f59ceb78ad4f4fe5680e41943ac00b43cad056bacec7b"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_gongji.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_gongji.webp",
+          "sha256": "4a609b3c0226e128508be98a47875d3001a47ca868beef1b5e55eaa1a00c40f4"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_shengming.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_shengming.webp",
+          "sha256": "5cf1f97ac3af4881b0cd50c4d3566bbeb809a5601f8f5ab23f590f6929d6c3ed"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_fangyu.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_fangyu.webp",
+          "sha256": "669257ef1e8dc4f2bea153e900098c0b865deada32c5464d4a059cdeb1b8a1df"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_baoji.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_baoji.webp",
+          "sha256": "67725ab778e876565e048de2ba3332e57dacfa97769c6f7fbb2f0d7029c70503"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_baojishanghai.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_baojishanghai.webp",
+          "sha256": "18bd8e3972dde7a7e0b67a498a389b63ef333432ea010bc1a64affcac19f70a3"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_kangxing.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_kangxing.webp",
+          "sha256": "0e98a1296562daf0dcc75b1daff42c64337e425c18eb6a121ca8cd72918def13"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/Icon_attri_surpass.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/Icon_attri_surpass.webp",
+          "sha256": "b70868d23f56198c00dc649014bc85b80988f1234b81be10d1848ef284f9f044"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/Icon_attri_strength_qingxian.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/Icon_attri_strength_qingxian.webp",
+          "sha256": "8f7d63687adb6d77777846fe29e8cc6c924579d0d528b5dc4c232b7552a8bc56"
+        }
+      ]
+    },
+    {
+      "id": "cell3_style1_1_orange",
+      "shape_id": "cell3_style1_1",
+      "quality": "gold",
+      "source_url": "https://wiki.mysqil.com/drivers/cell3_style1_1_Orange",
+      "name": "Ⅲ型驱动",
+      "index_label": "Ⅲ型驱动 3格 横向 3 格",
+      "raw_page": "data/mysqil/driver-blocks/cell3_style1_1_orange/raw/page.html",
+      "images": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/gold/type3-h.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/gold/type3-h.webp",
+          "sha256": "71c730ee03b14c6b737d8a9556a4d141a7bd7252df08564b06c634c91900f615"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/blue/type3-h.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/blue/type3-h.webp",
+          "sha256": "be8dffdf628dd0ee7e614b4ae25cbb3c5957d2b36d49b4c8e2a5bc6f14ee498f"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/purple/type3-h.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/purple/type3-h.webp",
+          "sha256": "449e3196fecee68325e14f2f919486940dca42fc6da8e326a2f58298f88c35d8"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/ui/stat-atk.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/ui/stat-atk.webp",
+          "sha256": "72b1feed665760d7a7dbf9e5ba8887d779f81632e371fdafa2a04899a0f72437"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/ui/stat-hp.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/ui/stat-hp.webp",
+          "sha256": "3ceda81fff27a8b1936f59ceb78ad4f4fe5680e41943ac00b43cad056bacec7b"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_gongji.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_gongji.webp",
+          "sha256": "4a609b3c0226e128508be98a47875d3001a47ca868beef1b5e55eaa1a00c40f4"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_shengming.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_shengming.webp",
+          "sha256": "5cf1f97ac3af4881b0cd50c4d3566bbeb809a5601f8f5ab23f590f6929d6c3ed"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_fangyu.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_fangyu.webp",
+          "sha256": "669257ef1e8dc4f2bea153e900098c0b865deada32c5464d4a059cdeb1b8a1df"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_baoji.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_baoji.webp",
+          "sha256": "67725ab778e876565e048de2ba3332e57dacfa97769c6f7fbb2f0d7029c70503"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_baojishanghai.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_baojishanghai.webp",
+          "sha256": "18bd8e3972dde7a7e0b67a498a389b63ef333432ea010bc1a64affcac19f70a3"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_kangxing.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_kangxing.webp",
+          "sha256": "0e98a1296562daf0dcc75b1daff42c64337e425c18eb6a121ca8cd72918def13"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/Icon_attri_surpass.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/Icon_attri_surpass.webp",
+          "sha256": "b70868d23f56198c00dc649014bc85b80988f1234b81be10d1848ef284f9f044"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/Icon_attri_strength_qingxian.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/Icon_attri_strength_qingxian.webp",
+          "sha256": "8f7d63687adb6d77777846fe29e8cc6c924579d0d528b5dc4c232b7552a8bc56"
+        }
+      ]
+    },
+    {
+      "id": "cell3_style1_1_purple",
+      "shape_id": "cell3_style1_1",
+      "quality": "purple",
+      "source_url": "https://wiki.mysqil.com/drivers/cell3_style1_1_Purple",
+      "name": "Ⅲ型驱动",
+      "index_label": "Ⅲ型驱动 3格 横向 3 格",
+      "raw_page": "data/mysqil/driver-blocks/cell3_style1_1_purple/raw/page.html",
+      "images": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/purple/type3-h.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/purple/type3-h.webp",
+          "sha256": "449e3196fecee68325e14f2f919486940dca42fc6da8e326a2f58298f88c35d8"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/blue/type3-h.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/blue/type3-h.webp",
+          "sha256": "be8dffdf628dd0ee7e614b4ae25cbb3c5957d2b36d49b4c8e2a5bc6f14ee498f"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/gold/type3-h.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/gold/type3-h.webp",
+          "sha256": "71c730ee03b14c6b737d8a9556a4d141a7bd7252df08564b06c634c91900f615"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/ui/stat-atk.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/ui/stat-atk.webp",
+          "sha256": "72b1feed665760d7a7dbf9e5ba8887d779f81632e371fdafa2a04899a0f72437"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/ui/stat-hp.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/ui/stat-hp.webp",
+          "sha256": "3ceda81fff27a8b1936f59ceb78ad4f4fe5680e41943ac00b43cad056bacec7b"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_gongji.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_gongji.webp",
+          "sha256": "4a609b3c0226e128508be98a47875d3001a47ca868beef1b5e55eaa1a00c40f4"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_shengming.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_shengming.webp",
+          "sha256": "5cf1f97ac3af4881b0cd50c4d3566bbeb809a5601f8f5ab23f590f6929d6c3ed"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_fangyu.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_fangyu.webp",
+          "sha256": "669257ef1e8dc4f2bea153e900098c0b865deada32c5464d4a059cdeb1b8a1df"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_baoji.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_baoji.webp",
+          "sha256": "67725ab778e876565e048de2ba3332e57dacfa97769c6f7fbb2f0d7029c70503"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_baojishanghai.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_baojishanghai.webp",
+          "sha256": "18bd8e3972dde7a7e0b67a498a389b63ef333432ea010bc1a64affcac19f70a3"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_kangxing.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_kangxing.webp",
+          "sha256": "0e98a1296562daf0dcc75b1daff42c64337e425c18eb6a121ca8cd72918def13"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/Icon_attri_surpass.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/Icon_attri_surpass.webp",
+          "sha256": "b70868d23f56198c00dc649014bc85b80988f1234b81be10d1848ef284f9f044"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/Icon_attri_strength_qingxian.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/Icon_attri_strength_qingxian.webp",
+          "sha256": "8f7d63687adb6d77777846fe29e8cc6c924579d0d528b5dc4c232b7552a8bc56"
+        }
+      ]
+    },
+    {
+      "id": "cell3_style1_1_blue",
+      "shape_id": "cell3_style1_1",
+      "quality": "blue",
+      "source_url": "https://wiki.mysqil.com/drivers/cell3_style1_1_Blue",
+      "name": "Ⅲ型驱动",
+      "index_label": "Ⅲ型驱动 3格 横向 3 格",
+      "raw_page": "data/mysqil/driver-blocks/cell3_style1_1_blue/raw/page.html",
+      "images": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/blue/type3-h.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/blue/type3-h.webp",
+          "sha256": "be8dffdf628dd0ee7e614b4ae25cbb3c5957d2b36d49b4c8e2a5bc6f14ee498f"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/purple/type3-h.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/purple/type3-h.webp",
+          "sha256": "449e3196fecee68325e14f2f919486940dca42fc6da8e326a2f58298f88c35d8"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/gold/type3-h.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/gold/type3-h.webp",
+          "sha256": "71c730ee03b14c6b737d8a9556a4d141a7bd7252df08564b06c634c91900f615"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/ui/stat-atk.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/ui/stat-atk.webp",
+          "sha256": "72b1feed665760d7a7dbf9e5ba8887d779f81632e371fdafa2a04899a0f72437"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/ui/stat-hp.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/ui/stat-hp.webp",
+          "sha256": "3ceda81fff27a8b1936f59ceb78ad4f4fe5680e41943ac00b43cad056bacec7b"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_gongji.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_gongji.webp",
+          "sha256": "4a609b3c0226e128508be98a47875d3001a47ca868beef1b5e55eaa1a00c40f4"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_shengming.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_shengming.webp",
+          "sha256": "5cf1f97ac3af4881b0cd50c4d3566bbeb809a5601f8f5ab23f590f6929d6c3ed"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_fangyu.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_fangyu.webp",
+          "sha256": "669257ef1e8dc4f2bea153e900098c0b865deada32c5464d4a059cdeb1b8a1df"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_baoji.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_baoji.webp",
+          "sha256": "67725ab778e876565e048de2ba3332e57dacfa97769c6f7fbb2f0d7029c70503"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_baojishanghai.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_baojishanghai.webp",
+          "sha256": "18bd8e3972dde7a7e0b67a498a389b63ef333432ea010bc1a64affcac19f70a3"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_kangxing.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_kangxing.webp",
+          "sha256": "0e98a1296562daf0dcc75b1daff42c64337e425c18eb6a121ca8cd72918def13"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/Icon_attri_surpass.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/Icon_attri_surpass.webp",
+          "sha256": "b70868d23f56198c00dc649014bc85b80988f1234b81be10d1848ef284f9f044"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/Icon_attri_strength_qingxian.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/Icon_attri_strength_qingxian.webp",
+          "sha256": "8f7d63687adb6d77777846fe29e8cc6c924579d0d528b5dc4c232b7552a8bc56"
+        }
+      ]
+    },
+    {
+      "id": "cell3_style2_1_orange",
+      "shape_id": "cell3_style2_1",
+      "quality": "gold",
+      "source_url": "https://wiki.mysqil.com/drivers/cell3_style2_1_Orange",
+      "name": "Ⅲ型驱动",
+      "index_label": "Ⅲ型驱动 3格 竖向 3 格",
+      "raw_page": "data/mysqil/driver-blocks/cell3_style2_1_orange/raw/page.html",
+      "images": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/gold/type3-v.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/gold/type3-v.webp",
+          "sha256": "f5a586eda5b8f8e9d5b0f175ae8f6a260349499bd701dfdf5605432a0ae63419"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/blue/type3-v.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/blue/type3-v.webp",
+          "sha256": "9672471bb29155ee466e73c8e1eaebae6a2fdc487dc64e9588bda515a13d9da2"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/purple/type3-v.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/purple/type3-v.webp",
+          "sha256": "e29332e0d57e39d339eb41b1781b47cf933531c20effd4981aa3114290c7f5d0"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/ui/stat-atk.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/ui/stat-atk.webp",
+          "sha256": "72b1feed665760d7a7dbf9e5ba8887d779f81632e371fdafa2a04899a0f72437"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/ui/stat-hp.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/ui/stat-hp.webp",
+          "sha256": "3ceda81fff27a8b1936f59ceb78ad4f4fe5680e41943ac00b43cad056bacec7b"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_gongji.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_gongji.webp",
+          "sha256": "4a609b3c0226e128508be98a47875d3001a47ca868beef1b5e55eaa1a00c40f4"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_shengming.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_shengming.webp",
+          "sha256": "5cf1f97ac3af4881b0cd50c4d3566bbeb809a5601f8f5ab23f590f6929d6c3ed"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_fangyu.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_fangyu.webp",
+          "sha256": "669257ef1e8dc4f2bea153e900098c0b865deada32c5464d4a059cdeb1b8a1df"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_baoji.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_baoji.webp",
+          "sha256": "67725ab778e876565e048de2ba3332e57dacfa97769c6f7fbb2f0d7029c70503"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_baojishanghai.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_baojishanghai.webp",
+          "sha256": "18bd8e3972dde7a7e0b67a498a389b63ef333432ea010bc1a64affcac19f70a3"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_kangxing.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_kangxing.webp",
+          "sha256": "0e98a1296562daf0dcc75b1daff42c64337e425c18eb6a121ca8cd72918def13"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/Icon_attri_surpass.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/Icon_attri_surpass.webp",
+          "sha256": "b70868d23f56198c00dc649014bc85b80988f1234b81be10d1848ef284f9f044"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/Icon_attri_strength_qingxian.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/Icon_attri_strength_qingxian.webp",
+          "sha256": "8f7d63687adb6d77777846fe29e8cc6c924579d0d528b5dc4c232b7552a8bc56"
+        }
+      ]
+    },
+    {
+      "id": "cell3_style2_1_purple",
+      "shape_id": "cell3_style2_1",
+      "quality": "purple",
+      "source_url": "https://wiki.mysqil.com/drivers/cell3_style2_1_Purple",
+      "name": "Ⅲ型驱动",
+      "index_label": "Ⅲ型驱动 3格 竖向 3 格",
+      "raw_page": "data/mysqil/driver-blocks/cell3_style2_1_purple/raw/page.html",
+      "images": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/purple/type3-v.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/purple/type3-v.webp",
+          "sha256": "e29332e0d57e39d339eb41b1781b47cf933531c20effd4981aa3114290c7f5d0"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/blue/type3-v.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/blue/type3-v.webp",
+          "sha256": "9672471bb29155ee466e73c8e1eaebae6a2fdc487dc64e9588bda515a13d9da2"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/gold/type3-v.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/gold/type3-v.webp",
+          "sha256": "f5a586eda5b8f8e9d5b0f175ae8f6a260349499bd701dfdf5605432a0ae63419"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/ui/stat-atk.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/ui/stat-atk.webp",
+          "sha256": "72b1feed665760d7a7dbf9e5ba8887d779f81632e371fdafa2a04899a0f72437"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/ui/stat-hp.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/ui/stat-hp.webp",
+          "sha256": "3ceda81fff27a8b1936f59ceb78ad4f4fe5680e41943ac00b43cad056bacec7b"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_gongji.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_gongji.webp",
+          "sha256": "4a609b3c0226e128508be98a47875d3001a47ca868beef1b5e55eaa1a00c40f4"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_shengming.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_shengming.webp",
+          "sha256": "5cf1f97ac3af4881b0cd50c4d3566bbeb809a5601f8f5ab23f590f6929d6c3ed"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_fangyu.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_fangyu.webp",
+          "sha256": "669257ef1e8dc4f2bea153e900098c0b865deada32c5464d4a059cdeb1b8a1df"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_baoji.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_baoji.webp",
+          "sha256": "67725ab778e876565e048de2ba3332e57dacfa97769c6f7fbb2f0d7029c70503"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_baojishanghai.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_baojishanghai.webp",
+          "sha256": "18bd8e3972dde7a7e0b67a498a389b63ef333432ea010bc1a64affcac19f70a3"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_kangxing.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_kangxing.webp",
+          "sha256": "0e98a1296562daf0dcc75b1daff42c64337e425c18eb6a121ca8cd72918def13"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/Icon_attri_surpass.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/Icon_attri_surpass.webp",
+          "sha256": "b70868d23f56198c00dc649014bc85b80988f1234b81be10d1848ef284f9f044"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/Icon_attri_strength_qingxian.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/Icon_attri_strength_qingxian.webp",
+          "sha256": "8f7d63687adb6d77777846fe29e8cc6c924579d0d528b5dc4c232b7552a8bc56"
+        }
+      ]
+    },
+    {
+      "id": "cell3_style2_1_blue",
+      "shape_id": "cell3_style2_1",
+      "quality": "blue",
+      "source_url": "https://wiki.mysqil.com/drivers/cell3_style2_1_Blue",
+      "name": "Ⅲ型驱动",
+      "index_label": "Ⅲ型驱动 3格 竖向 3 格",
+      "raw_page": "data/mysqil/driver-blocks/cell3_style2_1_blue/raw/page.html",
+      "images": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/blue/type3-v.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/blue/type3-v.webp",
+          "sha256": "9672471bb29155ee466e73c8e1eaebae6a2fdc487dc64e9588bda515a13d9da2"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/purple/type3-v.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/purple/type3-v.webp",
+          "sha256": "e29332e0d57e39d339eb41b1781b47cf933531c20effd4981aa3114290c7f5d0"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/gold/type3-v.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/gold/type3-v.webp",
+          "sha256": "f5a586eda5b8f8e9d5b0f175ae8f6a260349499bd701dfdf5605432a0ae63419"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/ui/stat-atk.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/ui/stat-atk.webp",
+          "sha256": "72b1feed665760d7a7dbf9e5ba8887d779f81632e371fdafa2a04899a0f72437"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/ui/stat-hp.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/ui/stat-hp.webp",
+          "sha256": "3ceda81fff27a8b1936f59ceb78ad4f4fe5680e41943ac00b43cad056bacec7b"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_gongji.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_gongji.webp",
+          "sha256": "4a609b3c0226e128508be98a47875d3001a47ca868beef1b5e55eaa1a00c40f4"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_shengming.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_shengming.webp",
+          "sha256": "5cf1f97ac3af4881b0cd50c4d3566bbeb809a5601f8f5ab23f590f6929d6c3ed"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_fangyu.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_fangyu.webp",
+          "sha256": "669257ef1e8dc4f2bea153e900098c0b865deada32c5464d4a059cdeb1b8a1df"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_baoji.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_baoji.webp",
+          "sha256": "67725ab778e876565e048de2ba3332e57dacfa97769c6f7fbb2f0d7029c70503"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_baojishanghai.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_baojishanghai.webp",
+          "sha256": "18bd8e3972dde7a7e0b67a498a389b63ef333432ea010bc1a64affcac19f70a3"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_kangxing.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_kangxing.webp",
+          "sha256": "0e98a1296562daf0dcc75b1daff42c64337e425c18eb6a121ca8cd72918def13"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/Icon_attri_surpass.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/Icon_attri_surpass.webp",
+          "sha256": "b70868d23f56198c00dc649014bc85b80988f1234b81be10d1848ef284f9f044"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/Icon_attri_strength_qingxian.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/Icon_attri_strength_qingxian.webp",
+          "sha256": "8f7d63687adb6d77777846fe29e8cc6c924579d0d528b5dc4c232b7552a8bc56"
+        }
+      ]
+    },
+    {
+      "id": "cell3_style6_1_orange",
+      "shape_id": "cell3_style6_1",
+      "quality": "gold",
+      "source_url": "https://wiki.mysqil.com/drivers/cell3_style6_1_Orange",
+      "name": "Ⅲ型驱动",
+      "index_label": "Ⅲ型驱动 3格 L形 · 右下",
+      "raw_page": "data/mysqil/driver-blocks/cell3_style6_1_orange/raw/page.html",
+      "images": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/gold/type3-l-rb.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/gold/type3-l-rb.webp",
+          "sha256": "f1f9aae148cff546daf690c966be54dacfb08a5bd5fba3d97b60ca621633d12d"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/blue/type3-l-rb.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/blue/type3-l-rb.webp",
+          "sha256": "26a4ebbd1bf560c6924dcb339194b6052d5e4b75d7e01ebba39a480511675c20"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/purple/type3-l-rb.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/purple/type3-l-rb.webp",
+          "sha256": "17290b07314d351510393b2afea72a271d87274e1a671ddf03a2c30c28b9912e"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/ui/stat-atk.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/ui/stat-atk.webp",
+          "sha256": "72b1feed665760d7a7dbf9e5ba8887d779f81632e371fdafa2a04899a0f72437"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/ui/stat-hp.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/ui/stat-hp.webp",
+          "sha256": "3ceda81fff27a8b1936f59ceb78ad4f4fe5680e41943ac00b43cad056bacec7b"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_gongji.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_gongji.webp",
+          "sha256": "4a609b3c0226e128508be98a47875d3001a47ca868beef1b5e55eaa1a00c40f4"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_shengming.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_shengming.webp",
+          "sha256": "5cf1f97ac3af4881b0cd50c4d3566bbeb809a5601f8f5ab23f590f6929d6c3ed"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_fangyu.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_fangyu.webp",
+          "sha256": "669257ef1e8dc4f2bea153e900098c0b865deada32c5464d4a059cdeb1b8a1df"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_baoji.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_baoji.webp",
+          "sha256": "67725ab778e876565e048de2ba3332e57dacfa97769c6f7fbb2f0d7029c70503"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_baojishanghai.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_baojishanghai.webp",
+          "sha256": "18bd8e3972dde7a7e0b67a498a389b63ef333432ea010bc1a64affcac19f70a3"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_kangxing.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_kangxing.webp",
+          "sha256": "0e98a1296562daf0dcc75b1daff42c64337e425c18eb6a121ca8cd72918def13"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/Icon_attri_surpass.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/Icon_attri_surpass.webp",
+          "sha256": "b70868d23f56198c00dc649014bc85b80988f1234b81be10d1848ef284f9f044"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/Icon_attri_strength_qingxian.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/Icon_attri_strength_qingxian.webp",
+          "sha256": "8f7d63687adb6d77777846fe29e8cc6c924579d0d528b5dc4c232b7552a8bc56"
+        }
+      ]
+    },
+    {
+      "id": "cell3_style6_1_purple",
+      "shape_id": "cell3_style6_1",
+      "quality": "purple",
+      "source_url": "https://wiki.mysqil.com/drivers/cell3_style6_1_Purple",
+      "name": "Ⅲ型驱动",
+      "index_label": "Ⅲ型驱动 3格 L形 · 右下",
+      "raw_page": "data/mysqil/driver-blocks/cell3_style6_1_purple/raw/page.html",
+      "images": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/purple/type3-l-rb.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/purple/type3-l-rb.webp",
+          "sha256": "17290b07314d351510393b2afea72a271d87274e1a671ddf03a2c30c28b9912e"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/blue/type3-l-rb.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/blue/type3-l-rb.webp",
+          "sha256": "26a4ebbd1bf560c6924dcb339194b6052d5e4b75d7e01ebba39a480511675c20"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/gold/type3-l-rb.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/gold/type3-l-rb.webp",
+          "sha256": "f1f9aae148cff546daf690c966be54dacfb08a5bd5fba3d97b60ca621633d12d"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/ui/stat-atk.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/ui/stat-atk.webp",
+          "sha256": "72b1feed665760d7a7dbf9e5ba8887d779f81632e371fdafa2a04899a0f72437"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/ui/stat-hp.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/ui/stat-hp.webp",
+          "sha256": "3ceda81fff27a8b1936f59ceb78ad4f4fe5680e41943ac00b43cad056bacec7b"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_gongji.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_gongji.webp",
+          "sha256": "4a609b3c0226e128508be98a47875d3001a47ca868beef1b5e55eaa1a00c40f4"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_shengming.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_shengming.webp",
+          "sha256": "5cf1f97ac3af4881b0cd50c4d3566bbeb809a5601f8f5ab23f590f6929d6c3ed"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_fangyu.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_fangyu.webp",
+          "sha256": "669257ef1e8dc4f2bea153e900098c0b865deada32c5464d4a059cdeb1b8a1df"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_baoji.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_baoji.webp",
+          "sha256": "67725ab778e876565e048de2ba3332e57dacfa97769c6f7fbb2f0d7029c70503"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_baojishanghai.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_baojishanghai.webp",
+          "sha256": "18bd8e3972dde7a7e0b67a498a389b63ef333432ea010bc1a64affcac19f70a3"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_kangxing.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_kangxing.webp",
+          "sha256": "0e98a1296562daf0dcc75b1daff42c64337e425c18eb6a121ca8cd72918def13"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/Icon_attri_surpass.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/Icon_attri_surpass.webp",
+          "sha256": "b70868d23f56198c00dc649014bc85b80988f1234b81be10d1848ef284f9f044"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/Icon_attri_strength_qingxian.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/Icon_attri_strength_qingxian.webp",
+          "sha256": "8f7d63687adb6d77777846fe29e8cc6c924579d0d528b5dc4c232b7552a8bc56"
+        }
+      ]
+    },
+    {
+      "id": "cell3_style6_1_blue",
+      "shape_id": "cell3_style6_1",
+      "quality": "blue",
+      "source_url": "https://wiki.mysqil.com/drivers/cell3_style6_1_Blue",
+      "name": "Ⅲ型驱动",
+      "index_label": "Ⅲ型驱动 3格 L形 · 右下",
+      "raw_page": "data/mysqil/driver-blocks/cell3_style6_1_blue/raw/page.html",
+      "images": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/blue/type3-l-rb.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/blue/type3-l-rb.webp",
+          "sha256": "26a4ebbd1bf560c6924dcb339194b6052d5e4b75d7e01ebba39a480511675c20"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/purple/type3-l-rb.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/purple/type3-l-rb.webp",
+          "sha256": "17290b07314d351510393b2afea72a271d87274e1a671ddf03a2c30c28b9912e"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/gold/type3-l-rb.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/gold/type3-l-rb.webp",
+          "sha256": "f1f9aae148cff546daf690c966be54dacfb08a5bd5fba3d97b60ca621633d12d"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/ui/stat-atk.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/ui/stat-atk.webp",
+          "sha256": "72b1feed665760d7a7dbf9e5ba8887d779f81632e371fdafa2a04899a0f72437"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/ui/stat-hp.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/ui/stat-hp.webp",
+          "sha256": "3ceda81fff27a8b1936f59ceb78ad4f4fe5680e41943ac00b43cad056bacec7b"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_gongji.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_gongji.webp",
+          "sha256": "4a609b3c0226e128508be98a47875d3001a47ca868beef1b5e55eaa1a00c40f4"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_shengming.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_shengming.webp",
+          "sha256": "5cf1f97ac3af4881b0cd50c4d3566bbeb809a5601f8f5ab23f590f6929d6c3ed"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_fangyu.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_fangyu.webp",
+          "sha256": "669257ef1e8dc4f2bea153e900098c0b865deada32c5464d4a059cdeb1b8a1df"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_baoji.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_baoji.webp",
+          "sha256": "67725ab778e876565e048de2ba3332e57dacfa97769c6f7fbb2f0d7029c70503"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_baojishanghai.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_baojishanghai.webp",
+          "sha256": "18bd8e3972dde7a7e0b67a498a389b63ef333432ea010bc1a64affcac19f70a3"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_kangxing.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_kangxing.webp",
+          "sha256": "0e98a1296562daf0dcc75b1daff42c64337e425c18eb6a121ca8cd72918def13"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/Icon_attri_surpass.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/Icon_attri_surpass.webp",
+          "sha256": "b70868d23f56198c00dc649014bc85b80988f1234b81be10d1848ef284f9f044"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/Icon_attri_strength_qingxian.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/Icon_attri_strength_qingxian.webp",
+          "sha256": "8f7d63687adb6d77777846fe29e8cc6c924579d0d528b5dc4c232b7552a8bc56"
+        }
+      ]
+    },
+    {
+      "id": "cell3_style4_1_orange",
+      "shape_id": "cell3_style4_1",
+      "quality": "gold",
+      "source_url": "https://wiki.mysqil.com/drivers/cell3_style4_1_Orange",
+      "name": "Ⅲ型驱动",
+      "index_label": "Ⅲ型驱动 3格 L形 · 右上",
+      "raw_page": "data/mysqil/driver-blocks/cell3_style4_1_orange/raw/page.html",
+      "images": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/gold/type3-l-rt.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/gold/type3-l-rt.webp",
+          "sha256": "a23fe8f33a35aea5603a8ba44c6524c85d5391871e83f9130e613bc1e41c30df"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/blue/type3-l-rt.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/blue/type3-l-rt.webp",
+          "sha256": "7b173e07377040c1d55708b35cc2b70eddeec82c2829e6f4cffd685f8dadd903"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/purple/type3-l-rt.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/purple/type3-l-rt.webp",
+          "sha256": "542bbfc625494b67d783b5c9c6c17183a3686035993f04ac7db2976e154e6268"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/ui/stat-atk.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/ui/stat-atk.webp",
+          "sha256": "72b1feed665760d7a7dbf9e5ba8887d779f81632e371fdafa2a04899a0f72437"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/ui/stat-hp.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/ui/stat-hp.webp",
+          "sha256": "3ceda81fff27a8b1936f59ceb78ad4f4fe5680e41943ac00b43cad056bacec7b"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_gongji.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_gongji.webp",
+          "sha256": "4a609b3c0226e128508be98a47875d3001a47ca868beef1b5e55eaa1a00c40f4"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_shengming.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_shengming.webp",
+          "sha256": "5cf1f97ac3af4881b0cd50c4d3566bbeb809a5601f8f5ab23f590f6929d6c3ed"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_fangyu.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_fangyu.webp",
+          "sha256": "669257ef1e8dc4f2bea153e900098c0b865deada32c5464d4a059cdeb1b8a1df"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_baoji.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_baoji.webp",
+          "sha256": "67725ab778e876565e048de2ba3332e57dacfa97769c6f7fbb2f0d7029c70503"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_baojishanghai.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_baojishanghai.webp",
+          "sha256": "18bd8e3972dde7a7e0b67a498a389b63ef333432ea010bc1a64affcac19f70a3"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_kangxing.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_kangxing.webp",
+          "sha256": "0e98a1296562daf0dcc75b1daff42c64337e425c18eb6a121ca8cd72918def13"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/Icon_attri_surpass.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/Icon_attri_surpass.webp",
+          "sha256": "b70868d23f56198c00dc649014bc85b80988f1234b81be10d1848ef284f9f044"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/Icon_attri_strength_qingxian.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/Icon_attri_strength_qingxian.webp",
+          "sha256": "8f7d63687adb6d77777846fe29e8cc6c924579d0d528b5dc4c232b7552a8bc56"
+        }
+      ]
+    },
+    {
+      "id": "cell3_style4_1_purple",
+      "shape_id": "cell3_style4_1",
+      "quality": "purple",
+      "source_url": "https://wiki.mysqil.com/drivers/cell3_style4_1_Purple",
+      "name": "Ⅲ型驱动",
+      "index_label": "Ⅲ型驱动 3格 L形 · 右上",
+      "raw_page": "data/mysqil/driver-blocks/cell3_style4_1_purple/raw/page.html",
+      "images": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/purple/type3-l-rt.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/purple/type3-l-rt.webp",
+          "sha256": "542bbfc625494b67d783b5c9c6c17183a3686035993f04ac7db2976e154e6268"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/blue/type3-l-rt.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/blue/type3-l-rt.webp",
+          "sha256": "7b173e07377040c1d55708b35cc2b70eddeec82c2829e6f4cffd685f8dadd903"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/gold/type3-l-rt.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/gold/type3-l-rt.webp",
+          "sha256": "a23fe8f33a35aea5603a8ba44c6524c85d5391871e83f9130e613bc1e41c30df"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/ui/stat-atk.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/ui/stat-atk.webp",
+          "sha256": "72b1feed665760d7a7dbf9e5ba8887d779f81632e371fdafa2a04899a0f72437"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/ui/stat-hp.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/ui/stat-hp.webp",
+          "sha256": "3ceda81fff27a8b1936f59ceb78ad4f4fe5680e41943ac00b43cad056bacec7b"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_gongji.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_gongji.webp",
+          "sha256": "4a609b3c0226e128508be98a47875d3001a47ca868beef1b5e55eaa1a00c40f4"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_shengming.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_shengming.webp",
+          "sha256": "5cf1f97ac3af4881b0cd50c4d3566bbeb809a5601f8f5ab23f590f6929d6c3ed"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_fangyu.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_fangyu.webp",
+          "sha256": "669257ef1e8dc4f2bea153e900098c0b865deada32c5464d4a059cdeb1b8a1df"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_baoji.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_baoji.webp",
+          "sha256": "67725ab778e876565e048de2ba3332e57dacfa97769c6f7fbb2f0d7029c70503"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_baojishanghai.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_baojishanghai.webp",
+          "sha256": "18bd8e3972dde7a7e0b67a498a389b63ef333432ea010bc1a64affcac19f70a3"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_kangxing.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_kangxing.webp",
+          "sha256": "0e98a1296562daf0dcc75b1daff42c64337e425c18eb6a121ca8cd72918def13"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/Icon_attri_surpass.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/Icon_attri_surpass.webp",
+          "sha256": "b70868d23f56198c00dc649014bc85b80988f1234b81be10d1848ef284f9f044"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/Icon_attri_strength_qingxian.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/Icon_attri_strength_qingxian.webp",
+          "sha256": "8f7d63687adb6d77777846fe29e8cc6c924579d0d528b5dc4c232b7552a8bc56"
+        }
+      ]
+    },
+    {
+      "id": "cell3_style4_1_blue",
+      "shape_id": "cell3_style4_1",
+      "quality": "blue",
+      "source_url": "https://wiki.mysqil.com/drivers/cell3_style4_1_Blue",
+      "name": "Ⅲ型驱动",
+      "index_label": "Ⅲ型驱动 3格 L形 · 右上",
+      "raw_page": "data/mysqil/driver-blocks/cell3_style4_1_blue/raw/page.html",
+      "images": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/blue/type3-l-rt.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/blue/type3-l-rt.webp",
+          "sha256": "7b173e07377040c1d55708b35cc2b70eddeec82c2829e6f4cffd685f8dadd903"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/purple/type3-l-rt.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/purple/type3-l-rt.webp",
+          "sha256": "542bbfc625494b67d783b5c9c6c17183a3686035993f04ac7db2976e154e6268"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/gold/type3-l-rt.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/gold/type3-l-rt.webp",
+          "sha256": "a23fe8f33a35aea5603a8ba44c6524c85d5391871e83f9130e613bc1e41c30df"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/ui/stat-atk.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/ui/stat-atk.webp",
+          "sha256": "72b1feed665760d7a7dbf9e5ba8887d779f81632e371fdafa2a04899a0f72437"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/ui/stat-hp.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/ui/stat-hp.webp",
+          "sha256": "3ceda81fff27a8b1936f59ceb78ad4f4fe5680e41943ac00b43cad056bacec7b"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_gongji.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_gongji.webp",
+          "sha256": "4a609b3c0226e128508be98a47875d3001a47ca868beef1b5e55eaa1a00c40f4"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_shengming.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_shengming.webp",
+          "sha256": "5cf1f97ac3af4881b0cd50c4d3566bbeb809a5601f8f5ab23f590f6929d6c3ed"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_fangyu.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_fangyu.webp",
+          "sha256": "669257ef1e8dc4f2bea153e900098c0b865deada32c5464d4a059cdeb1b8a1df"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_baoji.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_baoji.webp",
+          "sha256": "67725ab778e876565e048de2ba3332e57dacfa97769c6f7fbb2f0d7029c70503"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_baojishanghai.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_baojishanghai.webp",
+          "sha256": "18bd8e3972dde7a7e0b67a498a389b63ef333432ea010bc1a64affcac19f70a3"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_kangxing.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_kangxing.webp",
+          "sha256": "0e98a1296562daf0dcc75b1daff42c64337e425c18eb6a121ca8cd72918def13"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/Icon_attri_surpass.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/Icon_attri_surpass.webp",
+          "sha256": "b70868d23f56198c00dc649014bc85b80988f1234b81be10d1848ef284f9f044"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/Icon_attri_strength_qingxian.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/Icon_attri_strength_qingxian.webp",
+          "sha256": "8f7d63687adb6d77777846fe29e8cc6c924579d0d528b5dc4c232b7552a8bc56"
+        }
+      ]
+    },
+    {
+      "id": "cell3_style5_1_orange",
+      "shape_id": "cell3_style5_1",
+      "quality": "gold",
+      "source_url": "https://wiki.mysqil.com/drivers/cell3_style5_1_Orange",
+      "name": "Ⅲ型驱动",
+      "index_label": "Ⅲ型驱动 3格 L形 · 左下",
+      "raw_page": "data/mysqil/driver-blocks/cell3_style5_1_orange/raw/page.html",
+      "images": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/gold/type3-l-lb.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/gold/type3-l-lb.webp",
+          "sha256": "a6176db79beebca4edb5d1c48e340a3e594d9c1fe55347139e50e76f4095abbc"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/blue/type3-l-lb.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/blue/type3-l-lb.webp",
+          "sha256": "3a19b4abcf2424bae09c0a2ff855b30db4dae21933cf49a5e6c044577c4d8a64"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/purple/type3-l-lb.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/purple/type3-l-lb.webp",
+          "sha256": "1f185fc5625adc78d8b526c8f6c7f2ccb2fe2c6f0e370c7e72779d06e4b6ae2c"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/ui/stat-atk.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/ui/stat-atk.webp",
+          "sha256": "72b1feed665760d7a7dbf9e5ba8887d779f81632e371fdafa2a04899a0f72437"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/ui/stat-hp.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/ui/stat-hp.webp",
+          "sha256": "3ceda81fff27a8b1936f59ceb78ad4f4fe5680e41943ac00b43cad056bacec7b"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_gongji.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_gongji.webp",
+          "sha256": "4a609b3c0226e128508be98a47875d3001a47ca868beef1b5e55eaa1a00c40f4"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_shengming.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_shengming.webp",
+          "sha256": "5cf1f97ac3af4881b0cd50c4d3566bbeb809a5601f8f5ab23f590f6929d6c3ed"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_fangyu.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_fangyu.webp",
+          "sha256": "669257ef1e8dc4f2bea153e900098c0b865deada32c5464d4a059cdeb1b8a1df"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_baoji.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_baoji.webp",
+          "sha256": "67725ab778e876565e048de2ba3332e57dacfa97769c6f7fbb2f0d7029c70503"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_baojishanghai.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_baojishanghai.webp",
+          "sha256": "18bd8e3972dde7a7e0b67a498a389b63ef333432ea010bc1a64affcac19f70a3"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_kangxing.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_kangxing.webp",
+          "sha256": "0e98a1296562daf0dcc75b1daff42c64337e425c18eb6a121ca8cd72918def13"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/Icon_attri_surpass.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/Icon_attri_surpass.webp",
+          "sha256": "b70868d23f56198c00dc649014bc85b80988f1234b81be10d1848ef284f9f044"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/Icon_attri_strength_qingxian.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/Icon_attri_strength_qingxian.webp",
+          "sha256": "8f7d63687adb6d77777846fe29e8cc6c924579d0d528b5dc4c232b7552a8bc56"
+        }
+      ]
+    },
+    {
+      "id": "cell3_style5_1_purple",
+      "shape_id": "cell3_style5_1",
+      "quality": "purple",
+      "source_url": "https://wiki.mysqil.com/drivers/cell3_style5_1_Purple",
+      "name": "Ⅲ型驱动",
+      "index_label": "Ⅲ型驱动 3格 L形 · 左下",
+      "raw_page": "data/mysqil/driver-blocks/cell3_style5_1_purple/raw/page.html",
+      "images": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/purple/type3-l-lb.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/purple/type3-l-lb.webp",
+          "sha256": "1f185fc5625adc78d8b526c8f6c7f2ccb2fe2c6f0e370c7e72779d06e4b6ae2c"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/blue/type3-l-lb.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/blue/type3-l-lb.webp",
+          "sha256": "3a19b4abcf2424bae09c0a2ff855b30db4dae21933cf49a5e6c044577c4d8a64"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/gold/type3-l-lb.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/gold/type3-l-lb.webp",
+          "sha256": "a6176db79beebca4edb5d1c48e340a3e594d9c1fe55347139e50e76f4095abbc"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/ui/stat-atk.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/ui/stat-atk.webp",
+          "sha256": "72b1feed665760d7a7dbf9e5ba8887d779f81632e371fdafa2a04899a0f72437"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/ui/stat-hp.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/ui/stat-hp.webp",
+          "sha256": "3ceda81fff27a8b1936f59ceb78ad4f4fe5680e41943ac00b43cad056bacec7b"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_gongji.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_gongji.webp",
+          "sha256": "4a609b3c0226e128508be98a47875d3001a47ca868beef1b5e55eaa1a00c40f4"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_shengming.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_shengming.webp",
+          "sha256": "5cf1f97ac3af4881b0cd50c4d3566bbeb809a5601f8f5ab23f590f6929d6c3ed"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_fangyu.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_fangyu.webp",
+          "sha256": "669257ef1e8dc4f2bea153e900098c0b865deada32c5464d4a059cdeb1b8a1df"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_baoji.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_baoji.webp",
+          "sha256": "67725ab778e876565e048de2ba3332e57dacfa97769c6f7fbb2f0d7029c70503"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_baojishanghai.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_baojishanghai.webp",
+          "sha256": "18bd8e3972dde7a7e0b67a498a389b63ef333432ea010bc1a64affcac19f70a3"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_kangxing.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_kangxing.webp",
+          "sha256": "0e98a1296562daf0dcc75b1daff42c64337e425c18eb6a121ca8cd72918def13"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/Icon_attri_surpass.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/Icon_attri_surpass.webp",
+          "sha256": "b70868d23f56198c00dc649014bc85b80988f1234b81be10d1848ef284f9f044"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/Icon_attri_strength_qingxian.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/Icon_attri_strength_qingxian.webp",
+          "sha256": "8f7d63687adb6d77777846fe29e8cc6c924579d0d528b5dc4c232b7552a8bc56"
+        }
+      ]
+    },
+    {
+      "id": "cell3_style5_1_blue",
+      "shape_id": "cell3_style5_1",
+      "quality": "blue",
+      "source_url": "https://wiki.mysqil.com/drivers/cell3_style5_1_Blue",
+      "name": "Ⅲ型驱动",
+      "index_label": "Ⅲ型驱动 3格 L形 · 左下",
+      "raw_page": "data/mysqil/driver-blocks/cell3_style5_1_blue/raw/page.html",
+      "images": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/blue/type3-l-lb.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/blue/type3-l-lb.webp",
+          "sha256": "3a19b4abcf2424bae09c0a2ff855b30db4dae21933cf49a5e6c044577c4d8a64"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/purple/type3-l-lb.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/purple/type3-l-lb.webp",
+          "sha256": "1f185fc5625adc78d8b526c8f6c7f2ccb2fe2c6f0e370c7e72779d06e4b6ae2c"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/gold/type3-l-lb.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/gold/type3-l-lb.webp",
+          "sha256": "a6176db79beebca4edb5d1c48e340a3e594d9c1fe55347139e50e76f4095abbc"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/ui/stat-atk.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/ui/stat-atk.webp",
+          "sha256": "72b1feed665760d7a7dbf9e5ba8887d779f81632e371fdafa2a04899a0f72437"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/ui/stat-hp.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/ui/stat-hp.webp",
+          "sha256": "3ceda81fff27a8b1936f59ceb78ad4f4fe5680e41943ac00b43cad056bacec7b"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_gongji.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_gongji.webp",
+          "sha256": "4a609b3c0226e128508be98a47875d3001a47ca868beef1b5e55eaa1a00c40f4"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_shengming.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_shengming.webp",
+          "sha256": "5cf1f97ac3af4881b0cd50c4d3566bbeb809a5601f8f5ab23f590f6929d6c3ed"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_fangyu.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_fangyu.webp",
+          "sha256": "669257ef1e8dc4f2bea153e900098c0b865deada32c5464d4a059cdeb1b8a1df"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_baoji.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_baoji.webp",
+          "sha256": "67725ab778e876565e048de2ba3332e57dacfa97769c6f7fbb2f0d7029c70503"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_baojishanghai.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_baojishanghai.webp",
+          "sha256": "18bd8e3972dde7a7e0b67a498a389b63ef333432ea010bc1a64affcac19f70a3"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_kangxing.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_kangxing.webp",
+          "sha256": "0e98a1296562daf0dcc75b1daff42c64337e425c18eb6a121ca8cd72918def13"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/Icon_attri_surpass.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/Icon_attri_surpass.webp",
+          "sha256": "b70868d23f56198c00dc649014bc85b80988f1234b81be10d1848ef284f9f044"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/Icon_attri_strength_qingxian.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/Icon_attri_strength_qingxian.webp",
+          "sha256": "8f7d63687adb6d77777846fe29e8cc6c924579d0d528b5dc4c232b7552a8bc56"
+        }
+      ]
+    },
+    {
+      "id": "cell3_style3_1_orange",
+      "shape_id": "cell3_style3_1",
+      "quality": "gold",
+      "source_url": "https://wiki.mysqil.com/drivers/cell3_style3_1_Orange",
+      "name": "Ⅲ型驱动",
+      "index_label": "Ⅲ型驱动 3格 L形 · 左上",
+      "raw_page": "data/mysqil/driver-blocks/cell3_style3_1_orange/raw/page.html",
+      "images": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/gold/type3-l-lt.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/gold/type3-l-lt.webp",
+          "sha256": "a052422ee3f57595c9b659416debc6703255679d1150839bc4c557f3e8e2f6d3"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/blue/type3-l-lt.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/blue/type3-l-lt.webp",
+          "sha256": "b3e25941d95e58e41df200cd1883c8d0d501757229dd0b9d5f776742c75b5b69"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/purple/type3-l-lt.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/purple/type3-l-lt.webp",
+          "sha256": "5fec04b01ed642481ee264b8b054a0caf790ff0f44e220f319bbfd0239076de1"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/ui/stat-atk.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/ui/stat-atk.webp",
+          "sha256": "72b1feed665760d7a7dbf9e5ba8887d779f81632e371fdafa2a04899a0f72437"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/ui/stat-hp.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/ui/stat-hp.webp",
+          "sha256": "3ceda81fff27a8b1936f59ceb78ad4f4fe5680e41943ac00b43cad056bacec7b"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_gongji.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_gongji.webp",
+          "sha256": "4a609b3c0226e128508be98a47875d3001a47ca868beef1b5e55eaa1a00c40f4"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_shengming.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_shengming.webp",
+          "sha256": "5cf1f97ac3af4881b0cd50c4d3566bbeb809a5601f8f5ab23f590f6929d6c3ed"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_fangyu.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_fangyu.webp",
+          "sha256": "669257ef1e8dc4f2bea153e900098c0b865deada32c5464d4a059cdeb1b8a1df"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_baoji.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_baoji.webp",
+          "sha256": "67725ab778e876565e048de2ba3332e57dacfa97769c6f7fbb2f0d7029c70503"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_baojishanghai.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_baojishanghai.webp",
+          "sha256": "18bd8e3972dde7a7e0b67a498a389b63ef333432ea010bc1a64affcac19f70a3"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_kangxing.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_kangxing.webp",
+          "sha256": "0e98a1296562daf0dcc75b1daff42c64337e425c18eb6a121ca8cd72918def13"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/Icon_attri_surpass.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/Icon_attri_surpass.webp",
+          "sha256": "b70868d23f56198c00dc649014bc85b80988f1234b81be10d1848ef284f9f044"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/Icon_attri_strength_qingxian.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/Icon_attri_strength_qingxian.webp",
+          "sha256": "8f7d63687adb6d77777846fe29e8cc6c924579d0d528b5dc4c232b7552a8bc56"
+        }
+      ]
+    },
+    {
+      "id": "cell3_style3_1_purple",
+      "shape_id": "cell3_style3_1",
+      "quality": "purple",
+      "source_url": "https://wiki.mysqil.com/drivers/cell3_style3_1_Purple",
+      "name": "Ⅲ型驱动",
+      "index_label": "Ⅲ型驱动 3格 L形 · 左上",
+      "raw_page": "data/mysqil/driver-blocks/cell3_style3_1_purple/raw/page.html",
+      "images": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/purple/type3-l-lt.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/purple/type3-l-lt.webp",
+          "sha256": "5fec04b01ed642481ee264b8b054a0caf790ff0f44e220f319bbfd0239076de1"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/blue/type3-l-lt.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/blue/type3-l-lt.webp",
+          "sha256": "b3e25941d95e58e41df200cd1883c8d0d501757229dd0b9d5f776742c75b5b69"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/gold/type3-l-lt.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/gold/type3-l-lt.webp",
+          "sha256": "a052422ee3f57595c9b659416debc6703255679d1150839bc4c557f3e8e2f6d3"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/ui/stat-atk.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/ui/stat-atk.webp",
+          "sha256": "72b1feed665760d7a7dbf9e5ba8887d779f81632e371fdafa2a04899a0f72437"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/ui/stat-hp.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/ui/stat-hp.webp",
+          "sha256": "3ceda81fff27a8b1936f59ceb78ad4f4fe5680e41943ac00b43cad056bacec7b"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_gongji.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_gongji.webp",
+          "sha256": "4a609b3c0226e128508be98a47875d3001a47ca868beef1b5e55eaa1a00c40f4"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_shengming.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_shengming.webp",
+          "sha256": "5cf1f97ac3af4881b0cd50c4d3566bbeb809a5601f8f5ab23f590f6929d6c3ed"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_fangyu.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_fangyu.webp",
+          "sha256": "669257ef1e8dc4f2bea153e900098c0b865deada32c5464d4a059cdeb1b8a1df"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_baoji.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_baoji.webp",
+          "sha256": "67725ab778e876565e048de2ba3332e57dacfa97769c6f7fbb2f0d7029c70503"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_baojishanghai.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_baojishanghai.webp",
+          "sha256": "18bd8e3972dde7a7e0b67a498a389b63ef333432ea010bc1a64affcac19f70a3"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_kangxing.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_kangxing.webp",
+          "sha256": "0e98a1296562daf0dcc75b1daff42c64337e425c18eb6a121ca8cd72918def13"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/Icon_attri_surpass.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/Icon_attri_surpass.webp",
+          "sha256": "b70868d23f56198c00dc649014bc85b80988f1234b81be10d1848ef284f9f044"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/Icon_attri_strength_qingxian.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/Icon_attri_strength_qingxian.webp",
+          "sha256": "8f7d63687adb6d77777846fe29e8cc6c924579d0d528b5dc4c232b7552a8bc56"
+        }
+      ]
+    },
+    {
+      "id": "cell3_style3_1_blue",
+      "shape_id": "cell3_style3_1",
+      "quality": "blue",
+      "source_url": "https://wiki.mysqil.com/drivers/cell3_style3_1_Blue",
+      "name": "Ⅲ型驱动",
+      "index_label": "Ⅲ型驱动 3格 L形 · 左上",
+      "raw_page": "data/mysqil/driver-blocks/cell3_style3_1_blue/raw/page.html",
+      "images": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/blue/type3-l-lt.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/blue/type3-l-lt.webp",
+          "sha256": "b3e25941d95e58e41df200cd1883c8d0d501757229dd0b9d5f776742c75b5b69"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/purple/type3-l-lt.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/purple/type3-l-lt.webp",
+          "sha256": "5fec04b01ed642481ee264b8b054a0caf790ff0f44e220f319bbfd0239076de1"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/gold/type3-l-lt.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/gold/type3-l-lt.webp",
+          "sha256": "a052422ee3f57595c9b659416debc6703255679d1150839bc4c557f3e8e2f6d3"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/ui/stat-atk.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/ui/stat-atk.webp",
+          "sha256": "72b1feed665760d7a7dbf9e5ba8887d779f81632e371fdafa2a04899a0f72437"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/ui/stat-hp.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/ui/stat-hp.webp",
+          "sha256": "3ceda81fff27a8b1936f59ceb78ad4f4fe5680e41943ac00b43cad056bacec7b"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_gongji.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_gongji.webp",
+          "sha256": "4a609b3c0226e128508be98a47875d3001a47ca868beef1b5e55eaa1a00c40f4"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_shengming.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_shengming.webp",
+          "sha256": "5cf1f97ac3af4881b0cd50c4d3566bbeb809a5601f8f5ab23f590f6929d6c3ed"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_fangyu.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_fangyu.webp",
+          "sha256": "669257ef1e8dc4f2bea153e900098c0b865deada32c5464d4a059cdeb1b8a1df"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_baoji.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_baoji.webp",
+          "sha256": "67725ab778e876565e048de2ba3332e57dacfa97769c6f7fbb2f0d7029c70503"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_baojishanghai.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_baojishanghai.webp",
+          "sha256": "18bd8e3972dde7a7e0b67a498a389b63ef333432ea010bc1a64affcac19f70a3"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_kangxing.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_kangxing.webp",
+          "sha256": "0e98a1296562daf0dcc75b1daff42c64337e425c18eb6a121ca8cd72918def13"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/Icon_attri_surpass.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/Icon_attri_surpass.webp",
+          "sha256": "b70868d23f56198c00dc649014bc85b80988f1234b81be10d1848ef284f9f044"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/Icon_attri_strength_qingxian.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/Icon_attri_strength_qingxian.webp",
+          "sha256": "8f7d63687adb6d77777846fe29e8cc6c924579d0d528b5dc4c232b7552a8bc56"
+        }
+      ]
+    },
+    {
+      "id": "cell4_style1_1_orange",
+      "shape_id": "cell4_style1_1",
+      "quality": "gold",
+      "source_url": "https://wiki.mysqil.com/drivers/cell4_style1_1_Orange",
+      "name": "Ⅳ型驱动",
+      "index_label": "Ⅳ型驱动 4格 横向 4 格",
+      "raw_page": "data/mysqil/driver-blocks/cell4_style1_1_orange/raw/page.html",
+      "images": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/gold/type4-h.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/gold/type4-h.webp",
+          "sha256": "706168ca0e3e5b7e631568ccf27b00068c5051e90d8a94fb363e7e35a19b53d0"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/blue/type4-h.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/blue/type4-h.webp",
+          "sha256": "3b2b0427dcc4fed1d17d4e6407192809bba81438e9bbf4943ca5d3094a7a829c"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/purple/type4-h.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/purple/type4-h.webp",
+          "sha256": "48db2a6d6c83a938bab557c36e1db7aa06deed0ebce54dee282b4bf8baf78e8c"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/ui/stat-atk.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/ui/stat-atk.webp",
+          "sha256": "72b1feed665760d7a7dbf9e5ba8887d779f81632e371fdafa2a04899a0f72437"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/ui/stat-hp.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/ui/stat-hp.webp",
+          "sha256": "3ceda81fff27a8b1936f59ceb78ad4f4fe5680e41943ac00b43cad056bacec7b"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_gongji.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_gongji.webp",
+          "sha256": "4a609b3c0226e128508be98a47875d3001a47ca868beef1b5e55eaa1a00c40f4"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_shengming.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_shengming.webp",
+          "sha256": "5cf1f97ac3af4881b0cd50c4d3566bbeb809a5601f8f5ab23f590f6929d6c3ed"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_fangyu.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_fangyu.webp",
+          "sha256": "669257ef1e8dc4f2bea153e900098c0b865deada32c5464d4a059cdeb1b8a1df"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_baoji.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_baoji.webp",
+          "sha256": "67725ab778e876565e048de2ba3332e57dacfa97769c6f7fbb2f0d7029c70503"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_baojishanghai.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_baojishanghai.webp",
+          "sha256": "18bd8e3972dde7a7e0b67a498a389b63ef333432ea010bc1a64affcac19f70a3"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_kangxing.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_kangxing.webp",
+          "sha256": "0e98a1296562daf0dcc75b1daff42c64337e425c18eb6a121ca8cd72918def13"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/Icon_attri_surpass.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/Icon_attri_surpass.webp",
+          "sha256": "b70868d23f56198c00dc649014bc85b80988f1234b81be10d1848ef284f9f044"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/Icon_attri_strength_qingxian.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/Icon_attri_strength_qingxian.webp",
+          "sha256": "8f7d63687adb6d77777846fe29e8cc6c924579d0d528b5dc4c232b7552a8bc56"
+        }
+      ]
+    },
+    {
+      "id": "cell4_style1_1_purple",
+      "shape_id": "cell4_style1_1",
+      "quality": "purple",
+      "source_url": "https://wiki.mysqil.com/drivers/cell4_style1_1_Purple",
+      "name": "Ⅳ型驱动",
+      "index_label": "Ⅳ型驱动 4格 横向 4 格",
+      "raw_page": "data/mysqil/driver-blocks/cell4_style1_1_purple/raw/page.html",
+      "images": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/purple/type4-h.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/purple/type4-h.webp",
+          "sha256": "48db2a6d6c83a938bab557c36e1db7aa06deed0ebce54dee282b4bf8baf78e8c"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/blue/type4-h.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/blue/type4-h.webp",
+          "sha256": "3b2b0427dcc4fed1d17d4e6407192809bba81438e9bbf4943ca5d3094a7a829c"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/gold/type4-h.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/gold/type4-h.webp",
+          "sha256": "706168ca0e3e5b7e631568ccf27b00068c5051e90d8a94fb363e7e35a19b53d0"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/ui/stat-atk.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/ui/stat-atk.webp",
+          "sha256": "72b1feed665760d7a7dbf9e5ba8887d779f81632e371fdafa2a04899a0f72437"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/ui/stat-hp.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/ui/stat-hp.webp",
+          "sha256": "3ceda81fff27a8b1936f59ceb78ad4f4fe5680e41943ac00b43cad056bacec7b"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_gongji.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_gongji.webp",
+          "sha256": "4a609b3c0226e128508be98a47875d3001a47ca868beef1b5e55eaa1a00c40f4"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_shengming.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_shengming.webp",
+          "sha256": "5cf1f97ac3af4881b0cd50c4d3566bbeb809a5601f8f5ab23f590f6929d6c3ed"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_fangyu.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_fangyu.webp",
+          "sha256": "669257ef1e8dc4f2bea153e900098c0b865deada32c5464d4a059cdeb1b8a1df"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_baoji.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_baoji.webp",
+          "sha256": "67725ab778e876565e048de2ba3332e57dacfa97769c6f7fbb2f0d7029c70503"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_baojishanghai.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_baojishanghai.webp",
+          "sha256": "18bd8e3972dde7a7e0b67a498a389b63ef333432ea010bc1a64affcac19f70a3"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_kangxing.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_kangxing.webp",
+          "sha256": "0e98a1296562daf0dcc75b1daff42c64337e425c18eb6a121ca8cd72918def13"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/Icon_attri_surpass.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/Icon_attri_surpass.webp",
+          "sha256": "b70868d23f56198c00dc649014bc85b80988f1234b81be10d1848ef284f9f044"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/Icon_attri_strength_qingxian.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/Icon_attri_strength_qingxian.webp",
+          "sha256": "8f7d63687adb6d77777846fe29e8cc6c924579d0d528b5dc4c232b7552a8bc56"
+        }
+      ]
+    },
+    {
+      "id": "cell4_style1_1_blue",
+      "shape_id": "cell4_style1_1",
+      "quality": "blue",
+      "source_url": "https://wiki.mysqil.com/drivers/cell4_style1_1_Blue",
+      "name": "Ⅳ型驱动",
+      "index_label": "Ⅳ型驱动 4格 横向 4 格",
+      "raw_page": "data/mysqil/driver-blocks/cell4_style1_1_blue/raw/page.html",
+      "images": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/blue/type4-h.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/blue/type4-h.webp",
+          "sha256": "3b2b0427dcc4fed1d17d4e6407192809bba81438e9bbf4943ca5d3094a7a829c"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/purple/type4-h.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/purple/type4-h.webp",
+          "sha256": "48db2a6d6c83a938bab557c36e1db7aa06deed0ebce54dee282b4bf8baf78e8c"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/gold/type4-h.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/gold/type4-h.webp",
+          "sha256": "706168ca0e3e5b7e631568ccf27b00068c5051e90d8a94fb363e7e35a19b53d0"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/ui/stat-atk.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/ui/stat-atk.webp",
+          "sha256": "72b1feed665760d7a7dbf9e5ba8887d779f81632e371fdafa2a04899a0f72437"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/ui/stat-hp.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/ui/stat-hp.webp",
+          "sha256": "3ceda81fff27a8b1936f59ceb78ad4f4fe5680e41943ac00b43cad056bacec7b"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_gongji.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_gongji.webp",
+          "sha256": "4a609b3c0226e128508be98a47875d3001a47ca868beef1b5e55eaa1a00c40f4"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_shengming.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_shengming.webp",
+          "sha256": "5cf1f97ac3af4881b0cd50c4d3566bbeb809a5601f8f5ab23f590f6929d6c3ed"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_fangyu.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_fangyu.webp",
+          "sha256": "669257ef1e8dc4f2bea153e900098c0b865deada32c5464d4a059cdeb1b8a1df"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_baoji.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_baoji.webp",
+          "sha256": "67725ab778e876565e048de2ba3332e57dacfa97769c6f7fbb2f0d7029c70503"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_baojishanghai.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_baojishanghai.webp",
+          "sha256": "18bd8e3972dde7a7e0b67a498a389b63ef333432ea010bc1a64affcac19f70a3"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_kangxing.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_kangxing.webp",
+          "sha256": "0e98a1296562daf0dcc75b1daff42c64337e425c18eb6a121ca8cd72918def13"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/Icon_attri_surpass.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/Icon_attri_surpass.webp",
+          "sha256": "b70868d23f56198c00dc649014bc85b80988f1234b81be10d1848ef284f9f044"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/Icon_attri_strength_qingxian.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/Icon_attri_strength_qingxian.webp",
+          "sha256": "8f7d63687adb6d77777846fe29e8cc6c924579d0d528b5dc4c232b7552a8bc56"
+        }
+      ]
+    },
+    {
+      "id": "cell4_style2_1_orange",
+      "shape_id": "cell4_style2_1",
+      "quality": "gold",
+      "source_url": "https://wiki.mysqil.com/drivers/cell4_style2_1_Orange",
+      "name": "Ⅳ型驱动",
+      "index_label": "Ⅳ型驱动 4格 竖向 4 格",
+      "raw_page": "data/mysqil/driver-blocks/cell4_style2_1_orange/raw/page.html",
+      "images": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/gold/type4-v.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/gold/type4-v.webp",
+          "sha256": "13601e2834adc257f23f302b933c29b94fde3a55be7891cd19551ebac08189b1"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/blue/type4-v.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/blue/type4-v.webp",
+          "sha256": "3ae701984a0be534ec12228ec59aafc32180d11008a71da7371d4373fca9e511"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/purple/type4-v.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/purple/type4-v.webp",
+          "sha256": "bd9aba3fdd931300786d6de0f88fbe7f568c3e9fa5e1a0733d1907ac05f7c63b"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/ui/stat-atk.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/ui/stat-atk.webp",
+          "sha256": "72b1feed665760d7a7dbf9e5ba8887d779f81632e371fdafa2a04899a0f72437"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/ui/stat-hp.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/ui/stat-hp.webp",
+          "sha256": "3ceda81fff27a8b1936f59ceb78ad4f4fe5680e41943ac00b43cad056bacec7b"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_gongji.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_gongji.webp",
+          "sha256": "4a609b3c0226e128508be98a47875d3001a47ca868beef1b5e55eaa1a00c40f4"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_shengming.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_shengming.webp",
+          "sha256": "5cf1f97ac3af4881b0cd50c4d3566bbeb809a5601f8f5ab23f590f6929d6c3ed"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_fangyu.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_fangyu.webp",
+          "sha256": "669257ef1e8dc4f2bea153e900098c0b865deada32c5464d4a059cdeb1b8a1df"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_baoji.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_baoji.webp",
+          "sha256": "67725ab778e876565e048de2ba3332e57dacfa97769c6f7fbb2f0d7029c70503"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_baojishanghai.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_baojishanghai.webp",
+          "sha256": "18bd8e3972dde7a7e0b67a498a389b63ef333432ea010bc1a64affcac19f70a3"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_kangxing.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_kangxing.webp",
+          "sha256": "0e98a1296562daf0dcc75b1daff42c64337e425c18eb6a121ca8cd72918def13"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/Icon_attri_surpass.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/Icon_attri_surpass.webp",
+          "sha256": "b70868d23f56198c00dc649014bc85b80988f1234b81be10d1848ef284f9f044"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/Icon_attri_strength_qingxian.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/Icon_attri_strength_qingxian.webp",
+          "sha256": "8f7d63687adb6d77777846fe29e8cc6c924579d0d528b5dc4c232b7552a8bc56"
+        }
+      ]
+    },
+    {
+      "id": "cell4_style2_1_purple",
+      "shape_id": "cell4_style2_1",
+      "quality": "purple",
+      "source_url": "https://wiki.mysqil.com/drivers/cell4_style2_1_Purple",
+      "name": "Ⅳ型驱动",
+      "index_label": "Ⅳ型驱动 4格 竖向 4 格",
+      "raw_page": "data/mysqil/driver-blocks/cell4_style2_1_purple/raw/page.html",
+      "images": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/purple/type4-v.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/purple/type4-v.webp",
+          "sha256": "bd9aba3fdd931300786d6de0f88fbe7f568c3e9fa5e1a0733d1907ac05f7c63b"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/blue/type4-v.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/blue/type4-v.webp",
+          "sha256": "3ae701984a0be534ec12228ec59aafc32180d11008a71da7371d4373fca9e511"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/gold/type4-v.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/gold/type4-v.webp",
+          "sha256": "13601e2834adc257f23f302b933c29b94fde3a55be7891cd19551ebac08189b1"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/ui/stat-atk.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/ui/stat-atk.webp",
+          "sha256": "72b1feed665760d7a7dbf9e5ba8887d779f81632e371fdafa2a04899a0f72437"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/ui/stat-hp.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/ui/stat-hp.webp",
+          "sha256": "3ceda81fff27a8b1936f59ceb78ad4f4fe5680e41943ac00b43cad056bacec7b"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_gongji.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_gongji.webp",
+          "sha256": "4a609b3c0226e128508be98a47875d3001a47ca868beef1b5e55eaa1a00c40f4"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_shengming.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_shengming.webp",
+          "sha256": "5cf1f97ac3af4881b0cd50c4d3566bbeb809a5601f8f5ab23f590f6929d6c3ed"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_fangyu.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_fangyu.webp",
+          "sha256": "669257ef1e8dc4f2bea153e900098c0b865deada32c5464d4a059cdeb1b8a1df"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_baoji.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_baoji.webp",
+          "sha256": "67725ab778e876565e048de2ba3332e57dacfa97769c6f7fbb2f0d7029c70503"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_baojishanghai.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_baojishanghai.webp",
+          "sha256": "18bd8e3972dde7a7e0b67a498a389b63ef333432ea010bc1a64affcac19f70a3"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_kangxing.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_kangxing.webp",
+          "sha256": "0e98a1296562daf0dcc75b1daff42c64337e425c18eb6a121ca8cd72918def13"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/Icon_attri_surpass.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/Icon_attri_surpass.webp",
+          "sha256": "b70868d23f56198c00dc649014bc85b80988f1234b81be10d1848ef284f9f044"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/Icon_attri_strength_qingxian.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/Icon_attri_strength_qingxian.webp",
+          "sha256": "8f7d63687adb6d77777846fe29e8cc6c924579d0d528b5dc4c232b7552a8bc56"
+        }
+      ]
+    },
+    {
+      "id": "cell4_style2_1_blue",
+      "shape_id": "cell4_style2_1",
+      "quality": "blue",
+      "source_url": "https://wiki.mysqil.com/drivers/cell4_style2_1_Blue",
+      "name": "Ⅳ型驱动",
+      "index_label": "Ⅳ型驱动 4格 竖向 4 格",
+      "raw_page": "data/mysqil/driver-blocks/cell4_style2_1_blue/raw/page.html",
+      "images": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/blue/type4-v.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/blue/type4-v.webp",
+          "sha256": "3ae701984a0be534ec12228ec59aafc32180d11008a71da7371d4373fca9e511"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/purple/type4-v.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/purple/type4-v.webp",
+          "sha256": "bd9aba3fdd931300786d6de0f88fbe7f568c3e9fa5e1a0733d1907ac05f7c63b"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/gold/type4-v.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/gold/type4-v.webp",
+          "sha256": "13601e2834adc257f23f302b933c29b94fde3a55be7891cd19551ebac08189b1"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/ui/stat-atk.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/ui/stat-atk.webp",
+          "sha256": "72b1feed665760d7a7dbf9e5ba8887d779f81632e371fdafa2a04899a0f72437"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/ui/stat-hp.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/ui/stat-hp.webp",
+          "sha256": "3ceda81fff27a8b1936f59ceb78ad4f4fe5680e41943ac00b43cad056bacec7b"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_gongji.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_gongji.webp",
+          "sha256": "4a609b3c0226e128508be98a47875d3001a47ca868beef1b5e55eaa1a00c40f4"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_shengming.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_shengming.webp",
+          "sha256": "5cf1f97ac3af4881b0cd50c4d3566bbeb809a5601f8f5ab23f590f6929d6c3ed"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_fangyu.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_fangyu.webp",
+          "sha256": "669257ef1e8dc4f2bea153e900098c0b865deada32c5464d4a059cdeb1b8a1df"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_baoji.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_baoji.webp",
+          "sha256": "67725ab778e876565e048de2ba3332e57dacfa97769c6f7fbb2f0d7029c70503"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_baojishanghai.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_baojishanghai.webp",
+          "sha256": "18bd8e3972dde7a7e0b67a498a389b63ef333432ea010bc1a64affcac19f70a3"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_kangxing.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_kangxing.webp",
+          "sha256": "0e98a1296562daf0dcc75b1daff42c64337e425c18eb6a121ca8cd72918def13"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/Icon_attri_surpass.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/Icon_attri_surpass.webp",
+          "sha256": "b70868d23f56198c00dc649014bc85b80988f1234b81be10d1848ef284f9f044"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/Icon_attri_strength_qingxian.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/Icon_attri_strength_qingxian.webp",
+          "sha256": "8f7d63687adb6d77777846fe29e8cc6c924579d0d528b5dc4c232b7552a8bc56"
+        }
+      ]
+    },
+    {
+      "id": "cell4_style5_1_orange",
+      "shape_id": "cell4_style5_1",
+      "quality": "gold",
+      "source_url": "https://wiki.mysqil.com/drivers/cell4_style5_1_Orange",
+      "name": "Ⅳ型驱动",
+      "index_label": "Ⅳ型驱动 4格 Z形 · 横向",
+      "raw_page": "data/mysqil/driver-blocks/cell4_style5_1_orange/raw/page.html",
+      "images": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/gold/type4-z-h.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/gold/type4-z-h.webp",
+          "sha256": "e9138d2b16ba001deae8eddc688468e78c82077e9338c37a990b09cbb32265f2"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/blue/type4-z-h.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/blue/type4-z-h.webp",
+          "sha256": "1a8b215900798eae2be9fc6641ebd5dfe94a811ca20945dd434539234e583c8c"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/purple/type4-z-h.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/purple/type4-z-h.webp",
+          "sha256": "59b4a35e0c783883d6ef2ded21905378f0955b829de394ec338b449dff475c2d"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/ui/stat-atk.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/ui/stat-atk.webp",
+          "sha256": "72b1feed665760d7a7dbf9e5ba8887d779f81632e371fdafa2a04899a0f72437"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/ui/stat-hp.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/ui/stat-hp.webp",
+          "sha256": "3ceda81fff27a8b1936f59ceb78ad4f4fe5680e41943ac00b43cad056bacec7b"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_gongji.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_gongji.webp",
+          "sha256": "4a609b3c0226e128508be98a47875d3001a47ca868beef1b5e55eaa1a00c40f4"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_shengming.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_shengming.webp",
+          "sha256": "5cf1f97ac3af4881b0cd50c4d3566bbeb809a5601f8f5ab23f590f6929d6c3ed"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_fangyu.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_fangyu.webp",
+          "sha256": "669257ef1e8dc4f2bea153e900098c0b865deada32c5464d4a059cdeb1b8a1df"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_baoji.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_baoji.webp",
+          "sha256": "67725ab778e876565e048de2ba3332e57dacfa97769c6f7fbb2f0d7029c70503"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_baojishanghai.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_baojishanghai.webp",
+          "sha256": "18bd8e3972dde7a7e0b67a498a389b63ef333432ea010bc1a64affcac19f70a3"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_kangxing.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_kangxing.webp",
+          "sha256": "0e98a1296562daf0dcc75b1daff42c64337e425c18eb6a121ca8cd72918def13"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/Icon_attri_surpass.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/Icon_attri_surpass.webp",
+          "sha256": "b70868d23f56198c00dc649014bc85b80988f1234b81be10d1848ef284f9f044"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/Icon_attri_strength_qingxian.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/Icon_attri_strength_qingxian.webp",
+          "sha256": "8f7d63687adb6d77777846fe29e8cc6c924579d0d528b5dc4c232b7552a8bc56"
+        }
+      ]
+    },
+    {
+      "id": "cell4_style5_1_purple",
+      "shape_id": "cell4_style5_1",
+      "quality": "purple",
+      "source_url": "https://wiki.mysqil.com/drivers/cell4_style5_1_Purple",
+      "name": "Ⅳ型驱动",
+      "index_label": "Ⅳ型驱动 4格 Z形 · 横向",
+      "raw_page": "data/mysqil/driver-blocks/cell4_style5_1_purple/raw/page.html",
+      "images": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/purple/type4-z-h.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/purple/type4-z-h.webp",
+          "sha256": "59b4a35e0c783883d6ef2ded21905378f0955b829de394ec338b449dff475c2d"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/blue/type4-z-h.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/blue/type4-z-h.webp",
+          "sha256": "1a8b215900798eae2be9fc6641ebd5dfe94a811ca20945dd434539234e583c8c"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/gold/type4-z-h.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/gold/type4-z-h.webp",
+          "sha256": "e9138d2b16ba001deae8eddc688468e78c82077e9338c37a990b09cbb32265f2"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/ui/stat-atk.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/ui/stat-atk.webp",
+          "sha256": "72b1feed665760d7a7dbf9e5ba8887d779f81632e371fdafa2a04899a0f72437"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/ui/stat-hp.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/ui/stat-hp.webp",
+          "sha256": "3ceda81fff27a8b1936f59ceb78ad4f4fe5680e41943ac00b43cad056bacec7b"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_gongji.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_gongji.webp",
+          "sha256": "4a609b3c0226e128508be98a47875d3001a47ca868beef1b5e55eaa1a00c40f4"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_shengming.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_shengming.webp",
+          "sha256": "5cf1f97ac3af4881b0cd50c4d3566bbeb809a5601f8f5ab23f590f6929d6c3ed"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_fangyu.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_fangyu.webp",
+          "sha256": "669257ef1e8dc4f2bea153e900098c0b865deada32c5464d4a059cdeb1b8a1df"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_baoji.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_baoji.webp",
+          "sha256": "67725ab778e876565e048de2ba3332e57dacfa97769c6f7fbb2f0d7029c70503"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_baojishanghai.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_baojishanghai.webp",
+          "sha256": "18bd8e3972dde7a7e0b67a498a389b63ef333432ea010bc1a64affcac19f70a3"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_kangxing.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_kangxing.webp",
+          "sha256": "0e98a1296562daf0dcc75b1daff42c64337e425c18eb6a121ca8cd72918def13"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/Icon_attri_surpass.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/Icon_attri_surpass.webp",
+          "sha256": "b70868d23f56198c00dc649014bc85b80988f1234b81be10d1848ef284f9f044"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/Icon_attri_strength_qingxian.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/Icon_attri_strength_qingxian.webp",
+          "sha256": "8f7d63687adb6d77777846fe29e8cc6c924579d0d528b5dc4c232b7552a8bc56"
+        }
+      ]
+    },
+    {
+      "id": "cell4_style5_1_blue",
+      "shape_id": "cell4_style5_1",
+      "quality": "blue",
+      "source_url": "https://wiki.mysqil.com/drivers/cell4_style5_1_Blue",
+      "name": "Ⅳ型驱动",
+      "index_label": "Ⅳ型驱动 4格 Z形 · 横向",
+      "raw_page": "data/mysqil/driver-blocks/cell4_style5_1_blue/raw/page.html",
+      "images": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/blue/type4-z-h.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/blue/type4-z-h.webp",
+          "sha256": "1a8b215900798eae2be9fc6641ebd5dfe94a811ca20945dd434539234e583c8c"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/purple/type4-z-h.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/purple/type4-z-h.webp",
+          "sha256": "59b4a35e0c783883d6ef2ded21905378f0955b829de394ec338b449dff475c2d"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/gold/type4-z-h.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/gold/type4-z-h.webp",
+          "sha256": "e9138d2b16ba001deae8eddc688468e78c82077e9338c37a990b09cbb32265f2"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/ui/stat-atk.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/ui/stat-atk.webp",
+          "sha256": "72b1feed665760d7a7dbf9e5ba8887d779f81632e371fdafa2a04899a0f72437"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/ui/stat-hp.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/ui/stat-hp.webp",
+          "sha256": "3ceda81fff27a8b1936f59ceb78ad4f4fe5680e41943ac00b43cad056bacec7b"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_gongji.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_gongji.webp",
+          "sha256": "4a609b3c0226e128508be98a47875d3001a47ca868beef1b5e55eaa1a00c40f4"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_shengming.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_shengming.webp",
+          "sha256": "5cf1f97ac3af4881b0cd50c4d3566bbeb809a5601f8f5ab23f590f6929d6c3ed"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_fangyu.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_fangyu.webp",
+          "sha256": "669257ef1e8dc4f2bea153e900098c0b865deada32c5464d4a059cdeb1b8a1df"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_baoji.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_baoji.webp",
+          "sha256": "67725ab778e876565e048de2ba3332e57dacfa97769c6f7fbb2f0d7029c70503"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_baojishanghai.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_baojishanghai.webp",
+          "sha256": "18bd8e3972dde7a7e0b67a498a389b63ef333432ea010bc1a64affcac19f70a3"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_kangxing.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_kangxing.webp",
+          "sha256": "0e98a1296562daf0dcc75b1daff42c64337e425c18eb6a121ca8cd72918def13"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/Icon_attri_surpass.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/Icon_attri_surpass.webp",
+          "sha256": "b70868d23f56198c00dc649014bc85b80988f1234b81be10d1848ef284f9f044"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/Icon_attri_strength_qingxian.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/Icon_attri_strength_qingxian.webp",
+          "sha256": "8f7d63687adb6d77777846fe29e8cc6c924579d0d528b5dc4c232b7552a8bc56"
+        }
+      ]
+    },
+    {
+      "id": "cell4_style6_1_orange",
+      "shape_id": "cell4_style6_1",
+      "quality": "gold",
+      "source_url": "https://wiki.mysqil.com/drivers/cell4_style6_1_Orange",
+      "name": "Ⅳ型驱动",
+      "index_label": "Ⅳ型驱动 4格 Z形 · 竖向",
+      "raw_page": "data/mysqil/driver-blocks/cell4_style6_1_orange/raw/page.html",
+      "images": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/gold/type4-z-v.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/gold/type4-z-v.webp",
+          "sha256": "5c0293ede4c27dfb2731c9f8a6e0a695c32a32e542d2b3664e10290e9066c904"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/blue/type4-z-v.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/blue/type4-z-v.webp",
+          "sha256": "293a4ee6bfc46307f6960a662564d5591380033610f4a9ff80503986513d035a"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/purple/type4-z-v.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/purple/type4-z-v.webp",
+          "sha256": "d0a82920b6e20324c9a113a781cc9647e0d39e0e3ba68b592d30e77331729d8d"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/ui/stat-atk.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/ui/stat-atk.webp",
+          "sha256": "72b1feed665760d7a7dbf9e5ba8887d779f81632e371fdafa2a04899a0f72437"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/ui/stat-hp.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/ui/stat-hp.webp",
+          "sha256": "3ceda81fff27a8b1936f59ceb78ad4f4fe5680e41943ac00b43cad056bacec7b"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_gongji.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_gongji.webp",
+          "sha256": "4a609b3c0226e128508be98a47875d3001a47ca868beef1b5e55eaa1a00c40f4"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_shengming.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_shengming.webp",
+          "sha256": "5cf1f97ac3af4881b0cd50c4d3566bbeb809a5601f8f5ab23f590f6929d6c3ed"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_fangyu.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_fangyu.webp",
+          "sha256": "669257ef1e8dc4f2bea153e900098c0b865deada32c5464d4a059cdeb1b8a1df"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_baoji.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_baoji.webp",
+          "sha256": "67725ab778e876565e048de2ba3332e57dacfa97769c6f7fbb2f0d7029c70503"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_baojishanghai.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_baojishanghai.webp",
+          "sha256": "18bd8e3972dde7a7e0b67a498a389b63ef333432ea010bc1a64affcac19f70a3"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_kangxing.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_kangxing.webp",
+          "sha256": "0e98a1296562daf0dcc75b1daff42c64337e425c18eb6a121ca8cd72918def13"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/Icon_attri_surpass.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/Icon_attri_surpass.webp",
+          "sha256": "b70868d23f56198c00dc649014bc85b80988f1234b81be10d1848ef284f9f044"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/Icon_attri_strength_qingxian.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/Icon_attri_strength_qingxian.webp",
+          "sha256": "8f7d63687adb6d77777846fe29e8cc6c924579d0d528b5dc4c232b7552a8bc56"
+        }
+      ]
+    },
+    {
+      "id": "cell4_style6_1_purple",
+      "shape_id": "cell4_style6_1",
+      "quality": "purple",
+      "source_url": "https://wiki.mysqil.com/drivers/cell4_style6_1_Purple",
+      "name": "Ⅳ型驱动",
+      "index_label": "Ⅳ型驱动 4格 Z形 · 竖向",
+      "raw_page": "data/mysqil/driver-blocks/cell4_style6_1_purple/raw/page.html",
+      "images": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/purple/type4-z-v.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/purple/type4-z-v.webp",
+          "sha256": "d0a82920b6e20324c9a113a781cc9647e0d39e0e3ba68b592d30e77331729d8d"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/blue/type4-z-v.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/blue/type4-z-v.webp",
+          "sha256": "293a4ee6bfc46307f6960a662564d5591380033610f4a9ff80503986513d035a"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/gold/type4-z-v.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/gold/type4-z-v.webp",
+          "sha256": "5c0293ede4c27dfb2731c9f8a6e0a695c32a32e542d2b3664e10290e9066c904"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/ui/stat-atk.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/ui/stat-atk.webp",
+          "sha256": "72b1feed665760d7a7dbf9e5ba8887d779f81632e371fdafa2a04899a0f72437"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/ui/stat-hp.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/ui/stat-hp.webp",
+          "sha256": "3ceda81fff27a8b1936f59ceb78ad4f4fe5680e41943ac00b43cad056bacec7b"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_gongji.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_gongji.webp",
+          "sha256": "4a609b3c0226e128508be98a47875d3001a47ca868beef1b5e55eaa1a00c40f4"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_shengming.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_shengming.webp",
+          "sha256": "5cf1f97ac3af4881b0cd50c4d3566bbeb809a5601f8f5ab23f590f6929d6c3ed"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_fangyu.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_fangyu.webp",
+          "sha256": "669257ef1e8dc4f2bea153e900098c0b865deada32c5464d4a059cdeb1b8a1df"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_baoji.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_baoji.webp",
+          "sha256": "67725ab778e876565e048de2ba3332e57dacfa97769c6f7fbb2f0d7029c70503"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_baojishanghai.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_baojishanghai.webp",
+          "sha256": "18bd8e3972dde7a7e0b67a498a389b63ef333432ea010bc1a64affcac19f70a3"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_kangxing.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_kangxing.webp",
+          "sha256": "0e98a1296562daf0dcc75b1daff42c64337e425c18eb6a121ca8cd72918def13"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/Icon_attri_surpass.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/Icon_attri_surpass.webp",
+          "sha256": "b70868d23f56198c00dc649014bc85b80988f1234b81be10d1848ef284f9f044"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/Icon_attri_strength_qingxian.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/Icon_attri_strength_qingxian.webp",
+          "sha256": "8f7d63687adb6d77777846fe29e8cc6c924579d0d528b5dc4c232b7552a8bc56"
+        }
+      ]
+    },
+    {
+      "id": "cell4_style6_1_blue",
+      "shape_id": "cell4_style6_1",
+      "quality": "blue",
+      "source_url": "https://wiki.mysqil.com/drivers/cell4_style6_1_Blue",
+      "name": "Ⅳ型驱动",
+      "index_label": "Ⅳ型驱动 4格 Z形 · 竖向",
+      "raw_page": "data/mysqil/driver-blocks/cell4_style6_1_blue/raw/page.html",
+      "images": [
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/blue/type4-z-v.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/blue/type4-z-v.webp",
+          "sha256": "293a4ee6bfc46307f6960a662564d5591380033610f4a9ff80503986513d035a"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/purple/type4-z-v.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/purple/type4-z-v.webp",
+          "sha256": "d0a82920b6e20324c9a113a781cc9647e0d39e0e3ba68b592d30e77331729d8d"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/gold/type4-z-v.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/gold/type4-z-v.webp",
+          "sha256": "5c0293ede4c27dfb2731c9f8a6e0a695c32a32e542d2b3664e10290e9066c904"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/ui/stat-atk.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/ui/stat-atk.webp",
+          "sha256": "72b1feed665760d7a7dbf9e5ba8887d779f81632e371fdafa2a04899a0f72437"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/ui/stat-hp.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/ui/stat-hp.webp",
+          "sha256": "3ceda81fff27a8b1936f59ceb78ad4f4fe5680e41943ac00b43cad056bacec7b"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_gongji.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_gongji.webp",
+          "sha256": "4a609b3c0226e128508be98a47875d3001a47ca868beef1b5e55eaa1a00c40f4"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_shengming.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_shengming.webp",
+          "sha256": "5cf1f97ac3af4881b0cd50c4d3566bbeb809a5601f8f5ab23f590f6929d6c3ed"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_fangyu.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_fangyu.webp",
+          "sha256": "669257ef1e8dc4f2bea153e900098c0b865deada32c5464d4a059cdeb1b8a1df"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_baoji.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_baoji.webp",
+          "sha256": "67725ab778e876565e048de2ba3332e57dacfa97769c6f7fbb2f0d7029c70503"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_baojishanghai.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_baojishanghai.webp",
+          "sha256": "18bd8e3972dde7a7e0b67a498a389b63ef333432ea010bc1a64affcac19f70a3"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/icon_attri_kangxing.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/icon_attri_kangxing.webp",
+          "sha256": "0e98a1296562daf0dcc75b1daff42c64337e425c18eb6a121ca8cd72918def13"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/Icon_attri_surpass.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/Icon_attri_surpass.webp",
+          "sha256": "b70868d23f56198c00dc649014bc85b80988f1234b81be10d1848ef284f9f044"
+        },
+        {
+          "source_url": "https://wiki.mysqil.com/images/drivers/icons/Icon_attri_strength_qingxian.webp",
+          "local_path": "data/resources/encyclopedia/driver_blocks/site/images/drivers/icons/Icon_attri_strength_qingxian.webp",
+          "sha256": "8f7d63687adb6d77777846fe29e8cc6c924579d0d528b5dc4c232b7552a8bc56"
+        }
+      ]
+    }
+  ]
+}
