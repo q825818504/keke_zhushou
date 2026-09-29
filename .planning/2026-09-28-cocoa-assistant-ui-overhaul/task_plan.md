@@ -16,11 +16,11 @@
 
 ## Next Step
 
-Phase 9 图鉴与弧盘目录已完成并同步 GitHub；接下来继续处理 Phase 8 仓库持久化驱动摆放图上传。
+Phase 10 空幕图鉴数据完整导入与界面接入；Phase 8 仓库持久化驱动摆放图上传仍保留为后续计划。
 
 ## Current Phase
 
-Phase 9 - Encyclopedia Management and Arc Drive Catalog；implementation complete and synced to GitHub; browser verification remains pending.
+Phase 10 - Sky Curtain Catalog；implementation complete; Git delivery pending; browser interaction/responsive verification not run.
 
 ## Phases
 
@@ -125,6 +125,20 @@ Phase 9 - Encyclopedia Management and Arc Drive Catalog；implementation complet
 | Git 被 dubious ownership 阻止 | 每条 Git 命令使用明确的 safe.directory 参数，不修改全局配置 |
 | 原始卡带快照是单行 HTML，全文检索输出过大 | 只提取有限匹配和字段 |
 | apply_patch 在 Windows sandbox helper 中失败 | 使用目标明确的 PowerShell 文件写入作为降级方案 |
+| 两次 Phase 10 findings 补丁因上下文定位错误未应用 | 改用唯一文本校验后更新 canonical 计划并追加日志 |
+| 查询尚未创建的 encyclopedia/cassettes 知识目录产生路径不存在提示 | 这是当前空幕分类尚未导入的预期空状态；改查已存在的空幕原始快照目录 |
+| PowerShell 环境没有 `python` 命令 | 改用 Codex bundled Python 完整路径检查本地快照；后续脚本使用已确认路径执行 |
+| 一次 Python 检查输出中文乱码 | 仅是终端 stdout 编码显示问题；按 UTF-8 重跑，原始 HTML 未改动 |
+| 空幕下载器索引解析发现 13 个不同链接但索引声明 12 项 | 未写 roster；检查链接语境后将解析规则限制到真实卡片区 |
+| 第一次输出索引链接上下文的 PowerShell 表达式解析失败 | 只影响诊断输出；改用赋值后逐项输出，不影响原始索引 |
+| 链接上下文诊断语句的 PowerShell 管道写法触发解析错误 | 记录后将输出改成直接赋值并逐条输出，成功定位多出的链接 |
+| 下载器动态给 PSCustomObject 写入未声明的 `name` 属性失败 | 记录后在对象初始化时声明 `name` 字段，再从索引完整重跑 |
+| 本地页面诊断器打印完结构摘要后调用了未定义的 `direct` 辅助方法 | 记录后使用现有节点的 children 列表读取池字段；原始数据和抓取未受影响 |
+| 空幕 CSS 补丁锚点不存在 | 未修改样式；把空幕样式追加为独立组件规则 |
+| 首轮覆盖审计发现品质差异子项解析为 0/12 | 源页把品质名放在嵌套 div、说明放在 p；按实际结构修正后全量重导 |
+| UI-integrated status write hit a PowerShell quoted-string parser error | No plan change occurred; switched to UTF-8 byte-preserving updates with exact-match guards |
+| CC BY-NC-SA 4.0 法律条文页读取超时 | 改用 Creative Commons 官方 deed 摘要核对核心条件，并在交付日志记录该限制 |
+| `git diff --check` found trailing whitespace in a truncated progress entry | Replaced the affected line, recorded the shell quoting issue, and reran the full diff check |
 | 真红知识 JS 首次生成时结尾换行被写成字面量 | 清理并重新生成后通过 node --check |
 | 卡带编辑器初始化曾被插入错误函数位置 | 移除后放回 updateImportedPanel |
 | 之前产生了独立卡带计划目录 | 本次将内容合并回本主计划并删除重复目录 |
@@ -190,3 +204,19 @@ Phase 9 - Encyclopedia Management and Arc Drive Catalog；implementation complet
 - [x] Commit the complete Phase 9 feature and push it to `origin/main`.
 - [ ] Browser interaction and responsive visual verification.
 - **Status:** implementation complete and synced to GitHub; visual verification not run.
+
+### Phase 10: Complete Sky Curtain Catalog
+
+**Goal:** Download every 空幕 entry from the guide site, preserve source pages, item imagery, attribution, and license locally, normalize the full catalog in the existing encyclopedia data model, and connect it to the existing 图鉴 navigation/list/detail UI. 驱动块 remains in its current empty state until its own source data is imported.
+
+- [x] Determine the authoritative 空幕 index URL and its explicitly declared complete item count; enumerate every detail URL from that index.
+- [x] Inspect representative and exceptional detail pages to identify all importable fields, item image paths, page variants, and source attribution/license statements.
+- [x] Download the index, every detail page, and every item-specific image into the Phase 9 raw snapshot/resource directory pattern; keep a deterministic roster/manifest with retrieval metadata and source URLs.
+- [x] Add an offline importer that checks roster count and snapshot/resource coverage, preserves unknown or absent source values, and emits canonical JSON plus the generated JS bundle with per-record provenance.
+- [x] Replace only the 空幕 placeholder with a complete searchable/filterable listing and detail view consistent with the existing 弧盘 catalog; preserve 驱动块's honest empty state.
+- [x] Document the source and repeatable update workflow; retain author, license, attribution, and source links, and review the complete redistribution scope before delivery.
+- [x] Reconcile the declared source count against roster records, snapshots, imported records, and downloaded item images; record unresolved source gaps without inventing data.
+- [x] Run code/data/resource checks and record the results in canonical planning files.
+- [ ] Browser interaction and responsive visual verification; report only if actually run.
+- [ ] Review the exact delivery scope, refresh `origin/main`, commit, and push to `origin/main` without force-pushing; update the canonical plan/findings/progress after the push and confirm local/remote synchronization.
+- **Status:** implementation complete — 12 records, 36 source assets, all source fields, UI, attribution, documentation, and scope checks complete; Git delivery pending; browser verification not run.

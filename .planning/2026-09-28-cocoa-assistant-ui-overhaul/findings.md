@@ -138,3 +138,73 @@
 - Browser navigation successfully opened the authoritative `/weapons/` index. It explicitly reports **51 items** and exposes all 51 detail-page links in a single list. The current inventory comprises S/A/B grades and five types; this full index supersedes the earlier limitation from the web reader.
 - A detail page contains the weapon image, grade/type, display name, level-80 base attributes, description, rank-dependent effect text, overview, and page scripts carrying level and rank values. The item icon path follows `/images/weapons/<slug>.webp` on the sampled page.
 - Source detail footers identify © 2026 Matsuzaka Yuki and CC BY-NC-SA 4.0. Keep a visible attribution/source link in the app and preserve page snapshots.
+
+## Phase 10 — Sky Curtain Catalog — 2026-09-29
+
+- Canonical Phase 9 conventions confirmed before source investigation: raw index at `data/mysqil/weapons/raw/index.html`; each raw detail snapshot at `data/mysqil/weapons/<slug>/raw/page.html`; item roster and retrieval/source metadata at `data/mysqil/weapons/roster.json`; imported knowledge at `data/knowledge/encyclopedia/arc_drives.json` plus generated `.js`; item-specific images under `data/resources/encyclopedia/weapons/<slug>/`; repeatable collection/import scripts are `scripts/download_mysqil_weapons.ps1` and `scripts/import_mysqil_weapons.py`. The importer checks the index-declared count and attaches source/license/author/URL/snapshot provenance to each record.
+- The source's authoritative 空幕 index is `https://wiki.mysqil.com/cassettes/` (also reachable without the trailing slash). It declares **12 套卡带**, split into six 属性专属 and six 泛用功能 entries. Names listed by the index: 失落光芒、恶魔之血·诅咒、森林萤火之心、真红双生蝶、街头拳王、迪亚波罗斯、守卫王国、小小大冒险、影之信条、缇娅的夜间酒馆、静谧山庄、音速蓝刺猬. The index footer credits Matsuzaka Yuki and states CC BY-NC-SA 4.0.
+- The index distinguishes 卡带 from 驱动块 as separate entities. This phase imports only the 12 空幕卡带 entries; the 驱动块 UI/category remains empty.
+- Each of the 12 detail pages and its referenced item artwork still needs direct inspection and local snapshot/resource reconciliation. Do not treat search snippets as complete item data.
+
+### Detail page inventory and retrieval notes
+- The listing links to these 12 stable detail slugs: `shiluo-guangmang`, `emozhixie-zuzhou`, `senlin-yinghuozhixin`, `zhenhong-shuangshengdie`, `jietou-quanwang`, `diyabolosi`, `shouwei-wangguo`, `xiaoxiao-damaoxian`, `yingzhi-xintiao`, `tiyà-yèjianjiuguan`, `jingmi-shanzhuang`, and `yinsu-lancìwei`. Preserve and URL-encode the two accent-bearing paths when fetching.
+- The four detail pages retrieved by the web reader expose the same core layout: set classification and elemental affinity where applicable; 2-piece/4-piece effects; acquisition text; main/sub affix possibility pools; Gold/Purple/Blue quality notes; an editorial overview; and one item image. Each footer repeats Matsuzaka Yuki and CC BY-NC-SA 4.0. The source's prose overview may include editorial recommendations, so keep source facts distinct and preserve its URL/provenance if normalized.
+- Web reader retrieval failed for eight detail pages (cache miss or timeout). Direct raw download and offline parsing are required before claiming all page fields or assets are reconciled.
+
+### Local integration findings
+- Ten of the 12 listed card sets already have raw snapshots under `data/mysqil/cassettes/<slug>/raw/page.html` because character imports downloaded role-recommended gear. The source index entries `yingzhi-xintiao` and `jingmi-shanzhuang` have no snapshot yet.
+- `data/knowledge/encyclopedia/cassettes/` does not exist: there is no complete standalone 空幕 knowledge package. The app already has a dedicated 空幕 sub-navigation button, but `showEncyclopediaCategory` routes it to the generic empty-state panel.
+- A lookup of the absent knowledge directory emitted a path-not-found message and made no changes; this confirms the planned data gap.
+
+### Image asset findings
+- All inspected cached cassette pages reference three quality-specific item images (Gold, Purple, Blue), each hosted under an English asset slug at `/images/cassettes/<asset-slug>/<quality>.webp`. The page-detail slug and image-directory slug are not reliably identical, so collect each page's exact image URLs instead of deriving names.
+- The complete expected image set is 36 item-specific WebP files for the 12 listed entries. Preserve all three tiers locally; the UI can default to Gold and allow selecting the other two images.
+
+### Normalization fields confirmed from cached detail HTML
+- The primary page content is server-rendered under `<main>`. The item header contains the `h1`, category label, and (for attribute-specific sets) element label. The set-effects section holds separate 2-piece and 4-piece cards; acquisition is a separate labeled section.
+- The affix mechanism section presents main-affix and sub-affix pools as individual chips, followed by a quality-difference panel; the final `套装概述` section contains source overview prose. Parse each field from its own section and leave missing values empty rather than falling back to generic explanatory copy.
+- The header includes three `<img data-tier-img="gold|purple|blue">` elements. These expose all quality image variants in one raw page; the app can provide an image-tier selector.
+
+### Index link parsing correction
+- The 13th `/cassettes/<slug>` link is `/cassettes/drivers`, labeled “查看驱动块详解 →”; it is a guide link, not a card entry. The 12 actual catalog links are card anchors carrying `bg-card` and `overflow-hidden` classes. The downloader now restricts enumeration to those catalog-card anchors and retains the index-declared count check.
+
+### Source collection complete
+- `scripts/download_mysqil_cassettes.ps1 -Refresh` fetched the declared 12 entries, all 12 detail pages, and all 36 Gold/Purple/Blue WebP files with no failures. The downloader saved `data/mysqil/cassettes/raw/index.html`, each `data/mysqil/cassettes/<slug>/raw/page.html`, image files under `data/resources/encyclopedia/cassettes/<slug>/<quality>.webp`, and the root `roster.json` with author, license, source URLs, local paths, SHA-256 hashes, and retrieval time.
+- The web reader had failed to retrieve eight detail URLs, but the local downloader fetched all eight. All 12 pages have been refreshed rather than relying on role-link discovery coverage.
+
+### Parser implementation notes
+- On a representative local snapshot, the header has the exact `属性专属`/`泛用功能` marker and optional elemental affinity; the set-effects cards are inside their own section; acquisition has a labeled value; each main/sub-affix card has an individual heading, explanatory paragraph, and chip container; and the quality-difference card contains the shared Gold/Purple/Blue notes.
+- The category index itself also summarizes both set effects for each item, but detail-page content remains the canonical normalized source. The index is retained separately for completeness and provenance.
+- The diagnostic printed the required structure successfully before its final chip-only step hit an undefined helper method. This affected no source data; importer code will use the parser's children list directly.
+
+### Normalized knowledge package
+- `scripts/import_mysqil_cassettes.py` reads only the local source roster and snapshots. It validates the declared 12-item count, uniqueness, exact page-title match, required two-/four-piece effects, all three source image variants and URL/path mapping, then writes `data/knowledge/encyclopedia/sky_curtains.json` and `sky_curtains.js`.
+- Each record preserves category, optional element, both set effects, acquisition, separate main/sub-affix pools and notes, quality differences, source overview, Gold/Purple/Blue local image paths and hashes, source URL, raw snapshot path, author, license, and pending human review status. Missing optional source values remain empty.
+- Import completed with 12 records and 36 locally mapped quality images.
+
+
+### UI integration and scope review
+- Added `sky_curtains.js` to the page load order. 空幕 now has its own searchable listing, category and element filters, detail panel, source links/attribution, 2/4-piece effects, acquisition, main/sub-affix pools, quality differences, and a Gold/Purple/Blue image selector. The 驱动块 category remains on the existing empty-state panel.
+- Source coverage reconciles 12 source entries to 12 unique normalized records, 12 detail snapshots, and 36 WebP images. All 12 records contain both set effects, acquisition, overview, main/sub-affix pools, three quality notes, and all three quality image mappings. Categories are 6 属性专属 / 6 泛用功能; the six elemental sets have one affinity each.
+- A first coverage pass found quality-tier prose was not being parsed (0/12); source DOM showed the label in a nested `div` and description in a `p`. The importer was corrected and rerun; the final coverage pass confirms 金/紫/蓝 notes on all 12 records.
+- Static checks passed: `node --check app.js`, `node --check data/knowledge/encyclopedia/arc_drives.js`, and `node --check data/knowledge/encyclopedia/sky_curtains.js`; roster/count, raw-page footer, title, quality assets, SHA-256, provenance, and JSON/JS bundle matching checks passed. Browser interaction and responsive verification were not run.
+
+
+### Attribution and license review
+- Mysqil's index/detail pages identify Matsuzaka Yuki and CC BY-NC-SA 4.0. The official Creative Commons deed says sharing/adaptation is allowed under conditions including appropriate credit, a link to the license, an indication of changes, noncommercial use, and same-license sharing for adapted material: https://creativecommons.org/licenses/by-nc-sa/4.0/ .
+- The raw pages remain preserved; normalized knowledge is a structured extraction from those snapshots. The UI, README, and attribution file will link the license and identify the imported data as normalized. Commercial reuse remains outside the source license grant.
+- The official deed page opened from its legal-code URL timed out in the web reader. The checklist above comes from the official CC deed summary, not a claim that the full legal code was reviewed.
+
+
+### Attribution implementation
+- Added the official CC BY-NC-SA 4.0 license URL to the cassette raw roster and to collection/record provenance; each normalized item identifies the source-page extraction and structure normalization while its exact HTML page remains preserved.
+- Both arc-drive and sky-curtain attribution footers now link to the source index and the Creative Commons license, name Matsuzaka Yuki, and state that the catalog was extracted and structured. README and `data/mysqil/ATTRIBUTION.md` describe the 12-set update workflow, snapshot/resource locations, attribution, license link, and modification status.
+
+
+### Final page-field reconciliation
+- A final raw-page pass found two quality-panel fields present on every item page that were not yet in the normalized record: the grade-role note (`data-tier-field="role"`) and grade-source note (`data-tier-field="source"`). They supplement the separate acquisition field and Gold/Purple/Blue quality differences. Import both exactly as shown, expose them in the item detail, and include them in final coverage checks.
+
+
+### Final source-field reconciliation complete
+- The normalized quality object now includes the raw page's `data-tier-field="role"` (quality grade guidance) and `data-tier-field="source"` (quality source conditions) alongside the Gold/Purple/Blue tier notes. The detail page shows both additional values, and search includes them.
+- Reimported all 12 records. Final audit confirms both additional fields are present on 12/12 records, with the earlier source/count/page/image/provenance/quality checks still passing.

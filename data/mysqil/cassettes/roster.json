@@ -1,0 +1,323 @@
+{
+  "source": "Mysqil · 环世全鉴",
+  "source_index": "https://wiki.mysqil.com/cassettes/",
+  "source_license": "CC BY-NC-SA 4.0",
+  "source_author": "Matsuzaka Yuki",
+  "retrieved_at": "2026-09-29T05:35:53.4699425Z",
+  "expected_count": 12,
+  "items": [
+    {
+      "id": "shiluo-guangmang",
+      "name": "失落光芒",
+      "source_url": "https://wiki.mysqil.com/cassettes/shiluo-guangmang",
+      "raw_page": "data/mysqil/cassettes/shiluo-guangmang/raw/page.html",
+      "images": [
+        {
+          "quality": "blue",
+          "source_url": "https://wiki.mysqil.com/images/cassettes/lost-radiance/blue.webp",
+          "local_path": "data/resources/encyclopedia/cassettes/shiluo-guangmang/blue.webp",
+          "sha256": "0a459b1d19b358f5bbbae39dde9cb2e83e9cb29d28213ac8a1abd2dbc5869ca9"
+        },
+        {
+          "quality": "gold",
+          "source_url": "https://wiki.mysqil.com/images/cassettes/lost-radiance/gold.webp",
+          "local_path": "data/resources/encyclopedia/cassettes/shiluo-guangmang/gold.webp",
+          "sha256": "dad6777be8c6ffa2e69bc6008338880d907108e012edd39021b8b9b721e41fe0"
+        },
+        {
+          "quality": "purple",
+          "source_url": "https://wiki.mysqil.com/images/cassettes/lost-radiance/purple.webp",
+          "local_path": "data/resources/encyclopedia/cassettes/shiluo-guangmang/purple.webp",
+          "sha256": "27877491e07b6741258f4a2933b9038c18395ffe7218097ac5437f67581060be"
+        }
+      ]
+    },
+    {
+      "id": "emozhixie-zuzhou",
+      "name": "恶魔之血·诅咒",
+      "source_url": "https://wiki.mysqil.com/cassettes/emozhixie-zuzhou",
+      "raw_page": "data/mysqil/cassettes/emozhixie-zuzhou/raw/page.html",
+      "images": [
+        {
+          "quality": "blue",
+          "source_url": "https://wiki.mysqil.com/images/cassettes/devils-blood-curse/blue.webp",
+          "local_path": "data/resources/encyclopedia/cassettes/emozhixie-zuzhou/blue.webp",
+          "sha256": "f874c704ae0a886941e3bd33799fe7882ae9dd9ba8a29243b0afd2794692f0f8"
+        },
+        {
+          "quality": "gold",
+          "source_url": "https://wiki.mysqil.com/images/cassettes/devils-blood-curse/gold.webp",
+          "local_path": "data/resources/encyclopedia/cassettes/emozhixie-zuzhou/gold.webp",
+          "sha256": "c0fc163306d8ede6b61d3ab0ac6e10fc8b1bc9dfe676061518e661b28f45328f"
+        },
+        {
+          "quality": "purple",
+          "source_url": "https://wiki.mysqil.com/images/cassettes/devils-blood-curse/purple.webp",
+          "local_path": "data/resources/encyclopedia/cassettes/emozhixie-zuzhou/purple.webp",
+          "sha256": "f021e07a146a566c65ca2283e583e411f4fba0f33ed9782ff1d145077bc4c4fc"
+        }
+      ]
+    },
+    {
+      "id": "senlin-yinghuozhixin",
+      "name": "森林萤火之心",
+      "source_url": "https://wiki.mysqil.com/cassettes/senlin-yinghuozhixin",
+      "raw_page": "data/mysqil/cassettes/senlin-yinghuozhixin/raw/page.html",
+      "images": [
+        {
+          "quality": "blue",
+          "source_url": "https://wiki.mysqil.com/images/cassettes/fireflies-and-the-forest/blue.webp",
+          "local_path": "data/resources/encyclopedia/cassettes/senlin-yinghuozhixin/blue.webp",
+          "sha256": "e0e6319bff97904ebbe06a520a3bbdfe4763b05cd54f63e07ac482adbc8360ff"
+        },
+        {
+          "quality": "gold",
+          "source_url": "https://wiki.mysqil.com/images/cassettes/fireflies-and-the-forest/gold.webp",
+          "local_path": "data/resources/encyclopedia/cassettes/senlin-yinghuozhixin/gold.webp",
+          "sha256": "0c0bd29d9ef3460607f787283721674e349c9b1d7e14060f4c05e7ed71939ae3"
+        },
+        {
+          "quality": "purple",
+          "source_url": "https://wiki.mysqil.com/images/cassettes/fireflies-and-the-forest/purple.webp",
+          "local_path": "data/resources/encyclopedia/cassettes/senlin-yinghuozhixin/purple.webp",
+          "sha256": "40be18531edbd58be223f7360c18951c1f625715fa307a881bfb6fc0012e7ebe"
+        }
+      ]
+    },
+    {
+      "id": "zhenhong-shuangshengdie",
+      "name": "真红双生蝶",
+      "source_url": "https://wiki.mysqil.com/cassettes/zhenhong-shuangshengdie",
+      "raw_page": "data/mysqil/cassettes/zhenhong-shuangshengdie/raw/page.html",
+      "images": [
+        {
+          "quality": "blue",
+          "source_url": "https://wiki.mysqil.com/images/cassettes/crimson-twin-butterflies/blue.webp",
+          "local_path": "data/resources/encyclopedia/cassettes/zhenhong-shuangshengdie/blue.webp",
+          "sha256": "45b1ed19fd47fce5cda894158f3730ccd5b243721896b8ca9c74ed4b25f9ed77"
+        },
+        {
+          "quality": "gold",
+          "source_url": "https://wiki.mysqil.com/images/cassettes/crimson-twin-butterflies/gold.webp",
+          "local_path": "data/resources/encyclopedia/cassettes/zhenhong-shuangshengdie/gold.webp",
+          "sha256": "b31290525ac58a88d0ea5c28ad5db2c2e6ea27c66e5ed2a51d7e5e8cd799e813"
+        },
+        {
+          "quality": "purple",
+          "source_url": "https://wiki.mysqil.com/images/cassettes/crimson-twin-butterflies/purple.webp",
+          "local_path": "data/resources/encyclopedia/cassettes/zhenhong-shuangshengdie/purple.webp",
+          "sha256": "5bb4816dff6d4ef37bdc0a40520fe7c18c263d9a5aaab6a65d2da6d87812712d"
+        }
+      ]
+    },
+    {
+      "id": "jietou-quanwang",
+      "name": "街头拳王",
+      "source_url": "https://wiki.mysqil.com/cassettes/jietou-quanwang",
+      "raw_page": "data/mysqil/cassettes/jietou-quanwang/raw/page.html",
+      "images": [
+        {
+          "quality": "blue",
+          "source_url": "https://wiki.mysqil.com/images/cassettes/street-boxer/blue.webp",
+          "local_path": "data/resources/encyclopedia/cassettes/jietou-quanwang/blue.webp",
+          "sha256": "7b8866d056828d2fe1fbd47a8b00981ca1577be2186e07ac5ac88077e5a53d7e"
+        },
+        {
+          "quality": "gold",
+          "source_url": "https://wiki.mysqil.com/images/cassettes/street-boxer/gold.webp",
+          "local_path": "data/resources/encyclopedia/cassettes/jietou-quanwang/gold.webp",
+          "sha256": "d95dd4f18963116e1a5e1431cacb6c53bda42e48ab67925279202ec4ca10beb7"
+        },
+        {
+          "quality": "purple",
+          "source_url": "https://wiki.mysqil.com/images/cassettes/street-boxer/purple.webp",
+          "local_path": "data/resources/encyclopedia/cassettes/jietou-quanwang/purple.webp",
+          "sha256": "c515b31b1460de9b764b3d34578a8ad082eebb2c47eb47a3df8d278d681001ac"
+        }
+      ]
+    },
+    {
+      "id": "diyabolosi",
+      "name": "迪亚波罗斯",
+      "source_url": "https://wiki.mysqil.com/cassettes/diyabolosi",
+      "raw_page": "data/mysqil/cassettes/diyabolosi/raw/page.html",
+      "images": [
+        {
+          "quality": "blue",
+          "source_url": "https://wiki.mysqil.com/images/cassettes/diabolos/blue.webp",
+          "local_path": "data/resources/encyclopedia/cassettes/diyabolosi/blue.webp",
+          "sha256": "71a4ae0e815488383b06fef5bcdd9807e5a55a25a7ccee4d97629702a1e8358d"
+        },
+        {
+          "quality": "gold",
+          "source_url": "https://wiki.mysqil.com/images/cassettes/diabolos/gold.webp",
+          "local_path": "data/resources/encyclopedia/cassettes/diyabolosi/gold.webp",
+          "sha256": "09cd2e91a9097695dce9c811e128d0c1e7f73bae474b22d7b18720bee97ef325"
+        },
+        {
+          "quality": "purple",
+          "source_url": "https://wiki.mysqil.com/images/cassettes/diabolos/purple.webp",
+          "local_path": "data/resources/encyclopedia/cassettes/diyabolosi/purple.webp",
+          "sha256": "6ad7552557ca1605cdf68b9edf0aa5c297adcb6e790fa61363807ffc2310b7a3"
+        }
+      ]
+    },
+    {
+      "id": "shouwei-wangguo",
+      "name": "守卫王国",
+      "source_url": "https://wiki.mysqil.com/cassettes/shouwei-wangguo",
+      "raw_page": "data/mysqil/cassettes/shouwei-wangguo/raw/page.html",
+      "images": [
+        {
+          "quality": "blue",
+          "source_url": "https://wiki.mysqil.com/images/cassettes/kingdoms-guard/blue.webp",
+          "local_path": "data/resources/encyclopedia/cassettes/shouwei-wangguo/blue.webp",
+          "sha256": "6b0ad79e81dcf18afcfe4901f9697d2a2caeaec92187260bfea54f77e1e7eeab"
+        },
+        {
+          "quality": "gold",
+          "source_url": "https://wiki.mysqil.com/images/cassettes/kingdoms-guard/gold.webp",
+          "local_path": "data/resources/encyclopedia/cassettes/shouwei-wangguo/gold.webp",
+          "sha256": "4ce49827f847a709f63a027e4e7574c56fc120a292df15810c29e8d5ce87f803"
+        },
+        {
+          "quality": "purple",
+          "source_url": "https://wiki.mysqil.com/images/cassettes/kingdoms-guard/purple.webp",
+          "local_path": "data/resources/encyclopedia/cassettes/shouwei-wangguo/purple.webp",
+          "sha256": "b2c149e2f411cf50ea2c5cfa109fc4913fb46f43667dcf0facc2d9dbea73e4d6"
+        }
+      ]
+    },
+    {
+      "id": "xiaoxiao-damaoxian",
+      "name": "小小大冒险",
+      "source_url": "https://wiki.mysqil.com/cassettes/xiaoxiao-damaoxian",
+      "raw_page": "data/mysqil/cassettes/xiaoxiao-damaoxian/raw/page.html",
+      "images": [
+        {
+          "quality": "blue",
+          "source_url": "https://wiki.mysqil.com/images/cassettes/tiny-big-adventure/blue.webp",
+          "local_path": "data/resources/encyclopedia/cassettes/xiaoxiao-damaoxian/blue.webp",
+          "sha256": "b8a606185c4c3abfc129e96a9ca6cb052a8d72ba804ad8a836398f343992605f"
+        },
+        {
+          "quality": "gold",
+          "source_url": "https://wiki.mysqil.com/images/cassettes/tiny-big-adventure/gold.webp",
+          "local_path": "data/resources/encyclopedia/cassettes/xiaoxiao-damaoxian/gold.webp",
+          "sha256": "156123ac1a752f0efb8a9ff33c7a9d7581977567f8e341123ce4b5fa3d1149bd"
+        },
+        {
+          "quality": "purple",
+          "source_url": "https://wiki.mysqil.com/images/cassettes/tiny-big-adventure/purple.webp",
+          "local_path": "data/resources/encyclopedia/cassettes/xiaoxiao-damaoxian/purple.webp",
+          "sha256": "8951517ee702e5c7fb27f3ccda79cf4d762755b4054612d93ef523bb13f8cbc0"
+        }
+      ]
+    },
+    {
+      "id": "yingzhi-xintiao",
+      "name": "影之信条",
+      "source_url": "https://wiki.mysqil.com/cassettes/yingzhi-xintiao",
+      "raw_page": "data/mysqil/cassettes/yingzhi-xintiao/raw/page.html",
+      "images": [
+        {
+          "quality": "blue",
+          "source_url": "https://wiki.mysqil.com/images/cassettes/shadow-creed/blue.webp",
+          "local_path": "data/resources/encyclopedia/cassettes/yingzhi-xintiao/blue.webp",
+          "sha256": "60424272b565a96669987610d97229489b966c5f122dca67c282fd292d856c80"
+        },
+        {
+          "quality": "gold",
+          "source_url": "https://wiki.mysqil.com/images/cassettes/shadow-creed/gold.webp",
+          "local_path": "data/resources/encyclopedia/cassettes/yingzhi-xintiao/gold.webp",
+          "sha256": "454b259cb66e872a7d9437bee7f86fb75d2edf83b4f560ba17d1be9d0406a88c"
+        },
+        {
+          "quality": "purple",
+          "source_url": "https://wiki.mysqil.com/images/cassettes/shadow-creed/purple.webp",
+          "local_path": "data/resources/encyclopedia/cassettes/yingzhi-xintiao/purple.webp",
+          "sha256": "c0fb775ab4b64d654b752d06e03ec227bb236ff3e3c1c66778bc145f1fc6ffd0"
+        }
+      ]
+    },
+    {
+      "id": "tiyà-yèjianjiuguan",
+      "name": "缇娅的夜间酒馆",
+      "source_url": "https://wiki.mysqil.com/cassettes/tiy%C3%A0-y%C3%A8jianjiuguan",
+      "raw_page": "data/mysqil/cassettes/tiyà-yèjianjiuguan/raw/page.html",
+      "images": [
+        {
+          "quality": "blue",
+          "source_url": "https://wiki.mysqil.com/images/cassettes/theas-night-tavern/blue.webp",
+          "local_path": "data/resources/encyclopedia/cassettes/tiyà-yèjianjiuguan/blue.webp",
+          "sha256": "1fafd51daff0ef2d5e2ccaf1a5549c3ab32faa78c593257ed52e68ebe6a6325b"
+        },
+        {
+          "quality": "gold",
+          "source_url": "https://wiki.mysqil.com/images/cassettes/theas-night-tavern/gold.webp",
+          "local_path": "data/resources/encyclopedia/cassettes/tiyà-yèjianjiuguan/gold.webp",
+          "sha256": "0729422db0c7379a843533595387264b61bf9735e9ce20ba9f090421449d5e4d"
+        },
+        {
+          "quality": "purple",
+          "source_url": "https://wiki.mysqil.com/images/cassettes/theas-night-tavern/purple.webp",
+          "local_path": "data/resources/encyclopedia/cassettes/tiyà-yèjianjiuguan/purple.webp",
+          "sha256": "b3e4f4be15a91eea973b102892acab3ea6c4d136911ed2ed78db29c4ade0d1bb"
+        }
+      ]
+    },
+    {
+      "id": "jingmi-shanzhuang",
+      "name": "静谧山庄",
+      "source_url": "https://wiki.mysqil.com/cassettes/jingmi-shanzhuang",
+      "raw_page": "data/mysqil/cassettes/jingmi-shanzhuang/raw/page.html",
+      "images": [
+        {
+          "quality": "blue",
+          "source_url": "https://wiki.mysqil.com/images/cassettes/quiet-manor/blue.webp",
+          "local_path": "data/resources/encyclopedia/cassettes/jingmi-shanzhuang/blue.webp",
+          "sha256": "7659a5bf0b62140115bb926e089ec5211de53215848463bd63418752b929905e"
+        },
+        {
+          "quality": "gold",
+          "source_url": "https://wiki.mysqil.com/images/cassettes/quiet-manor/gold.webp",
+          "local_path": "data/resources/encyclopedia/cassettes/jingmi-shanzhuang/gold.webp",
+          "sha256": "2706cbc129a8f77cc7cea5816a3f0c591059e90a3d2615d84bb035a864640a9c"
+        },
+        {
+          "quality": "purple",
+          "source_url": "https://wiki.mysqil.com/images/cassettes/quiet-manor/purple.webp",
+          "local_path": "data/resources/encyclopedia/cassettes/jingmi-shanzhuang/purple.webp",
+          "sha256": "766bd9a9321ba1152fd230c1460464b5e1d6da622953c236120cf49149fb5e08"
+        }
+      ]
+    },
+    {
+      "id": "yinsu-lancìwei",
+      "name": "音速蓝刺猬",
+      "source_url": "https://wiki.mysqil.com/cassettes/yinsu-lanc%C3%ACwei",
+      "raw_page": "data/mysqil/cassettes/yinsu-lancìwei/raw/page.html",
+      "images": [
+        {
+          "quality": "blue",
+          "source_url": "https://wiki.mysqil.com/images/cassettes/speedy-hedgehog/blue.webp",
+          "local_path": "data/resources/encyclopedia/cassettes/yinsu-lancìwei/blue.webp",
+          "sha256": "0dd5c22439a13cbca3f2a280ec838f58926e321e65ce5b3aac1d2c704a17792a"
+        },
+        {
+          "quality": "gold",
+          "source_url": "https://wiki.mysqil.com/images/cassettes/speedy-hedgehog/gold.webp",
+          "local_path": "data/resources/encyclopedia/cassettes/yinsu-lancìwei/gold.webp",
+          "sha256": "d51db501fa877249fb3719f661e5fdacf5f55530df24d7bf8e96428e24890684"
+        },
+        {
+          "quality": "purple",
+          "source_url": "https://wiki.mysqil.com/images/cassettes/speedy-hedgehog/purple.webp",
+          "local_path": "data/resources/encyclopedia/cassettes/yinsu-lancìwei/purple.webp",
+          "sha256": "a0998047928b206ce9d25524ec336a8c2961af56e3b1257229cc98278a79990d"
+        }
+      ]
+    }
+  ],
+  "source_license_url": "https://creativecommons.org/licenses/by-nc-sa/4.0/"
+}

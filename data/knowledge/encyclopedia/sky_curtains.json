@@ -1,0 +1,1109 @@
+{
+  "schema_version": 1,
+  "id": "sky-curtains",
+  "name": "空幕",
+  "source_index": "https://wiki.mysqil.com/cassettes/",
+  "source": {
+    "origin": "https://wiki.mysqil.com",
+    "source": "Mysqil · 环世全鉴",
+    "source_author": "Matsuzaka Yuki",
+    "source_license": "CC BY-NC-SA 4.0",
+    "source_license_url": "https://creativecommons.org/licenses/by-nc-sa/4.0/"
+  },
+  "retrieved_at": "2026-09-29T05:35:53.4699425Z",
+  "count": 12,
+  "items": [
+    {
+      "id": "shiluo-guangmang",
+      "name": "失落光芒",
+      "category": "属性专属",
+      "element": "光属性",
+      "set_effects": {
+        "two_piece": "光属性伤害 +10%",
+        "four_piece": "佩戴者施放必杀技后，造成的伤害无视 25% 防御力，持续 20 秒（不可叠加）"
+      },
+      "acquisition": "兔子洞副本（光系产出关）",
+      "main_affix_pool": {
+        "items": [
+          "攻击力（% / 固定值）",
+          "生命值（% / 固定值）",
+          "防御力（% / 固定值）",
+          "暴击率",
+          "暴击伤害",
+          "元素伤害（光/暗/灵/咒/魂/相）",
+          "倾陷强度",
+          "环合强度"
+        ],
+        "note": "每张卡带的主属性在掉落时从以下池中随机出现一条，强化只提升数值、不改变词条种类。"
+      },
+      "sub_affix_pool": {
+        "items": [
+          "暴击率",
+          "暴击伤害",
+          "攻击力（%）",
+          "攻击力（固定值）",
+          "生命值（%）",
+          "生命值（固定值）",
+          "防御力（%）",
+          "防御力（固定值）",
+          "元素伤害加成",
+          "全伤害加成",
+          "倾陷强度",
+          "环合强度"
+        ],
+        "note": "每张卡带在掉落时随机生成 4 条副词条（不可洗练、不可变更），强化只提升数值。以下为该卡带可能出现的副词条池，具体优先级因角色定位而异，无法统一排序。"
+      },
+      "quality": {
+        "role_note": "毕业 · 主副属性数值上限最高",
+        "source_note": "困难难度及以上兔子洞产出，40 级后稳定必出",
+        "note": "所有品质的卡带均为 1 主属性 + 4 副属性，品质只影响数值上限、不影响词条条数与种类。",
+        "tiers": [
+          {
+            "quality": "金",
+            "description": "毕业 · 数值上限最高"
+          },
+          {
+            "quality": "紫",
+            "description": "约为金色 80%"
+          },
+          {
+            "quality": "蓝",
+            "description": "前期过渡"
+          }
+        ]
+      },
+      "overview": "失落光芒是光属性专属输出卡带，4件套在施放必杀技后提供 25% 无视防御，持续 20 秒，是光系主C（尤其是依赖终结技爆发的小吱）的优质选择，能有效提升爆发期伤害。",
+      "images": {
+        "gold": {
+          "quality": "gold",
+          "source_url": "https://wiki.mysqil.com/images/cassettes/lost-radiance/gold.webp",
+          "local_path": "data/resources/encyclopedia/cassettes/shiluo-guangmang/gold.webp",
+          "sha256": "dad6777be8c6ffa2e69bc6008338880d907108e012edd39021b8b9b721e41fe0"
+        },
+        "purple": {
+          "quality": "purple",
+          "source_url": "https://wiki.mysqil.com/images/cassettes/lost-radiance/purple.webp",
+          "local_path": "data/resources/encyclopedia/cassettes/shiluo-guangmang/purple.webp",
+          "sha256": "27877491e07b6741258f4a2933b9038c18395ffe7218097ac5437f67581060be"
+        },
+        "blue": {
+          "quality": "blue",
+          "source_url": "https://wiki.mysqil.com/images/cassettes/lost-radiance/blue.webp",
+          "local_path": "data/resources/encyclopedia/cassettes/shiluo-guangmang/blue.webp",
+          "sha256": "0a459b1d19b358f5bbbae39dde9cb2e83e9cb29d28213ac8a1abd2dbc5869ca9"
+        }
+      },
+      "source": {
+        "site": "Mysqil · 环世全鉴",
+        "author": "Matsuzaka Yuki",
+        "license": "CC BY-NC-SA 4.0",
+        "license_url": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+        "modifications": "从保存的来源页面提取并结构化；原始 HTML 快照单独保留。",
+        "review_status": "pending",
+        "url": "https://wiki.mysqil.com/cassettes/shiluo-guangmang",
+        "snapshot_path": "data/mysqil/cassettes/shiluo-guangmang/raw/page.html"
+      }
+    },
+    {
+      "id": "emozhixie-zuzhou",
+      "name": "恶魔之血·诅咒",
+      "category": "属性专属",
+      "element": "魂属性",
+      "set_effects": {
+        "two_piece": "魂属性伤害 +10%",
+        "four_piece": "佩戴者造成的伤害 +18%。攻击处于浸染或黯星状态的敌人时，伤害提升变为 +36%"
+      },
+      "acquisition": "兔子洞副本（魂系产出关）/ 材料自选箱",
+      "main_affix_pool": {
+        "items": [
+          "攻击力（% / 固定值）",
+          "生命值（% / 固定值）",
+          "防御力（% / 固定值）",
+          "暴击率",
+          "暴击伤害",
+          "元素伤害（光/暗/灵/咒/魂/相）",
+          "倾陷强度",
+          "环合强度"
+        ],
+        "note": "每张卡带的主属性在掉落时从以下池中随机出现一条，强化只提升数值、不改变词条种类。"
+      },
+      "sub_affix_pool": {
+        "items": [
+          "暴击率",
+          "暴击伤害",
+          "攻击力（%）",
+          "攻击力（固定值）",
+          "生命值（%）",
+          "生命值（固定值）",
+          "防御力（%）",
+          "防御力（固定值）",
+          "元素伤害加成",
+          "全伤害加成",
+          "倾陷强度",
+          "环合强度"
+        ],
+        "note": "每张卡带在掉落时随机生成 4 条副词条（不可洗练、不可变更），强化只提升数值。以下为该卡带可能出现的副词条池，具体优先级因角色定位而异，无法统一排序。"
+      },
+      "quality": {
+        "role_note": "毕业 · 主副属性数值上限最高",
+        "source_note": "困难难度及以上兔子洞产出，40 级后稳定必出",
+        "note": "所有品质的卡带均为 1 主属性 + 4 副属性，品质只影响数值上限、不影响词条条数与种类。",
+        "tiers": [
+          {
+            "quality": "金",
+            "description": "毕业 · 数值上限最高"
+          },
+          {
+            "quality": "紫",
+            "description": "约为金色 80%"
+          },
+          {
+            "quality": "蓝",
+            "description": "前期过渡"
+          }
+        ]
+      },
+      "overview": "恶魔之血·诅咒是魂属性反应流输出卡带，4件套基础增伤 18%，攻击受浸染或黯星状态影响的敌人时增伤翻倍至 36%。适合配合浸染/黯星反应体系的魂属性输出角色，需要队友先挂对应状态。\n\n可通过兔子洞副本或材料自选箱获取。",
+      "images": {
+        "gold": {
+          "quality": "gold",
+          "source_url": "https://wiki.mysqil.com/images/cassettes/devils-blood-curse/gold.webp",
+          "local_path": "data/resources/encyclopedia/cassettes/emozhixie-zuzhou/gold.webp",
+          "sha256": "c0fc163306d8ede6b61d3ab0ac6e10fc8b1bc9dfe676061518e661b28f45328f"
+        },
+        "purple": {
+          "quality": "purple",
+          "source_url": "https://wiki.mysqil.com/images/cassettes/devils-blood-curse/purple.webp",
+          "local_path": "data/resources/encyclopedia/cassettes/emozhixie-zuzhou/purple.webp",
+          "sha256": "f021e07a146a566c65ca2283e583e411f4fba0f33ed9782ff1d145077bc4c4fc"
+        },
+        "blue": {
+          "quality": "blue",
+          "source_url": "https://wiki.mysqil.com/images/cassettes/devils-blood-curse/blue.webp",
+          "local_path": "data/resources/encyclopedia/cassettes/emozhixie-zuzhou/blue.webp",
+          "sha256": "f874c704ae0a886941e3bd33799fe7882ae9dd9ba8a29243b0afd2794692f0f8"
+        }
+      },
+      "source": {
+        "site": "Mysqil · 环世全鉴",
+        "author": "Matsuzaka Yuki",
+        "license": "CC BY-NC-SA 4.0",
+        "license_url": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+        "modifications": "从保存的来源页面提取并结构化；原始 HTML 快照单独保留。",
+        "review_status": "pending",
+        "url": "https://wiki.mysqil.com/cassettes/emozhixie-zuzhou",
+        "snapshot_path": "data/mysqil/cassettes/emozhixie-zuzhou/raw/page.html"
+      }
+    },
+    {
+      "id": "senlin-yinghuozhixin",
+      "name": "森林萤火之心",
+      "category": "属性专属",
+      "element": "灵属性",
+      "set_effects": {
+        "two_piece": "灵属性伤害 +10%",
+        "four_piece": "附近敌人受到队伍造成的灵属性伤害时，佩戴者暴击伤害 +8%，最多叠加 7 层，每层持续 10 秒（后台也生效）"
+      },
+      "acquisition": "兔子洞副本（灵系产出关）",
+      "main_affix_pool": {
+        "items": [
+          "攻击力（% / 固定值）",
+          "生命值（% / 固定值）",
+          "防御力（% / 固定值）",
+          "暴击率",
+          "暴击伤害",
+          "元素伤害（光/暗/灵/咒/魂/相）",
+          "倾陷强度",
+          "环合强度"
+        ],
+        "note": "每张卡带的主属性在掉落时从以下池中随机出现一条，强化只提升数值、不改变词条种类。"
+      },
+      "sub_affix_pool": {
+        "items": [
+          "暴击率",
+          "暴击伤害",
+          "攻击力（%）",
+          "攻击力（固定值）",
+          "生命值（%）",
+          "生命值（固定值）",
+          "防御力（%）",
+          "防御力（固定值）",
+          "元素伤害加成",
+          "全伤害加成",
+          "倾陷强度",
+          "环合强度"
+        ],
+        "note": "每张卡带在掉落时随机生成 4 条副词条（不可洗练、不可变更），强化只提升数值。以下为该卡带可能出现的副词条池，具体优先级因角色定位而异，无法统一排序。"
+      },
+      "quality": {
+        "role_note": "毕业 · 主副属性数值上限最高",
+        "source_note": "困难难度及以上兔子洞产出，40 级后稳定必出",
+        "note": "所有品质的卡带均为 1 主属性 + 4 副属性，品质只影响数值上限、不影响词条条数与种类。",
+        "tiers": [
+          {
+            "quality": "金",
+            "description": "毕业 · 数值上限最高"
+          },
+          {
+            "quality": "紫",
+            "description": "约为金色 80%"
+          },
+          {
+            "quality": "蓝",
+            "description": "前期过渡"
+          }
+        ]
+      },
+      "overview": "森林萤火之心是灵属性专属输出卡带，4件套通过队伍造成灵伤害叠层提升佩戴者暴击伤害（每层 8%、最多 7 层 = +56%），且后台可生效。是娜娜莉等灵属性主C的毕业套装。",
+      "images": {
+        "gold": {
+          "quality": "gold",
+          "source_url": "https://wiki.mysqil.com/images/cassettes/fireflies-and-the-forest/gold.webp",
+          "local_path": "data/resources/encyclopedia/cassettes/senlin-yinghuozhixin/gold.webp",
+          "sha256": "0c0bd29d9ef3460607f787283721674e349c9b1d7e14060f4c05e7ed71939ae3"
+        },
+        "purple": {
+          "quality": "purple",
+          "source_url": "https://wiki.mysqil.com/images/cassettes/fireflies-and-the-forest/purple.webp",
+          "local_path": "data/resources/encyclopedia/cassettes/senlin-yinghuozhixin/purple.webp",
+          "sha256": "40be18531edbd58be223f7360c18951c1f625715fa307a881bfb6fc0012e7ebe"
+        },
+        "blue": {
+          "quality": "blue",
+          "source_url": "https://wiki.mysqil.com/images/cassettes/fireflies-and-the-forest/blue.webp",
+          "local_path": "data/resources/encyclopedia/cassettes/senlin-yinghuozhixin/blue.webp",
+          "sha256": "e0e6319bff97904ebbe06a520a3bbdfe4763b05cd54f63e07ac482adbc8360ff"
+        }
+      },
+      "source": {
+        "site": "Mysqil · 环世全鉴",
+        "author": "Matsuzaka Yuki",
+        "license": "CC BY-NC-SA 4.0",
+        "license_url": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+        "modifications": "从保存的来源页面提取并结构化；原始 HTML 快照单独保留。",
+        "review_status": "pending",
+        "url": "https://wiki.mysqil.com/cassettes/senlin-yinghuozhixin",
+        "snapshot_path": "data/mysqil/cassettes/senlin-yinghuozhixin/raw/page.html"
+      }
+    },
+    {
+      "id": "zhenhong-shuangshengdie",
+      "name": "真红双生蝶",
+      "category": "属性专属",
+      "element": "咒属性",
+      "set_effects": {
+        "two_piece": "咒属性伤害 +10%",
+        "four_piece": "附近敌人受到队伍造成的咒属性伤害时，佩戴者攻击力 +6%，最多叠加 6 层，每层持续 10 秒（后台也生效）"
+      },
+      "acquisition": "兔子洞副本（咒系产出关）",
+      "main_affix_pool": {
+        "items": [
+          "攻击力（% / 固定值）",
+          "生命值（% / 固定值）",
+          "防御力（% / 固定值）",
+          "暴击率",
+          "暴击伤害",
+          "元素伤害（光/暗/灵/咒/魂/相）",
+          "倾陷强度",
+          "环合强度"
+        ],
+        "note": "每张卡带的主属性在掉落时从以下池中随机出现一条，强化只提升数值、不改变词条种类。"
+      },
+      "sub_affix_pool": {
+        "items": [
+          "暴击率",
+          "暴击伤害",
+          "攻击力（%）",
+          "攻击力（固定值）",
+          "生命值（%）",
+          "生命值（固定值）",
+          "防御力（%）",
+          "防御力（固定值）",
+          "元素伤害加成",
+          "全伤害加成",
+          "倾陷强度",
+          "环合强度"
+        ],
+        "note": "每张卡带在掉落时随机生成 4 条副词条（不可洗练、不可变更），强化只提升数值。以下为该卡带可能出现的副词条池，具体优先级因角色定位而异，无法统一排序。"
+      },
+      "quality": {
+        "role_note": "毕业 · 主副属性数值上限最高",
+        "source_note": "困难难度及以上兔子洞产出，40 级后稳定必出",
+        "note": "所有品质的卡带均为 1 主属性 + 4 副属性，品质只影响数值上限、不影响词条条数与种类。",
+        "tiers": [
+          {
+            "quality": "金",
+            "description": "毕业 · 数值上限最高"
+          },
+          {
+            "quality": "紫",
+            "description": "约为金色 80%"
+          },
+          {
+            "quality": "蓝",
+            "description": "前期过渡"
+          }
+        ]
+      },
+      "overview": "真红双生蝶是咒属性专属输出卡带，4件套通过队伍造成咒伤害叠层提升佩戴者攻击力（每层 6%、最多 6 层），且后台可生效，是咒系输出角色的核心套装选择。",
+      "images": {
+        "gold": {
+          "quality": "gold",
+          "source_url": "https://wiki.mysqil.com/images/cassettes/crimson-twin-butterflies/gold.webp",
+          "local_path": "data/resources/encyclopedia/cassettes/zhenhong-shuangshengdie/gold.webp",
+          "sha256": "b31290525ac58a88d0ea5c28ad5db2c2e6ea27c66e5ed2a51d7e5e8cd799e813"
+        },
+        "purple": {
+          "quality": "purple",
+          "source_url": "https://wiki.mysqil.com/images/cassettes/crimson-twin-butterflies/purple.webp",
+          "local_path": "data/resources/encyclopedia/cassettes/zhenhong-shuangshengdie/purple.webp",
+          "sha256": "5bb4816dff6d4ef37bdc0a40520fe7c18c263d9a5aaab6a65d2da6d87812712d"
+        },
+        "blue": {
+          "quality": "blue",
+          "source_url": "https://wiki.mysqil.com/images/cassettes/crimson-twin-butterflies/blue.webp",
+          "local_path": "data/resources/encyclopedia/cassettes/zhenhong-shuangshengdie/blue.webp",
+          "sha256": "45b1ed19fd47fce5cda894158f3730ccd5b243721896b8ca9c74ed4b25f9ed77"
+        }
+      },
+      "source": {
+        "site": "Mysqil · 环世全鉴",
+        "author": "Matsuzaka Yuki",
+        "license": "CC BY-NC-SA 4.0",
+        "license_url": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+        "modifications": "从保存的来源页面提取并结构化；原始 HTML 快照单独保留。",
+        "review_status": "pending",
+        "url": "https://wiki.mysqil.com/cassettes/zhenhong-shuangshengdie",
+        "snapshot_path": "data/mysqil/cassettes/zhenhong-shuangshengdie/raw/page.html"
+      }
+    },
+    {
+      "id": "jietou-quanwang",
+      "name": "街头拳王",
+      "category": "属性专属",
+      "element": "相属性",
+      "set_effects": {
+        "two_piece": "相属性伤害 +10%",
+        "four_piece": "暴击率 +14%。队伍触发盈蓄或浸染反应时，额外获得 14% 暴击率，持续 20 秒"
+      },
+      "acquisition": "兔子洞副本（相系产出关）",
+      "main_affix_pool": {
+        "items": [
+          "攻击力（% / 固定值）",
+          "生命值（% / 固定值）",
+          "防御力（% / 固定值）",
+          "暴击率",
+          "暴击伤害",
+          "元素伤害（光/暗/灵/咒/魂/相）",
+          "倾陷强度",
+          "环合强度"
+        ],
+        "note": "每张卡带的主属性在掉落时从以下池中随机出现一条，强化只提升数值、不改变词条种类。"
+      },
+      "sub_affix_pool": {
+        "items": [
+          "暴击率",
+          "暴击伤害",
+          "攻击力（%）",
+          "攻击力（固定值）",
+          "生命值（%）",
+          "生命值（固定值）",
+          "防御力（%）",
+          "防御力（固定值）",
+          "元素伤害加成",
+          "全伤害加成",
+          "倾陷强度",
+          "环合强度"
+        ],
+        "note": "每张卡带在掉落时随机生成 4 条副词条（不可洗练、不可变更），强化只提升数值。以下为该卡带可能出现的副词条池，具体优先级因角色定位而异，无法统一排序。"
+      },
+      "quality": {
+        "role_note": "毕业 · 主副属性数值上限最高",
+        "source_note": "困难难度及以上兔子洞产出，40 级后稳定必出",
+        "note": "所有品质的卡带均为 1 主属性 + 4 副属性，品质只影响数值上限、不影响词条条数与种类。",
+        "tiers": [
+          {
+            "quality": "金",
+            "description": "毕业 · 数值上限最高"
+          },
+          {
+            "quality": "紫",
+            "description": "约为金色 80%"
+          },
+          {
+            "quality": "蓝",
+            "description": "前期过渡"
+          }
+        ]
+      },
+      "overview": "街头拳王是相属性专属输出卡带，4件套提供 14% 暴击率，触发盈蓄或浸染反应后额外获得 14% 暴击率（共 28%），能快速拉满暴击。是哈索尔、翳等相属性输出角色的核心套装。",
+      "images": {
+        "gold": {
+          "quality": "gold",
+          "source_url": "https://wiki.mysqil.com/images/cassettes/street-boxer/gold.webp",
+          "local_path": "data/resources/encyclopedia/cassettes/jietou-quanwang/gold.webp",
+          "sha256": "d95dd4f18963116e1a5e1431cacb6c53bda42e48ab67925279202ec4ca10beb7"
+        },
+        "purple": {
+          "quality": "purple",
+          "source_url": "https://wiki.mysqil.com/images/cassettes/street-boxer/purple.webp",
+          "local_path": "data/resources/encyclopedia/cassettes/jietou-quanwang/purple.webp",
+          "sha256": "c515b31b1460de9b764b3d34578a8ad082eebb2c47eb47a3df8d278d681001ac"
+        },
+        "blue": {
+          "quality": "blue",
+          "source_url": "https://wiki.mysqil.com/images/cassettes/street-boxer/blue.webp",
+          "local_path": "data/resources/encyclopedia/cassettes/jietou-quanwang/blue.webp",
+          "sha256": "7b8866d056828d2fe1fbd47a8b00981ca1577be2186e07ac5ac88077e5a53d7e"
+        }
+      },
+      "source": {
+        "site": "Mysqil · 环世全鉴",
+        "author": "Matsuzaka Yuki",
+        "license": "CC BY-NC-SA 4.0",
+        "license_url": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+        "modifications": "从保存的来源页面提取并结构化；原始 HTML 快照单独保留。",
+        "review_status": "pending",
+        "url": "https://wiki.mysqil.com/cassettes/jietou-quanwang",
+        "snapshot_path": "data/mysqil/cassettes/jietou-quanwang/raw/page.html"
+      }
+    },
+    {
+      "id": "diyabolosi",
+      "name": "迪亚波罗斯",
+      "category": "属性专属",
+      "element": "暗属性",
+      "set_effects": {
+        "two_piece": "暗属性伤害 +10%",
+        "four_piece": "无视敌人 12% 暗属性抗性。佩戴者触发浊燃反应后，无视效果提升至 24%，持续 20 秒"
+      },
+      "acquisition": "兔子洞副本（暗系产出关）",
+      "main_affix_pool": {
+        "items": [
+          "攻击力（% / 固定值）",
+          "生命值（% / 固定值）",
+          "防御力（% / 固定值）",
+          "暴击率",
+          "暴击伤害",
+          "元素伤害（光/暗/灵/咒/魂/相）",
+          "倾陷强度",
+          "环合强度"
+        ],
+        "note": "每张卡带的主属性在掉落时从以下池中随机出现一条，强化只提升数值、不改变词条种类。"
+      },
+      "sub_affix_pool": {
+        "items": [
+          "暴击率",
+          "暴击伤害",
+          "攻击力（%）",
+          "攻击力（固定值）",
+          "生命值（%）",
+          "生命值（固定值）",
+          "防御力（%）",
+          "防御力（固定值）",
+          "元素伤害加成",
+          "全伤害加成",
+          "倾陷强度",
+          "环合强度"
+        ],
+        "note": "每张卡带在掉落时随机生成 4 条副词条（不可洗练、不可变更），强化只提升数值。以下为该卡带可能出现的副词条池，具体优先级因角色定位而异，无法统一排序。"
+      },
+      "quality": {
+        "role_note": "毕业 · 主副属性数值上限最高",
+        "source_note": "困难难度及以上兔子洞产出，40 级后稳定必出",
+        "note": "所有品质的卡带均为 1 主属性 + 4 副属性，品质只影响数值上限、不影响词条条数与种类。",
+        "tiers": [
+          {
+            "quality": "金",
+            "description": "毕业 · 数值上限最高"
+          },
+          {
+            "quality": "紫",
+            "description": "约为金色 80%"
+          },
+          {
+            "quality": "蓝",
+            "description": "前期过渡"
+          }
+        ]
+      },
+      "overview": "迪亚波罗斯是暗属性专属输出卡带，4件套提供无视暗抗（12%，触发浊燃反应后翻倍至 24%），是暗属性主C（安魂曲）与副C（达芙蒂尔）的核心套装，配合浊燃反应体系效果更佳。",
+      "images": {
+        "gold": {
+          "quality": "gold",
+          "source_url": "https://wiki.mysqil.com/images/cassettes/diabolos/gold.webp",
+          "local_path": "data/resources/encyclopedia/cassettes/diyabolosi/gold.webp",
+          "sha256": "09cd2e91a9097695dce9c811e128d0c1e7f73bae474b22d7b18720bee97ef325"
+        },
+        "purple": {
+          "quality": "purple",
+          "source_url": "https://wiki.mysqil.com/images/cassettes/diabolos/purple.webp",
+          "local_path": "data/resources/encyclopedia/cassettes/diyabolosi/purple.webp",
+          "sha256": "6ad7552557ca1605cdf68b9edf0aa5c297adcb6e790fa61363807ffc2310b7a3"
+        },
+        "blue": {
+          "quality": "blue",
+          "source_url": "https://wiki.mysqil.com/images/cassettes/diabolos/blue.webp",
+          "local_path": "data/resources/encyclopedia/cassettes/diyabolosi/blue.webp",
+          "sha256": "71a4ae0e815488383b06fef5bcdd9807e5a55a25a7ccee4d97629702a1e8358d"
+        }
+      },
+      "source": {
+        "site": "Mysqil · 环世全鉴",
+        "author": "Matsuzaka Yuki",
+        "license": "CC BY-NC-SA 4.0",
+        "license_url": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+        "modifications": "从保存的来源页面提取并结构化；原始 HTML 快照单独保留。",
+        "review_status": "pending",
+        "url": "https://wiki.mysqil.com/cassettes/diyabolosi",
+        "snapshot_path": "data/mysqil/cassettes/diyabolosi/raw/page.html"
+      }
+    },
+    {
+      "id": "shouwei-wangguo",
+      "name": "守卫王国",
+      "category": "泛用功能",
+      "element": "",
+      "set_effects": {
+        "two_piece": "防御力 +15%",
+        "four_piece": "佩戴者的护盾效果 +20%"
+      },
+      "acquisition": "兔子洞副本",
+      "main_affix_pool": {
+        "items": [
+          "攻击力（% / 固定值）",
+          "生命值（% / 固定值）",
+          "防御力（% / 固定值）",
+          "暴击率",
+          "暴击伤害",
+          "元素伤害（光/暗/灵/咒/魂/相）",
+          "倾陷强度",
+          "环合强度"
+        ],
+        "note": "每张卡带的主属性在掉落时从以下池中随机出现一条，强化只提升数值、不改变词条种类。"
+      },
+      "sub_affix_pool": {
+        "items": [
+          "暴击率",
+          "暴击伤害",
+          "攻击力（%）",
+          "攻击力（固定值）",
+          "生命值（%）",
+          "生命值（固定值）",
+          "防御力（%）",
+          "防御力（固定值）",
+          "元素伤害加成",
+          "全伤害加成",
+          "倾陷强度",
+          "环合强度"
+        ],
+        "note": "每张卡带在掉落时随机生成 4 条副词条（不可洗练、不可变更），强化只提升数值。以下为该卡带可能出现的副词条池，具体优先级因角色定位而异，无法统一排序。"
+      },
+      "quality": {
+        "role_note": "毕业 · 主副属性数值上限最高",
+        "source_note": "困难难度及以上兔子洞产出，40 级后稳定必出",
+        "note": "所有品质的卡带均为 1 主属性 + 4 副属性，品质只影响数值上限、不影响词条条数与种类。",
+        "tiers": [
+          {
+            "quality": "金",
+            "description": "毕业 · 数值上限最高"
+          },
+          {
+            "quality": "紫",
+            "description": "约为金色 80%"
+          },
+          {
+            "quality": "蓝",
+            "description": "前期过渡"
+          }
+        ]
+      },
+      "overview": "守卫王国是防御/护盾型通用卡带，2件套提升防御力，4件套强化护盾效果 20%。适合提供护盾的生存辅助角色（如阿德勒），能显著提升护盾的承伤能力，是高难度生存关卡的优质选择。",
+      "images": {
+        "gold": {
+          "quality": "gold",
+          "source_url": "https://wiki.mysqil.com/images/cassettes/kingdoms-guard/gold.webp",
+          "local_path": "data/resources/encyclopedia/cassettes/shouwei-wangguo/gold.webp",
+          "sha256": "4ce49827f847a709f63a027e4e7574c56fc120a292df15810c29e8d5ce87f803"
+        },
+        "purple": {
+          "quality": "purple",
+          "source_url": "https://wiki.mysqil.com/images/cassettes/kingdoms-guard/purple.webp",
+          "local_path": "data/resources/encyclopedia/cassettes/shouwei-wangguo/purple.webp",
+          "sha256": "b2c149e2f411cf50ea2c5cfa109fc4913fb46f43667dcf0facc2d9dbea73e4d6"
+        },
+        "blue": {
+          "quality": "blue",
+          "source_url": "https://wiki.mysqil.com/images/cassettes/kingdoms-guard/blue.webp",
+          "local_path": "data/resources/encyclopedia/cassettes/shouwei-wangguo/blue.webp",
+          "sha256": "6b0ad79e81dcf18afcfe4901f9697d2a2caeaec92187260bfea54f77e1e7eeab"
+        }
+      },
+      "source": {
+        "site": "Mysqil · 环世全鉴",
+        "author": "Matsuzaka Yuki",
+        "license": "CC BY-NC-SA 4.0",
+        "license_url": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+        "modifications": "从保存的来源页面提取并结构化；原始 HTML 快照单独保留。",
+        "review_status": "pending",
+        "url": "https://wiki.mysqil.com/cassettes/shouwei-wangguo",
+        "snapshot_path": "data/mysqil/cassettes/shouwei-wangguo/raw/page.html"
+      }
+    },
+    {
+      "id": "xiaoxiao-damaoxian",
+      "name": "小小大冒险",
+      "category": "泛用功能",
+      "element": "",
+      "set_effects": {
+        "two_piece": "生命值上限 +10%",
+        "four_piece": "佩戴者 HP 降低时，最大 HP +4%，最多叠加 10 层，每层持续 10 秒。施放必杀技立即获得 10 层"
+      },
+      "acquisition": "兔子洞副本",
+      "main_affix_pool": {
+        "items": [
+          "攻击力（% / 固定值）",
+          "生命值（% / 固定值）",
+          "防御力（% / 固定值）",
+          "暴击率",
+          "暴击伤害",
+          "元素伤害（光/暗/灵/咒/魂/相）",
+          "倾陷强度",
+          "环合强度"
+        ],
+        "note": "每张卡带的主属性在掉落时从以下池中随机出现一条，强化只提升数值、不改变词条种类。"
+      },
+      "sub_affix_pool": {
+        "items": [
+          "暴击率",
+          "暴击伤害",
+          "攻击力（%）",
+          "攻击力（固定值）",
+          "生命值（%）",
+          "生命值（固定值）",
+          "防御力（%）",
+          "防御力（固定值）",
+          "元素伤害加成",
+          "全伤害加成",
+          "倾陷强度",
+          "环合强度"
+        ],
+        "note": "每张卡带在掉落时随机生成 4 条副词条（不可洗练、不可变更），强化只提升数值。以下为该卡带可能出现的副词条池，具体优先级因角色定位而异，无法统一排序。"
+      },
+      "quality": {
+        "role_note": "毕业 · 主副属性数值上限最高",
+        "source_note": "困难难度及以上兔子洞产出，40 级后稳定必出",
+        "note": "所有品质的卡带均为 1 主属性 + 4 副属性，品质只影响数值上限、不影响词条条数与种类。",
+        "tiers": [
+          {
+            "quality": "金",
+            "description": "毕业 · 数值上限最高"
+          },
+          {
+            "quality": "紫",
+            "description": "约为金色 80%"
+          },
+          {
+            "quality": "蓝",
+            "description": "前期过渡"
+          }
+        ]
+      },
+      "overview": "小小大冒险是生命值堆叠型卡带，4件套通过 HP 降低叠层提升最大生命值（每层 +4%，最多 10 层）。最适合法帝娅——施放必杀技直接获得满层 10 层，配合 2 件套的 +10%，瞬间获得 +50% 生命上限加成，大幅强化其护盾/生存能力。",
+      "images": {
+        "gold": {
+          "quality": "gold",
+          "source_url": "https://wiki.mysqil.com/images/cassettes/tiny-big-adventure/gold.webp",
+          "local_path": "data/resources/encyclopedia/cassettes/xiaoxiao-damaoxian/gold.webp",
+          "sha256": "156123ac1a752f0efb8a9ff33c7a9d7581977567f8e341123ce4b5fa3d1149bd"
+        },
+        "purple": {
+          "quality": "purple",
+          "source_url": "https://wiki.mysqil.com/images/cassettes/tiny-big-adventure/purple.webp",
+          "local_path": "data/resources/encyclopedia/cassettes/xiaoxiao-damaoxian/purple.webp",
+          "sha256": "8951517ee702e5c7fb27f3ccda79cf4d762755b4054612d93ef523bb13f8cbc0"
+        },
+        "blue": {
+          "quality": "blue",
+          "source_url": "https://wiki.mysqil.com/images/cassettes/tiny-big-adventure/blue.webp",
+          "local_path": "data/resources/encyclopedia/cassettes/xiaoxiao-damaoxian/blue.webp",
+          "sha256": "b8a606185c4c3abfc129e96a9ca6cb052a8d72ba804ad8a836398f343992605f"
+        }
+      },
+      "source": {
+        "site": "Mysqil · 环世全鉴",
+        "author": "Matsuzaka Yuki",
+        "license": "CC BY-NC-SA 4.0",
+        "license_url": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+        "modifications": "从保存的来源页面提取并结构化；原始 HTML 快照单独保留。",
+        "review_status": "pending",
+        "url": "https://wiki.mysqil.com/cassettes/xiaoxiao-damaoxian",
+        "snapshot_path": "data/mysqil/cassettes/xiaoxiao-damaoxian/raw/page.html"
+      }
+    },
+    {
+      "id": "yingzhi-xintiao",
+      "name": "影之信条",
+      "category": "泛用功能",
+      "element": "",
+      "set_effects": {
+        "two_piece": "攻击力 +10%",
+        "four_piece": "施放技能后，佩戴者攻击力 +25%，持续 20 秒"
+      },
+      "acquisition": "兔子洞副本",
+      "main_affix_pool": {
+        "items": [
+          "攻击力（% / 固定值）",
+          "生命值（% / 固定值）",
+          "防御力（% / 固定值）",
+          "暴击率",
+          "暴击伤害",
+          "元素伤害（光/暗/灵/咒/魂/相）",
+          "倾陷强度",
+          "环合强度"
+        ],
+        "note": "每张卡带的主属性在掉落时从以下池中随机出现一条，强化只提升数值、不改变词条种类。"
+      },
+      "sub_affix_pool": {
+        "items": [
+          "暴击率",
+          "暴击伤害",
+          "攻击力（%）",
+          "攻击力（固定值）",
+          "生命值（%）",
+          "生命值（固定值）",
+          "防御力（%）",
+          "防御力（固定值）",
+          "元素伤害加成",
+          "全伤害加成",
+          "倾陷强度",
+          "环合强度"
+        ],
+        "note": "每张卡带在掉落时随机生成 4 条副词条（不可洗练、不可变更），强化只提升数值。以下为该卡带可能出现的副词条池，具体优先级因角色定位而异，无法统一排序。"
+      },
+      "quality": {
+        "role_note": "毕业 · 主副属性数值上限最高",
+        "source_note": "困难难度及以上兔子洞产出，40 级后稳定必出",
+        "note": "所有品质的卡带均为 1 主属性 + 4 副属性，品质只影响数值上限、不影响词条条数与种类。",
+        "tiers": [
+          {
+            "quality": "金",
+            "description": "毕业 · 数值上限最高"
+          },
+          {
+            "quality": "紫",
+            "description": "约为金色 80%"
+          },
+          {
+            "quality": "蓝",
+            "description": "前期过渡"
+          }
+        ]
+      },
+      "overview": "影之信条是通用攻击型卡带，不限属性。2件套提升攻击力，4件套在施放技能后提供 25% 攻击力加成，是站场主C的通用优质选择。",
+      "images": {
+        "gold": {
+          "quality": "gold",
+          "source_url": "https://wiki.mysqil.com/images/cassettes/shadow-creed/gold.webp",
+          "local_path": "data/resources/encyclopedia/cassettes/yingzhi-xintiao/gold.webp",
+          "sha256": "454b259cb66e872a7d9437bee7f86fb75d2edf83b4f560ba17d1be9d0406a88c"
+        },
+        "purple": {
+          "quality": "purple",
+          "source_url": "https://wiki.mysqil.com/images/cassettes/shadow-creed/purple.webp",
+          "local_path": "data/resources/encyclopedia/cassettes/yingzhi-xintiao/purple.webp",
+          "sha256": "c0fb775ab4b64d654b752d06e03ec227bb236ff3e3c1c66778bc145f1fc6ffd0"
+        },
+        "blue": {
+          "quality": "blue",
+          "source_url": "https://wiki.mysqil.com/images/cassettes/shadow-creed/blue.webp",
+          "local_path": "data/resources/encyclopedia/cassettes/yingzhi-xintiao/blue.webp",
+          "sha256": "60424272b565a96669987610d97229489b966c5f122dca67c282fd292d856c80"
+        }
+      },
+      "source": {
+        "site": "Mysqil · 环世全鉴",
+        "author": "Matsuzaka Yuki",
+        "license": "CC BY-NC-SA 4.0",
+        "license_url": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+        "modifications": "从保存的来源页面提取并结构化；原始 HTML 快照单独保留。",
+        "review_status": "pending",
+        "url": "https://wiki.mysqil.com/cassettes/yingzhi-xintiao",
+        "snapshot_path": "data/mysqil/cassettes/yingzhi-xintiao/raw/page.html"
+      }
+    },
+    {
+      "id": "tiyà-yèjianjiuguan",
+      "name": "缇娅的夜间酒馆",
+      "category": "泛用功能",
+      "element": "",
+      "set_effects": {
+        "two_piece": "生命值上限 +10%",
+        "four_piece": "佩戴者的治疗加成 +20%"
+      },
+      "acquisition": "兔子洞副本",
+      "main_affix_pool": {
+        "items": [
+          "攻击力（% / 固定值）",
+          "生命值（% / 固定值）",
+          "防御力（% / 固定值）",
+          "暴击率",
+          "暴击伤害",
+          "元素伤害（光/暗/灵/咒/魂/相）",
+          "倾陷强度",
+          "环合强度"
+        ],
+        "note": "每张卡带的主属性在掉落时从以下池中随机出现一条，强化只提升数值、不改变词条种类。"
+      },
+      "sub_affix_pool": {
+        "items": [
+          "暴击率",
+          "暴击伤害",
+          "攻击力（%）",
+          "攻击力（固定值）",
+          "生命值（%）",
+          "生命值（固定值）",
+          "防御力（%）",
+          "防御力（固定值）",
+          "元素伤害加成",
+          "全伤害加成",
+          "倾陷强度",
+          "环合强度"
+        ],
+        "note": "每张卡带在掉落时随机生成 4 条副词条（不可洗练、不可变更），强化只提升数值。以下为该卡带可能出现的副词条池，具体优先级因角色定位而异，无法统一排序。"
+      },
+      "quality": {
+        "role_note": "毕业 · 主副属性数值上限最高",
+        "source_note": "困难难度及以上兔子洞产出，40 级后稳定必出",
+        "note": "所有品质的卡带均为 1 主属性 + 4 副属性，品质只影响数值上限、不影响词条条数与种类。",
+        "tiers": [
+          {
+            "quality": "金",
+            "description": "毕业 · 数值上限最高"
+          },
+          {
+            "quality": "紫",
+            "description": "约为金色 80%"
+          },
+          {
+            "quality": "蓝",
+            "description": "前期过渡"
+          }
+        ]
+      },
+      "overview": "缇娅的夜间酒馆是治疗辅助专属卡带，2件套提升生命上限，4件套提供 20% 治疗加成，是治疗角色（埃德嘉等）的毕业套装。",
+      "images": {
+        "gold": {
+          "quality": "gold",
+          "source_url": "https://wiki.mysqil.com/images/cassettes/theas-night-tavern/gold.webp",
+          "local_path": "data/resources/encyclopedia/cassettes/tiyà-yèjianjiuguan/gold.webp",
+          "sha256": "0729422db0c7379a843533595387264b61bf9735e9ce20ba9f090421449d5e4d"
+        },
+        "purple": {
+          "quality": "purple",
+          "source_url": "https://wiki.mysqil.com/images/cassettes/theas-night-tavern/purple.webp",
+          "local_path": "data/resources/encyclopedia/cassettes/tiyà-yèjianjiuguan/purple.webp",
+          "sha256": "b3e4f4be15a91eea973b102892acab3ea6c4d136911ed2ed78db29c4ade0d1bb"
+        },
+        "blue": {
+          "quality": "blue",
+          "source_url": "https://wiki.mysqil.com/images/cassettes/theas-night-tavern/blue.webp",
+          "local_path": "data/resources/encyclopedia/cassettes/tiyà-yèjianjiuguan/blue.webp",
+          "sha256": "1fafd51daff0ef2d5e2ccaf1a5549c3ab32faa78c593257ed52e68ebe6a6325b"
+        }
+      },
+      "source": {
+        "site": "Mysqil · 环世全鉴",
+        "author": "Matsuzaka Yuki",
+        "license": "CC BY-NC-SA 4.0",
+        "license_url": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+        "modifications": "从保存的来源页面提取并结构化；原始 HTML 快照单独保留。",
+        "review_status": "pending",
+        "url": "https://wiki.mysqil.com/cassettes/tiy%C3%A0-y%C3%A8jianjiuguan",
+        "snapshot_path": "data/mysqil/cassettes/tiyà-yèjianjiuguan/raw/page.html"
+      }
+    },
+    {
+      "id": "jingmi-shanzhuang",
+      "name": "静谧山庄",
+      "category": "泛用功能",
+      "element": "",
+      "set_effects": {
+        "two_piece": "心灵伤害 +10%",
+        "four_piece": "佩戴者使用普通攻击时，心灵伤害 +12%，最多叠加 3 层，每层持续 6 秒"
+      },
+      "acquisition": "兔子洞副本",
+      "main_affix_pool": {
+        "items": [
+          "攻击力（% / 固定值）",
+          "生命值（% / 固定值）",
+          "防御力（% / 固定值）",
+          "暴击率",
+          "暴击伤害",
+          "元素伤害（光/暗/灵/咒/魂/相）",
+          "倾陷强度",
+          "环合强度"
+        ],
+        "note": "每张卡带的主属性在掉落时从以下池中随机出现一条，强化只提升数值、不改变词条种类。"
+      },
+      "sub_affix_pool": {
+        "items": [
+          "暴击率",
+          "暴击伤害",
+          "攻击力（%）",
+          "攻击力（固定值）",
+          "生命值（%）",
+          "生命值（固定值）",
+          "防御力（%）",
+          "防御力（固定值）",
+          "元素伤害加成",
+          "全伤害加成",
+          "倾陷强度",
+          "环合强度"
+        ],
+        "note": "每张卡带在掉落时随机生成 4 条副词条（不可洗练、不可变更），强化只提升数值。以下为该卡带可能出现的副词条池，具体优先级因角色定位而异，无法统一排序。"
+      },
+      "quality": {
+        "role_note": "毕业 · 主副属性数值上限最高",
+        "source_note": "困难难度及以上兔子洞产出，40 级后稳定必出",
+        "note": "所有品质的卡带均为 1 主属性 + 4 副属性，品质只影响数值上限、不影响词条条数与种类。",
+        "tiers": [
+          {
+            "quality": "金",
+            "description": "毕业 · 数值上限最高"
+          },
+          {
+            "quality": "紫",
+            "description": "约为金色 80%"
+          },
+          {
+            "quality": "蓝",
+            "description": "前期过渡"
+          }
+        ]
+      },
+      "overview": "静谧山庄是围绕「心灵伤害」机制设计的卡带。2件套提升心灵伤害，4件套通过普攻叠层进一步强化心灵伤害，最高可叠加约 46% 心灵伤害增伤。\n\n⚠️ 心灵伤害并非元素属性，而是独立的特殊伤害乘区。开服阶段暂无以心灵伤害为核心的专属主C，该卡带实用性受限，评级偏低（T3），建议等后续版本推出心灵伤害角色后再考虑。",
+      "images": {
+        "gold": {
+          "quality": "gold",
+          "source_url": "https://wiki.mysqil.com/images/cassettes/quiet-manor/gold.webp",
+          "local_path": "data/resources/encyclopedia/cassettes/jingmi-shanzhuang/gold.webp",
+          "sha256": "2706cbc129a8f77cc7cea5816a3f0c591059e90a3d2615d84bb035a864640a9c"
+        },
+        "purple": {
+          "quality": "purple",
+          "source_url": "https://wiki.mysqil.com/images/cassettes/quiet-manor/purple.webp",
+          "local_path": "data/resources/encyclopedia/cassettes/jingmi-shanzhuang/purple.webp",
+          "sha256": "766bd9a9321ba1152fd230c1460464b5e1d6da622953c236120cf49149fb5e08"
+        },
+        "blue": {
+          "quality": "blue",
+          "source_url": "https://wiki.mysqil.com/images/cassettes/quiet-manor/blue.webp",
+          "local_path": "data/resources/encyclopedia/cassettes/jingmi-shanzhuang/blue.webp",
+          "sha256": "7659a5bf0b62140115bb926e089ec5211de53215848463bd63418752b929905e"
+        }
+      },
+      "source": {
+        "site": "Mysqil · 环世全鉴",
+        "author": "Matsuzaka Yuki",
+        "license": "CC BY-NC-SA 4.0",
+        "license_url": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+        "modifications": "从保存的来源页面提取并结构化；原始 HTML 快照单独保留。",
+        "review_status": "pending",
+        "url": "https://wiki.mysqil.com/cassettes/jingmi-shanzhuang",
+        "snapshot_path": "data/mysqil/cassettes/jingmi-shanzhuang/raw/page.html"
+      }
+    },
+    {
+      "id": "yinsu-lancìwei",
+      "name": "音速蓝刺猬",
+      "category": "泛用功能",
+      "element": "",
+      "set_effects": {
+        "two_piece": "充能效率 +12%",
+        "four_piece": "佩戴者施放必杀技后，全队攻击力 +15%，持续 20 秒（不可叠加）"
+      },
+      "acquisition": "兔子洞副本",
+      "main_affix_pool": {
+        "items": [
+          "攻击力（% / 固定值）",
+          "生命值（% / 固定值）",
+          "防御力（% / 固定值）",
+          "暴击率",
+          "暴击伤害",
+          "元素伤害（光/暗/灵/咒/魂/相）",
+          "倾陷强度",
+          "环合强度"
+        ],
+        "note": "每张卡带的主属性在掉落时从以下池中随机出现一条，强化只提升数值、不改变词条种类。"
+      },
+      "sub_affix_pool": {
+        "items": [
+          "暴击率",
+          "暴击伤害",
+          "攻击力（%）",
+          "攻击力（固定值）",
+          "生命值（%）",
+          "生命值（固定值）",
+          "防御力（%）",
+          "防御力（固定值）",
+          "元素伤害加成",
+          "全伤害加成",
+          "倾陷强度",
+          "环合强度"
+        ],
+        "note": "每张卡带在掉落时随机生成 4 条副词条（不可洗练、不可变更），强化只提升数值。以下为该卡带可能出现的副词条池，具体优先级因角色定位而异，无法统一排序。"
+      },
+      "quality": {
+        "role_note": "毕业 · 主副属性数值上限最高",
+        "source_note": "困难难度及以上兔子洞产出，40 级后稳定必出",
+        "note": "所有品质的卡带均为 1 主属性 + 4 副属性，品质只影响数值上限、不影响词条条数与种类。",
+        "tiers": [
+          {
+            "quality": "金",
+            "description": "毕业 · 数值上限最高"
+          },
+          {
+            "quality": "紫",
+            "description": "约为金色 80%"
+          },
+          {
+            "quality": "蓝",
+            "description": "前期过渡"
+          }
+        ]
+      },
+      "overview": "音速蓝刺猬是通用辅助/增伤卡带，2件套提升充能效率（加速必杀技回能），4件套在佩戴者释放必杀技后为全队提供 15% 攻击力加成。是辅助/增伤位的优质通用选择。",
+      "images": {
+        "gold": {
+          "quality": "gold",
+          "source_url": "https://wiki.mysqil.com/images/cassettes/speedy-hedgehog/gold.webp",
+          "local_path": "data/resources/encyclopedia/cassettes/yinsu-lancìwei/gold.webp",
+          "sha256": "d51db501fa877249fb3719f661e5fdacf5f55530df24d7bf8e96428e24890684"
+        },
+        "purple": {
+          "quality": "purple",
+          "source_url": "https://wiki.mysqil.com/images/cassettes/speedy-hedgehog/purple.webp",
+          "local_path": "data/resources/encyclopedia/cassettes/yinsu-lancìwei/purple.webp",
+          "sha256": "a0998047928b206ce9d25524ec336a8c2961af56e3b1257229cc98278a79990d"
+        },
+        "blue": {
+          "quality": "blue",
+          "source_url": "https://wiki.mysqil.com/images/cassettes/speedy-hedgehog/blue.webp",
+          "local_path": "data/resources/encyclopedia/cassettes/yinsu-lancìwei/blue.webp",
+          "sha256": "0dd5c22439a13cbca3f2a280ec838f58926e321e65ce5b3aac1d2c704a17792a"
+        }
+      },
+      "source": {
+        "site": "Mysqil · 环世全鉴",
+        "author": "Matsuzaka Yuki",
+        "license": "CC BY-NC-SA 4.0",
+        "license_url": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+        "modifications": "从保存的来源页面提取并结构化；原始 HTML 快照单独保留。",
+        "review_status": "pending",
+        "url": "https://wiki.mysqil.com/cassettes/yinsu-lanc%C3%ACwei",
+        "snapshot_path": "data/mysqil/cassettes/yinsu-lancìwei/raw/page.html"
+      }
+    }
+  ]
+}

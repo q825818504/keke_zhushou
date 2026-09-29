@@ -1,5 +1,6 @@
 const allKnowledge = window.characterKnowledge || {};
 const arcDriveCatalog = window.arcDriveKnowledge || { items: [], source: {} };
+const skyCurtainCatalog = window.skyCurtainKnowledge || { items: [], source: {} };
 const importedKnowledge = allKnowledge.zhenhong || null;
 let activeKnowledge = importedKnowledge;
 const importedAssetUrl = (asset) => asset?.local_path || "";
@@ -63,6 +64,11 @@ let arcDriveTypeFilter = "all";
 let arcDriveSearchQuery = "";
 let selectedArcDriveLevel = 80;
 let selectedArcDriveRank = 1;
+let selectedSkyCurtainId = skyCurtainCatalog.items?.[0]?.id || "";
+let skyCurtainCategoryFilter = "all";
+let skyCurtainElementFilter = "all";
+let skyCurtainSearchQuery = "";
+let selectedSkyCurtainQuality = "gold";
 
 function notify(message) {
   toastText.textContent = message;
@@ -770,9 +776,84 @@ function initArcDriveCatalog() {
   const attribution = $("#arcDriveAttribution");
   if (attribution) {
     const indexUrl = arcDriveCatalog.source_index || "https://wiki.mysqil.com/weapons/";
-    attribution.innerHTML = `资料整理自 <a href="${escapeHtml(indexUrl)}" target="_blank" rel="noreferrer">${escapeHtml(source.site || "Mysqil · 环世全鉴")}</a>；作者 ${escapeHtml(source.author || "Matsuzaka Yuki")}；许可 ${escapeHtml(source.license || "CC BY-NC-SA 4.0")}。`;
+    attribution.innerHTML = `资料整理自 <a href="${escapeHtml(indexUrl)}" target="_blank" rel="noreferrer">${escapeHtml(source.site || "Mysqil · 环世全鉴")}</a>；作者 ${escapeHtml(source.author || "Matsuzaka Yuki")}；许可 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noreferrer">${escapeHtml(source.license || "CC BY-NC-SA 4.0")}</a>；本地图鉴内容已从来源页提取并结构化整理。`;
   }
   renderArcDriveList();
+}
+
+function skyCurtainSearchText(item) {
+  return [
+    item.name,
+    item.category,
+    item.element,
+    item.set_effects?.two_piece,
+    item.set_effects?.four_piece,
+    item.acquisition,
+    item.main_affix_pool?.note,
+    ...(item.main_affix_pool?.items || []),
+    item.sub_affix_pool?.note,
+    ...(item.sub_affix_pool?.items || []),
+    item.quality?.role_note,
+    item.quality?.source_note,
+    item.quality?.note,
+    ...(item.quality?.tiers || []).map((tier) => tier.description),
+    item.overview
+  ].filter(Boolean).join(" ").toLowerCase();
+}
+
+function filteredSkyCurtains() {
+  return (skyCurtainCatalog.items || []).filter((item) => {
+    if (skyCurtainCategoryFilter !== "all" && item.category !== skyCurtainCategoryFilter) return false;
+    if (skyCurtainElementFilter !== "all" && item.element !== skyCurtainElementFilter) return false;
+    return !skyCurtainSearchQuery || skyCurtainSearchText(item).includes(skyCurtainSearchQuery);
+  });
+}
+
+function renderSkyCurtainList() {
+  const list = $("#skyCurtainList");
+  if (!list) return;
+  const items = filteredSkyCurtains();
+  const count = $("#skyCurtainCount");
+  if (count) count.textContent = `显示 ${items.length} / ${(skyCurtainCatalog.items || []).length} 套`;
+  list.innerHTML = items.length ? items.map((item) => {
+    const image = item.images?.gold?.local_path || "";
+    const context = [item.category, item.element].filter(Boolean).join(" · ");
+    return `<button class="arc-drive-card${item.id === selectedSkyCurtainId ? " is-active" : ""}" type="button" data-sky-curtain-id="${escapeHtml(item.id)}" aria-pressed="${item.id === selectedSkyCurtainId}"><span class="arc-drive-card-image">${image ? `<img src="${escapeHtml(image)}" alt="">` : "幕"}</span><span class="arc-drive-card-copy"><small>${escapeHtml(context || "空幕套装")}</small><b>${escapeHtml(item.name)}</b></span></button>`;
+  }).join("") : emptyState("没有符合条件的空幕");
+  if (!items.some((item) => item.id === selectedSkyCurtainId)) selectedSkyCurtainId = items[0]?.id || "";
+  renderSkyCurtainDetail();
+}
+
+function renderSkyCurtainDetail() {
+  const target = $("#skyCurtainDetail");
+  const item = (skyCurtainCatalog.items || []).find((entry) => entry.id === selectedSkyCurtainId);
+  if (!target) return;
+  if (!item) {
+    target.innerHTML = emptyState("从左侧选择一套空幕查看本地资料");
+    return;
+  }
+  const qualityLabels = { gold: "金", purple: "紫", blue: "蓝" };
+  const image = item.images?.[selectedSkyCurtainQuality] || item.images?.gold || Object.values(item.images || {})[0];
+  const sourceUrl = item.source?.url || "";
+  const effects = item.set_effects || {};
+  const renderPool = (title, pool) => {
+    const values = pool?.items || [];
+    return `<section class="arc-drive-description sky-curtain-pool"><h3>${escapeHtml(title)}</h3>${pool?.note ? `<p>${escapeHtml(pool.note)}</p>` : ""}<div class="sky-curtain-chip-list">${values.length ? values.map((value) => `<span class="sky-curtain-chip">${escapeHtml(value)}</span>`).join("") : `<span class="empty-state">来源页未提供词条池。</span>`}</div></section>`;
+  };
+  const tierNotes = item.quality?.tiers || [];
+  target.innerHTML = `<div class="arc-drive-detail-head"><div class="arc-drive-detail-image">${image?.local_path ? `<img src="${escapeHtml(image.local_path)}" alt="${escapeHtml(item.name)}·${escapeHtml(qualityLabels[selectedSkyCurtainQuality] || "金")}">` : "幕"}</div><div class="arc-drive-detail-title"><span class="sky-curtain-category-chip">${escapeHtml(item.category || "空幕")}${item.element ? ` · ${escapeHtml(item.element)}` : ""}</span><h2>${escapeHtml(item.name)}</h2>${sourceUrl ? `<a class="source-link" href="${escapeHtml(sourceUrl)}" target="_blank" rel="noreferrer">打开来源详情 ↗</a>` : ""}</div></div><section class="arc-drive-detail-section"><div class="arc-detail-section-head"><div><h3>品质图片</h3><small>来源页提供的三种品质图</small></div></div><div class="sky-curtain-quality-selector" role="group" aria-label="空幕品质图片">${Object.entries(qualityLabels).map(([qualityId, label]) => `<button type="button" class="${selectedSkyCurtainQuality === qualityId ? "is-active" : ""}" data-sky-quality="${qualityId}" aria-pressed="${selectedSkyCurtainQuality === qualityId}">${label}</button>`).join("")}</div></section><section class="arc-drive-detail-section"><div class="arc-detail-section-head"><div><h3>套装效果</h3><small>来源页记录的 2 件与 4 件效果</small></div></div><div class="sky-curtain-effect-grid"><div class="sky-curtain-effect-card"><span>2 件套</span><p>${escapeHtml(effects.two_piece || "来源页未提供。")}</p></div><div class="sky-curtain-effect-card"><span>4 件套</span><p>${escapeHtml(effects.four_piece || "来源页未提供。")}</p></div></div>${item.acquisition ? `<div class="arc-drive-description"><h3>获取途径</h3><p>${escapeHtml(item.acquisition)}</p></div>` : ""}</section>${renderPool("主属性可能词条", item.main_affix_pool)}${renderPool("副属性可能词条", item.sub_affix_pool)}<section class="arc-drive-description sky-curtain-quality-note"><h3>品质说明</h3>${item.quality?.role_note ? `<p><b>品质定位：</b>${escapeHtml(item.quality.role_note)}</p>` : ""}${item.quality?.source_note ? `<p><b>品质来源：</b>${escapeHtml(item.quality.source_note)}</p>` : ""}${item.quality?.note ? `<p>${escapeHtml(item.quality.note)}</p>` : ""}${tierNotes.length ? `<ul>${tierNotes.map((tier) => `<li><b>${escapeHtml(tier.quality)}</b><span>${escapeHtml(tier.description)}</span></li>`).join("")}</ul>` : ""}</section>${item.overview ? `<section class="arc-drive-overview"><h3>套装概述</h3><p>${escapeHtml(item.overview)}</p></section>` : ""}`;
+}
+
+function initSkyCurtainCatalog() {
+  const entries = skyCurtainCatalog.items || [];
+  if (!entries.some((item) => item.id === selectedSkyCurtainId)) selectedSkyCurtainId = entries[0]?.id || "";
+  const source = skyCurtainCatalog.source || {};
+  const attribution = $("#skyCurtainAttribution");
+  if (attribution) {
+    const indexUrl = skyCurtainCatalog.source_index || "https://wiki.mysqil.com/cassettes/";
+    attribution.innerHTML = `资料整理自 <a href="${escapeHtml(indexUrl)}" target="_blank" rel="noreferrer">${escapeHtml(source.site || "Mysqil · 环世全鉴")}</a>；作者 ${escapeHtml(source.author || "Matsuzaka Yuki")}；许可 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noreferrer">${escapeHtml(source.license || "CC BY-NC-SA 4.0")}</a>；本地图鉴内容已从来源页提取并结构化整理。`;
+  }
+  renderSkyCurtainList();
 }
 
 function showRoleManagement() {
@@ -789,7 +870,9 @@ function showRoleManagement() {
 function showEncyclopediaCategory(kind) {
   const labels = { "arc-drives": "弧盘", cassettes: "空幕", "drive-blocks": "驱动块" };
   const label = labels[kind] || "图鉴";
-  const hasCatalog = kind === "arc-drives";
+  const hasArcDriveCatalog = kind === "arc-drives";
+  const hasSkyCurtainCatalog = kind === "cassettes";
+  const hasCatalog = hasArcDriveCatalog || hasSkyCurtainCatalog;
   $$("[data-nav]").forEach((item) => item.classList.remove("is-active"));
   $("#encyclopediaNavTrigger")?.classList.add("is-active");
   $$("[data-encyclopedia-kind]").forEach((item) => item.classList.toggle("is-active", item.dataset.encyclopediaKind === kind));
@@ -797,12 +880,13 @@ function showEncyclopediaCategory(kind) {
   $("#encyclopediaView").hidden = false;
   $("#previewButton").hidden = true;
   $("#saveDraftButton").hidden = true;
-  $("#arcCatalogPanel").hidden = !hasCatalog;
+  $("#arcCatalogPanel").hidden = !hasArcDriveCatalog;
+  $("#skyCurtainPanel").hidden = !hasSkyCurtainCatalog;
   $("#encyclopediaEmptyState").hidden = hasCatalog;
   setText("#activeBreadcrumb", `图鉴 · ${label}`);
   setText("#encyclopediaTitle", label);
-  setText("#encyclopediaCount", hasCatalog ? `${(arcDriveCatalog.items || []).length} 件本地资料` : "资料待接入");
-  setText("#encyclopediaDescription", hasCatalog ? "浏览弧盘属性、等级成长与调弧效果。" : `${label}分类入口已建立；本地资料接入后会在这里展示。`);
+  setText("#encyclopediaCount", hasArcDriveCatalog ? `${(arcDriveCatalog.items || []).length} 件本地资料` : hasSkyCurtainCatalog ? `${(skyCurtainCatalog.items || []).length} 套本地资料` : "资料待接入");
+  setText("#encyclopediaDescription", hasArcDriveCatalog ? "浏览弧盘属性、等级成长与调弧效果。" : hasSkyCurtainCatalog ? "浏览空幕套装效果、可能词条与品质图片。" : `${label}分类入口已建立；本地资料接入后会在这里展示。`);
   setText("#emptyCategoryTitle", label);
 }
 
@@ -839,6 +923,36 @@ function bindArcDriveCatalog() {
     if (!button) return;
     selectedArcDriveRank = Number(button.dataset.arcRank);
     renderArcDriveDetail();
+  });
+}
+
+function bindSkyCurtainCatalog() {
+  $("#skyCurtainSearch")?.addEventListener("input", (event) => {
+    skyCurtainSearchQuery = event.target.value.trim().toLowerCase();
+    renderSkyCurtainList();
+  });
+  $$('[data-sky-category]').forEach((button) => button.addEventListener("click", () => {
+    skyCurtainCategoryFilter = button.dataset.skyCategory;
+    $$('[data-sky-category]').forEach((item) => item.classList.toggle("is-active", item === button));
+    renderSkyCurtainList();
+  }));
+  $$('[data-sky-element]').forEach((button) => button.addEventListener("click", () => {
+    skyCurtainElementFilter = button.dataset.skyElement;
+    $$('[data-sky-element]').forEach((item) => item.classList.toggle("is-active", item === button));
+    renderSkyCurtainList();
+  }));
+  $("#skyCurtainList")?.addEventListener("click", (event) => {
+    const card = event.target.closest("[data-sky-curtain-id]");
+    if (!card) return;
+    selectedSkyCurtainId = card.dataset.skyCurtainId;
+    selectedSkyCurtainQuality = "gold";
+    renderSkyCurtainList();
+  });
+  $("#skyCurtainDetail")?.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-sky-quality]");
+    if (!button) return;
+    selectedSkyCurtainQuality = button.dataset.skyQuality;
+    renderSkyCurtainDetail();
   });
 }
 
@@ -925,6 +1039,8 @@ bindNavigation();
 bindEncyclopediaNavigation();
 initArcDriveCatalog();
 bindArcDriveCatalog();
+initSkyCurtainCatalog();
+bindSkyCurtainCatalog();
 bindSearch();
 bindBasicPreview();
 bindModes();

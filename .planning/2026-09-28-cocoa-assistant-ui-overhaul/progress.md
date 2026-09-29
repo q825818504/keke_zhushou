@@ -163,3 +163,72 @@
 - Refreshed `origin/main` at `fd98b9e`; local `main` matched it before delivery.
 - Created feature commit `46adb62 feat: add arc drive encyclopedia catalog` and pushed it successfully to `origin/main`.
 - `git diff --cached --check` passed before commit. The feature commit contains 96 files: the catalog UI/model, all 51 source entries and icons, downloader/importer, source attribution, README, and canonical planning updates.
+
+## Session: 2026-09-29 — Complete Sky Curtain Catalog
+
+### Work Started
+- Resolved the sole canonical plan directory and read task_plan.md, findings.md, and progress.md before making changes.
+- Confirmed the starting checkout is clean and `main` matches `origin/main` at `b4e560e`.
+- Confirmed Phase 9 raw/knowledge/resource/importer conventions, then added Phase 10 to the existing canonical task plan before researching the guide site.
+- The Mysqil 空幕 index declares 12 entries: six 属性专属 and six 泛用功能. The full detail-page and image inventory is still pending.
+- Two attempts to append findings used a patch context from the progress file; neither changed a file. Re-read the file tails and switched to a verified append.
+- Enumerated all 12 detail URLs from the index. The web reader retrieved 4 full detail pages; 8 page opens failed due to cache misses/timeouts, so local acquisition and snapshot validation are the path for complete inspection.
+- Sampled detail pages contain classification/affinity, 2/4-piece effects, acquisition, affix pools, quality notes, overview, and one item image; all inspected footers repeat attribution/license.
+- Local audit found 10 existing recommendation-derived raw cassette pages and identified the two missing source pages; no standalone cassettes encyclopedia knowledge package exists yet.
+- The initial knowledge-directory lookup reported path not found because that package is not present. No files were changed by the lookup; recorded as an expected state/error.
+- Local snapshot parsing confirmed three per-item image variants (Gold/Purple/Blue). The complete image scope is 36 assets; asset URLs must be extracted from each raw page because image folder slugs differ from item detail slugs.
+- The first parser invocation could not resolve `python` in PATH. The bundled workspace Python executable was then used successfully to inspect all ten existing snapshots.
+- Confirmed the page structure for the importer: server-rendered `main`, header/category/optional element, separate 2-piece and 4-piece cards, acquisition section, main/sub-affix chips, quality-difference notes, and a final overview section. The three quality image elements are explicitly marked by `data-tier-img`.
+- A diagnostic run printed some Chinese text with the terminal's default encoding. It affected display only; UTF-8 output is used for future diagnostics and the saved source snapshots are unchanged.
+
+- First downloader run safely stopped before writing a roster: the index states 12 but the broad href match found 13 unique `/cassettes/<slug>` links. The raw index was preserved for inspection; no source page or image was modified by this failed pass.
+
+- The first link-context diagnostic command had a PowerShell parser error in its output pipeline; it read no source beyond the already-saved index and made no file changes. Re-ran with simple assigned output.
+
+- The extra unique index URL is `/cassettes/drivers`, an explanatory driver-block guide link rather than a cassette listing card. Updated the downloader to accept only item card anchors (`bg-card` + `overflow-hidden`) and keep the 12-count gate.
+
+- Second downloader pass passed the corrected 12-card index check and refreshed the first detail page, then stopped when assigning the `name` property to a PSCustomObject without a declared property. No roster was written; add the field in the constructor and rerun the full catalog pass.
+ame to a PSCustomObject without a declared property. No roster was written; add the field in the constructor and rerun the full catalog pass.
+
+### Source collection complete
+- Corrected the downloader's roster-card scope and declared item property after recording both failed passes; no roster was written by the failed passes.
+- Successful `download_mysqil_cassettes.ps1 -Refresh`: 12 source items = 12/12 detail snapshots + 36/36 quality images; zero image failures. Wrote the raw source index, source roster, per-item snapshots, and Gold/Purple/Blue assets. The eight detail pages unavailable in the web reader were downloaded successfully through the local request path.
+
+- The UTF-8 page-structure diagnostic confirmed exact header/category/affinity, effect-card, acquisition, affix-chip, quality, and overview sections. Its final optional chip display step failed because the scratch parser omitted a `direct()` helper; this was diagnostic-only, logged, and no page data changed.
+
+### Normalized knowledge package
+- Added an offline importer that reads only local Mysqil snapshots and the roster. It verifies the declared item count, duplicate IDs, page-title match, both set effects, and all three quality-image URLs before writing the knowledge bundle.
+- Importer completed successfully: 12 records and 36 local image variants in `data/knowledge/encyclopedia/sky_curtains.json` and `.js`. Records carry source URLs, local snapshots, author/license, review status, set effects, acquisition, affix pools, quality notes, overview, and image hashes.
+
+- The CSS insertion patch expected a standalone arc-drive selector, but the source combines description/overview into one selector. The patch changed nothing; the sky-curtain styles are added as independent rules at EOF.
+
+- Coverage audit found 0/12 quality tier descriptions in the first normalized bundle even though all 12 source pages contain them. DOM inspection showed quality names are nested div text and descriptions are p elements, not two span nodes. Fixing the parser before finalizing the knowledge bundle.
+
+
+### UI integration and validation
+- Loaded the generated sky-curtain bundle and replaced the 空幕 empty state with a separate searchable catalog. Added category/element filters, detail information, per-item source links, attribution footer, and Gold/Purple/Blue image selection. 驱动块 remains in the original explicit empty state.
+- The first structured coverage audit found quality-tier labels/notes missing from the importer output (0/12). Read the source DOM, corrected the parser for nested `div` labels and `p` descriptions, regenerated the bundle, and reran coverage successfully.
+- Final scope coverage passed: 12/12 source records, 12/12 snapshots, 36/36 WebP assets and hashes; 6+6 category split; six element-specific records; both set effects, acquisition, overview, and main/sub-affix pools on every record; three quality notes and images on every record; generated JS matches JSON.
+- `node --check` passed for `app.js`, `arc_drives.js`, and `sky_curtains.js`. The local index/panel toggling and responsive interaction were not browser-tested; no browser pass is claimed.
+- The previous bulk plan update failed before executing because its PowerShell single-quoted replacement contained an apostrophe. No file was changed by that parse failure; the current update uses byte-preserving Python and exact-match guards.
+
+
+### Attribution and license review
+- Confirmed the Mysqil pages state CC BY-NC-SA 4.0 and credit Matsuzaka Yuki. Checked Creative Commons' official deed summary: provide credit and a license link, indicate changes, restrict use to noncommercial purposes, and share adaptations under the same license. The raw snapshots are retained; the catalog is a structured extraction.
+- The official legal-code endpoint timed out in the web reader; reviewed the official CC deed summary and recorded that limitation. The app/README/attribution changes will add a clickable license link and identify normalization.
+
+
+### Attribution and documentation implementation
+- Added `source_license_url` to the sky-curtain roster and collection/record provenance, with an explicit normalization note on each imported record. Raw source HTML remains intact.
+- Updated the UI attribution footers for both catalogs to link the source index and CC license, name the creator, and indicate the data was structured from source pages. Updated README and `data/mysqil/ATTRIBUTION.md` with the 12-entry catalog, refresh commands, paths, and reuse conditions.
+- Marked the Phase 10 source/update documentation and attribution checklist complete.
+
+
+### Final page-field reconciliation
+- Reviewing the preserved source page beside the normalized model found two additional quality-panel fields (role/grade guidance and quality-specific source note). The earlier structure coverage did not count these. Updating the importer and detail view to carry both source values before delivery.
+
+
+### Final field and scope pass
+- Added and displayed both source quality-panel fields (`role_note`, `source_note`) for each cassette; regenerated the JSON/JS package offline.
+- Final audit passed for all 12 entries, raw pages, and 36 image hashes, plus title/category, set effects, acquisition, overview, both affix pools, Gold/Purple/Blue differences and images, CC license/source/modification provenance, UI selector coverage, and JSON/JS parity.
+- Final `node --check` passed for `app.js` and `sky_curtains.js`. Browser interaction/responsive verification remains unrun and is marked pending; no browser pass is claimed.

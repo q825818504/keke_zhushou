@@ -232,6 +232,22 @@
           <footer class="catalog-attribution" id="arcDriveAttribution"></footer>
         </div>
 
+        <div class="catalog-panel" id="skyCurtainPanel" hidden>
+          <div class="section-toolbar catalog-toolbar">
+            <label class="search-box"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="1.6"/><path d="m16 16 4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg><input id="skyCurtainSearch" type="search" placeholder="搜索空幕名称、效果或词条" aria-label="搜索空幕"></label>
+            <span class="catalog-count" id="skyCurtainCount">载入中</span>
+          </div>
+          <div class="catalog-filter-row" aria-label="空幕筛选">
+            <div class="catalog-filter-group" aria-label="按类别筛选"><span>类别</span><button class="catalog-filter is-active" type="button" data-sky-category="all">全部</button><button class="catalog-filter" type="button" data-sky-category="属性专属">属性专属</button><button class="catalog-filter" type="button" data-sky-category="泛用功能">泛用功能</button></div>
+            <div class="catalog-filter-group" aria-label="按属性筛选"><span>属性</span><button class="catalog-filter is-active" type="button" data-sky-element="all">全部</button><button class="catalog-filter" type="button" data-sky-element="光属性">光</button><button class="catalog-filter" type="button" data-sky-element="暗属性">暗</button><button class="catalog-filter" type="button" data-sky-element="灵属性">灵</button><button class="catalog-filter" type="button" data-sky-element="咒属性">咒</button><button class="catalog-filter" type="button" data-sky-element="魂属性">魂</button><button class="catalog-filter" type="button" data-sky-element="相属性">相</button></div>
+          </div>
+          <div class="arc-catalog-layout">
+            <div class="arc-drive-grid" id="skyCurtainList" aria-label="空幕列表"></div>
+            <article class="arc-drive-detail" id="skyCurtainDetail" aria-live="polite"><p class="empty-state">正在载入本地空幕资料……</p></article>
+          </div>
+          <footer class="catalog-attribution" id="skyCurtainAttribution"></footer>
+        </div>
+
         <div class="encyclopedia-empty-panel" id="encyclopediaEmptyState" hidden>
           <span class="empty-panel-icon" aria-hidden="true">▧</span>
           <h2 id="emptyCategoryTitle">空幕</h2>
@@ -244,6 +260,7 @@
   <script src="data/knowledge/characters/zhenhong.js"></script>
   <script src="data/knowledge/characters/other_characters.js"></script>
   <script src="data/knowledge/encyclopedia/arc_drives.js"></script>
+  <script src="data/knowledge/encyclopedia/sky_curtains.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
