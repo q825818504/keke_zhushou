@@ -208,3 +208,8 @@
 ### Final source-field reconciliation complete
 - The normalized quality object now includes the raw page's `data-tier-field="role"` (quality grade guidance) and `data-tier-field="source"` (quality source conditions) alongside the Gold/Purple/Blue tier notes. The detail page shows both additional values, and search includes them.
 - Reimported all 12 records. Final audit confirms both additional fields are present on 12/12 records, with the earlier source/count/page/image/provenance/quality checks still passing.
+
+
+### Git delivery attempt
+- Refreshed `origin/main` immediately before delivery; local `HEAD` and `origin/main` both matched `b4e560e`. Created local feature commit `b190533 feat: add complete sky curtain catalog` (52 files, including 12 records and 36 images).
+- The direct `git push origin main` was rejected by automatic review. The reviewer cited direct mutation of the repository's default branch as high risk and said it did not recognize trusted explicit authorization for this destination/side effect. No push succeeded: the post-attempt check shows `origin/main` remains `b4e560e`, local `main` is ahead by one, and the working tree is clean. Do not retry via another route; require direct user approval.

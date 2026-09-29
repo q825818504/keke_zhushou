@@ -16,11 +16,11 @@
 
 ## Next Step
 
-Phase 10 空幕图鉴数据完整导入与界面接入；Phase 8 仓库持久化驱动摆放图上传仍保留为后续计划。
+Phase 10 本地提交待推送；自动审查要求直接授权。同步后再继续 Phase 8 仓库持久化驱动摆放图上传。
 
 ## Current Phase
 
-Phase 10 - Sky Curtain Catalog；implementation complete; Git delivery pending; browser interaction/responsive verification not run.
+Phase 10 - Sky Curtain Catalog；implementation complete in local commit `b190533`; push to `origin/main` rejected by auto-review pending direct user approval; browser verification not run.
 
 ## Phases
 
@@ -139,6 +139,7 @@ Phase 10 - Sky Curtain Catalog；implementation complete; Git delivery pending; 
 | UI-integrated status write hit a PowerShell quoted-string parser error | No plan change occurred; switched to UTF-8 byte-preserving updates with exact-match guards |
 | CC BY-NC-SA 4.0 法律条文页读取超时 | 改用 Creative Commons 官方 deed 摘要核对核心条件，并在交付日志记录该限制 |
 | `git diff --check` found trailing whitespace in a truncated progress entry | Replaced the affected line, recorded the shell quoting issue, and reran the full diff check |
+| 自动审查拒绝将 `b190533` 直接推送到默认分支 `origin/main` | 审查指出这是高风险远端变更且未识别到可信的精确授权；不通过其他路径绕过，等待用户直接确认 |
 | 真红知识 JS 首次生成时结尾换行被写成字面量 | 清理并重新生成后通过 node --check |
 | 卡带编辑器初始化曾被插入错误函数位置 | 移除后放回 updateImportedPanel |
 | 之前产生了独立卡带计划目录 | 本次将内容合并回本主计划并删除重复目录 |
@@ -218,5 +219,7 @@ Phase 10 - Sky Curtain Catalog；implementation complete; Git delivery pending; 
 - [x] Reconcile the declared source count against roster records, snapshots, imported records, and downloaded item images; record unresolved source gaps without inventing data.
 - [x] Run code/data/resource checks and record the results in canonical planning files.
 - [ ] Browser interaction and responsive visual verification; report only if actually run.
-- [ ] Review the exact delivery scope, refresh `origin/main`, commit, and push to `origin/main` without force-pushing; update the canonical plan/findings/progress after the push and confirm local/remote synchronization.
-- **Status:** implementation complete — 12 records, 36 source assets, all source fields, UI, attribution, documentation, and scope checks complete; Git delivery pending; browser verification not run.
+- [x] Review the exact delivery scope, refresh `origin/main` at `b4e560e` (no remote advancement), and commit the feature as `b190533` without rewriting history.
+- [ ] Push `b190533` to `origin/main` without force-pushing. The direct push was rejected by auto-review; await explicit user approval.
+- [ ] After the push, update canonical planning files and confirm local/remote synchronization.
+- **Status:** implementation complete in local commit `b190533`; GitHub push blocked by auto-review pending explicit user approval; browser verification not run.

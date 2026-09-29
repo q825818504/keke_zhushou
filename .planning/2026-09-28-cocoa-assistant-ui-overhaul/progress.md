@@ -232,3 +232,9 @@ ame to a PSCustomObject without a declared property. No roster was written; add 
 - Added and displayed both source quality-panel fields (`role_note`, `source_note`) for each cassette; regenerated the JSON/JS package offline.
 - Final audit passed for all 12 entries, raw pages, and 36 image hashes, plus title/category, set effects, acquisition, overview, both affix pools, Gold/Purple/Blue differences and images, CC license/source/modification provenance, UI selector coverage, and JSON/JS parity.
 - Final `node --check` passed for `app.js` and `sky_curtains.js`. Browser interaction/responsive verification remains unrun and is marked pending; no browser pass is claimed.
+
+
+### Git delivery attempt — 2026-09-29
+- Refreshed `origin/main` at `b4e560e`; local main matched it. Committed the complete feature as `b190533 feat: add complete sky curtain catalog` (52 files changed).
+- Attempted `git push origin main` once. Automatic review rejected the direct push, stating that updating the default branch is a high-risk remote mutation and that it did not recognize trusted explicit authorization for this exact destination and side effect. No workaround or alternate remote path was attempted.
+- Verified after rejection: `HEAD=b190533`, `origin/main=b4e560e`, local main ahead by one, working tree clean. The feature commit is ready for push after direct user approval. Browser interaction/responsive verification remains unrun.
