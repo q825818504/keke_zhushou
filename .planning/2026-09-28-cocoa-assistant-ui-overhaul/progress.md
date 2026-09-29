@@ -263,4 +263,6 @@ ame to a PSCustomObject without a declared property. No roster was written; add 
 - Updated README refresh/import instructions and paths, plus Mysqil attribution and license records for 36 quality pages and 46 assets.
 - Re-ran the offline importer: 12 shapes, 36 quality pages, 46 images, guide imported. Importer reconciles all snapshots/assets and emits matching JSON/JS packages.
 - `node --check app.js`, `node --check data/knowledge/encyclopedia/driver_blocks.js`, the PowerShell parser, and `git diff --check` passed. Browser interaction/responsive verification was not run.
-- Next: review the tracked/untracked delivery scope, refresh origin/main, commit, and push the feature as requested.
+- Reviewed the staged scope: 97 files, including all 36 raw quality pages, 46 local images, the index/guide/roster, normalized bundle, importer/downloader, UI, docs, and canonical plan updates. No unrelated changes were present.
+- Refreshed `origin/main` with no remote advancement. Committed as `aeb5179 feat: import complete driver block catalog` and pushed without rewriting history.
+- Fetched after push and confirmed both local `main` and `origin/main` at `aeb5179`. Now committing this post-push planning record so the delivery log is also versioned.
