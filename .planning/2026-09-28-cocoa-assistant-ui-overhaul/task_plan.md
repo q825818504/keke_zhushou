@@ -433,6 +433,6 @@ Phase 27 - External-source UI cleanup; in progress.
 - [x] Confirm accepted requirements and delivery scope: Phase 27 cleanup plus Phase 29 default-preserving recommendation edits.
 - [x] Fetch origin and verify main/origin-main alignment at b9ce9b7.
 - [x] Complete browser/data/solver/guide/reaction regression and inspect exact staged payload.
-- [ ] Commit and push the implementation and planning records to origin/main.
-- [ ] Verify remote/local equality and record delivery.
-- **Status:** in progress.
+- [x] Commit and push the implementation and planning records to origin/main.
+- [x] Verify remote/local equality and record delivery.
+- **Status:** complete; feature e063f6f pushed to origin/main, local/remote equality and clean worktree verified.
