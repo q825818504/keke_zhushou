@@ -538,3 +538,41 @@ ame to a PSCustomObject without a declared property. No roster was written; add 
 - `git diff --check` passed; Git reported only expected LF/CRLF normalization notices.
 - Commit `66d9545` (`feat: improve team recommendations and data consistency`) pushed successfully to `origin/main`.
 - Phase 23 is marked complete against `66d9545`; this final planning status will be published as a separate documentation commit.
+
+## Phase 24 implementation
+Default shell sandbox and apply_patch helper failed to initialize. Escalated shell reads succeeded; scoped file writes are the fallback. Started guide manager and preference removal.
+
+### Phase 24 completion
+- Removed team preference UI, persisted goal and goal score branches; updated obsolete regression.
+- Added team_manager.js with shared browser-local catalog overlay and export/import. Saved guides feed the solver directly. Source records remain intact; source and local guide provenance are distinct.
+- Added admin navigation, four-slot drag/click editor, core selection, title/notes, enable state, search, edit/copy/delete/undo and import/export.
+- Apple design choices: clear solid cards, immediate drag tracking, preserved grab offset, visible drop targets, keyboard/click alternative and two-column mobile slots.
+- Fixed existing smoke extraction's CRLF-sensitive boundary.
+- Verification passed: node syntax; smoke (25 icons/27 templates/20 cassette references); solver; guide store (reload, atomic imports, delete/undo, disable, provenance and solver integration).
+- Independent Chrome CDP checks passed real pointer fill/swap, real save/reload, 390px document width without overflow, removed preference UI and no runtime exceptions. Reviewed desktop and mobile screenshots. Physical mobile-device touch was not tested.
+- Test harness errors: initial selector quoting caused SyntaxError; corrected selector extraction. CDP mouse moves omitted left-button state and caused premature capture loss; corrected event button values. Temporary diagnostic lostcapture logging tried outerHTML on a document target; removed diagnostic listener. These were test-harness failures; final real pointer check passed.
+- Cleanup: dedicated hidden Chrome test profile and temporary script/screenshots removed after verification; no user browser data changed.
+## Phase 25 started
+Preserved the prior uncommitted Phase 24 work. Downloaded source HTML successfully. apply_patch still failed to write via sandbox helper; use scoped shell fallback. Source raw HTML is mostly one line, so initial rg output truncated; switched to structured main parsing.
+
+Phase 25: importer completed with exact article text coverage; all local images present. Added reactions.js and shared data bundle. Cleaned four sidebar entries and enabled sticky user preview in encyclopedia and guide routes. Syntax, existing smoke/solver/guide regressions passed. Browser navigation, search and full content rendering checks next.
+
+### Phase 25 complete — 2026-10-01
+- Preview toolbar remains visible in role management, all three encyclopedia catalogs, guide manager and reaction system. Toolbar sticks while scrolling and preview stays available at 390px.
+- Removed only 标签词典、资料校验、规则中心、黄金测试 sidebar entries.
+- Imported 8 reactions, 20 passives, 26 article images, full source HTML, source/license metadata and SHA-256 manifests.
+- Added reusable offline importer and independent source-text/number/asset/bundle checker. No source-derived numbers or missing multipliers were guessed.
+- Browser regression: all 6 admin routes preview successfully; all 8 reactions and 20 passives render exact descriptions; every article image decodes locally; numeric search, attribute filtering, keyboard disclosure, expand/collapse and sticky toolbar pass. No runtime exceptions. Desktop and 390px screenshots reviewed; mobile document width equals 390px with no overflow.
+- Existing character/catalog smoke, team solver and guide manager regressions passed. Exact raw HTML reconstruction, numeric token coverage, asset hashes, JSON/JS parity and source-linked solver definitions passed.
+- Source capture timestamp remains UTC in metadata; presentation uses Asia/Shanghai to reflect the client date.
+- Preserved all prior Phase 24 modifications. No Git commit or push performed in this implementation turn.
+## Session: 2026-10-01 — Phase 24–25 GitHub Delivery
+
+- The user requested a plan and GitHub sync. The pending worktree contains the completed visual lineup manager (Phase 24) and admin navigation plus complete esper-cycle import (Phase 25).
+- Remote preflight succeeded: fetched origin; main and origin/main are aligned at 50adebc (0 ahead / 0 behind).
+- Delivery scope includes the entire reviewed worktree: code, UI, regression/import scripts, planning records, structured data, source HTML, attribution and all 26 source images. No other modified files were found.
+- Prior session verification recorded successful store/solver/smoke checks and desktop/390px browser interaction for both phases.
+- Next: stage and inspect exact payload, commit, push, verify, then record the final SHA.
+
+- Payload review: 45 staged files, 1699 insertions and 49 deletions; includes Phase 24 lineup management and Phase 25 admin/reaction-system delivery. git diff --cached --check passed.
+- Tool hiccups: the first planning-log write was rejected by JS template-string quoting before changing files; corrected on retry. The default command helper then failed to start, so an elevated shell was used for the authorized repository sync. No content was changed by failed attempts.

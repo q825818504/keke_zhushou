@@ -33,6 +33,7 @@
         <p class="nav-label">工作区</p>
         <button class="nav-item" type="button" data-nav="工作台"><span class="nav-icon"><svg viewBox="0 0 24 24" fill="none"><rect x="4" y="4" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.6"/><rect x="14" y="4" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.6"/><rect x="4" y="14" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.6"/><rect x="14" y="14" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.6"/></svg></span><span>工作台</span></button>
         <button class="nav-item is-active" type="button" data-nav="角色管理"><span class="nav-icon"><svg viewBox="0 0 24 24" fill="none"><circle cx="9" cy="8" r="3" stroke="currentColor" stroke-width="1.6"/><path d="M4 19c.8-3 2.5-4.5 5-4.5s4.2 1.5 5 4.5M16 5.5a3 3 0 0 1 0 5.8M16 14.5c2 .3 3.3 1.8 4 4.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span><span>角色管理</span><em>12</em></button>
+        <button class="nav-item" type="button" data-nav="攻略阵容"><span class="nav-icon" aria-hidden="true">✦</span><span>攻略阵容</span></button>
         <div class="nav-folder">
           <button class="nav-item nav-folder-trigger" type="button" id="encyclopediaNavTrigger" aria-expanded="false" aria-controls="encyclopediaSubnav"><span class="nav-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M12 7v14M3 18V4a1 1 0 0 1 1-1h4a4 4 0 0 1 4 4 4 4 0 0 1 4-4h4a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1h-5a3 3 0 0 0-3 2 3 3 0 0 0-3-2H4a1 1 0 0 1-1-1Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></span><span>图鉴</span><svg class="nav-folder-chevron" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
           <div class="nav-submenu" id="encyclopediaSubnav" hidden>
@@ -41,11 +42,7 @@
             <button class="nav-subitem" type="button" data-encyclopedia-kind="drive-blocks">驱动块</button>
           </div>
         </div>
-        <button class="nav-item" type="button" data-nav="标签词典"><span class="nav-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M4 7.5A2.5 2.5 0 0 1 6.5 5H19v13H6.5A2.5 2.5 0 0 0 4 20V7.5Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H19M8 9h7M8 12h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span><span>标签词典</span></button>
         <button class="nav-item" type="button" data-nav="反应体系"><span class="nav-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M12 4v16M4 12h16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="1.6"/></svg></span><span>反应体系</span></button>
-        <button class="nav-item" type="button" data-nav="资料校验"><span class="nav-icon"><svg viewBox="0 0 24 24" fill="none"><rect x="4" y="5" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.6"/><rect x="14" y="5" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.6"/><rect x="4" y="14" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.6"/><rect x="14" y="14" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="1.6"/></svg></span><span>资料校验</span></button>
-        <button class="nav-item" type="button" data-nav="规则中心"><span class="nav-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M5 6h14M5 12h14M5 18h9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="17" cy="18" r="2" stroke="currentColor" stroke-width="1.6"/></svg></span><span>规则中心</span></button>
-        <button class="nav-item" type="button" data-nav="黄金测试"><span class="nav-icon"><svg viewBox="0 0 24 24" fill="none"><path d="m12 4 2.2 4.8 5.3.6-3.9 3.7 1.1 5.3-4.7-2.6-4.7 2.6 1.1-5.3-3.9-3.7 5.3-.6L12 4Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></span><span>黄金测试</span><i class="status-dot"></i></button>
       </nav>
 
       <div class="sidebar-bottom">
@@ -77,6 +74,8 @@
           <button class="user-topbar-link user-admin-link pressable" type="button" id="userAdminButton"><span class="admin-link-mark">⌘</span>管理端</button>
         </div>      </header>
 
+      <section id="reactionSystemView" class="reaction-view" aria-label="反应体系" hidden></section>
+      <section id="guideManagerView" class="guide-manager" aria-label="攻略阵容管理" hidden></section>
       <section class="user-experience-view" id="userExperienceView" aria-labelledby="userPageTitle">
         <div class="user-route-panel user-characters-route" id="userCharactersRoute" data-user-route-panel="characters">
         <div class="user-page-intro">
@@ -323,6 +322,9 @@
   <script src="data/knowledge/encyclopedia/sky_curtains.js"></script>
   <script src="data/knowledge/encyclopedia/driver_blocks.js"></script>
   <script src="data/knowledge/team_templates.js"></script>
+  <script src="data/knowledge/esper_cycles.js"></script>
+  <script src="team_manager.js"></script>
+  <script src="reactions.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

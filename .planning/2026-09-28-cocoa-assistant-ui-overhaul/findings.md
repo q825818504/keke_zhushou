@@ -379,3 +379,21 @@
 - 薄荷's own icon and the mistakenly selected 真红 icon share the same SHA-256 because they are the same file content; the correct 真红 icon was already present in the local bundle.
 - Added `findCharacterIcon`, which prefers the filename `<character ID>-icon.*` and only falls back to the first icon when no identity-matched asset exists.
 - The smoke check now verifies every character picks its own icon, each file exists, and selected icon image hashes are unique. All 25 character icons passed; app syntax and `git diff --check` passed.
+
+## Visual guide manager
+Existing 27 templates are static JSON/JS with editorial metadata. No backend exists. Browser-local overrides plus export/import will share the exact solver catalog, preserve source attribution, and avoid claiming repository writes. Pointer dragging and click/keyboard slot selection provide direct manipulation and accessibility.
+
+### Guide manager verified behavior
+- Browser saves overlay the original catalog and are consumed by userTeamBuildPlans; disabling/deleting removes guide eligibility while retaining the local-rule fallback.
+- Imports validate all entries before committing, preventing partial updates. Original source bundles are not modified.
+- Real browser drag must dispatch mouseMoved with button=left as well as buttons=1; missing button state caused test-only lost capture.
+- Chrome tests confirmed four slots, persistence after page reload and no overflow at 390px. Desktop/mobile screenshot review completed.
+## 2026-10-01 — Esper cycles discovery
+Source: https://wiki.mysqil.com/esper-cycles. Eight native details sections contain six two-attribute reactions and two derived three-attribute reactions, system introduction, and character-specific passives. All article text is server-rendered. Footer credits Matsuzaka Yuki under CC BY-NC-SA 4.0. Inspect parser coverage rather than copying only visible collapsed summaries.
+
+### Esper-cycle full coverage audit
+Imported exactly 8 sections: 5/3/4/0/3/3/2/0 passives in source order, totaling 20. All 26 main-article images downloaded. Whitespace-normalized source main text equals reconstructed structured content character-for-character; numeric tokens are retained in coverage metadata. Source contains zero tables. The six two-attribute rules and two three-attribute rules now feed both the reference and user team solver. Existing character IDs from the source are preserved even if source naming differs from local records.
+
+### Reaction view final checks
+Independent checker reconstructs all main-body text from structured fields and compares against separately stripped/decoded source HTML, including every numeric token. Offline image hashes and browser decoding cover all 26 unique assets. Both reference view and solver use esper_cycles.js; no second reaction-name/attribute list remains in app.js.
+Source defines effect conditions beyond attribute membership; the UI retains those conditions in full rather than describing every attribute combination as an automatically triggered in-battle event.

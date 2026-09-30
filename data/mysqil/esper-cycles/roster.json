@@ -1,0 +1,229 @@
+{
+  "source_url": "https://wiki.mysqil.com/esper-cycles",
+  "captured_at": "2026-09-30T16:08:00.373467+00:00",
+  "raw_snapshot": "data/mysqil/esper-cycles/raw/page.html",
+  "snapshot_sha256": "994b61e0bf8476bd32c449ae707a6e419cb420e43fbf779fff0b6c5c8d73f0e4",
+  "assets": [
+    {
+      "source_url": "https://wiki.mysqil.com/images/characters/adeler-icon.webp",
+      "source_path": "/images/characters/adeler-icon.webp",
+      "local_path": "data/mysqil/esper-cycles/assets/characters/adeler-icon.webp",
+      "sha256": "4e96faa1404c8aba9eeb8c71d98684929c3076ee850e33ed44a59811f20537da"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/characters/anhunqu-icon.webp",
+      "source_path": "/images/characters/anhunqu-icon.webp",
+      "local_path": "data/mysqil/esper-cycles/assets/characters/anhunqu-icon.webp",
+      "sha256": "e1f2f17777acdd8626f8a807bfe145ec4d65d417b71b17c1343f07e46ad8c8bd"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/characters/baizang-icon.webp",
+      "source_path": "/images/characters/baizang-icon.webp",
+      "local_path": "data/mysqil/esper-cycles/assets/characters/baizang-icon.webp",
+      "sha256": "af32ffe0ebf770f8b85cee92ee2c8dcf06659e28efc08ff3fb9672b222053b1e"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/characters/bohe-icon.webp",
+      "source_path": "/images/characters/bohe-icon.webp",
+      "local_path": "data/mysqil/esper-cycles/assets/characters/bohe-icon.webp",
+      "sha256": "28605233c38c756db6a08c748583b80c585670a13ae0e1b101ef0a8b993f8e76"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/characters/dafutier-icon.webp",
+      "source_path": "/images/characters/dafutier-icon.webp",
+      "local_path": "data/mysqil/esper-cycles/assets/characters/dafutier-icon.webp",
+      "sha256": "2e032c3e6f74f810a1d600e93268030c5658efac3fb489f923b0ae6bf7b0e29b"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/characters/edjia-icon.webp",
+      "source_path": "/images/characters/edjia-icon.webp",
+      "local_path": "data/mysqil/esper-cycles/assets/characters/edjia-icon.webp",
+      "sha256": "9af443e42d1c45c829357f2e3cb7d81785841dad608eef90e9a14f3e787748d0"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/characters/fadiya-icon.webp",
+      "source_path": "/images/characters/fadiya-icon.webp",
+      "local_path": "data/mysqil/esper-cycles/assets/characters/fadiya-icon.webp",
+      "sha256": "740f9eb7b465937840b1013c926587da5809d944848d7a419b08a6f02a56dad9"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/characters/haiyue-icon.webp",
+      "source_path": "/images/characters/haiyue-icon.webp",
+      "local_path": "data/mysqil/esper-cycles/assets/characters/haiyue-icon.webp",
+      "sha256": "3480f5e7834e0c480837484b54579ce515ffef4084c73a8fb274c930f24b66af"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/characters/haniya-icon.webp",
+      "source_path": "/images/characters/haniya-icon.webp",
+      "local_path": "data/mysqil/esper-cycles/assets/characters/haniya-icon.webp",
+      "sha256": "f2ccf712e476ffb4438ebd6b7a66297192007bc1b50fb77eb157c8c0938a608e"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/characters/hasuoer-icon.webp",
+      "source_path": "/images/characters/hasuoer-icon.webp",
+      "local_path": "data/mysqil/esper-cycles/assets/characters/hasuoer-icon.webp",
+      "sha256": "335439bd310e819c25cab2529ae68273e08813638fc53141ce672ba1cb7ff9f6"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/characters/jiuyuan-icon.webp",
+      "source_path": "/images/characters/jiuyuan-icon.webp",
+      "local_path": "data/mysqil/esper-cycles/assets/characters/jiuyuan-icon.webp",
+      "sha256": "d439ae2f1422c831c604b6cca8498cc159039482eddbee00b65fdf3623170204"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/characters/kaesi-icon.webp",
+      "source_path": "/images/characters/kaesi-icon.webp",
+      "local_path": "data/mysqil/esper-cycles/assets/characters/kaesi-icon.webp",
+      "sha256": "e99b31f4be109fdb8a3f38bca5373c042ae1510c029f95ffedd4bc11ca40a3e9"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/characters/ling-icon.webp",
+      "source_path": "/images/characters/ling-icon.webp",
+      "local_path": "data/mysqil/esper-cycles/assets/characters/ling-icon.webp",
+      "sha256": "60c53e670a4a275ecfeeff9620ab51edb2af91ffaafffa08863eaf828e027d0b"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/characters/nanali-icon.webp",
+      "source_path": "/images/characters/nanali-icon.webp",
+      "local_path": "data/mysqil/esper-cycles/assets/characters/nanali-icon.webp",
+      "sha256": "7377cad07ba8ae7ba526a42c32e50d4f13715d0e6b4ce63f38510bab26f7c0ba"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/characters/xiaozhi-icon.webp",
+      "source_path": "/images/characters/xiaozhi-icon.webp",
+      "local_path": "data/mysqil/esper-cycles/assets/characters/xiaozhi-icon.webp",
+      "sha256": "a31b4026f18178b713b2f5555f343d850c6a53d23b5e88bfab69dacf16345752"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/characters/xun-icon.webp",
+      "source_path": "/images/characters/xun-icon.webp",
+      "local_path": "data/mysqil/esper-cycles/assets/characters/xun-icon.webp",
+      "sha256": "cecac312b9dfca36e5063051636def495a7cc80bd778b5e7ef4e6679ea201669"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/characters/yi-icon.webp",
+      "source_path": "/images/characters/yi-icon.webp",
+      "local_path": "data/mysqil/esper-cycles/assets/characters/yi-icon.webp",
+      "sha256": "027c164f0be78ccef708d31e7cc0d7e3bd5445221705f5d2c26d547b7ffb28e7"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/characters/yiluoyi-icon.webp",
+      "source_path": "/images/characters/yiluoyi-icon.webp",
+      "local_path": "data/mysqil/esper-cycles/assets/characters/yiluoyi-icon.webp",
+      "sha256": "870452b4802e06e80a770a67732ba1a6eb107f4179d9512575e49502ec3ad152"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/characters/zaowu-icon.webp",
+      "source_path": "/images/characters/zaowu-icon.webp",
+      "local_path": "data/mysqil/esper-cycles/assets/characters/zaowu-icon.webp",
+      "sha256": "9ba4d2be7fd86d125b34211efd28f256a37c4bd955705788e70f60b98e8f8b3b"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/characters/zhenhong-icon.webp",
+      "source_path": "/images/characters/zhenhong-icon.webp",
+      "local_path": "data/mysqil/esper-cycles/assets/characters/zhenhong-icon.webp",
+      "sha256": "7fd548c327f8de732b9bacb88b68b8afb9e312c9677f2dbbfc28f550ac058326"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/ui/element-dark.webp",
+      "source_path": "/images/ui/element-dark.webp",
+      "local_path": "data/mysqil/esper-cycles/assets/ui/element-dark.webp",
+      "sha256": "5afc25422d00cc8c06fcdeb173d99e0a54a7c3af67a742157f462edd3ebc5012"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/ui/element-incantation.webp",
+      "source_path": "/images/ui/element-incantation.webp",
+      "local_path": "data/mysqil/esper-cycles/assets/ui/element-incantation.webp",
+      "sha256": "079745c78eab8b90d2a2f0a8722684dea95b4e31207db73aea2255c6b513efb0"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/ui/element-lakshana.webp",
+      "source_path": "/images/ui/element-lakshana.webp",
+      "local_path": "data/mysqil/esper-cycles/assets/ui/element-lakshana.webp",
+      "sha256": "f29d49ec67569ea91634b49242bf3f1109470d0660c59bf8844dc2f75490a00d"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/ui/element-light.webp",
+      "source_path": "/images/ui/element-light.webp",
+      "local_path": "data/mysqil/esper-cycles/assets/ui/element-light.webp",
+      "sha256": "c624986544b19e7edf0562b9db2ca8d67de7df9c69fe8501a0c943c34105c7b5"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/ui/element-nature.webp",
+      "source_path": "/images/ui/element-nature.webp",
+      "local_path": "data/mysqil/esper-cycles/assets/ui/element-nature.webp",
+      "sha256": "f4f6ec50ab2fabd43b852018c4b0eec3e8dfa7b9e07f4b0f4c050f8182155909"
+    },
+    {
+      "source_url": "https://wiki.mysqil.com/images/ui/element-psyche.webp",
+      "source_path": "/images/ui/element-psyche.webp",
+      "local_path": "data/mysqil/esper-cycles/assets/ui/element-psyche.webp",
+      "sha256": "8ad159a37fb066b481003b00999f7859eb04e49a84db0da9b414fdd41e1714b8"
+    }
+  ],
+  "coverage": {
+    "reaction_count": 8,
+    "enhancement_count": 20,
+    "image_count": 26,
+    "article_text_complete": true,
+    "source_text_sha256": "03cfe9749aef76f8c4ef2101daab993161a8586e668fb79e5ab9bd8fc5341253",
+    "numeric_tokens": [
+      "8",
+      "1",
+      "5",
+      "2",
+      "3",
+      "10",
+      "1",
+      "1",
+      "6",
+      "3",
+      "5",
+      "12",
+      "10%",
+      "800%",
+      "5",
+      "1",
+      "45%",
+      "300%",
+      "10",
+      "50%",
+      "4",
+      "120",
+      "30",
+      "400%",
+      "11",
+      "863.6%",
+      "5%",
+      "30",
+      "10",
+      "1",
+      "12",
+      "20%",
+      "15",
+      "25%",
+      "100%",
+      "20%",
+      "10%",
+      "10%",
+      "15",
+      "5",
+      "200%",
+      "10%",
+      "50%",
+      "4%",
+      "8%",
+      "16%",
+      "20%",
+      "3",
+      "50%",
+      "400%",
+      "10%",
+      "30",
+      "20%",
+      "12",
+      "20%"
+    ],
+    "tables": 0
+  }
+}

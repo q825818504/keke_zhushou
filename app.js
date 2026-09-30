@@ -102,7 +102,6 @@ let userCarouselDragOffset = 0;
 let userCarouselSuppressClick = false;
 let userActiveRoute = "characters";
 
-let userTeamGoal = ["均衡", "速切", "生存"].includes(userTeamSavedState.goal) ? userTeamSavedState.goal : "均衡";
 let userTeamTeamCount = userTeamSavedState.teamCount === 2 ? 2 : 1;
 let userArcDriveSearchQuery = "";
 let userSkyCurtainSearchQuery = "";
@@ -124,16 +123,7 @@ let userTeamSelectedCandidateIndexes = [0, 0];
 let userTeamGenerated = false;
 const userRouteLabels = { characters: "角色", team: "自动配队", "arc-drives": "弧盘", cassettes: "空幕", "drive-blocks": "驱动块" };
 const userTeamElementRing = ["光", "灵", "咒", "暗", "魂", "相"];
-const userTeamReactionRules = [
-  { name: "创生", attrs: ["光", "灵"] },
-  { name: "延滞", attrs: ["光", "相"] },
-  { name: "覆纹", attrs: ["灵", "咒"] },
-  { name: "浊燃", attrs: ["咒", "暗"] },
-  { name: "黯星", attrs: ["暗", "魂"] },
-  { name: "浸染", attrs: ["魂", "相"] },
-  { name: "盈蓄", attrs: ["光", "灵", "相"] },
-  { name: "失谐", attrs: ["咒", "暗", "魂"] }
-];
+const userTeamReactionRules = (window.esperCycleKnowledge?.cycles || []).map(cycle => ({ name: cycle.name, attrs: cycle.attributes.map(attribute => attribute.name) }));
 
 function notify(message) {
   toastText.textContent = message;
@@ -1031,6 +1021,10 @@ function initDriverBlockCatalog() {
 }
 
 function showRoleManagement() {
+  if (guideDirty && !guideCanLeave()) return;
+  guideDirty = false;
+  $("#guideManagerView").hidden = true;
+  $("#reactionSystemView").hidden = true;
   document.body.classList.remove("user-mode");
   $("#userExperienceView").hidden = true;
   $("#adminTopbarActions").hidden = false;
@@ -1045,9 +1039,13 @@ function showRoleManagement() {
   $$('[data-encyclopedia-kind]').forEach((item) => item.classList.remove("is-active"));
 }
 function showEncyclopediaCategory(kind) {
+  if (guideDirty && !guideCanLeave()) return;
+  guideDirty = false;
+  $("#guideManagerView").hidden = true;
+  $("#reactionSystemView").hidden = true;
   document.body.classList.remove("user-mode");
   $("#userExperienceView").hidden = true;
-  $("#adminTopbarActions").hidden = true;
+  $("#adminTopbarActions").hidden = false;
   $("#userTopbarActions").hidden = true;
 
   const labels = { "arc-drives": "弧盘", cassettes: "空幕", "drive-blocks": "驱动块" };
@@ -1061,7 +1059,7 @@ function showEncyclopediaCategory(kind) {
   $$("[data-encyclopedia-kind]").forEach((item) => item.classList.toggle("is-active", item.dataset.encyclopediaKind === kind));
   $("#roleManagementView").hidden = true;
   $("#encyclopediaView").hidden = false;
-  $("#previewButton").hidden = true;
+  $("#previewButton").hidden = false;
   $("#saveDraftButton").hidden = true;
   $("#arcCatalogPanel").hidden = !hasArcDriveCatalog;
   $("#skyCurtainPanel").hidden = !hasSkyCurtainCatalog;
@@ -1196,6 +1194,8 @@ function bindNavigation() {
     $$("[data-nav]").forEach((nav) => nav.classList.remove("is-active"));
     item.classList.add("is-active");
     if (item.dataset.nav === "角色管理") showRoleManagement();
+    else if (item.dataset.nav === "攻略阵容") showGuideManager();
+    else if (item.dataset.nav === "反应体系") showReactionSystem();
     else notify(`「${item.dataset.nav}」模块将在下一阶段接入`);
   }));
 }
@@ -1554,6 +1554,10 @@ function renderUserExperience(knowledge) {
 }
 
 function showUserExperience() {
+  if (guideDirty && !guideCanLeave()) return;
+  guideDirty = false;
+  $("#guideManagerView").hidden = true;
+  $("#reactionSystemView").hidden = true;
   document.body.classList.add("user-mode");
   $("#userExperienceView").hidden = false;
   $("#roleManagementView").hidden = true;
@@ -1652,7 +1656,7 @@ function userTeamCanPin(name) {
   const data = characterData[name];
   if (!data) return false;
   if (userTeamRoleKind(data) === "main") return true;
-  return (teamTemplateKnowledge.teams || []).some((team) => team.source_core_character_id === data.id);
+  return (window.teamGuideStore ? window.teamGuideStore.all() : (teamTemplateKnowledge.teams || [])).some((team) => team.source_core_character_id === data.id);
 }
 
 function userTeamInvestmentState(name) {
@@ -1677,7 +1681,6 @@ function userTeamSaveSettings() {
     ownedCharacterIds: userTeamAvailableNames().map((name) => characterData[name].id),
     pinnedMainCIds: userTeamPinnedCoreNames.map((name) => characterData[name]?.id).filter(Boolean),
     investmentsByCharacterId: investments,
-    goal: userTeamGoal,
     teamCount: userTeamTeamCount
   };
   try {
@@ -1694,8 +1697,8 @@ function userTeamRankedMainCNames(names) {
   return names.filter(userTeamCanPin).sort((firstName, secondName) => {
     const firstData = characterData[firstName];
     const secondData = characterData[secondName];
-    const firstSourceCount = (teamTemplateKnowledge.teams || []).filter((team) => team.source_core_character_id === firstData.id).length;
-    const secondSourceCount = (teamTemplateKnowledge.teams || []).filter((team) => team.source_core_character_id === secondData.id).length;
+    const firstSourceCount = (window.teamGuideStore ? window.teamGuideStore.all() : (teamTemplateKnowledge.teams || [])).filter((team) => team.source_core_character_id === firstData.id).length;
+    const secondSourceCount = (window.teamGuideStore ? window.teamGuideStore.all() : (teamTemplateKnowledge.teams || [])).filter((team) => team.source_core_character_id === secondData.id).length;
     const firstScore = userTeamTierScore(firstData) + firstSourceCount * 0.25 + userTeamInvestmentRank(firstName);
     const secondScore = userTeamTierScore(secondData) + secondSourceCount * 0.25 + userTeamInvestmentRank(secondName);
     return secondScore - firstScore || firstName.localeCompare(secondName, "zh-CN");
@@ -1755,9 +1758,6 @@ function userTeamEvaluate(coreName, memberNames) {
   score += profile.adjacentPairs.length * 5;
   score += profile.derivedReactions.length * 7;
   if (members.some((member) => userTeamAdjacent(core.element, member.element))) score += 4;
-  if (userTeamGoal === "速切") score += counts.secondary * 4 + counts.support * 3 - counts.sustain;
-  if (userTeamGoal === "生存") score += counts.sustain * 5 + counts.support * 2 + counts.secondary;
-  if (userTeamGoal === "均衡") score += counts.support + counts.sustain * 2;
   score += members.reduce((sum, member) => sum + userTeamTierScore(member), 0) * 0.4;
   score += new Set(members.map((member) => member.element).filter(userTeamIsElement)).size;
   score -= members.filter((member) => member.element === core.element).length * 0.75;
@@ -1789,7 +1789,7 @@ function userTeamBuildPlans(coreName, blockedNames = new Set(), limit = 3) {
   if (!coreName || !available.includes(coreName)) return [];
   const plans = [];
   const seen = new Set();
-  const templates = (teamTemplateKnowledge.teams || [])
+  const templates = (window.teamGuideStore ? window.teamGuideStore.all() : (teamTemplateKnowledge.teams || []))
     .filter((team) => team.editorial?.active !== false && team.source_core_character_id === characterData[coreName]?.id)
     .map((team) => {
       const orderedNames = (team.member_character_ids || []).map((id) => userTeamNameById[id]);
@@ -1867,7 +1867,7 @@ function userTeamRosterCard(name, data) {
   const pinIndex = userTeamPinnedCoreNames.indexOf(name);
   const canPin = userTeamCanPin(name);
   const expanded = userTeamExpandedInvestmentNames.has(name) || pinIndex >= 0;
-  const sourceCount = (teamTemplateKnowledge.teams || []).filter((team) => team.source_core_character_id === data.id).length;
+  const sourceCount = (window.teamGuideStore ? window.teamGuideStore.all() : (teamTemplateKnowledge.teams || [])).filter((team) => team.source_core_character_id === data.id).length;
   const pinLabel = pinIndex === 0 ? "1队主C" : pinIndex === 1 ? "2队主C" : "锁定主C";
   return '<article class="user-team-roster-card' + (selected ? " is-selected" : "") + (pinIndex >= 0 ? " is-core-choice" : "") + '">' +
     '<div class="user-team-roster-row"><button class="user-team-roster-toggle" type="button" data-user-team-roster="' + escapeHtml(name) + '" aria-pressed="' + String(selected) + '"><span class="user-team-roster-avatar">' + (data.icon ? '<img src="' + escapeHtml(data.icon) + '" alt="">' : escapeHtml(name.slice(0, 1))) + '</span><span class="user-team-roster-name"><b>' + escapeHtml(name) + '</b><small>' + escapeHtml(userTeamRoleLabel(data) + " · " + (data.element || "属性待补充")) + (sourceCount ? " · " + sourceCount + " 条公开阵容" : "") + '</small></span><i aria-hidden="true">' + (selected ? "✓" : "+") + '</i></button><div class="user-team-roster-tools">' +
@@ -1890,7 +1890,7 @@ function userTeamReasonMarkup(plan) {
 function userTeamCandidatePickerMarkup(plans, selectedIndex, teamIndex) {
   return '<div class="user-team-candidates" role="group" aria-label="第' + (teamIndex + 1) + '队候选方案">' + plans.map((plan, index) => {
     const selected = selectedIndex === index;
-    const origin = plan.candidateKind === "source" ? "攻略站可见阵容" : "本地规则候选";
+    const origin = plan.candidateKind === "source" ? "攻略阵容" : "本地规则候选";
     const archetype = plan.sourceRecord?.source_archetype || (plan.profile.reactions[0] ? plan.profile.reactions[0] + "反应" : "定位组合");
     return '<button class="user-team-candidate' + (selected ? " is-active" : "") + '" type="button" data-user-team-candidate="' + teamIndex + ':' + index + '" aria-pressed="' + String(selected) + '"><span>' + escapeHtml("方案 " + (index + 1)) + '</span><b>' + escapeHtml(plan.coreName + " · " + archetype) + '</b><small>' + escapeHtml(origin) + '</small></button>';
   }).join("") + '</div>';
@@ -1911,9 +1911,11 @@ function userTeamResultSection(title, teamIndex, plans, selectedIndex) {
   const missingMarkup = plan.missing ? '<div class="user-team-missing"><b>还差 ' + plan.missing + ' 位角色</b><span>目前有 ' + plan.memberNames.length + ' 位可用角色，纳入更多未被另一队占用的角色后可补齐。</span></div>' : "";
   const sourceRecord = plan.sourceRecord;
   const sourceMarkup = sourceRecord
-    ? '<div class="user-team-source-note"><span>来源</span><b>会火攻略站 · ' + escapeHtml(sourceRecord.source_archetype || "公开阵容") + '</b><a href="' + escapeHtml(teamTemplateKnowledge.source_catalog?.source_url || "https://sifangshangxia.cn/team.html") + '" target="_blank" rel="noreferrer">查看公开页面 ↗</a><small>从公开界面整理；来源未说明复用许可，记录范围不代表站点完整阵容库。</small></div>'
-    : '<div class="user-team-source-note is-local"><span>来源</span><b>可可助手本地规则候选</b><small>按当前本地角色定位、属性环合和你填写的养成信息排序；没有把它标成攻略站推荐。</small></div>';
-  return '<section class="user-team-result"><div class="user-section-heading"><div><span class="user-section-kicker">' + escapeHtml(title) + '</span><h2>' + escapeHtml(plan.coreName) + ' 的方案</h2><p>先看多个方案，再选中一套；另一队会自动避开这里的四名角色。</p></div><span class="user-result-pill">' + (plan.missing ? "队伍未满" : plan.candidateKind === "source" ? "攻略站可见阵容" : "本地规则候选") + '</span></div>' + userTeamCandidatePickerMarkup(plans, safeIndex, teamIndex) + '<div class="user-team-grid">' + memberMarkup + '</div>' + missingMarkup + userTeamReasonMarkup(plan) + sourceMarkup + '</section>';
+    ? '<div class="user-team-source-note"><span>攻略</span><b>' + escapeHtml(sourceRecord.source_archetype || "攻略阵容") + '</b>' +
+      (sourceRecord.source_visibility === "local_editor" ? '<small>可可助手 · 自建攻略阵容</small>' : '<a href="' + escapeHtml(teamTemplateKnowledge.source_catalog?.source_url || "https://sifangshangxia.cn/team.html") + '" target="_blank" rel="noreferrer">会火攻略站公开页面 ↗</a>') +
+      (sourceRecord.editorial?.notes ? '<p>' + escapeHtml(sourceRecord.editorial.notes) + '</p>' : '') + '</div>'
+    : '<div class="user-team-source-note is-local"><span>来源</span><b>可可助手本地规则候选</b><small>按角色定位、属性环合和养成信息排序。</small></div>';
+  return '<section class="user-team-result"><div class="user-section-heading"><div><span class="user-section-kicker">' + escapeHtml(title) + '</span><h2>' + escapeHtml(plan.coreName) + ' 的方案</h2><p>先看多个方案，再选中一套；另一队会自动避开这里的四名角色。</p></div><span class="user-result-pill">' + (plan.missing ? "队伍未满" : plan.candidateKind === "source" ? "攻略阵容" : "本地规则候选") + '</span></div>' + userTeamCandidatePickerMarkup(plans, safeIndex, teamIndex) + '<div class="user-team-grid">' + memberMarkup + '</div>' + missingMarkup + userTeamReasonMarkup(plan) + sourceMarkup + '</section>';
 }
 
 function renderUserTeamRoute() {
@@ -1931,7 +1933,6 @@ function renderUserTeamRoute() {
   userTeamPinnedCoreNames = userTeamPinnedCoreNames.filter((name) => userTeamOwnedNames.has(name) && userTeamCanPin(name)).slice(0, 2);
   const rosterStatus = userTeamOwnedNames.size + " / " + allNames.length + " 人已纳入角色池";
   const rosterCards = allEntries.map(([name, data]) => userTeamRosterCard(name, data)).join("");
-  const goalOptions = ["均衡", "速切", "生存"].map((goal) => '<button class="user-route-segment ' + (goal === userTeamGoal ? "is-active" : "") + ' pressable" type="button" data-user-team-goal="' + goal + '" aria-pressed="' + String(goal === userTeamGoal) + '">' + goal + '</button>').join("");
   const teamCountOptions = [1, 2].map((count) => '<button class="user-route-segment ' + (count === userTeamTeamCount ? "is-active" : "") + ' pressable" type="button" data-user-team-count="' + count + '" aria-pressed="' + String(count === userTeamTeamCount) + '">' + count + '队</button>').join("");
   const pinnedMarkup = userTeamPinnedCoreNames.length
     ? userTeamPinnedCoreNames.map((name, index) => '<span class="user-team-pin-slot"><i>' + (index + 1) + '</i>' + escapeHtml(name) + '</span>').join("")
@@ -1955,10 +1956,10 @@ function renderUserTeamRoute() {
       resultMarkup = firstSection + secondSection;
     }
   }
-  const sourceCount = (teamTemplateKnowledge.teams || []).length;
+  const sourceCount = (window.teamGuideStore ? window.teamGuideStore.all() : (teamTemplateKnowledge.teams || [])).length;
   target.innerHTML = '<div class="user-route-intro"><div><span class="user-section-kicker">角色池 · 多方案 · 双队去重</span><h1 id="userTeamTitle">自动配队 1.0</h1><p>勾选你的角色，助手会一起推荐主C与队友；有明确偏好时可手动锁定，再从剩余角色规划第二队。</p></div><div class="user-route-status"><i></i><span>' + escapeHtml(rosterStatus) + '</span></div></div>' +
     '<section class="user-surface user-team-builder"><div class="user-team-builder-head"><div><span class="user-section-kicker">01 · 角色池</span><h2>先告诉助手你有哪些角色。</h2><p>首次使用从空角色池开始；持有状态、共鸣和专属弧盘只保存在当前浏览器。</p></div><div class="user-team-roster-actions"><button class="user-secondary-action pressable" type="button" data-user-team-roster-action="all">全部纳入</button><button class="user-secondary-action pressable" type="button" data-user-team-roster-action="clear">清空角色池</button></div></div><div class="user-team-roster-grid">' + rosterCards + '</div></section>' +
-    '<section class="user-surface user-team-builder user-team-controls-surface"><div class="user-team-controls"><div class="user-team-core-locks"><span>主C偏好（可选）</span><div class="user-team-pin-slots">' + pinnedMarkup + '</div></div><div class="user-route-control"><span>配队偏好</span><div class="user-route-segments" role="group" aria-label="配队偏好">' + goalOptions + '</div></div><div class="user-route-control"><span>生成队伍数</span><div class="user-route-segments" role="group" aria-label="生成队伍数">' + teamCountOptions + '</div></div><button class="user-primary-action pressable" type="button" data-user-team-generate>生成候选</button></div><div class="user-team-rule-note"><span class="user-section-kicker">候选依据</span><p>本地已保存 ' + sourceCount + ' 条攻略站可见阵容；先按持有角色筛选，不足时才补本地规则候选。未锁定时自动推荐主C；最多可锁定两位，分别用于第一队和第二队，成员不会跨队重复。共鸣和专属弧盘只用于方案排序，不等同伤害模拟。</p></div></section>' + resultMarkup;
+    '<section class="user-surface user-team-builder user-team-controls-surface"><div class="user-team-controls"><div class="user-team-core-locks"><span>主C偏好（可选）</span><div class="user-team-pin-slots">' + pinnedMarkup + '</div></div><div class="user-route-control"><span>生成队伍数</span><div class="user-route-segments" role="group" aria-label="生成队伍数">' + teamCountOptions + '</div></div><button class="user-primary-action pressable" type="button" data-user-team-generate>生成候选</button></div><div class="user-team-rule-note"><span class="user-section-kicker">候选依据</span><p>本地已保存 ' + sourceCount + ' 条攻略阵容；先按持有角色筛选，不足时才补本地规则候选。未锁定时自动推荐主C；最多可锁定两位，分别用于第一队和第二队，成员不会跨队重复。共鸣和专属弧盘只用于方案排序，不等同伤害模拟。</p></div></section>' + resultMarkup;
 }
 function renderUserArcDriveRoute() {
   const target = $("#userArcDriveRoute");
@@ -2168,15 +2169,6 @@ function bindUserCatalogRoutes() {
       return;
     }
 
-    const goal = event.target.closest("[data-user-team-goal]");
-    if (goal) {
-      userTeamGoal = goal.dataset.userTeamGoal;
-      userTeamGenerated = false;
-      userTeamSaveSettings();
-      renderUserTeamRoute();
-      return;
-    }
-
     if (event.target.closest("[data-user-team-generate]")) {
       if (!userTeamOwnedNames.size) {
         notify("先把你的角色纳入角色池");
@@ -2262,3 +2254,16 @@ function bindUserCatalogRoutes() {
     }
   });
 }
+
+bindGuideManager();
+window.addEventListener("guide-lineups-changed", () => {
+  userTeamSelectedCandidateIndexes = [0, 0];
+  if (userActiveRoute === "team") renderUserTeamRoute();
+});
+function showAdminToolbar(showDraft = false) {
+  $("#adminTopbarActions").hidden = false;
+  $("#userTopbarActions").hidden = true;
+  $("#previewButton").hidden = false;
+  $("#saveDraftButton").hidden = !showDraft;
+}
+bindReactionSystem();

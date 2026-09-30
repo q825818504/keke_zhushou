@@ -84,3 +84,14 @@ python .\scripts\build_team_templates_bundle.py
 - 唯一项目计划与进度：`.planning/2026-09-28-cocoa-assistant-ui-overhaul/`
 
 来源站 [Mysqil · 环世全鉴](https://wiki.mysqil.com/) 为社区维护的非官方资料，页面注明 [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)，并署名 Matsuzaka Yuki。原始 HTML 快照保留在本地，结构化图鉴记录说明了来源和规范化整理；分享导入或改编的资料时应保留署名与许可链接、说明修改，并遵守非商业和相同方式共享条件。配队推荐不进入标准化角色数据。
+
+## 可视化攻略阵容管理
+进入管理端后选择侧栏「攻略阵容」。从角色库拖入四个位置，或选中位置后点击角色；队内拖动会交换位置。选择主C、填写阵容名称与攻略说明，点击「保存阵容」即可纳入用户端攻略候选。已有阵容可搜索、编辑、复制、停用、删除及撤销删除。
+
+保存使用当前浏览器的本地存储；不同浏览器或设备不会自动同步。可导出 JSON 备份并在另一浏览器导入。导入按阵容编号合并，校验失败不会部分写入。若要将导出内容发布到仓库，将导出的 team_templates.json 替换 data/knowledge/team_templates.json，再运行 scripts/build_team_templates_bundle.py 生成发布包。页面保存本身不会修改仓库文件。
+## 反应体系 · 异能环合
+管理端「反应体系」可浏览、搜索和按属性筛选全部 8 种环合及 20 条角色强化被动。用户端预览在所有管理端页面常驻；资料与配队使用同一份环合定义，属性组合表示可形成的反应，实际触发还需满足资料中的条件。
+
+资料来源：[环世全鉴 · 异能环合](https://wiki.mysqil.com/esper-cycles)，作者 Matsuzaka Yuki，许可 [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)。原始 HTML 保存在 data/mysqil/esper-cycles/raw/page.html，26 张正文图片及 SHA-256 校验清单保存在同目录 assets/ 和 roster.json。结构化资料及浏览器包位于 data/knowledge/esper_cycles.json 和 esper_cycles.js。本地版本调整展示与分类，保留来源文字、数值、角色强化条件与图片；派生资料按同一许可使用。
+
+更新：运行 python scripts/import_mysqil_esper_cycles.py --refresh 下载并重建；无网络时运行不带参数的同一命令，从快照重建。导入器检查正文逐字覆盖、8 项清单、20 条被动和全部图片。运行 node scripts/check_esper_cycles.js 独立核对正文、全部数值、资源哈希和 JSON/JS 一致性。

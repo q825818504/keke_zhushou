@@ -19,7 +19,7 @@ vm.runInContext(`
   const userTeamNameById = Object.fromEntries(Object.entries(characterData).map(([name, data]) => [data.id, name]));
   let userTeamOwnedNames = new Set(Object.keys(characterData));
   let userTeamInvestmentByCharacterId = {};
-  let userTeamGoal = "均衡";
+
 `, sandbox);
 vm.runInContext(app.slice(app.indexOf("function userTeamRoleKind("), app.indexOf("function userTeamMemberCard(")), sandbox);
 
@@ -50,10 +50,6 @@ const lockedSecond = recommend("小吱", new Set(lockedFirst[0].memberNames));
 assert.ok(lockedSecond.length);
 assert.ok(lockedSecond.every((plan) => plan.coreName === "小吱" && plan.memberNames.every((name) => !lockedFirst[0].memberNames.includes(name))));
 
-for (const goal of ["均衡", "速切", "生存"]) {
-  vm.runInContext("userTeamGoal = " + JSON.stringify(goal), sandbox);
-  assert.ok(recommend().every((plan) => plan.memberNames.length === 4));
-}
 setPool([]);
 assert.equal(recommend().length, 0, "empty pool must not imply ownership of every character");
 setPool(["真红"]);
@@ -65,4 +61,4 @@ const limited = recommend();
 assert.ok(limited.length);
 assert.ok(limited.every((plan) => plan.candidateKind === "rule" && plan.memberNames.every((name) => ["真红", "早雾", "阿德勒", "浔"].includes(name))));
 
-console.log("Team recommendation checks passed: automatic cores, two-team exclusion, manual locks, preferences, empty/partial/support-only pools, and rule fallback.");
+console.log("Team recommendation checks passed: automatic cores, two-team exclusion, manual locks, empty/partial/support-only pools, and rule fallback.");

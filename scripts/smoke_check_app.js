@@ -44,7 +44,7 @@ assert.equal(invalidTeamReferences.length, 0, "team templates must only referenc
 
 const iconSelectorStart = app.indexOf("function findCharacterIcon(");
 assert.ok(iconSelectorStart >= 0, "character icons must be selected by character identity");
-const iconSelectorEnd = app.indexOf("\n\nconst characterData", iconSelectorStart);
+const iconSelectorEnd = app.indexOf("const characterData", iconSelectorStart);
 vm.runInContext(app.slice(iconSelectorStart, iconSelectorEnd), sandbox);
 const selectedIconHashes = new Map();
 for (const character of characters) {

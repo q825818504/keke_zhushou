@@ -381,3 +381,28 @@ Phase 17 - Automatic Team Builder 1.0 and Reference Lineup Catalog；local imple
 - [x] Commit the authorized local feature work and push it to the repository (`66d9545`).
 - [x] Confirm local `main` and `origin/main` point to the same commit and the worktree is clean.
 - **Status:** complete; implementation pushed to `origin/main` at `66d9545`.
+
+### Phase 24: Visual Guide Lineup Management
+- [x] Remove team preference UI, state and scoring.
+- [x] Add shared persistent guide store and drag/click four-slot editor.
+- [x] Support edit, duplicate, disable, delete with undo, search and JSON import/export.
+- [x] Connect saved guides to user recommendations and verify regression.
+- Status: complete locally; real desktop pointer drag, save/reload, 390px layout and algorithm/store regression passed.
+
+### Phase 25: Admin Navigation and Complete Esper Cycles
+- [x] Keep user preview visible across every admin module; remove four unused entries.
+- [x] Preserve source HTML, all article images, provenance and CC BY-NC-SA attribution.
+- [x] Import all 8 reactions and every character passive; reconcile text, numbers and image coverage.
+- [x] Build searchable reaction view and share combinations with the team solver.
+- [x] Verify navigation, content completeness, offline assets, desktop and narrow layouts.
+- Status: complete locally; full source/content/asset reconciliation and desktop/390px browser checks passed.
+
+### Phase 26: GitHub Delivery for Phases 24–25
+
+- [x] Review the complete pending worktree and attribute every file to the lineup manager or reaction-system/navigation feature.
+- [x] Fetch GitHub and confirm local main matches origin/main at 50adebc.
+- [x] Include the canonical plan, source snapshot, attribution, 26 image assets, generated reaction catalog, import/check scripts, and both UI phases.
+- [x] Stage and inspect the exact delivery payload.
+- [ ] Commit the complete local feature work and push to origin/main.
+- [ ] Confirm remote/local commit equality and clean worktree; record the delivered commit.
+- **Status:** exact 45-file payload staged and reviewed; commit and push pending.
