@@ -84,7 +84,7 @@
             <h1 id="userPageTitle">把每一次养成都算得明白。</h1>
             <p>从角色机制到配装建议，把复杂的资料整理成你现在就能用的答案。</p>
           </div>
-          <div class="user-intro-note"><span class="user-note-dot"></span><span>本地知识包持续更新</span></div>
+
         </div>
 
         <div class="user-character-toolbar">
@@ -107,7 +107,7 @@
         <section class="user-route-panel" id="userTeamRoute" data-user-route-panel="team" hidden aria-labelledby="userTeamTitle"></section>
         <section class="user-route-panel" id="userArcDriveRoute" data-user-route-panel="arc-drives" hidden aria-labelledby="userArcDriveTitle"></section>
         <section class="user-route-panel" id="userSkyCurtainRoute" data-user-route-panel="cassettes" hidden aria-labelledby="userSkyCurtainTitle"></section><section class="user-route-panel" id="userDriverBlockRoute" data-user-route-panel="drive-blocks" hidden aria-labelledby="userDriverBlockTitle"></section>
-        <footer class="user-footer"><span>可可助手 · 为每一次选择保留证据</span><span>角色资料来自本地知识包</span></footer>
+        <footer class="user-footer"><span>可可助手 · 为每一次选择保留证据</span></footer>
       </section>
       <div id="roleManagementView" hidden>
       <section class="page-heading stagger-item" style="--delay: 20ms">
@@ -146,29 +146,23 @@
                 <label class="field"><span>角色定位</span><input id="rolePosition" type="text"></label>
                 <label class="field"><span>站位</span><input id="roleStation" type="text"></label>
                 <label class="field"><span>强度评级</span><input id="roleRating" value="T0" type="text"></label>
-                <label class="field"><span>适用版本</span><div class="input-with-status"><input id="roleVersion" value="5.1.0" type="text"><span class="valid-icon">✓</span></div></label>
               </div>
             </div>
 
-            <div class="form-section split-section">
-              <div class="split-block">
+            <div class="form-section">
                 <div class="form-section-heading"><span class="section-number">02</span><div><h3>反应强化</h3><p>角色强化哪条反应，以及作用方式</p></div></div>
-                <button class="reaction-select pressable" type="button" id="reactionSelect"><span class="reaction-glyph">✦</span><span><b>盈蓄</b><small>提高反应伤害 · 作用于全队</small></span><svg viewBox="0 0 24 24" fill="none"><path d="m8 10 4 4 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-              </div>
-              <div class="split-block">
-                <div class="form-section-heading"><span class="section-number">03</span><div><h3>站场模式</h3><p>决定体系中角色的时间结构</p></div></div>
-                <div class="segmented-control" role="group" aria-label="站场模式"><button class="segment is-active pressable" type="button" data-mode="站场">站场</button><button class="segment pressable" type="button" data-mode="速切">速切</button><button class="segment pressable" type="button" data-mode="后台">后台</button></div>
-              </div>
+                <div id="roleReactionEnhancements"></div>
             </div>
 
 
                          <div class="imported-data-section">
-              <div class="imported-data-head"><div class="form-section-heading compact-heading"><span class="section-number">04</span><div><h3>角色资料全量导入</h3><p>基础资料、技能、觉醒、养成与卡带数据均来自本地快照</p></div></div><span class="source-actions"><a class="source-link" id="sourcePageLink" href="https://wiki.mysqil.com/characters/zhenhong" target="_blank" rel="noreferrer">打开来源页面 ↗</a><a class="source-link" id="localSnapshotLink" href="data/mysqil/characters/zhenhong/raw/page.html" target="_blank" rel="noreferrer">查看完整本地快照 ↗</a></span></div>
+              <div class="imported-data-head"><div class="form-section-heading compact-heading"><span class="section-number">04</span><div><h3>角色资料全量导入</h3></div></div></div>
               <div class="profile-grid">
                 <section class="data-block recommendation-block">
-                  <div class="data-block-heading"><span>推荐配置</span><small>来源页面记录</small></div>
+                  <div class="data-block-heading"><span>推荐配置</span></div>
                   <div id="recommendedWeapon"></div>
                   <div id="recommendedCassette"></div>
+                  <details class="recommendation-editor"><summary>编辑推荐配置</summary><div id="recommendationControls"></div></details>
                 </section>
                 <section class="data-block stats-block">
                   <div class="data-block-heading"><span>基础属性成长</span><small id="statsLevelLabel">等级上限 Lv.80</small></div>
@@ -237,11 +231,6 @@
             <button class="outline-button full pressable" type="button" id="runImpactButton">重新汇总材料</button>
           </article>
 
-          <article class="publish-card stagger-item" style="--delay: 300ms">
-            <div class="publish-head"><div><span class="card-kicker plain">资料审核</span><h3>还有 1 个动作</h3></div><span class="publish-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M12 4v11M8 8l4-4 4 4M5 15v4h14v-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
-            <div class="publish-step"><span class="step-number">1</span><div><b>提交审核</b><small>角色资料已导入，可以交给审核者</small></div><span class="step-state">待提交</span></div>
-            <button class="publish-button pressable" type="button" id="submitReviewButton">提交审核 <svg viewBox="0 0 24 24" fill="none"><path d="m9 5 7 7-7 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-          </article>
         </aside>
       </div>
       </div>
@@ -253,7 +242,7 @@
             <h1><span id="encyclopediaTitle">弧盘</span> <span class="count-pill" id="encyclopediaCount">51 件本地资料</span></h1>
             <p id="encyclopediaDescription">浏览弧盘属性、等级成长与调弧效果。</p>
           </div>
-          <div class="heading-meta"><span class="live-indicator"><i></i> 本地知识包</span><span class="updated-time" id="encyclopediaUpdated">来源快照已保存</span></div>
+
         </div>
 
         <div class="catalog-panel" id="arcCatalogPanel">
@@ -325,6 +314,7 @@
   <script src="data/knowledge/esper_cycles.js"></script>
   <script src="team_manager.js"></script>
   <script src="reactions.js"></script>
+  <script src="character_recommendations.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

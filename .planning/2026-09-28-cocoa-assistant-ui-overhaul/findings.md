@@ -1,5 +1,16 @@
 # Findings & Decisions
 
+## Phase 29 — Preserve defaults, explicit edits only
+- All imported character records stay unchanged. The editor works on a separate recommended-object copy; no default conversion or mechanism-fact rewriting occurs during startup.
+- Preserve existing recommendation cards and full default detail fields. Add a collapsed equipment editor with explicit save and exact restore-default; changing one item leaves the other intact.
+- Use a new storage key, ignoring the rolled-back v1 implementation. Unsaved selection changes are previews; only 保存推荐 persists changes. Defaults and existing affix/terminal details are recoverable in full.
+- Reaction enhancement presentation matches stable character IDs against the shared guide; render every matching description, or 无. Source character facts and solver inputs remain unchanged.
+
+## Phase 28 — Character build editing
+- Recommendation cards were read-only; the global draft button only showed a success toast. Added character-ID-scoped persistent build overrides and shared preview updates, with failure feedback.
+- Catalog cassettes use object-shaped effect and affix pools; character recommendations need array-shaped effects/pools. Normalize without leaking another cassette's terminal or character-specific priorities.
+- Reaction guide contains stable character IDs and complete enhancement descriptions. Derive all character associations from this shared guide, without guessing from elements.
+
 ## Requirements
 - 交付一份美观的“可可助手” UI，但产品角色是“配队知识管理后台”，不是通用聊天助手。
 - 维护者不应通过阅读或修改求解器代码来维护角色能力标签。
@@ -397,3 +408,38 @@ Imported exactly 8 sections: 5/3/4/0/3/3/2/0 passives in source order, totaling 
 ### Reaction view final checks
 Independent checker reconstructs all main-body text from structured fields and compares against separately stripped/decoded source HTML, including every numeric token. Offline image hashes and browser decoding cover all 26 unique assets. Both reference view and solver use esper_cycles.js; no second reaction-name/attribute list remains in app.js.
 Source defines effect conditions beyond attribute membership; the UI retains those conditions in full rather than describing every attribute combination as an automatically triggered in-battle event.
+## 2026-10-01 — Screenshot-led source UI cleanup
+- Screenshots call out user-visible implementation/provenance copy such as “本地知识包”, “资料来源”, the saved-guide count phrased as local storage, and an outbound guide-site entry. Remove these from the app-facing presentation, including equivalent catalog detail links.
+- Keep actual catalog data and source snapshots intact. Author/license attribution and acquisition provenance remain in repository documentation/data records; only redundant UI cues and navigation affordances are in scope.
+- Candidate-basis explanation still has product value; remove the local-storage count but retain a concise explanation of how guide lineups are selected.
+### Source UI inventory
+- Static user shell: top “本地知识包持续更新” badge and footer “角色资料来自本地知识包”; encyclopedia header repeats “本地知识包 / 来源快照已保存”.
+- Role admin UI: import section shows source/local-snapshot links and source-derived helper captions; role highlights identify “资料来源 本地知识包”.
+- Guide candidate UI: source-template cards link to “会火攻略站公开页面”; candidate rationale exposes a local saved-count and local fallback implementation.
+- Arc-drive, sky-curtain, and driver-block details in both admin and user routes conditionally render source-page links and provenance panels. Catalog headers also expose attribution hyperlinks.
+- Esper-cycle view renders source and license as clickable external links. Retain site/author/license credit in app copy but remove navigation targets; full attribution and source metadata remain in repository documentation/data.
+- Empty-state strings in role/catalog views repeatedly say “来源页未提供/没有”; replace these with concise neutral “暂无…” wording, without changing data or import behavior.
+- One broad combined search had quoting failure (recorded in progress); the PowerShell-safe retry enumerated the above locations successfully.
+### Outbound navigation inventory
+- The UI has source-detail anchors in admin arc-drive, sky-curtain, and driver-block details; corresponding anchors also appear in all three user detail views.
+- Source-attribution footers in the three catalog views and the reaction view contain outbound site/license links. Convert those to non-clickable attribution text rather than deleting author/license credit.
+- The guide candidate view links imported lineups to the external site. Remove that anchor and keep the lineup title/notes plus a concise explanation of candidate selection.
+- Admin role detail has an external source link and a local raw-snapshot link; both are inspection affordances rather than game data and can be removed from the page while retaining the snapshots in the repo.
+- `encyclopediaUpdated`, source-link DOM bindings, and the guide `sourceCount` are UI-only references; remove them along with their visual elements. Source URLs remain in provenance records for import/maintenance workflows.
+### Detail-level copy decisions
+- Role overview also labels the hero card “资料来源 本地知识包”; the role roster currently shows a per-character “公开阵容” count. Keep the count as useful selection context but rename it “套适配阵容” so it is not presented as an external-site badge.
+- Arc-drive/cassette/driver-block cards contain source-derived empty-state and quality-source labels; replace these only in rendered UI. Do not edit imported catalog records.
+- User catalog routes explain “同步图鉴/与管理端共用 catalog”; replace with gameplay-focused descriptions. Remove the three user “资料来源” panels and all per-record source anchors.
+- Source-count text in the team rationale is internal storage detail; remove the count and describe the candidate selection process directly.
+- Driver-block mechanism view also appends `secondary_source_notes` from its source guide; those external-reference notes are not game mechanics and will be omitted from rendering while preserved in the imported data/raw snapshot.
+- Sky-curtain detail exposes a `品质来源` note derived from source metadata in both admin and user views; omit that provenance-only field from the UI while keeping gameplay-facing quality notes.
+### Remaining copy inventory
+- Role-management empty states and metadata, user skill/terminal/cultivation empty states, catalog quality labels, and user catalog intros still repeat source-site phrasing. These describe missing imported fields, not actionable user guidance; replace with neutral “暂无…” wording.
+- User catalog intros repeat admin synchronization and read-only implementation details; replace with concise gameplay-facing descriptions (levels/effects/affixes).
+- The character detail still says to check the source page for terminal details; replace with a neutral availability state.
+- No unrelated external anchors were found outside the inventoried source, license, snapshot, and guide-site links. Static, reaction, admin guide-badge, catalog-detail, attribution, and team-candidate source navigation has now been removed or made non-clickable; source copy cleanup remains.
+## Phase 27 outcome — source UI cleanup
+- Removed the source badge/footer from the user shell and the encyclopedia status/source-snapshot badge. Removed role import source/snapshot links, source-origin labels, catalog detail source links, user catalog provenance panels, guide-site candidate CTA, and guide-management provenance badges.
+- Reworded source-dependent empty states and source-ingestion notes as neutral user-facing copy. Removed local saved-template counts and user-facing management/catalog synchronization explanations; kept useful per-character count as “套适配阵容”.
+- Source-derived attribution remains in catalog/reaction UI as plain, non-clickable author/license text. Repository README, attribution files, imported catalog provenance, raw source snapshots, and game data remain unchanged.
+- Static audit found no `target="_blank"`, `https://`, source-page labels, local-knowledge-package badges, or admin-sync copy in the application templates. JavaScript syntax checks and `git diff --check` passed. Browser interaction was not run.

@@ -23,22 +23,21 @@ const characterData = Object.fromEntries(Object.values(allKnowledge).filter((kno
   const awakenings = knowledge.awakenings || [];
   const resonance = knowledge.resonance || [];
   const materialCount = Object.keys(knowledge.cultivation?.material_catalog || {}).length;
-  const summary = basic.summary || "来源页面未提供角色简介。";
+  const summary = basic.summary || "暂无角色简介。";
   const roleLabel = basic.role || "定位待补充";
   const positionLabel = basic.position || "站位待补充";
   const statsCount = knowledge.base_stats?.stats?.length || 0;
   const cultivationAvailable = Boolean((knowledge.cultivation?.ascension || []).length || (knowledge.cultivation?.skills || []).length);
   const slots = [
-    ["基础资料", "来源页记录的角色属性与定位", basic.rarity && basic.element ? "已导入" : "待补充", basic.rarity && basic.element ? "green" : "amber"],
+    ["基础资料", "角色属性与定位", basic.rarity && basic.element ? "已导入" : "待补充", basic.rarity && basic.element ? "green" : "amber"],
     ["基础属性", "角色等级成长数据", statsCount ? `${statsCount} 项` : "待补充", statsCount ? "green" : "amber"],
-    ["技能资料", "来源页技能描述与参数", skills.length ? `${skills.length} 项` : "待补充", skills.length ? "green" : "amber"],
+    ["技能资料", "技能描述与参数", skills.length ? `${skills.length} 项` : "待补充", skills.length ? "green" : "amber"],
     ["觉醒与共鸣", "角色节点效果", awakenings.length + resonance.length ? `${awakenings.length + resonance.length} 项` : "待补充", awakenings.length + resonance.length ? "green" : "amber"],
     ["养成材料", "突破与技能升级消耗", cultivationAvailable ? `${materialCount} 种材料` : "待补充", cultivationAvailable ? "green" : "amber"]
   ];
   return [knowledge.name, {
     id: knowledge.id,
     knowledgeId: knowledge.id,
-    mode: "站场",
     rarity: basic.rarity || "—",
     element: basic.element || "—",
     cassetteType: basic.cassette_type || "—",
@@ -47,7 +46,6 @@ const characterData = Object.fromEntries(Object.values(allKnowledge).filter((kno
     sourcePosition: basic.position || "",
     position: `${roleLabel} · ${positionLabel}`,
     station: basic.position || "待补充",
-    version: "待补充",
     summaryTitle: `${knowledge.name} · ${roleLabel}`,
     summary,
     reaction: facts.primary_reaction || "待补充",
@@ -57,7 +55,7 @@ const characterData = Object.fromEntries(Object.values(allKnowledge).filter((kno
     localSnapshot: knowledge.provenance?.raw_snapshot || "",
     metrics: [String(skills.length), String(parameterCount), String(awakenings.length)],
     slots,
-    knowledge
+    knowledge: window.CharacterRecommendations.createKnowledge(knowledge)
   }];
 }));
 const userTeamSavedState = (() => {
@@ -75,7 +73,6 @@ const toast = $("#toast");
 const toastText = $("#toastText");
 let toastTimer;
 let selectedCharacter = "真红";
-let currentMode = "站场";
 let selectedArcDriveId = arcDriveCatalog.items?.[0]?.id || "";
 let arcDriveRarityFilter = "all";
 let arcDriveTypeFilter = "all";
@@ -166,7 +163,7 @@ function syncPublicPreview() {
 }
 
 function bindBasicPreview() {
-  ["#roleName", "#roleRarity", "#roleElement", "#roleCassetteType", "#rolePosition", "#roleStation", "#roleRating", "#roleVersion"].forEach((selector) => {
+  ["#roleName", "#roleRarity", "#roleElement", "#roleCassetteType", "#rolePosition", "#roleStation", "#roleRating"].forEach((selector) => {
     const element = $(selector);
     if (!element) return;
     ["input", "change"].forEach((eventName) => element.addEventListener(eventName, () => {
@@ -190,20 +187,68 @@ function renderRecommended(knowledge) {
   const weapon = $("#recommendedWeapon");
   if (weapon) {
     const data = recommended.weapon;
-    weapon.innerHTML = data ? `<div class="recommendation-card">${data.asset ? `<img src="${escapeHtml(importedAssetUrl({ local_path: data.asset }))}" alt="${escapeHtml(data.name)}">` : '<span class="asset-placeholder">武</span>'}<div><span>推荐武器 · ${escapeHtml(data.rating || "评级待补充")}</span><b>${escapeHtml(data.name)}</b><small>来源：角色详情页</small></div></div>` : emptyState("来源页未提供可导入的推荐武器");
+    weapon.innerHTML = data ? `<div class="recommendation-card">${data.asset ? `<img src="${escapeHtml(importedAssetUrl({ local_path: data.asset }))}" alt="${escapeHtml(data.name)}">` : '<span class="asset-placeholder">武</span>'}<div><span>推荐武器 · ${escapeHtml(data.rating || "评级待补充")}</span><b>${escapeHtml(data.name)}</b></div></div>` : emptyState("暂无推荐武器记录");
   }
   const cassette = $("#recommendedCassette");
   if (cassette) {
     const data = recommended.cassette;
-    cassette.innerHTML = data ? `<div class="recommendation-card">${data.icon ? `<img src="${escapeHtml(importedAssetUrl({ local_path: data.icon }))}" alt="${escapeHtml(data.name)}">` : '<span class="asset-placeholder">带</span>'}<div><span>推荐卡带 · ${escapeHtml(data.category || "类型待补充")} · ${escapeHtml(data.element || "属性待补充")}</span><b>${escapeHtml(data.name)}</b><small>${escapeHtml(data.cassette_type || "卡带类型待补充")}${data.set_effects?.length ? ` · ${data.set_effects.length} 条套装效果` : ""}</small></div></div>` : emptyState("来源页未提供可导入的推荐卡带");
+    cassette.innerHTML = data ? `<div class="recommendation-card">${data.icon ? `<img src="${escapeHtml(importedAssetUrl({ local_path: data.icon }))}" alt="${escapeHtml(data.name)}">` : '<span class="asset-placeholder">带</span>'}<div><span>推荐卡带 · ${escapeHtml(data.category || "类型待补充")} · ${escapeHtml(data.element || "属性待补充")}</span><b>${escapeHtml(data.name)}</b><small>${escapeHtml(data.cassette_type || "卡带类型待补充")}${data.set_effects?.length ? ` · ${data.set_effects.length} 条套装效果` : ""}</small></div></div>` : emptyState("暂无推荐卡带记录");
   }
+  renderRecommendationControls(knowledge);
+}
+
+function renderRecommendationControls(knowledge) {
+  const root = $("#recommendationControls");
+  const select = (kind, title, catalog) => {
+    const selected = knowledge.recommended?.[kind];
+    const defaults = allKnowledge[knowledge.id]?.recommended?.[kind];
+    const items = [...(catalog.items || [])];
+    if (selected && !items.some(item => item.id === selected.id)) items.unshift(selected);
+    return `<label class="field"><span>${title}</span><select data-recommendation-kind="${kind}" aria-label="${title}">${selected ? "" : '<option value="" selected disabled>请选择</option>'}${items.map(item => `<option value="${escapeHtml(item.id)}"${selected?.id === item.id ? " selected" : ""}>${escapeHtml(item.name)}${item.id === defaults?.id ? "（默认）" : ""}</option>`).join("")}</select></label>`;
+  };
+  root.innerHTML = select("weapon", "修改推荐弧盘", arcDriveCatalog) + select("cassette", "修改推荐卡带", skyCurtainCatalog) + '<div class="recommendation-actions"><button type="button" class="outline-button pressable" data-save-recommendation>保存推荐</button><button type="button" class="text-button pressable" data-reset-recommendation>恢复默认</button><span id="recommendationStatus" role="status">当前配置</span></div>';
+  if (root.dataset.bound) return;
+  root.dataset.bound = "true";
+  root.addEventListener("change", event => {
+    const field = event.target.closest("[data-recommendation-kind]");
+    if (!field) return;
+    window.CharacterRecommendations.select(activeKnowledge, field.dataset.recommendationKind, field.value);
+    refreshRecommendationPreview(activeKnowledge);
+    setText("#recommendationStatus", "已修改，待保存");
+  });
+  root.addEventListener("click", event => {
+    if (event.target.closest("[data-save-recommendation]")) {
+      const ok = window.CharacterRecommendations.save(activeKnowledge);
+      setText("#recommendationStatus", ok ? "推荐已保存" : "保存失败");
+      notify(ok ? "推荐配置已保存" : "保存失败，请检查浏览器存储空间或权限");
+    }
+    if (event.target.closest("[data-reset-recommendation]")) {
+      if (!window.CharacterRecommendations.reset(activeKnowledge)) { notify("恢复失败，请检查浏览器存储权限"); return; }
+      refreshRecommendationPreview(activeKnowledge);
+      setText("#recommendationStatus", "已恢复默认");
+    }
+  });
+}
+
+function refreshRecommendationPreview(knowledge) {
+  renderRecommended(knowledge);
+  renderCassetteRecommendationEditor(knowledge);
+  renderCassette(knowledge);
+  setText("#cassetteSummaryLabel", knowledge.recommended?.cassette?.name || "暂无推荐卡带");
+  renderUserTabPanel(knowledge);
+}
+
+function renderRoleReactionEnhancements(knowledge) {
+  const matches = (window.esperCycleKnowledge?.cycles || []).flatMap(cycle =>
+    (cycle.enhancements || []).filter(entry => entry.character_id === knowledge.id).map(entry => ({ name: cycle.name, description: entry.description })));
+  $("#roleReactionEnhancements").innerHTML = matches.length ? matches.map(entry => `<article class="role-reaction-enhancement"><b>${escapeHtml(entry.name)}</b><p>${escapeHtml(entry.description)}</p></article>`).join("") : '<p class="empty-state">无</p>';
 }
 
 function renderBaseStats(knowledge) {
   const target = $("#baseStats");
   if (!target) return;
   const stats = knowledge.base_stats?.stats || [];
-  if (!stats.length) { target.innerHTML = emptyState("来源页未提供结构化基础属性成长数据"); return; }
+  if (!stats.length) { target.innerHTML = emptyState("暂无基础属性成长数据"); return; }
   const maxLevel = Math.max(...stats.map((stat) => (stat.values || []).length));
   const levels = [1, 30, 50, 70, 80].filter((level) => level <= maxLevel);
   target.innerHTML = `<div class="stats-table"><div class="stats-row stats-head"><span>属性</span>${levels.map((level) => `<span>Lv.${level}</span>`).join("")}</div>${stats.map((stat) => `<div class="stats-row"><b>${escapeHtml(stat.name)}</b>${levels.map((level) => `<span>${stat.values?.[level - 1] == null ? "—" : Number(stat.values[level - 1]).toLocaleString()}</span>`).join("")}</div>`).join("")}</div>`;
@@ -213,7 +258,7 @@ function renderSkills(knowledge) {
   const target = $("#skillsList");
   if (!target) return;
   const skills = knowledge.skills || [];
-  if (!skills.length) { target.innerHTML = emptyState("来源页未提供可解析的技能条目"); return; }
+  if (!skills.length) { target.innerHTML = emptyState("暂无技能数据"); return; }
   target.innerHTML = skills.map((skill, index) => {
     const parameters = skill.parameters || [];
     return `
@@ -232,7 +277,7 @@ function renderAwakenings(knowledge) {
   if (!target) return;
   const awakenings = knowledge.awakenings || [];
   target.innerHTML = awakenings.length ? awakenings.map((awakening, index) => `
-    <article class="awakening-card">${awakening.asset ? `<img src="${escapeHtml(importedAssetUrl({ local_path: awakening.asset }))}" alt="觉醒 ${index + 1}">` : '<span class="asset-placeholder awakening-placeholder">?</span>'}<div><b>${index + 1}. ${escapeHtml(awakening.name || "未命名节点")}</b><p>${escapeHtml(awakening.description)}</p></div></article>`).join("") : emptyState("来源页未提供觉醒节点");
+    <article class="awakening-card">${awakening.asset ? `<img src="${escapeHtml(importedAssetUrl({ local_path: awakening.asset }))}" alt="觉醒 ${index + 1}">` : '<span class="asset-placeholder awakening-placeholder">?</span>'}<div><b>${index + 1}. ${escapeHtml(awakening.name || "未命名节点")}</b><p>${escapeHtml(awakening.description)}</p></div></article>`).join("") : emptyState("暂无觉醒节点");
 }
 
 function renderResonance(knowledge) {
@@ -240,7 +285,7 @@ function renderResonance(knowledge) {
   if (!target) return;
   const entries = knowledge.resonance || [];
   target.innerHTML = entries.length ? entries.map((entry) => `
-    <article class="awakening-card">${entry.asset ? `<img src="${escapeHtml(importedAssetUrl({ local_path: entry.asset }))}" alt="${escapeHtml(entry.name || "共鸣")}">` : '<span class="asset-placeholder awakening-placeholder">共</span>'}<div><b>${entry.level ? `Lv.${entry.level} · ` : ""}${escapeHtml(entry.name || "共鸣")}</b><p>${escapeHtml(entry.description)}</p></div></article>`).join("") : emptyState("来源页未提供共鸣节点");
+    <article class="awakening-card">${entry.asset ? `<img src="${escapeHtml(importedAssetUrl({ local_path: entry.asset }))}" alt="${escapeHtml(entry.name || "共鸣")}">` : '<span class="asset-placeholder awakening-placeholder">共</span>'}<div><b>${entry.level ? `Lv.${entry.level} · ` : ""}${escapeHtml(entry.name || "共鸣")}</b><p>${escapeHtml(entry.description)}</p></div></article>`).join("") : emptyState("暂无共鸣节点");
 }
 
 function materialAsset(knowledge, id) {
@@ -263,7 +308,7 @@ function renderSkillTargets(knowledge) {
   const target = $("#skillTargets");
   if (!target) return;
   const skills = knowledge.cultivation?.skills || [];
-  if (!skills.length) { target.innerHTML = emptyState("来源页未提供结构化技能养成节点"); return; }
+  if (!skills.length) { target.innerHTML = emptyState("暂无技能养成数据"); return; }
   target.innerHTML = '<div class="skill-targets-head"><div><b>技能目标等级</b><small>每个技能单独设定，默认按该技能最高等级计算</small></div><span>' + skills.length + ' 项技能</span></div>' +
     '<div class="skill-target-grid">' + skills.map((skill, index) => {
       const levels = skillTargetOptions(skill);
@@ -293,7 +338,7 @@ function readSkillTargets(knowledge) {
 function calculateMaterials(knowledge) {
   if (!knowledge || (!(knowledge.cultivation?.ascension || []).length && !(knowledge.cultivation?.skills || []).length)) {
     const target = $("#materialSummary");
-    if (target) target.innerHTML = emptyState("来源页未提供结构化养成材料数据");
+    if (target) target.innerHTML = emptyState("暂无养成材料数据");
     setText("#impactSummary", "养成数据待补充");
     setText("#analysisState", "待补充");
     setText("#metricMaterials", "0");
@@ -357,6 +402,7 @@ function syncCassetteRecommendations(knowledge, root, rerenderEditor = false) {
   cassette.recommended_main_affixes = readRecommendedAffixes(root, "main");
   cassette.recommended_sub_affixes = readRecommendedAffixes(root, "sub");
   renderCassette(knowledge);
+  setText("#recommendationStatus", "已修改，待保存");
   setText("#draftLabel", "草稿未保存");
   if (rerenderEditor) renderCassetteRecommendationEditor(knowledge);
 }
@@ -432,7 +478,7 @@ function renderCassette(knowledge) {
   if (!data) { target.innerHTML = terminalMarkup || emptyState("没有来源卡带详情"); return; }
   const effects = data.set_effects || [];
   const structure = data.structure || {};
-  target.innerHTML = '<div class="cassette-summary">' + (data.icon ? '<img src="' + escapeHtml(importedAssetUrl({ local_path: data.icon })) + '" alt="' + escapeHtml(data.name) + '">' : '<span class="asset-placeholder">带</span>') + '<div><b>' + escapeHtml(data.name) + '</b><span>' + [data.category, data.cassette_type, data.element && `${data.element}属性`].filter(Boolean).map(escapeHtml).join(" · ") + '</span><small>' + escapeHtml(data.acquisition || "获取方式待补充") + '</small></div></div><div class="set-effects">' + (effects.length ? effects.map((effect) => '<div><b>' + effect.pieces + '件套</b><span>' + escapeHtml(effect.description) + '</span></div>').join("") : emptyState("来源页未提供套装效果")) + '</div><div class="recommended-affixes"><div class="affix-section"><b>推荐主属性</b><div class="affix-ranking">' + renderAffixRanking(recommendedAffixes(data, "main")) + '</div></div><div class="affix-section"><b>推荐副属性</b><div class="affix-ranking">' + renderAffixRanking(recommendedAffixes(data, "sub")) + '</div></div><small class="affix-source-note">推荐结果由维护者配置；原始随机词条池仅作为编辑参考。</small></div>' + terminalMarkup + (structure.main_affix_count || structure.sub_affix_count ? '<div class="quality-note">' + (structure.main_affix_count ?? "—") + ' 个主属性 + ' + (structure.sub_affix_count ?? "—") + ' 个副属性 · ' + (structure.rerollable === false ? '词条不可洗练' : '洗练规则待补充') + '</div>' : '');
+  target.innerHTML = '<div class="cassette-summary">' + (data.icon ? '<img src="' + escapeHtml(importedAssetUrl({ local_path: data.icon })) + '" alt="' + escapeHtml(data.name) + '">' : '<span class="asset-placeholder">带</span>') + '<div><b>' + escapeHtml(data.name) + '</b><span>' + [data.category, data.cassette_type, data.element && `${data.element}属性`].filter(Boolean).map(escapeHtml).join(" · ") + '</span><small>' + escapeHtml(data.acquisition || "获取方式待补充") + '</small></div></div><div class="set-effects">' + (effects.length ? effects.map((effect) => '<div><b>' + effect.pieces + '件套</b><span>' + escapeHtml(effect.description) + '</span></div>').join("") : emptyState("暂无套装效果")) + '</div><div class="recommended-affixes"><div class="affix-section"><b>推荐主属性</b><div class="affix-ranking">' + renderAffixRanking(recommendedAffixes(data, "main")) + '</div></div><div class="affix-section"><b>推荐副属性</b><div class="affix-ranking">' + renderAffixRanking(recommendedAffixes(data, "sub")) + '</div></div><small class="affix-source-note">推荐结果由维护者配置；原始随机词条池仅作为编辑参考。</small></div>' + terminalMarkup + (structure.main_affix_count || structure.sub_affix_count ? '<div class="quality-note">' + (structure.main_affix_count ?? "—") + ' 个主属性 + ' + (structure.sub_affix_count ?? "—") + ' 个副属性 · ' + (structure.rerollable === false ? '词条不可洗练' : '洗练规则待补充') + '</div>' : '');
 }
 
 const DRIVE_LAYOUT_DB = "keke-character-drive-layouts";
@@ -646,15 +692,9 @@ function updateImportedPanel(data) {
     if (portrait) portraitElement.src = importedAssetUrl(portrait);
     portraitElement.alt = `${knowledge.name}立绘`;
   }
-  const sourceLink = $("#sourcePageLink");
-  if (sourceLink) sourceLink.href = knowledge.provenance?.source_url || "#";
-  const snapshotLink = $("#localSnapshotLink");
-  if (snapshotLink) snapshotLink.href = knowledge.provenance?.raw_snapshot || "#";
   const reviewPill = $(".verified-pill");
   if (reviewPill) reviewPill.innerHTML = '<i></i> ' + (knowledge.manual_review?.length ? "待人工核验" : "已校验");
-  const facts = knowledge.mechanism_facts || {};
-  setText("#reactionSelect b", facts.primary_reaction || "待补充");
-  setText("#reactionSelect small", facts.reaction_enhancement_text || (facts.primary_reaction ? "角色来源资料已保存" : "来源页未提供反应强化资料"));
+  renderRoleReactionEnhancements(knowledge);
   setText("#metricSlots", String(knowledge.skills?.length || 0));
   setText("#metricTeams", String((knowledge.skills || []).reduce((sum, skill) => sum + (skill.parameters || []).length, 0)));
   setText("#metricGold", String(knowledge.awakenings?.length || 0));
@@ -707,7 +747,6 @@ function applyCharacter(name, options = {}) {
   const data = characterData[name];
   if (!data) return;
   selectedCharacter = name;
-  currentMode = data.mode;
   $$(".character-card").forEach((card) => card.classList.toggle("is-active", card.dataset.character === name));
   setText("#editorCharacterName", name);
   $("#roleName").value = name;
@@ -718,12 +757,10 @@ function applyCharacter(name, options = {}) {
   $("#rolePosition").value = data.role || "";
   $("#roleStation").value = data.sourcePosition || "";
   $("#roleRating").value = data.rating || "";
-  $("#roleVersion").value = data.version || "待补充";
   syncPublicPreview();
   setText("#draftLabel", data.knowledge.review_status === "approved" ? "已审核" : "来源待核验");
   setText("#understandingTitle", data.summaryTitle);
   setText("#understandingCopy", data.summary);
-  $$(".segment").forEach((segment) => segment.classList.toggle("is-active", segment.dataset.mode === data.mode));
   updateImportedPanel(data);
   if (options.skipUserRail) {
     renderUserHero(data.knowledge);
@@ -832,9 +869,9 @@ function renderArcDriveDetail() {
   const levelIndex = Math.max(0, breakpoints.indexOf(selectedArcDriveLevel));
   const statRows = stats.rows || [];
   const rankDescriptions = item.passive?.rank_descriptions || [];
-  const currentEffect = rankDescriptions[selectedArcDriveRank - 1] || "来源页没有提供调弧效果数据。";
-  const sourceUrl = item.source?.url || "";
-  target.innerHTML = `<div class="arc-drive-detail-head"><div class="arc-drive-detail-image">${item.image?.local_path ? `<img src="${escapeHtml(item.image.local_path)}" alt="${escapeHtml(item.name)}">` : "弧"}</div><div class="arc-drive-detail-title"><span class="rarity-chip rarity-${escapeHtml(item.rarity.toLowerCase())}">${escapeHtml(item.rarity)}级 · ${escapeHtml(item.type)}类</span><h2>${escapeHtml(item.name)}</h2><p>${escapeHtml(item.overview || `${item.name} · ${item.rarity}级${item.type}类弧盘`)}</p>${sourceUrl ? `<a class="source-link" href="${escapeHtml(sourceUrl)}" target="_blank" rel="noreferrer">打开来源详情 ↗</a>` : ""}</div></div><section class="arc-drive-detail-section"><div class="arc-detail-section-head"><div><h3>等级属性</h3><small>来源等级成长数据</small></div><label class="arc-level-select">等级<select id="arcDriveLevel">${breakpoints.map((level) => `<option value="${level}"${Number(level) === Number(selectedArcDriveLevel) ? " selected" : ""}>Lv.${level}</option>`).join("")}</select></label></div><div class="arc-stat-grid">${statRows.length ? statRows.map((row) => { const value = row.values_at_breakpoints?.[levelIndex] ?? row.current_value; return `<div class="arc-stat-card"><span>${escapeHtml(row.name || "属性")}</span><b>${escapeHtml(formatArcDriveStat(value, row.is_percent))}</b></div>`; }).join("") : emptyState("来源页没有等级属性数据")}</div></section>${item.description ? `<section class="arc-drive-description"><h3>说明</h3><p>${escapeHtml(item.description)}</p></section>` : ""}<section class="arc-drive-detail-section"><div class="arc-detail-section-head"><div><h3>${escapeHtml(item.passive?.title || "调弧效果")}</h3><small>效果数值随调弧等级变化</small></div></div><div class="arc-rank-select" role="group" aria-label="调弧等级">${Array.from({ length: Math.max(rankDescriptions.length, 1) }, (_, index) => `<button type="button" class="${selectedArcDriveRank === index + 1 ? "is-active" : ""}" data-arc-rank="${index + 1}" aria-pressed="${selectedArcDriveRank === index + 1}">R${index + 1}</button>`).join("")}</div><p class="arc-effect-copy">${escapeHtml(currentEffect)}</p></section><section class="arc-drive-overview"><h3>图鉴概述</h3><p>${escapeHtml(item.overview || "来源页未提供概述。")}</p></section>`;
+  const currentEffect = rankDescriptions[selectedArcDriveRank - 1] || "暂无调弧效果数据。";
+
+  target.innerHTML = `<div class="arc-drive-detail-head"><div class="arc-drive-detail-image">${item.image?.local_path ? `<img src="${escapeHtml(item.image.local_path)}" alt="${escapeHtml(item.name)}">` : "弧"}</div><div class="arc-drive-detail-title"><span class="rarity-chip rarity-${escapeHtml(item.rarity.toLowerCase())}">${escapeHtml(item.rarity)}级 · ${escapeHtml(item.type)}类</span><h2>${escapeHtml(item.name)}</h2><p>${escapeHtml(item.overview || `${item.name} · ${item.rarity}级${item.type}类弧盘`)}</p></div></div><section class="arc-drive-detail-section"><div class="arc-detail-section-head"><div><h3>等级属性</h3><small>来源等级成长数据</small></div><label class="arc-level-select">等级<select id="arcDriveLevel">${breakpoints.map((level) => `<option value="${level}"${Number(level) === Number(selectedArcDriveLevel) ? " selected" : ""}>Lv.${level}</option>`).join("")}</select></label></div><div class="arc-stat-grid">${statRows.length ? statRows.map((row) => { const value = row.values_at_breakpoints?.[levelIndex] ?? row.current_value; return `<div class="arc-stat-card"><span>${escapeHtml(row.name || "属性")}</span><b>${escapeHtml(formatArcDriveStat(value, row.is_percent))}</b></div>`; }).join("") : emptyState("暂无等级属性数据")}</div></section>${item.description ? `<section class="arc-drive-description"><h3>说明</h3><p>${escapeHtml(item.description)}</p></section>` : ""}<section class="arc-drive-detail-section"><div class="arc-detail-section-head"><div><h3>${escapeHtml(item.passive?.title || "调弧效果")}</h3><small>效果数值随调弧等级变化</small></div></div><div class="arc-rank-select" role="group" aria-label="调弧等级">${Array.from({ length: Math.max(rankDescriptions.length, 1) }, (_, index) => `<button type="button" class="${selectedArcDriveRank === index + 1 ? "is-active" : ""}" data-arc-rank="${index + 1}" aria-pressed="${selectedArcDriveRank === index + 1}">R${index + 1}</button>`).join("")}</div><p class="arc-effect-copy">${escapeHtml(currentEffect)}</p></section><section class="arc-drive-overview"><h3>图鉴概述</h3><p>${escapeHtml(item.overview || "暂无概述。")}</p></section>`;
 }
 
 function initArcDriveCatalog() {
@@ -843,8 +880,7 @@ function initArcDriveCatalog() {
   const source = arcDriveCatalog.source || {};
   const attribution = $("#arcDriveAttribution");
   if (attribution) {
-    const indexUrl = arcDriveCatalog.source_index || "https://wiki.mysqil.com/weapons/";
-    attribution.innerHTML = `资料整理自 <a href="${escapeHtml(indexUrl)}" target="_blank" rel="noreferrer">${escapeHtml(source.site || "Mysqil · 环世全鉴")}</a>；作者 ${escapeHtml(source.author || "Matsuzaka Yuki")}；许可 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noreferrer">${escapeHtml(source.license || "CC BY-NC-SA 4.0")}</a>；本地图鉴内容已从来源页提取并结构化整理。`;
+    attribution.textContent = `${source.site || "Mysqil · 环世全鉴"} · 弧盘资料；作者 ${source.author || "Matsuzaka Yuki"}；许可 ${source.license || "CC BY-NC-SA 4.0"}。非官方资料。`;
   }
   renderArcDriveList();
 }
@@ -902,14 +938,14 @@ function renderSkyCurtainDetail() {
   }
   const qualityLabels = { gold: "金", purple: "紫", blue: "蓝" };
   const image = item.images?.[selectedSkyCurtainQuality] || item.images?.gold || Object.values(item.images || {})[0];
-  const sourceUrl = item.source?.url || "";
+
   const effects = item.set_effects || {};
   const renderPool = (title, pool) => {
     const values = pool?.items || [];
-    return `<section class="arc-drive-description sky-curtain-pool"><h3>${escapeHtml(title)}</h3>${pool?.note ? `<p>${escapeHtml(pool.note)}</p>` : ""}<div class="sky-curtain-chip-list">${values.length ? values.map((value) => `<span class="sky-curtain-chip">${escapeHtml(value)}</span>`).join("") : `<span class="empty-state">来源页未提供词条池。</span>`}</div></section>`;
+    return `<section class="arc-drive-description sky-curtain-pool"><h3>${escapeHtml(title)}</h3>${pool?.note ? `<p>${escapeHtml(pool.note)}</p>` : ""}<div class="sky-curtain-chip-list">${values.length ? values.map((value) => `<span class="sky-curtain-chip">${escapeHtml(value)}</span>`).join("") : `<span class="empty-state">暂无词条池。</span>`}</div></section>`;
   };
   const tierNotes = item.quality?.tiers || [];
-  target.innerHTML = `<div class="arc-drive-detail-head"><div class="arc-drive-detail-image">${image?.local_path ? `<img src="${escapeHtml(image.local_path)}" alt="${escapeHtml(item.name)}·${escapeHtml(qualityLabels[selectedSkyCurtainQuality] || "金")}">` : "幕"}</div><div class="arc-drive-detail-title"><span class="sky-curtain-category-chip">${escapeHtml(item.category || "空幕")}${item.element ? ` · ${escapeHtml(item.element)}` : ""}</span><h2>${escapeHtml(item.name)}</h2>${sourceUrl ? `<a class="source-link" href="${escapeHtml(sourceUrl)}" target="_blank" rel="noreferrer">打开来源详情 ↗</a>` : ""}</div></div><section class="arc-drive-detail-section"><div class="arc-detail-section-head"><div><h3>品质图片</h3><small>来源页提供的三种品质图</small></div></div><div class="sky-curtain-quality-selector" role="group" aria-label="空幕品质图片">${Object.entries(qualityLabels).map(([qualityId, label]) => `<button type="button" class="${selectedSkyCurtainQuality === qualityId ? "is-active" : ""}" data-sky-quality="${qualityId}" aria-pressed="${selectedSkyCurtainQuality === qualityId}">${label}</button>`).join("")}</div></section><section class="arc-drive-detail-section"><div class="arc-detail-section-head"><div><h3>套装效果</h3><small>来源页记录的 2 件与 4 件效果</small></div></div><div class="sky-curtain-effect-grid"><div class="sky-curtain-effect-card"><span>2 件套</span><p>${escapeHtml(effects.two_piece || "来源页未提供。")}</p></div><div class="sky-curtain-effect-card"><span>4 件套</span><p>${escapeHtml(effects.four_piece || "来源页未提供。")}</p></div></div>${item.acquisition ? `<div class="arc-drive-description"><h3>获取途径</h3><p>${escapeHtml(item.acquisition)}</p></div>` : ""}</section>${renderPool("主属性可能词条", item.main_affix_pool)}${renderPool("副属性可能词条", item.sub_affix_pool)}<section class="arc-drive-description sky-curtain-quality-note"><h3>品质说明</h3>${item.quality?.role_note ? `<p><b>品质定位：</b>${escapeHtml(item.quality.role_note)}</p>` : ""}${item.quality?.source_note ? `<p><b>品质来源：</b>${escapeHtml(item.quality.source_note)}</p>` : ""}${item.quality?.note ? `<p>${escapeHtml(item.quality.note)}</p>` : ""}${tierNotes.length ? `<ul>${tierNotes.map((tier) => `<li><b>${escapeHtml(tier.quality)}</b><span>${escapeHtml(tier.description)}</span></li>`).join("")}</ul>` : ""}</section>${item.overview ? `<section class="arc-drive-overview"><h3>套装概述</h3><p>${escapeHtml(item.overview)}</p></section>` : ""}`;
+  target.innerHTML = `<div class="arc-drive-detail-head"><div class="arc-drive-detail-image">${image?.local_path ? `<img src="${escapeHtml(image.local_path)}" alt="${escapeHtml(item.name)}·${escapeHtml(qualityLabels[selectedSkyCurtainQuality] || "金")}">` : "幕"}</div><div class="arc-drive-detail-title"><span class="sky-curtain-category-chip">${escapeHtml(item.category || "空幕")}${item.element ? ` · ${escapeHtml(item.element)}` : ""}</span><h2>${escapeHtml(item.name)}</h2></div></div><section class="arc-drive-detail-section"><div class="arc-detail-section-head"><div><h3>品质图片</h3><small>金、紫、蓝品质图</small></div></div><div class="sky-curtain-quality-selector" role="group" aria-label="空幕品质图片">${Object.entries(qualityLabels).map(([qualityId, label]) => `<button type="button" class="${selectedSkyCurtainQuality === qualityId ? "is-active" : ""}" data-sky-quality="${qualityId}" aria-pressed="${selectedSkyCurtainQuality === qualityId}">${label}</button>`).join("")}</div></section><section class="arc-drive-detail-section"><div class="arc-detail-section-head"><div><h3>套装效果</h3><small>两件套与四件套效果</small></div></div><div class="sky-curtain-effect-grid"><div class="sky-curtain-effect-card"><span>2 件套</span><p>${escapeHtml(effects.two_piece || "暂无效果记录。")}</p></div><div class="sky-curtain-effect-card"><span>4 件套</span><p>${escapeHtml(effects.four_piece || "暂无效果记录。")}</p></div></div>${item.acquisition ? `<div class="arc-drive-description"><h3>获取途径</h3><p>${escapeHtml(item.acquisition)}</p></div>` : ""}</section>${renderPool("主属性可能词条", item.main_affix_pool)}${renderPool("副属性可能词条", item.sub_affix_pool)}<section class="arc-drive-description sky-curtain-quality-note"><h3>品质说明</h3>${item.quality?.role_note ? `<p><b>品质定位：</b>${escapeHtml(item.quality.role_note)}</p>` : ""}${item.quality?.note ? `<p>${escapeHtml(item.quality.note)}</p>` : ""}${tierNotes.length ? `<ul>${tierNotes.map((tier) => `<li><b>${escapeHtml(tier.quality)}</b><span>${escapeHtml(tier.description)}</span></li>`).join("")}</ul>` : ""}</section>${item.overview ? `<section class="arc-drive-overview"><h3>套装概述</h3><p>${escapeHtml(item.overview)}</p></section>` : ""}`;
 }
 
 function initSkyCurtainCatalog() {
@@ -918,8 +954,7 @@ function initSkyCurtainCatalog() {
   const source = skyCurtainCatalog.source || {};
   const attribution = $("#skyCurtainAttribution");
   if (attribution) {
-    const indexUrl = skyCurtainCatalog.source_index || "https://wiki.mysqil.com/cassettes/";
-    attribution.innerHTML = `资料整理自 <a href="${escapeHtml(indexUrl)}" target="_blank" rel="noreferrer">${escapeHtml(source.site || "Mysqil · 环世全鉴")}</a>；作者 ${escapeHtml(source.author || "Matsuzaka Yuki")}；许可 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noreferrer">${escapeHtml(source.license || "CC BY-NC-SA 4.0")}</a>；本地图鉴内容已从来源页提取并结构化整理。`;
+    attribution.textContent = `${source.site || "Mysqil · 环世全鉴"} · 空幕资料；作者 ${source.author || "Matsuzaka Yuki"}；许可 ${source.license || "CC BY-NC-SA 4.0"}。非官方资料。`;
   }
   renderSkyCurtainList();
 }
@@ -973,17 +1008,17 @@ function renderDriverBlockDetail() {
   const qualityLabels = { gold: "金", purple: "紫", blue: "蓝" };
   const tier = item.qualities?.[selectedDriverBlockQuality] || item.qualities?.gold;
   if (!tier) {
-    target.innerHTML = emptyState("来源页没有这档品质的数据");
+    target.innerHTML = emptyState("暂无此品质的数据");
     return;
   }
   const level = Math.min(tier.level?.max ?? 20, Math.max(tier.level?.min ?? 0, selectedDriverBlockLevel));
   selectedDriverBlockLevel = level;
   const levelIndex = level - (tier.level?.min ?? 0);
   const image = tier.images?.[selectedDriverBlockQuality];
-  const sourceUrl = tier.source_page?.url || "";
+
   const mainStats = tier.main_stats || [];
   const randomStats = tier.random_stats || [];
-  target.innerHTML = `<div class="arc-drive-detail-head"><div class="arc-drive-detail-image driver-block-artwork">${image?.local_path ? `<img src="${escapeHtml(image.local_path)}" alt="${escapeHtml(item.model)} ${escapeHtml(item.shape)} · ${qualityLabels[selectedDriverBlockQuality]}">` : "块"}</div><div class="arc-drive-detail-title"><span class="rarity-chip rarity-${escapeHtml(tier.grade.toLowerCase())}">${escapeHtml(item.model)} · ${escapeHtml(qualityLabels[selectedDriverBlockQuality])}色 ${escapeHtml(tier.grade)}级</span><h2>${escapeHtml(item.model)} · ${escapeHtml(item.shape || `${item.grid_count} 格`)}</h2><p>${escapeHtml(item.grid_count)} 格 · ${tier.random_slot_count} 个随机副词条槽 · ${randomStats.length} 种候选词条</p>${sourceUrl ? `<a class="source-link" href="${escapeHtml(sourceUrl)}" target="_blank" rel="noreferrer">打开当前品质来源 ↗</a>` : ""}</div></div><section class="arc-drive-detail-section"><div class="arc-detail-section-head"><div><h3>品质与形状图</h3><small>来源页保留了三档品质的原图</small></div></div><div class="sky-curtain-quality-selector" role="group" aria-label="驱动块品质">${Object.entries(qualityLabels).map(([qualityId, label]) => { const qualityTier = item.qualities?.[qualityId]; return `<button type="button" class="${selectedDriverBlockQuality === qualityId ? "is-active" : ""}" data-driver-quality="${qualityId}" aria-pressed="${selectedDriverBlockQuality === qualityId}">${label} ${escapeHtml(qualityTier?.grade || "")}</button>`; }).join("")}</div></section><section class="arc-drive-detail-section"><div class="arc-detail-section-head"><div><h3>固定主属性</h3><small>来源页记录的强化等级成长值</small></div><label class="driver-block-level-control">强化 +<output id="driverBlockLevelValue">${level}</output><input id="driverBlockLevel" type="range" min="${tier.level?.min ?? 0}" max="${tier.level?.max ?? 20}" value="${level}" aria-label="驱动块强化等级"></label></div><div class="arc-stat-grid">${mainStats.map((stat, index) => `<div class="arc-stat-card"><span>${escapeHtml(stat.name || "主属性")}</span><b data-driver-main-stat="${index}">${escapeHtml(formatDriverBlockValue(stat.values?.[levelIndex]))}</b></div>`).join("")}</div></section><section class="arc-drive-detail-section"><div class="arc-detail-section-head"><div><h3>随机副属性</h3><small>每块装备 ${tier.random_slot_count} 条；以下为来源页列出的候选值</small></div><span class="driver-block-pool-count">${randomStats.length} 种</span></div><div class="driver-block-stat-grid">${randomStats.map((stat) => `<div class="driver-block-stat-option">${stat.icon?.local_path ? `<img src="${escapeHtml(stat.icon.local_path)}" alt="">` : ""}<span>${escapeHtml(stat.name)}</span><b>${escapeHtml(formatDriverBlockValue(stat.value, stat.is_percent))}</b></div>`).join("")}</div></section>`;
+  target.innerHTML = `<div class="arc-drive-detail-head"><div class="arc-drive-detail-image driver-block-artwork">${image?.local_path ? `<img src="${escapeHtml(image.local_path)}" alt="${escapeHtml(item.model)} ${escapeHtml(item.shape)} · ${qualityLabels[selectedDriverBlockQuality]}">` : "块"}</div><div class="arc-drive-detail-title"><span class="rarity-chip rarity-${escapeHtml(tier.grade.toLowerCase())}">${escapeHtml(item.model)} · ${escapeHtml(qualityLabels[selectedDriverBlockQuality])}色 ${escapeHtml(tier.grade)}级</span><h2>${escapeHtml(item.model)} · ${escapeHtml(item.shape || `${item.grid_count} 格`)}</h2><p>${escapeHtml(item.grid_count)} 格 · ${tier.random_slot_count} 个随机副词条槽 · ${randomStats.length} 种候选词条</p></div></div><section class="arc-drive-detail-section"><div class="arc-detail-section-head"><div><h3>品质与形状图</h3><small>金、紫、蓝三档品质图</small></div></div><div class="sky-curtain-quality-selector" role="group" aria-label="驱动块品质">${Object.entries(qualityLabels).map(([qualityId, label]) => { const qualityTier = item.qualities?.[qualityId]; return `<button type="button" class="${selectedDriverBlockQuality === qualityId ? "is-active" : ""}" data-driver-quality="${qualityId}" aria-pressed="${selectedDriverBlockQuality === qualityId}">${label} ${escapeHtml(qualityTier?.grade || "")}</button>`; }).join("")}</div></section><section class="arc-drive-detail-section"><div class="arc-detail-section-head"><div><h3>固定主属性</h3><small>强化等级成长值</small></div><label class="driver-block-level-control">强化 +<output id="driverBlockLevelValue">${level}</output><input id="driverBlockLevel" type="range" min="${tier.level?.min ?? 0}" max="${tier.level?.max ?? 20}" value="${level}" aria-label="驱动块强化等级"></label></div><div class="arc-stat-grid">${mainStats.map((stat, index) => `<div class="arc-stat-card"><span>${escapeHtml(stat.name || "主属性")}</span><b data-driver-main-stat="${index}">${escapeHtml(formatDriverBlockValue(stat.values?.[levelIndex]))}</b></div>`).join("")}</div></section><section class="arc-drive-detail-section"><div class="arc-detail-section-head"><div><h3>随机副属性</h3><small>每块装备 ${tier.random_slot_count} 条；可用候选值如下</small></div><span class="driver-block-pool-count">${randomStats.length} 种</span></div><div class="driver-block-stat-grid">${randomStats.map((stat) => `<div class="driver-block-stat-option">${stat.icon?.local_path ? `<img src="${escapeHtml(stat.icon.local_path)}" alt="">` : ""}<span>${escapeHtml(stat.name)}</span><b>${escapeHtml(formatDriverBlockValue(stat.value, stat.is_percent))}</b></div>`).join("")}</div></section>`;
 }
 
 function renderDriverBlockGuide() {
@@ -1002,19 +1037,15 @@ function renderDriverBlockGuide() {
     return "";
   };
   target.innerHTML = sections.length ? sections.map((section) => `<section class="driver-block-guide-section"><h3>${escapeHtml(section.title)}</h3>${(section.content || []).map(renderBlock).join("")}</section>`).join("") : `<p class="empty-state">机制说明快照暂不可用。</p>`;
-  const sourceNotes = guide.secondary_source_notes || [];
-  if (sourceNotes.length) target.insertAdjacentHTML("beforeend", `<p class="driver-block-guide-note">${sourceNotes.map(escapeHtml).join("<br>")}</p>`);
 }
 
 function initDriverBlockCatalog() {
   const entries = driverBlockCatalog.items || [];
   if (!entries.some((item) => item.id === selectedDriverBlockId)) selectedDriverBlockId = entries[0]?.id || "";
   const source = driverBlockCatalog.source || {};
-  const indexUrl = driverBlockCatalog.source_index || "https://wiki.mysqil.com/drivers";
-  const guideUrl = driverBlockCatalog.mechanism_guide?.source?.url || "https://wiki.mysqil.com/cassettes/drivers";
   const attribution = $("#driverBlockAttribution");
   if (attribution) {
-    attribution.innerHTML = `资料整理自 <a href="${escapeHtml(indexUrl)}" target="_blank" rel="noreferrer">${escapeHtml(source.site || "Mysqil · 环世全鉴")}</a>，机制说明见<a href="${escapeHtml(guideUrl)}" target="_blank" rel="noreferrer">攻略原文</a>；作者 ${escapeHtml(source.source_author || "Matsuzaka Yuki")}；许可 <a href="${escapeHtml(source.source_license_url || "https://creativecommons.org/licenses/by-nc-sa/4.0/")}" target="_blank" rel="noreferrer">${escapeHtml(source.source_license || "CC BY-NC-SA 4.0")}</a>；本地图鉴从来源页提取并结构化，攻略页列出的二级资料来源与“以游戏内为准”说明已保留。`;
+    attribution.textContent = `${source.site || "Mysqil · 环世全鉴"} · 驱动块资料；作者 ${source.source_author || "Matsuzaka Yuki"}；许可 ${source.source_license || "CC BY-NC-SA 4.0"}。非官方资料。`;
   }
   renderDriverBlockList();
   renderDriverBlockGuide();
@@ -1212,17 +1243,6 @@ function bindSearch() {
   });
 }
 
-function bindModes() {
-  $$(".segment").forEach((segment) => segment.addEventListener("click", () => {
-    $$(".segment").forEach((item) => item.classList.remove("is-active"));
-    segment.classList.add("is-active");
-    currentMode = segment.dataset.mode;
-    setText("#draftLabel", "草稿未保存");
-    setText("#analysisState", "需重新分析");
-    notify(`站场模式已切换为「${currentMode}」`);
-  }));
-}
-
 function bindSave() {
   const save = () => {
     setText("#draftLabel", "已保存刚刚");
@@ -1250,8 +1270,6 @@ function bindMisc() {
     ["#previewButton", showUserExperience],
     ["#explainButton", () => notify("概览来自基础资料、技能和觉醒数据")],
     ["#moreButton", () => notify("更多操作：停用、复制为新角色、查看历史版本")],
-    ["#reactionSelect", () => notify(activeKnowledge?.mechanism_facts?.reaction_enhancement_text || "当前角色来源页未提供反应强化资料")],
-    ["#submitReviewButton", () => { setText("#draftLabel", "待审核"); notify("已提交角色资料审核"); }],
     ["#recalculateButton", () => activeKnowledge && calculateMaterials(activeKnowledge)]
   ];
   optionalBindings.forEach(([selector, handler]) => { const element = $(selector); if (element) element.addEventListener("click", handler); });
@@ -1269,7 +1287,6 @@ initDriverBlockCatalog();
 bindDriverBlockCatalog();
 bindSearch();
 bindBasicPreview();
-bindModes();
 bindSave();
 bindImpact();
 bindMisc();
@@ -1493,7 +1510,7 @@ function renderUserHero(knowledge) {
 function userBuildCard(data, type, fallback, extra = "") {
   if (!data) return `<div class="user-empty">暂无${escapeHtml(type)}建议。</div>`;
   const image = data.asset || data.icon || "";
-  return `<article class="user-build-card">${userMediaMarkup(image, data.name || type, fallback)}<div class="user-build-card-copy"><span>${escapeHtml(type)}${data.rating ? ` · ${escapeHtml(data.rating)}级` : ""}</span><b>${escapeHtml(data.name || "待补充")}</b><small>${escapeHtml(extra || data.description || data.cassette_type || "来源资料已整理")}</small></div></article>`;
+  return `<article class="user-build-card">${userMediaMarkup(image, data.name || type, fallback)}<div class="user-build-card-copy"><span>${escapeHtml(type)}${data.rating ? ` · ${escapeHtml(data.rating)}级` : ""}</span><b>${escapeHtml(data.name || "待补充")}</b><small>${escapeHtml(extra || data.description || data.cassette_type || "资料已整理")}</small></div></article>`;
 }
 
 function factsForUser(knowledge) {
@@ -1507,11 +1524,11 @@ function renderUserOverview(knowledge) {
   const materials = userMaterialEntries(knowledge, knowledge.base_stats?.level_cap || 80, userSkillTargets);
   const recommended = knowledge.recommended || {};
   const cassette = resolveRecommendedCassette(knowledge);
-  return `<section class="user-section-heading"><div><span class="user-section-kicker">角色概览</span><h2>先知道怎么用，再决定怎么养。</h2><p>${escapeHtml(factsForUser(knowledge))}</p></div></section><div class="user-overview-grid"><article class="user-metric-card"><span>定位</span><b>${escapeHtml(basic.role || "待补充")}</b><small>${escapeHtml(basic.position || "站位待补充")}</small></article><article class="user-metric-card"><span>技能资料</span><b>${skills.length}</b><small>项结构化技能</small></article><article class="user-metric-card"><span>养成材料</span><b>${materials.length}</b><small>种材料汇总</small></article><article class="user-metric-card"><span>等级上限</span><b>Lv.${knowledge.base_stats?.level_cap || "—"}</b><small>基础属性成长</small></article></div><div class="user-overview-columns"><section class="user-surface"><div class="user-section-heading"><div><span class="user-section-kicker">推荐起点</span><h2>先从这套配置开始。</h2></div><button class="user-text-action pressable" type="button" data-user-action="build">查看完整配装 →</button></div><div class="user-build-grid">${userBuildCard(recommended.weapon, "推荐武器", "武", recommended.weapon?.rating ? `${recommended.weapon.rating}级推荐` : "来源资料已整理")}${userBuildCard(cassette, "推荐空幕", "幕", cassette?.acquisition || "获取方式待补充")}</div></section><section class="user-surface user-highlight-card"><span class="user-section-kicker">玩法提示</span><div><h3>${escapeHtml(basic.role || "这个角色")}的核心是把机制用在正确时机。</h3><p>进入技能页查看完整描述，再到养成页按你的实际目标规划材料。</p></div><div class="user-highlight-foot"><span>资料来源</span><strong>本地知识包</strong></div></section></div>`;
+  return `<section class="user-section-heading"><div><span class="user-section-kicker">角色概览</span><h2>先知道怎么用，再决定怎么养。</h2><p>${escapeHtml(factsForUser(knowledge))}</p></div></section><div class="user-overview-grid"><article class="user-metric-card"><span>定位</span><b>${escapeHtml(basic.role || "待补充")}</b><small>${escapeHtml(basic.position || "站位待补充")}</small></article><article class="user-metric-card"><span>技能资料</span><b>${skills.length}</b><small>项结构化技能</small></article><article class="user-metric-card"><span>养成材料</span><b>${materials.length}</b><small>种材料汇总</small></article><article class="user-metric-card"><span>等级上限</span><b>Lv.${knowledge.base_stats?.level_cap || "—"}</b><small>基础属性成长</small></article></div><div class="user-overview-columns"><section class="user-surface"><div class="user-section-heading"><div><span class="user-section-kicker">推荐起点</span><h2>先从这套配置开始。</h2></div><button class="user-text-action pressable" type="button" data-user-action="build">查看完整配装 →</button></div><div class="user-build-grid">${userBuildCard(recommended.weapon, "推荐武器", "武", recommended.weapon?.rating ? `${recommended.weapon.rating}级推荐` : "资料已整理")}${userBuildCard(cassette, "推荐空幕", "幕", cassette?.acquisition || "获取方式待补充")}</div></section><section class="user-surface user-highlight-card"><span class="user-section-kicker">玩法提示</span><div><h3>${escapeHtml(basic.role || "这个角色")}的核心是把机制用在正确时机。</h3><p>进入技能页查看完整描述，再到养成页按你的实际目标规划材料。</p></div></section></div>`;
 }
 
 function userSkillCard(skill, index) {
-  const summary = skill.description_parts?.map((part) => `${part.name || ""}${part.text || ""}`).join(" ") || skill.raw_text || "来源页未提供技能摘要。";
+  const summary = skill.description_parts?.map((part) => `${part.name || ""}${part.text || ""}`).join(" ") || skill.raw_text || "暂无技能摘要。";
   const parameters = skill.parameters || [];
   return `<article class="user-skill-card"><div class="user-skill-card-head"><div><span>${escapeHtml(skill.category || `技能 ${index + 1}`)}</span><b>${escapeHtml(skill.name || "未命名技能")}</b></div><span class="user-skill-level">${skill.level_cap ? `Lv.${skill.level_cap}` : "机制"}</span></div><p>${escapeHtml(summary.slice(0, 180))}</p>${parameters.length ? `<div class="user-skill-parameters">${parameters.slice(0, 3).map((parameter) => `<span class="user-skill-parameter">${escapeHtml(parameter.label)} · ${escapeHtml(parameter.current_value || parameter.values?.[0] || "—")}</span>`).join("")}</div>` : ""}</article>`;
 }
@@ -1526,7 +1543,7 @@ function renderUserBuild(knowledge) {
   const cassette = resolveRecommendedCassette(knowledge);
   const mainAffixes = renderAffixRanking(recommendedAffixes(cassette, "main"));
   const subAffixes = renderAffixRanking(recommendedAffixes(cassette, "sub"));
-  return `<section class="user-section-heading"><div><span class="user-section-kicker">配装建议</span><h2>从一套舒服的配置开始。</h2><p>推荐属性按优先级排列；同一优先级代表近似选择，不等于唯一答案。</p></div></section><div class="user-build-layout"><section class="user-surface user-build-large"><div class="user-build-grid">${userBuildCard(recommended.weapon, "推荐武器", "武", recommended.weapon?.rating ? `${recommended.weapon.rating}级推荐` : "来源资料已整理")}${userBuildCard(cassette, "推荐空幕", "幕", cassette?.acquisition || "获取方式待补充")}</div><div class="user-affix-groups"><div class="user-affix-group"><span>推荐主属性</span><div class="user-affix-ranking">${mainAffixes}</div></div><div class="user-affix-group"><span>推荐副属性</span><div class="user-affix-ranking">${subAffixes}</div></div></div><div class="user-source-note"><i></i><span>原始可能词条池与维护者推荐已分开保存。</span></div></section><div class="user-surface user-empty">终端与细节资料请在来源页核对。</div></div>`;
+  return `<section class="user-section-heading"><div><span class="user-section-kicker">配装建议</span><h2>从一套舒服的配置开始。</h2><p>推荐属性按优先级排列；同一优先级代表近似选择，不等于唯一答案。</p></div></section><div class="user-build-layout"><section class="user-surface user-build-large"><div class="user-build-grid">${userBuildCard(recommended.weapon, "推荐武器", "武", recommended.weapon?.rating ? `${recommended.weapon.rating}级推荐` : "资料已整理")}${userBuildCard(cassette, "推荐空幕", "幕", cassette?.acquisition || "获取方式待补充")}</div><div class="user-affix-groups"><div class="user-affix-group"><span>推荐主属性</span><div class="user-affix-ranking">${mainAffixes}</div></div><div class="user-affix-group"><span>推荐副属性</span><div class="user-affix-ranking">${subAffixes}</div></div></div><div class="user-source-note"><i></i><span>原始可能词条池与维护者推荐已分开保存。</span></div></section><div class="user-surface user-empty">暂无终端与细节资料。</div></div>`;
 }
 
 function renderUserCultivation(knowledge) {
@@ -1536,7 +1553,7 @@ function renderUserCultivation(knowledge) {
   const entries = userMaterialEntries(knowledge, userTargetLevel, userSkillTargets);
   const skills = knowledge.cultivation?.skills || [];
   const skillTargetMarkup = skills.length ? `<div class="user-skill-targets"><div class="user-skill-targets-head"><div><span>技能目标</span><b>每项技能单独规划</b><small>默认按各技能最高等级计算，调整后材料会立即更新。</small></div><em>${skills.length} 项</em></div><div class="user-skill-target-grid">${skills.map((skill, index) => { const levels = skillTargetOptions(skill); const selected = userSkillTargetValue(knowledge, skill, index); const fixed = levels.length === 1; return `<label class="user-skill-target-row"><span><b>${escapeHtml(skill.name || `技能 ${index + 1}`)}</b><small>${fixed ? "固定节点" : `可选至 Lv.${Math.max(...levels)}`}</small></span><select data-user-skill-target="${index}" ${fixed ? "disabled" : ""}>${levels.map((level) => `<option value="${level}"${level === selected ? " selected" : ""}>Lv.${level}</option>`).join("")}</select></label>`; }).join("")}</div></div>` : `<div class="user-skill-targets user-empty">当前角色暂无结构化技能养成节点。</div>`;
-  return `<section class="user-section-heading"><div><span class="user-section-kicker">养成规划</span><h2>知道还差多少。</h2><p>角色等级与每项技能目标分开设置，材料汇总会跟着你的选择变化。</p></div><label class="user-level-control"><span>角色目标</span><select id="userTargetLevel">${levelOptions.map((level) => `<option value="${level}"${level === userTargetLevel ? " selected" : ""}>Lv.${level}</option>`).join("")}</select></label></section><div class="user-cultivation-layout"><section class="user-surface"><div class="user-section-heading"><div><span class="user-section-kicker">材料清单</span><h2>${entries.length} 种材料</h2></div></div>${skillTargetMarkup}${entries.length ? `<div class="user-material-grid">${entries.map((entry) => `<article class="user-material-card">${userMediaMarkup(entry.icon, entry.name, "材")}<div><b>${escapeHtml(entry.name)}</b><span>${entry.amount.toLocaleString()}</span></div></article>`).join("")}</div>` : `<div class="user-empty">来源页暂未提供结构化养成材料。</div>`}</section><aside class="user-surface user-cultivation-summary"><span class="user-section-kicker">目标状态</span><h3>Lv.${userTargetLevel}</h3><p>角色等级与 ${skills.length || 0} 项技能目标已分别计入材料汇总。</p><ul><li><span>角色等级上限</span><b>Lv.${levelCap}</b></li><li><span>技能目标</span><b>${skills.length ? `${skills.length} 项已设置` : "暂无"}</b></li><li><span>预计材料种类</span><b>${entries.length} 种</b></li></ul></aside></div>`;
+  return `<section class="user-section-heading"><div><span class="user-section-kicker">养成规划</span><h2>知道还差多少。</h2><p>角色等级与每项技能目标分开设置，材料汇总会跟着你的选择变化。</p></div><label class="user-level-control"><span>角色目标</span><select id="userTargetLevel">${levelOptions.map((level) => `<option value="${level}"${level === userTargetLevel ? " selected" : ""}>Lv.${level}</option>`).join("")}</select></label></section><div class="user-cultivation-layout"><section class="user-surface"><div class="user-section-heading"><div><span class="user-section-kicker">材料清单</span><h2>${entries.length} 种材料</h2></div></div>${skillTargetMarkup}${entries.length ? `<div class="user-material-grid">${entries.map((entry) => `<article class="user-material-card">${userMediaMarkup(entry.icon, entry.name, "材")}<div><b>${escapeHtml(entry.name)}</b><span>${entry.amount.toLocaleString()}</span></div></article>`).join("")}</div>` : `<div class="user-empty">暂无养成材料数据。</div>`}</section><aside class="user-surface user-cultivation-summary"><span class="user-section-kicker">目标状态</span><h3>Lv.${userTargetLevel}</h3><p>角色等级与 ${skills.length || 0} 项技能目标已分别计入材料汇总。</p><ul><li><span>角色等级上限</span><b>Lv.${levelCap}</b></li><li><span>技能目标</span><b>${skills.length ? `${skills.length} 项已设置` : "暂无"}</b></li><li><span>预计材料种类</span><b>${entries.length} 种</b></li></ul></aside></div>`;
 }
 
 function renderUserTabPanel(knowledge) {
@@ -1870,7 +1887,7 @@ function userTeamRosterCard(name, data) {
   const sourceCount = (window.teamGuideStore ? window.teamGuideStore.all() : (teamTemplateKnowledge.teams || [])).filter((team) => team.source_core_character_id === data.id).length;
   const pinLabel = pinIndex === 0 ? "1队主C" : pinIndex === 1 ? "2队主C" : "锁定主C";
   return '<article class="user-team-roster-card' + (selected ? " is-selected" : "") + (pinIndex >= 0 ? " is-core-choice" : "") + '">' +
-    '<div class="user-team-roster-row"><button class="user-team-roster-toggle" type="button" data-user-team-roster="' + escapeHtml(name) + '" aria-pressed="' + String(selected) + '"><span class="user-team-roster-avatar">' + (data.icon ? '<img src="' + escapeHtml(data.icon) + '" alt="">' : escapeHtml(name.slice(0, 1))) + '</span><span class="user-team-roster-name"><b>' + escapeHtml(name) + '</b><small>' + escapeHtml(userTeamRoleLabel(data) + " · " + (data.element || "属性待补充")) + (sourceCount ? " · " + sourceCount + " 条公开阵容" : "") + '</small></span><i aria-hidden="true">' + (selected ? "✓" : "+") + '</i></button><div class="user-team-roster-tools">' +
+    '<div class="user-team-roster-row"><button class="user-team-roster-toggle" type="button" data-user-team-roster="' + escapeHtml(name) + '" aria-pressed="' + String(selected) + '"><span class="user-team-roster-avatar">' + (data.icon ? '<img src="' + escapeHtml(data.icon) + '" alt="">' : escapeHtml(name.slice(0, 1))) + '</span><span class="user-team-roster-name"><b>' + escapeHtml(name) + '</b><small>' + escapeHtml(userTeamRoleLabel(data) + " · " + (data.element || "属性待补充")) + (sourceCount ? " · " + sourceCount + " 套适配阵容" : "") + '</small></span><i aria-hidden="true">' + (selected ? "✓" : "+") + '</i></button><div class="user-team-roster-tools">' +
     (canPin ? '<button class="user-team-pin' + (pinIndex >= 0 ? " is-pinned" : "") + '" type="button" data-user-team-pin="' + escapeHtml(name) + '" aria-pressed="' + String(pinIndex >= 0) + '"' + (!selected ? " disabled" : "") + '>' + (pinIndex >= 0 ? pinLabel : "锁定主C") + '</button>' : "") +
     (selected && pinIndex < 0 ? '<button class="user-team-investment-toggle" type="button" data-user-team-investment-toggle="' + escapeHtml(name) + '" aria-expanded="' + String(expanded) + '">' + (expanded ? "收起养成" : "养成") + '</button>' : "") +
     '</div></div>' + (selected && expanded ? userTeamInvestmentMarkup(name) : "") + '</article>';
@@ -1911,10 +1928,8 @@ function userTeamResultSection(title, teamIndex, plans, selectedIndex) {
   const missingMarkup = plan.missing ? '<div class="user-team-missing"><b>还差 ' + plan.missing + ' 位角色</b><span>目前有 ' + plan.memberNames.length + ' 位可用角色，纳入更多未被另一队占用的角色后可补齐。</span></div>' : "";
   const sourceRecord = plan.sourceRecord;
   const sourceMarkup = sourceRecord
-    ? '<div class="user-team-source-note"><span>攻略</span><b>' + escapeHtml(sourceRecord.source_archetype || "攻略阵容") + '</b>' +
-      (sourceRecord.source_visibility === "local_editor" ? '<small>可可助手 · 自建攻略阵容</small>' : '<a href="' + escapeHtml(teamTemplateKnowledge.source_catalog?.source_url || "https://sifangshangxia.cn/team.html") + '" target="_blank" rel="noreferrer">会火攻略站公开页面 ↗</a>') +
-      (sourceRecord.editorial?.notes ? '<p>' + escapeHtml(sourceRecord.editorial.notes) + '</p>' : '') + '</div>'
-    : '<div class="user-team-source-note is-local"><span>来源</span><b>可可助手本地规则候选</b><small>按角色定位、属性环合和养成信息排序。</small></div>';
+    ? '<div class="user-team-source-note"><span>阵容说明</span><b>' + escapeHtml(sourceRecord.source_archetype || "攻略阵容") + '</b>' + (sourceRecord.editorial?.notes ? '<p>' + escapeHtml(sourceRecord.editorial.notes) + '</p>' : '') + '</div>'
+    : '<div class="user-team-source-note is-local"><span>候选说明</span><b>角色规则推荐</b><small>按角色定位、属性环合和养成信息排序。</small></div>';
   return '<section class="user-team-result"><div class="user-section-heading"><div><span class="user-section-kicker">' + escapeHtml(title) + '</span><h2>' + escapeHtml(plan.coreName) + ' 的方案</h2><p>先看多个方案，再选中一套；另一队会自动避开这里的四名角色。</p></div><span class="user-result-pill">' + (plan.missing ? "队伍未满" : plan.candidateKind === "source" ? "攻略阵容" : "本地规则候选") + '</span></div>' + userTeamCandidatePickerMarkup(plans, safeIndex, teamIndex) + '<div class="user-team-grid">' + memberMarkup + '</div>' + missingMarkup + userTeamReasonMarkup(plan) + sourceMarkup + '</section>';
 }
 
@@ -1956,10 +1971,9 @@ function renderUserTeamRoute() {
       resultMarkup = firstSection + secondSection;
     }
   }
-  const sourceCount = (window.teamGuideStore ? window.teamGuideStore.all() : (teamTemplateKnowledge.teams || [])).length;
   target.innerHTML = '<div class="user-route-intro"><div><span class="user-section-kicker">角色池 · 多方案 · 双队去重</span><h1 id="userTeamTitle">自动配队 1.0</h1><p>勾选你的角色，助手会一起推荐主C与队友；有明确偏好时可手动锁定，再从剩余角色规划第二队。</p></div><div class="user-route-status"><i></i><span>' + escapeHtml(rosterStatus) + '</span></div></div>' +
     '<section class="user-surface user-team-builder"><div class="user-team-builder-head"><div><span class="user-section-kicker">01 · 角色池</span><h2>先告诉助手你有哪些角色。</h2><p>首次使用从空角色池开始；持有状态、共鸣和专属弧盘只保存在当前浏览器。</p></div><div class="user-team-roster-actions"><button class="user-secondary-action pressable" type="button" data-user-team-roster-action="all">全部纳入</button><button class="user-secondary-action pressable" type="button" data-user-team-roster-action="clear">清空角色池</button></div></div><div class="user-team-roster-grid">' + rosterCards + '</div></section>' +
-    '<section class="user-surface user-team-builder user-team-controls-surface"><div class="user-team-controls"><div class="user-team-core-locks"><span>主C偏好（可选）</span><div class="user-team-pin-slots">' + pinnedMarkup + '</div></div><div class="user-route-control"><span>生成队伍数</span><div class="user-route-segments" role="group" aria-label="生成队伍数">' + teamCountOptions + '</div></div><button class="user-primary-action pressable" type="button" data-user-team-generate>生成候选</button></div><div class="user-team-rule-note"><span class="user-section-kicker">候选依据</span><p>本地已保存 ' + sourceCount + ' 条攻略阵容；先按持有角色筛选，不足时才补本地规则候选。未锁定时自动推荐主C；最多可锁定两位，分别用于第一队和第二队，成员不会跨队重复。共鸣和专属弧盘只用于方案排序，不等同伤害模拟。</p></div></section>' + resultMarkup;
+    '<section class="user-surface user-team-builder user-team-controls-surface"><div class="user-team-controls"><div class="user-team-core-locks"><span>主C偏好（可选）</span><div class="user-team-pin-slots">' + pinnedMarkup + '</div></div><div class="user-route-control"><span>生成队伍数</span><div class="user-route-segments" role="group" aria-label="生成队伍数">' + teamCountOptions + '</div></div><button class="user-primary-action pressable" type="button" data-user-team-generate>生成候选</button></div><div class="user-team-rule-note"><span class="user-section-kicker">候选依据</span><p>优先按持有角色筛选攻略阵容；不足时再补充规则候选。未锁定时自动推荐主C；最多可锁定两位，分别用于第一队和第二队，成员不会跨队重复。共鸣和专属弧盘只用于方案排序，不等同伤害模拟。</p></div></section>' + resultMarkup;
 }
 function renderUserArcDriveRoute() {
   const target = $("#userArcDriveRoute");
@@ -1973,7 +1987,7 @@ function renderUserArcDriveRoute() {
   const levelIndex = Math.max(0, breakpoints.findIndex((level) => Number(level) === Number(userArcDriveLevel)));
   const statRows = stats.rows || [];
   const rankDescriptions = selected?.passive?.rank_descriptions || [];
-  const currentEffect = rankDescriptions[userArcDriveRank - 1] || selected?.passive?.description_template || "来源页没有提供调弧效果数据。";
+  const currentEffect = rankDescriptions[userArcDriveRank - 1] || selected?.passive?.description_template || "暂无调弧效果数据。";
   const cards = items.map((item) => {
     const image = item.image?.local_path ? '<img src="' + escapeHtml(item.image.local_path) + '" alt=""> ' : "弧";
     return '<button class="user-library-card' + (item.id === userSelectedArcDriveId ? " is-active" : "") + '" type="button" data-user-arc-drive-id="' + escapeHtml(item.id) + '" aria-pressed="' + String(item.id === userSelectedArcDriveId) + '"><span class="user-library-image">' + image + '</span><span><small>' + escapeHtml((item.rarity || "—") + "级 · " + (item.type || "弧盘")) + '</small><b>' + escapeHtml(item.name) + '</b></span></button>';
@@ -1983,9 +1997,9 @@ function renderUserArcDriveRoute() {
   const statMarkup = statRows.length ? statRows.map((row) => {
     const value = row.values_at_breakpoints?.[levelIndex] ?? row.current_value;
     return '<div><span>' + escapeHtml(row.name || "属性") + '</span><b>' + escapeHtml(formatArcDriveStat(value, row.is_percent)) + '</b></div>';
-  }).join("") : emptyState("来源页没有等级属性数据");
-  const detail = selected ? '<article class="user-library-detail"><div class="user-library-detail-head"><div class="user-library-detail-image">' + (selected.image?.local_path ? '<img src="' + escapeHtml(selected.image.local_path) + '" alt="' + escapeHtml(selected.name) + '">' : "弧") + '</div><div><span class="user-result-pill">' + escapeHtml((selected.rarity || "—") + "级 · " + (selected.type || "弧盘")) + '</span><h2>' + escapeHtml(selected.name) + '</h2><p>' + escapeHtml(selected.overview || selected.description || "这件弧盘的公开资料已整理在本地知识包中。") + '</p>' + (selected.source?.url ? '<a class="source-link" href="' + escapeHtml(selected.source.url) + '" target="_blank" rel="noreferrer">查看来源资料 ↗</a>' : "") + '</div></div><section class="arc-drive-detail-section"><div class="arc-detail-section-head"><div><h3>等级属性</h3><small>与管理端使用同一份等级成长数据</small></div><label class="arc-level-select">等级<select data-user-arc-level aria-label="弧盘等级">' + levels + '</select></label></div><div class="user-library-stat-grid">' + statMarkup + '</div></section>' + (selected.description ? '<section class="user-library-copy"><span>说明</span><p>' + escapeHtml(selected.description) + '</p></section>' : "") + '<section class="user-library-copy"><span>' + escapeHtml(selected.passive?.title || "调弧效果") + '</span><div class="arc-rank-select" role="group" aria-label="用户端调弧等级">' + ranks + '</div><p>' + escapeHtml(currentEffect) + '</p></section><section class="user-library-copy"><span>资料来源</span><p>用户端与管理端均同步自本地弧盘 catalog，不另存一份用户数据。</p></section></article>' : '<div class="user-empty">没有找到符合条件的弧盘。</div>';
-  target.innerHTML = '<div class="user-route-intro"><div><span class="user-section-kicker">同步图鉴</span><h1 id="userArcDriveTitle">弧盘</h1><p>与管理端图鉴使用同一份弧盘目录，用户端只负责浏览与理解。</p></div><div class="user-route-status"><i></i><span>' + items.length + ' / ' + (arcDriveCatalog.items || []).length + ' 件</span></div></div><div class="user-library-toolbar"><label class="user-search"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="1.7"/><path d="m16 16 4 4" stroke="currentColor" stroke-linecap="round"/></svg><input id="userArcDriveSearch" type="search" value="' + escapeHtml(userArcDriveSearchQuery) + '" placeholder="搜索弧盘名称、类型或效果" aria-label="搜索弧盘"></label></div><div class="user-library-layout"><div class="user-library-grid" aria-label="用户端弧盘列表">' + (cards || '<div class="user-empty">没有找到符合条件的弧盘。</div>') + '</div>' + detail + '</div>';
+  }).join("") : emptyState("暂无等级属性数据");
+  const detail = selected ? '<article class="user-library-detail"><div class="user-library-detail-head"><div class="user-library-detail-image">' + (selected.image?.local_path ? '<img src="' + escapeHtml(selected.image.local_path) + '" alt="' + escapeHtml(selected.name) + '">' : "弧") + '</div><div><span class="user-result-pill">' + escapeHtml((selected.rarity || "—") + "级 · " + (selected.type || "弧盘")) + '</span><h2>' + escapeHtml(selected.name) + '</h2><p>' + escapeHtml(selected.overview || selected.description || "查看弧盘属性与调弧效果。") + '</p>' + '</div></div><section class="arc-drive-detail-section"><div class="arc-detail-section-head"><div><h3>等级属性</h3><small>随所选等级查看属性成长</small></div><label class="arc-level-select">等级<select data-user-arc-level aria-label="弧盘等级">' + levels + '</select></label></div><div class="user-library-stat-grid">' + statMarkup + '</div></section>' + (selected.description ? '<section class="user-library-copy"><span>说明</span><p>' + escapeHtml(selected.description) + '</p></section>' : "") + '<section class="user-library-copy"><span>' + escapeHtml(selected.passive?.title || "调弧效果") + '</span><div class="arc-rank-select" role="group" aria-label="用户端调弧等级">' + ranks + '</div><p>' + escapeHtml(currentEffect) + '</p></section></article>' : '<div class="user-empty">没有找到符合条件的弧盘。</div>';
+  target.innerHTML = '<div class="user-route-intro"><div><span class="user-section-kicker">图鉴</span><h1 id="userArcDriveTitle">弧盘</h1><p>查看等级属性与调弧效果，按当前目标调整调弧等级。</p></div><div class="user-route-status"><i></i><span>' + items.length + ' / ' + (arcDriveCatalog.items || []).length + ' 件</span></div></div><div class="user-library-toolbar"><label class="user-search"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="1.7"/><path d="m16 16 4 4" stroke="currentColor" stroke-linecap="round"/></svg><input id="userArcDriveSearch" type="search" value="' + escapeHtml(userArcDriveSearchQuery) + '" placeholder="搜索弧盘名称、类型或效果" aria-label="搜索弧盘"></label></div><div class="user-library-layout"><div class="user-library-grid" aria-label="用户端弧盘列表">' + (cards || '<div class="user-empty">没有找到符合条件的弧盘。</div>') + '</div>' + detail + '</div>';
 }
 
 function renderUserSkyCurtainRoute() {
@@ -2004,12 +2018,12 @@ function renderUserSkyCurtainRoute() {
   const qualityButtons = Object.entries(qualityLabels).map(([qualityId, label]) => '<button type="button" class="' + (userSkyCurtainQuality === qualityId ? "is-active" : "") + '" data-user-sky-quality="' + qualityId + '" aria-pressed="' + String(userSkyCurtainQuality === qualityId) + '">' + label + '</button>').join("");
   const renderPool = (title, pool) => {
     const values = pool?.items || [];
-    return '<section class="user-library-copy"><span>' + escapeHtml(title) + '</span>' + (pool?.note ? '<p>' + escapeHtml(pool.note) + '</p>' : "") + '<div class="user-affix-chip-list">' + (values.length ? values.map((value) => '<span>' + escapeHtml(value) + '</span>').join("") : '<span>来源页未提供词条池</span>') + '</div></section>';
+    return '<section class="user-library-copy"><span>' + escapeHtml(title) + '</span>' + (pool?.note ? '<p>' + escapeHtml(pool.note) + '</p>' : "") + '<div class="user-affix-chip-list">' + (values.length ? values.map((value) => '<span>' + escapeHtml(value) + '</span>').join("") : '<span>暂无词条池</span>') + '</div></section>';
   };
   const effects = selected?.set_effects || {};
   const tierNotes = selected?.quality?.tiers || [];
-  const detail = selected ? '<article class="user-library-detail"><div class="user-library-detail-head"><div class="user-library-detail-image">' + (image?.local_path ? '<img src="' + escapeHtml(image.local_path) + '" alt="' + escapeHtml(selected.name) + '">' : "幕") + '</div><div><span class="user-result-pill">' + escapeHtml(selected.category || "空幕") + (selected.element ? " · " + escapeHtml(selected.element) : "") + '</span><h2>' + escapeHtml(selected.name) + '</h2><p>' + escapeHtml(selected.overview || "套装效果与词条资料已整理在本地知识包中。") + '</p>' + (selected.source?.url ? '<a class="source-link" href="' + escapeHtml(selected.source.url) + '" target="_blank" rel="noreferrer">查看来源资料 ↗</a>' : "") + '</div></div><section class="arc-drive-detail-section"><div class="arc-detail-section-head"><div><h3>品质图片</h3><small>与管理端使用同一组三档品质图</small></div></div><div class="sky-curtain-quality-selector" role="group" aria-label="用户端空幕品质">' + qualityButtons + '</div></section><div class="user-sky-effects"><div><span>2 件套</span><p>' + escapeHtml(effects.two_piece || "来源页未提供") + '</p></div><div><span>4 件套</span><p>' + escapeHtml(effects.four_piece || "来源页未提供") + '</p></div></div>' + (selected.acquisition ? '<section class="user-library-copy"><span>获取途径</span><p>' + escapeHtml(selected.acquisition) + '</p></section>' : "") + renderPool("主属性可能词条", selected.main_affix_pool) + renderPool("副属性可能词条", selected.sub_affix_pool) + '<section class="user-library-copy"><span>品质说明</span>' + (selected.quality?.role_note ? '<p><b>品质定位：</b>' + escapeHtml(selected.quality.role_note) + '</p>' : "") + (selected.quality?.source_note ? '<p><b>品质来源：</b>' + escapeHtml(selected.quality.source_note) + '</p>' : "") + (selected.quality?.note ? '<p>' + escapeHtml(selected.quality.note) + '</p>' : "") + (tierNotes.length ? '<ul>' + tierNotes.map((tier) => '<li><b>' + escapeHtml(tier.quality) + '</b><span>' + escapeHtml(tier.description) + '</span></li>').join("") + '</ul>' : "") + '</section><section class="user-library-copy"><span>资料来源</span><p>用户端与管理端均同步自本地空幕 catalog，不另存一份用户数据。</p></section></article>' : '<div class="user-empty">没有找到符合条件的空幕。</div>';
-  target.innerHTML = '<div class="user-route-intro"><div><span class="user-section-kicker">同步图鉴</span><h1 id="userSkyCurtainTitle">空幕</h1><p>与管理端图鉴使用同一份空幕目录，品质、套装效果和词条池保持一致。</p></div><div class="user-route-status"><i></i><span>' + items.length + ' / ' + (skyCurtainCatalog.items || []).length + ' 套</span></div></div><div class="user-library-toolbar"><label class="user-search"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="1.7"/><path d="m16 16 4 4" stroke="currentColor" stroke-linecap="round"/></svg><input id="userSkyCurtainSearch" type="search" value="' + escapeHtml(userSkyCurtainSearchQuery) + '" placeholder="搜索空幕名称、效果或属性" aria-label="搜索空幕"></label></div><div class="user-library-layout"><div class="user-library-grid" aria-label="用户端空幕列表">' + (cards || '<div class="user-empty">没有找到符合条件的空幕。</div>') + '</div>' + detail + '</div>';
+  const detail = selected ? '<article class="user-library-detail"><div class="user-library-detail-head"><div class="user-library-detail-image">' + (image?.local_path ? '<img src="' + escapeHtml(image.local_path) + '" alt="' + escapeHtml(selected.name) + '">' : "幕") + '</div><div><span class="user-result-pill">' + escapeHtml(selected.category || "空幕") + (selected.element ? " · " + escapeHtml(selected.element) : "") + '</span><h2>' + escapeHtml(selected.name) + '</h2><p>' + escapeHtml(selected.overview || "查看套装效果与词条详情。") + '</p>' + '</div></div><section class="arc-drive-detail-section"><div class="arc-detail-section-head"><div><h3>品质图片</h3><small>切换品质查看对应图像</small></div></div><div class="sky-curtain-quality-selector" role="group" aria-label="用户端空幕品质">' + qualityButtons + '</div></section><div class="user-sky-effects"><div><span>2 件套</span><p>' + escapeHtml(effects.two_piece || "暂无") + '</p></div><div><span>4 件套</span><p>' + escapeHtml(effects.four_piece || "暂无") + '</p></div></div>' + (selected.acquisition ? '<section class="user-library-copy"><span>获取途径</span><p>' + escapeHtml(selected.acquisition) + '</p></section>' : "") + renderPool("主属性可能词条", selected.main_affix_pool) + renderPool("副属性可能词条", selected.sub_affix_pool) + '<section class="user-library-copy"><span>品质说明</span>' + (selected.quality?.role_note ? '<p><b>品质定位：</b>' + escapeHtml(selected.quality.role_note) + '</p>' : "") + (selected.quality?.note ? '<p>' + escapeHtml(selected.quality.note) + '</p>' : "") + (tierNotes.length ? '<ul>' + tierNotes.map((tier) => '<li><b>' + escapeHtml(tier.quality) + '</b><span>' + escapeHtml(tier.description) + '</span></li>').join("") + '</ul>' : "") + '</section></article>' : '<div class="user-empty">没有找到符合条件的空幕。</div>';
+  target.innerHTML = '<div class="user-route-intro"><div><span class="user-section-kicker">图鉴</span><h1 id="userSkyCurtainTitle">空幕</h1><p>查看套装效果、获取途径和可能词条。</p></div><div class="user-route-status"><i></i><span>' + items.length + ' / ' + (skyCurtainCatalog.items || []).length + ' 套</span></div></div><div class="user-library-toolbar"><label class="user-search"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="1.7"/><path d="m16 16 4 4" stroke="currentColor" stroke-linecap="round"/></svg><input id="userSkyCurtainSearch" type="search" value="' + escapeHtml(userSkyCurtainSearchQuery) + '" placeholder="搜索空幕名称、效果或属性" aria-label="搜索空幕"></label></div><div class="user-library-layout"><div class="user-library-grid" aria-label="用户端空幕列表">' + (cards || '<div class="user-empty">没有找到符合条件的空幕。</div>') + '</div>' + detail + '</div>';
 }
 
 function renderUserDriverBlockRoute() {
@@ -2039,8 +2053,8 @@ function renderUserDriverBlockRoute() {
   const randomStats = activeTier?.random_stats || [];
   const statMarkup = mainStats.map((stat) => '<div><span>' + escapeHtml(stat.name || "主属性") + '</span><b>' + escapeHtml(formatDriverBlockValue(stat.values?.[levelIndex], stat.is_percent)) + '</b></div>').join("");
   const randomMarkup = randomStats.map((stat) => '<span>' + escapeHtml(stat.name) + ' · ' + escapeHtml(formatDriverBlockValue(stat.value, stat.is_percent)) + '</span>').join("");
-  const detail = selected && activeTier ? '<article class="user-library-detail"><div class="user-library-detail-head"><div class="user-library-detail-image">' + (activeTier.images?.[userSelectedDriverBlockQuality]?.local_path ? '<img src="' + escapeHtml(activeTier.images[userSelectedDriverBlockQuality].local_path) + '" alt="' + escapeHtml(selected.name || "驱动块") + '">' : "块") + '</div><div><span class="user-result-pill">' + escapeHtml(selected.model + " · " + qualityLabels[userSelectedDriverBlockQuality] + "色 " + activeTier.grade + "级") + '</span><h2>' + escapeHtml(selected.model + " · " + (selected.shape || selected.grid_count + " 格")) + '</h2><p>' + escapeHtml(selected.grid_count + " 格 · " + activeTier.random_slot_count + " 个随机副词条槽 · " + randomStats.length + " 种候选词条") + '</p>' + (activeTier.source_page?.url ? '<a class="source-link" href="' + escapeHtml(activeTier.source_page.url) + '" target="_blank" rel="noreferrer">查看来源资料 ↗</a>' : "") + '</div></div><section class="arc-drive-detail-section"><div class="arc-detail-section-head"><div><h3>品质与形状图</h3><small>与管理端使用同一份三档品质数据</small></div></div><div class="sky-curtain-quality-selector" role="group" aria-label="用户端驱动块品质">' + qualityButtons + '</div></section><section class="arc-drive-detail-section"><div class="arc-detail-section-head"><div><h3>固定主属性</h3><small>强化 +0 至 +' + (activeTier.level?.max ?? 20) + '</small></div><label class="driver-block-level-control">强化 +<output>' + level + '</output><input data-user-driver-level type="range" min="' + (activeTier.level?.min ?? 0) + '" max="' + (activeTier.level?.max ?? 20) + '" value="' + level + '" aria-label="驱动块强化等级"></label></div><div class="user-library-stat-grid">' + statMarkup + '</div></section><section class="user-library-copy"><span>随机副属性池 · ' + randomStats.length + ' 种</span><div class="user-affix-chip-list">' + (randomMarkup || "<span>来源页未提供随机副属性</span>") + '</div></section><section class="user-library-copy"><span>资料来源</span><p>用户端与管理端均同步自本地驱动块 catalog，品质、强化成长和副属性池保持一致。</p></section></article>' : '<div class="user-empty">没有找到符合条件的驱动块。</div>';
-  target.innerHTML = '<div class="user-route-intro"><div><span class="user-section-kicker">同步图鉴</span><h1 id="userDriverBlockTitle">驱动块</h1><p>浏览型号、形状、品质成长和随机副属性；用户端不编辑，只与管理端图鉴同步展示。</p></div><div class="user-route-status"><i></i><span>' + items.length + ' / ' + (driverBlockCatalog.items || []).length + ' 种形状</span></div></div><div class="user-library-toolbar"><label class="user-search"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="1.7"/><path d="m16 16 4 4" stroke="currentColor" stroke-linecap="round"/></svg><input id="userDriverBlockSearch" type="search" value="' + escapeHtml(userDriverBlockSearchQuery) + '" placeholder="搜索型号、形状或副属性" aria-label="搜索驱动块"></label><div class="user-library-filters" role="group" aria-label="驱动块型号筛选">' + modelButtons + '</div></div><div class="user-library-layout"><div class="user-library-grid" aria-label="用户端驱动块列表">' + (cards || '<div class="user-empty">没有找到符合条件的驱动块。</div>') + '</div>' + detail + '</div>';
+  const detail = selected && activeTier ? '<article class="user-library-detail"><div class="user-library-detail-head"><div class="user-library-detail-image">' + (activeTier.images?.[userSelectedDriverBlockQuality]?.local_path ? '<img src="' + escapeHtml(activeTier.images[userSelectedDriverBlockQuality].local_path) + '" alt="' + escapeHtml(selected.name || "驱动块") + '">' : "块") + '</div><div><span class="user-result-pill">' + escapeHtml(selected.model + " · " + qualityLabels[userSelectedDriverBlockQuality] + "色 " + activeTier.grade + "级") + '</span><h2>' + escapeHtml(selected.model + " · " + (selected.shape || selected.grid_count + " 格")) + '</h2><p>' + escapeHtml(selected.grid_count + " 格 · " + activeTier.random_slot_count + " 个随机副词条槽 · " + randomStats.length + " 种候选词条") + '</p>' + '</div></div><section class="arc-drive-detail-section"><div class="arc-detail-section-head"><div><h3>品质与形状图</h3><small>切换品质查看对应成长数据</small></div></div><div class="sky-curtain-quality-selector" role="group" aria-label="用户端驱动块品质">' + qualityButtons + '</div></section><section class="arc-drive-detail-section"><div class="arc-detail-section-head"><div><h3>固定主属性</h3><small>强化 +0 至 +' + (activeTier.level?.max ?? 20) + '</small></div><label class="driver-block-level-control">强化 +<output>' + level + '</output><input data-user-driver-level type="range" min="' + (activeTier.level?.min ?? 0) + '" max="' + (activeTier.level?.max ?? 20) + '" value="' + level + '" aria-label="驱动块强化等级"></label></div><div class="user-library-stat-grid">' + statMarkup + '</div></section><section class="user-library-copy"><span>随机副属性池 · ' + randomStats.length + ' 种</span><div class="user-affix-chip-list">' + (randomMarkup || "<span>暂无随机副属性</span>") + '</div></section></article>' : '<div class="user-empty">没有找到符合条件的驱动块。</div>';
+  target.innerHTML = '<div class="user-route-intro"><div><span class="user-section-kicker">图鉴</span><h1 id="userDriverBlockTitle">驱动块</h1><p>浏览型号、形状、品质成长和随机副属性。</p></div><div class="user-route-status"><i></i><span>' + items.length + ' / ' + (driverBlockCatalog.items || []).length + ' 种形状</span></div></div><div class="user-library-toolbar"><label class="user-search"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="1.7"/><path d="m16 16 4 4" stroke="currentColor" stroke-linecap="round"/></svg><input id="userDriverBlockSearch" type="search" value="' + escapeHtml(userDriverBlockSearchQuery) + '" placeholder="搜索型号、形状或副属性" aria-label="搜索驱动块"></label><div class="user-library-filters" role="group" aria-label="驱动块型号筛选">' + modelButtons + '</div></div><div class="user-library-layout"><div class="user-library-grid" aria-label="用户端驱动块列表">' + (cards || '<div class="user-empty">没有找到符合条件的驱动块。</div>') + '</div>' + detail + '</div>';
 }
 
 function renderUserRouteView(route = userActiveRoute) {

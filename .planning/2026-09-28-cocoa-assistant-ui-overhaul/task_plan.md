@@ -16,11 +16,11 @@
 
 ## Next Step
 
-Phase 17 自动配队 1.0 已完成本地实现；Phase 18 阵容管理工作台仍为后续计划。
+Phase 26 GitHub delivery is complete. Phase 27 removes redundant source labels and outbound links from the application UI.
 
 ## Current Phase
 
-Phase 17 - Automatic Team Builder 1.0 and Reference Lineup Catalog；local implementation complete, browser review not run.
+Phase 27 - External-source UI cleanup; in progress.
 
 ## Phases
 
@@ -406,3 +406,33 @@ Phase 17 - Automatic Team Builder 1.0 and Reference Lineup Catalog；local imple
 - [x] Commit the complete local feature work and push to origin/main at c38a59a.
 - [x] Confirm remote/local commit equality and clean worktree at c38a59a; record the delivered commit.
 - **Status:** feature commit c38a59a pushed to origin/main; remote/local equality and clean worktree confirmed.
+
+### Phase 27: Remove Redundant Source and External-Link UI
+- [x] Inventory visible source/provenance copy and outbound links across user and admin views.
+- [x] Remove redundant source badges, storage/catalog explanations, and outbound source-navigation controls from the app UI.
+- [x] Replace source-ingestion empty-state wording with neutral, user-facing copy.
+- [x] Preserve underlying catalogs, source snapshots, importer metadata, author credits, and license records.
+- [x] Run JavaScript syntax checks, a UI link/copy audit, and git diff --check; no browser interaction test was run.
+- **Status:** complete locally; UI external-navigation cues removed, legal attribution retained as non-clickable text, underlying source data unchanged.
+
+### Phase 28: Editable Character Builds and Reaction Association
+- [x] Add catalog-backed recommended arc-drive and cassette editing, save/reload persistence and shared user preview.
+- [x] Remove version, field-mode and mock review controls.
+- [x] Match every reaction enhancement by stable character identity; display all matches or 无.
+- [x] Verify edit/save/reload, character isolation, reaction mapping and startup regression.
+- **Status:** rolled back at the user's request; restored the local Phase 27 interface and original imported recommendations.
+
+### Phase 29: Preserve Defaults and Add Explicit Recommendation Editing
+- [x] Keep every original character and default recommendation unchanged until explicitly edited; provide restore-default.
+- [x] Save only explicit per-character build choices; preserve untouched equipment and default affix/terminal details.
+- [x] Display reaction enhancements from the shared guide without rewriting mechanism facts.
+- [x] Remove version/mode/review UI and verify all defaults, persistence, restore and isolation in a browser.
+- **Status:** complete locally; all default-preservation and explicit-edit browser checks passed.
+
+### Phase 30: Publish Accepted Recommendation Feature to GitHub
+- [x] Confirm accepted requirements and delivery scope: Phase 27 cleanup plus Phase 29 default-preserving recommendation edits.
+- [x] Fetch origin and verify main/origin-main alignment at b9ce9b7.
+- [x] Complete browser/data/solver/guide/reaction regression and inspect exact staged payload.
+- [ ] Commit and push the implementation and planning records to origin/main.
+- [ ] Verify remote/local equality and record delivery.
+- **Status:** in progress.
