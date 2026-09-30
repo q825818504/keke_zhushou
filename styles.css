@@ -1330,3 +1330,52 @@ body.user-mode .breadcrumb span::after { content: "可可助手"; font-size: 13p
   .user-library-toolbar { align-items: stretch; flex-direction: column; }
   .user-library-filters { justify-content: flex-start; }
 }
+/* Automatic team builder 1.0 */
+.user-team-controls { grid-template-columns: minmax(230px, 1.2fr) minmax(170px, 1fr) minmax(135px, .75fr) auto; }
+.user-team-roster-card { display: block; min-height: 0; padding: 8px; text-align: left; }
+.user-team-roster-row { display: flex; align-items: center; gap: 7px; min-width: 0; }
+.user-team-roster-toggle { display: flex; align-items: center; flex: 1 1 auto; min-width: 0; gap: 8px; padding: 0; color: inherit; text-align: left; background: transparent; border: 0; cursor: pointer; }
+.user-team-roster-name { display: block; min-width: 0; }
+.user-team-roster-toggle > i { display: grid; flex: 0 0 auto; place-items: center; width: 18px; height: 18px; margin-left: auto; color: #86868b; background: #e5e5ea; border-radius: 50%; font-size: 11px; font-style: normal; }
+.user-team-roster-card.is-selected .user-team-roster-toggle > i { color: #fff; background: #5c52de; }
+.user-team-roster-tools { display: flex; flex: 0 0 auto; flex-direction: column; align-items: stretch; gap: 4px; }
+.user-team-pin, .user-team-investment-toggle { padding: 5px 7px; color: #6e6e73; background: #fff; border: 1px solid rgba(0, 0, 0, .08); border-radius: 8px; font-size: 9px; font-weight: 650; white-space: nowrap; }
+.user-team-pin.is-pinned { color: #fff; background: #5c52de; border-color: #5c52de; }
+.user-team-pin:disabled { color: #a1a1a6; background: #ededf0; cursor: not-allowed; }
+.user-team-investment { display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 7px; margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(0, 0, 0, .07); }
+.user-team-investment > label:first-child { display: grid; gap: 4px; color: #86868b; font-size: 9px; }
+.user-team-investment select { width: 100%; min-height: 28px; padding: 4px 7px; color: #1d1d1f; background: #fff; border: 1px solid rgba(0, 0, 0, .1); border-radius: 8px; font: inherit; font-size: 10px; }
+.user-team-arc-toggle { display: flex; align-items: center; gap: 5px; min-height: 28px; color: #515154; font-size: 9px; white-space: nowrap; }
+.user-team-arc-toggle input { accent-color: #5c52de; }
+.user-team-investment > small { grid-column: 1 / -1; color: #86868b; font-size: 9px; line-height: 1.45; }
+.user-team-core-locks { display: grid; gap: 7px; min-width: 0; color: #86868b; font-size: 11px; font-weight: 650; }
+.user-team-pin-slots { display: flex; flex-wrap: wrap; gap: 6px; }
+.user-team-pin-slot { display: inline-flex; align-items: center; gap: 5px; padding: 6px 9px; color: #423a8d; background: #efedff; border-radius: 999px; font-size: 10px; }
+.user-team-pin-slot i { display: grid; place-items: center; width: 16px; height: 16px; color: #fff; background: #5c52de; border-radius: 50%; font-size: 9px; font-style: normal; }
+.user-team-pin-empty { color: #86868b; font-size: 10px; font-weight: 400; line-height: 1.5; }
+.user-team-result-empty { padding: 18px; background: rgba(255, 255, 255, .62); border: 1px dashed rgba(0, 0, 0, .13); border-radius: 18px; }
+.user-team-candidates { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin: 14px 0; }
+.user-team-candidate { display: grid; gap: 4px; min-width: 0; padding: 10px 12px; color: #6e6e73; text-align: left; background: rgba(255, 255, 255, .72); border: 1px solid rgba(0, 0, 0, .08); border-radius: 13px; }
+.user-team-candidate:hover { border-color: rgba(90, 82, 222, .3); }
+.user-team-candidate.is-active { color: #3d347e; background: #f3f1ff; border-color: rgba(90, 82, 222, .45); box-shadow: 0 0 0 2px rgba(90, 82, 222, .08); }
+.user-team-candidate span { color: #86868b; font-size: 9px; }
+.user-team-candidate b { overflow: hidden; font-size: 11px; text-overflow: ellipsis; white-space: nowrap; }
+.user-team-candidate small { color: #86868b; font-size: 9px; }
+.user-team-source-note { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 4px 10px; margin-top: 12px; padding: 12px; background: rgba(255, 255, 255, .72); border: 1px solid rgba(0, 0, 0, .06); border-radius: 13px; }
+.user-team-source-note > span { color: #86868b; font-size: 10px; }
+.user-team-source-note > b { color: #1d1d1f; font-size: 11px; }
+.user-team-source-note > a { color: #5c52de; font-size: 10px; text-decoration: none; }
+.user-team-source-note > small { grid-column: 1 / -1; color: #86868b; font-size: 9px; line-height: 1.45; }
+.user-team-source-note.is-local { background: #f5f5f7; }
+.user-team-source-note.is-local > b { color: #5c52de; }
+@media (max-width: 900px) {
+  .user-team-controls { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 620px) {
+  .user-team-controls { grid-template-columns: 1fr; }
+  .user-team-candidates { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .user-team-investment { grid-template-columns: 1fr; }
+  .user-team-source-note { grid-template-columns: 1fr; }
+  .user-team-source-note > small { grid-column: auto; }
+  .user-team-roster-tools { align-items: flex-end; }
+}

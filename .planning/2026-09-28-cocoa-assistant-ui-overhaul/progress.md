@@ -454,3 +454,85 @@ ame to a PSCustomObject without a declared property. No roster was written; add 
 - 已成功执行 git push origin main，GitHub 返回 3904575..c256750 main -> main；未使用 force push。
 - 推送后核对通过：本地 HEAD 与 origin/main 都为 c256750e195632822d80df1f36deec1edc6f8e58，ahead/behind 为 0/0，工作区干净。
 - Phase 16 已完成并写回 task_plan；响应式视觉验证仍明确标记为未执行。
+
+## Session: 2026-09-30 — Automatic Team Builder 1.0 and Reference Lineup Discovery
+
+### Plan
+- 新增 Phase 17：修正自动配队 1.0 的用户输入与候选输出，并确认是否能获取会火攻略站公开的已录入阵容；可获取的数据先本地保留 provenance，未来由 Phase 18 管理端维护。
+- 2.0 的全面阵容/伤害/轮转模型明确不在本阶段内。
+- 当前 Git 工作区从 `origin/main` 的 `5f13b34` 开始，启动检查为干净。
+
+### Initial source inspection
+- 已检查参考站一键配队主页面和本地 `app.js`：参考站输入包含持有角色、共鸣、专属弧盘和有序主C锁定，并提供多条候选及剩余角色第二队；本地目前只有单核心/单结果流程。
+- 参考页面可正常通过浏览器读到，但尚未检查其静态脚本、数据端点、许可和阵容实录数量；数据是否可下载仍待确认。
+- 点击“我全都有”后，22 人选择页载入了角色投入控件，并把零号角色固定纳入（显示 23 / 22）。可见界面没有导出按钮；仍需验证生成结果和是否存在公开静态数据文件。
+- 全选角色、锁定真红并生成后，公开结果页展示真红的 3 条阵容线路，以及选定线路后的剩余角色第二队选项；详情包含队伍说明、共鸣/觉醒、专属弧盘和同位替代。至少有真实的逐条来源阵容数据可见，尚未确定批量读取方式与条目总数。
+- 错误/限制：`view-source:https://sifangshangxia.cn/team.html` 被浏览器 URL 安全策略拒绝（只允许 HTTP/HTTPS），且明确禁止通过其他方式绕过读取源码。已停止源码访问尝试，改为只检查网页公开交互和站点自带导出。
+- 实际公开 UI 的二主C回归（真红、小吱）中，第一队含小吱，第二队却围绕残虹生成，没有落实第二个锁定主C；将此记为本站 1.0 必须避免的流程错误。公开 UI 目前只见“导出阵容图”，尚未见结构化阵容导出。
+- 用户可见 UI 逐个选择 10 个主C观察，9 个入口共整理出 27 条四人候选；黑羽没有独立主C模板组。没有通过源码/API批量读取，数据覆盖范围严格限定为页面实际显示的阵容选项，许可未披露且只作本地评估。
+- 浏览器标签首次导航调用超时，但浏览器状态确认页面已加载；随后按当前 tab ID 重新绑定成功，没有再次重复原导航动作。
+
+## Session: 2026-09-30 — Automatic Team Builder 1.0 implementation
+
+### Implementation
+- Added a local lineup catalog with 27 publicly visible guide-site choices across 9 main-C groups. Source URL, visible capture method/date, unknown license, partial coverage, original team labels/order, and separate editorial fields are recorded.
+- Added scripts/build_team_templates_bundle.py and loaded its generated runtime data from index.html.
+- Reworked the automatic-team route in app.js and styles.css: empty-by-default owned-role pool, all/clear actions, ordered main-C locks, per-role resonance and signature-arc controls, localStorage persistence, up to three candidates per team, one/two-team selection, source-vs-rule labels, and second-team member exclusion.
+- Updated README.md; 2.0 damage/rotation simulation and the Phase 18 lineup admin screen remain outside this implementation.
+
+### Static checks
+| Check | Result | Status |
+|---|---|---|
+| node --check app.js | Passed | PASS |
+| node --check data/knowledge/team_templates.js | Passed | PASS |
+| Team catalog audit | 27 records, 9 source cores, 0 invalid character IDs, 0 duplicate record IDs | PASS |
+| git diff --check | Passed; only line-ending normalization warnings | PASS |
+| Browser interaction / responsive review | Not run | NOT RUN |
+
+### Error log
+- The first app replacement used an exact multiline anchor that did not match the Windows CRLF working copy; the write was aborted. Replaced the code by stable function boundaries.
+- One PowerShell command used shell-incompatible quote escaping and one functions.exec source included Markdown backticks; both failed before executing writes. Reissued with PowerShell here-strings and plain-text README commands.
+- The default shell had no python command. Located the bundled Python runtime and used it to regenerate team_templates.js from the canonical JSON.
+- The first attempt to append this phase note included Markdown inline-code delimiters in the command source and failed before running; reissued as plain text.
+
+## Session: 2026-09-30 — Startup Crash Repair
+
+### Diagnosis and repair
+- User screenshot showed static placeholders because a prior `app.js` edit removed the `$()` selector helper; the first toast lookup threw before any UI render or event binding.
+- Restored `$()` and initialized the one/two-team selector from persisted state so the automatic-team route can render.
+- Added a reusable Node smoke check at `scripts/smoke_check_app.js` and documented the command in README.
+
+### Verification
+- `node scripts/smoke_check_app.js`: PASS — all referenced scripts exist and parse; 25 character records and 27 lineup templates load; template IDs resolve.
+- `node --check app.js`, `node --check scripts/smoke_check_app.js`, and `git diff --check`: PASS (Git emitted only LF/CRLF normalization notices).
+- Browser interaction regression: NOT RUN. CUA rejected `file://` and explicitly disallowed localhost/alternate-browser/indirect-workaround attempts. Actual click behavior remains unverified in this environment.
+
+## Session: 2026-09-30 — Recommended Cassette Acquisition Fix
+
+- Resolved shared catalog acquisition by cassette ID for admin character details, user overview, and user build recommendations.
+- Preserved character-specific affix recommendations and original data snapshots; used source acquisition as fallback when the catalog has no acquisition.
+- `node scripts/smoke_check_app.js` passed: 20 recommended cassettes match the shared catalog, with fallback, precedence, missing recommendation, and non-mutation checks. Syntax and diff checks passed. No browser interaction test was performed.
+
+## Session: 2026-09-30 — Automatic Main-C Recommendations
+
+- Made main-C locks optional; unlocked generation compares eligible owned cores and recommends multiple teams with the core named on each candidate.
+- Manual locks remain ordered constraints. Second-team candidates exclude every member of the selected first team; selecting another candidate updates the displayed core.
+- Updated empty guidance and preserved honest partial/no-core cases. Added `scripts/check_team_recommendations.js` and its README command.
+- Solver regression, existing smoke checks, JavaScript syntax and diff checks passed. Verification covers pure data/solver behavior; browser interaction was not run.
+
+## Session: 2026-09-30 — Character Avatar Fix
+
+- Found 真红's imported record listed 11 related character icons; the first was 薄荷, and the generic first-match selector assigned it to 真红.
+- Changed icon selection to match the asset filename to the stable character ID, keeping a fallback for records without an identity-named icon.
+- Extended `scripts/smoke_check_app.js` to assert identity matching, file existence, and unique image content across the roster.
+- Smoke check passed for 25 unique character icons, 25 character records, 27 team templates, and 20 cassette recommendations. JavaScript syntax and diff checks passed.
+
+## Session: 2026-09-30 — GitHub Delivery Plan
+
+- The user requested that the character avatar identity fix be planned and synchronized to GitHub. Phase 22 already records the feature plan and implementation; Phase 23 tracks delivery of all related pending local work.
+- Local `main` was at `5f13b34` when inspected, and origin had not yet been fetched during this delivery step. The worktree includes Phase 17–22 feature changes, planning updates, generated lineup data, and regression scripts.
+- Next: fetch origin, run the regression commands, review the full change set, commit/push, and verify clean synchronization.
+- `git fetch origin` succeeded with authorized Git access. `main` and `origin/main` remain aligned at `5f13b34` (0 ahead / 0 behind).
+- `node scripts/smoke_check_app.js` passed for 25 identity-matched unique icons, 25 characters, 27 team templates, and 20 cassette recommendations.
+- `node scripts/check_team_recommendations.js` passed unlocked core recommendations, two-team exclusion, manual locks, preferences, empty/partial/support-only pools, and local-rule fallback.
+- `git diff --check` passed; Git reported only expected LF/CRLF normalization notices.

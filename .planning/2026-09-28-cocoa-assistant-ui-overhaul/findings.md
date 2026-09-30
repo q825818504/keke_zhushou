@@ -322,3 +322,60 @@
 - 本项目的角色知识 scope 明确排除配队推荐，所以本地实现采用规则候选而不是抄录外站阵容；后续若导入经过核验的阵容模板，可在同一候选层增加模板优先级。
 - 管理端和用户端原本已经共享三份全局 catalog：arcDriveCatalog、skyCurtainCatalog、driverBlockCatalog。用户端不一致的主要原因是展示层只取了部分字段，且没有驱动块路线；修复方向是补齐用户层展示，不建立第二份数据。
 - 当前对照结果：弧盘 51 件、空幕 12 套、驱动块 12 种形状，管理端计数和用户端 catalog 完全一致。
+
+## Phase 17 — Automatic Team Builder 1.0 and Source Lineup Discovery
+
+- 用户明确要求现在实现自动配队 1.0，并把 2.0 所需的更深层阵容/强度数据留到后续；若会火攻略站的已录入阵容可稳定公开获取，先本地保存，未来需要可在管理端维护。
+- 参考页 `https://sifangshangxia.cn/team.html` 显示 22 名角色，按属性分组；可勾选持有角色、设置共鸣等级和专属弧盘、按顺序锁定最多两个主C，并在候选线路间选择。选中第一队后可使用剩余角色配第二队；不足四人时提示缺人。
+- 参考页声明其配队来自已录入的成型阵容及同位置替换；共鸣/专属弧盘只影响方案排序，不改变队伍强度；站点声称计算在本地完成且不上传。后续实现应把站点已核实阵容与本站规则候选分开。
+- 当前本地 `app.js` 的 `userTeamBuildPlan` 只返回单个最高分组合；`userTeamGenerated` 仅被赋值但不参与生成条件；角色池初始化为全选，清空后可通过 `userTeamAvailableNames` 回退为全部本地角色。该行为与用户意图和参考交互不符。
+- 本地角色知识 scope 明确排除配队推荐；角色数为 25，而参考站角色数为 22。导入前需要匹配角色身份/别名并记录未匹配项，不能把本地规则结果包装成参考站模板。
+- 角色知识中 `recommended.weapon` 代表已收录的推荐武器字段，不能在没有来源证明时直接当作“专属弧盘”；缺少记录时应显示未知/未收录。
+- 参考站的阵容数据和页面许可条款尚未确认。先调查实际公开页面和数据资源；若只可访问人工渲染结果或无法确认复用条件，保留最小必要的来源记录，不把不确定数据合并进默认公开图鉴。
+- 参考页初始角色清单为 22 人；点击“我全都有”后各选中角色卡片出现 0–6 共鸣按钮、专属弧盘开关和“必须用TA”按钮。页面把“零”视作每人固定拥有，因此全选后 UI 显示 23 / 22；角色池导入时需单独表达默认角色，不直接照搬计数。
+- 当前可见页面没有阵容下载/导出按钮；页面说明阵容来自已录入成型阵容及同位置替换，但这些记录尚未从 UI 生成结果或静态资源中提取，也未判断能否批量下载。
+- 浏览器验证：全选角色、锁定真红并点生成后，页面显示真红的 3 条成型阵容线路；选定一条后还能基于剩余角色展示第二队的多条线路。阵容详情还含定位/反应、队伍操作、共鸣觉醒、专属弧盘和同位替代等区块，证明至少一部分阵容数据可从公开 UI 读到。总阵容数量和批量提取入口仍未知。
+- 浏览器拒绝了 `view-source:` URL（仅允许 HTTP/HTTPS 页面导航），并要求不得以其他浏览器、命令或协议绕过取得源码。后续只通过正常公开 UI 或站点本身提供的下载/导出查看阵容；不请求原始页面脚本或隐藏接口。
+- 两个“必须用TA”按真红、小吱顺序选中后，参考页生成第一队时把小吱也放进真红队，第二队却改为残虹，并没有保证第二个锁定主C进入第二队。本站 1.0 应用“锁定即占位”的明确约束：第一主C必须进入第一队、第二主C必须进入第二队，且两队成员互斥。
+- 通过全选角色、一次锁定一个主C、使用网页正式“生成”交互观察到 10 个主C入口；9 个入口公开展示了 27 条四人候选（真红3、小吱3、娜娜莉3、薄荷2、白藏3、残虹4、安魂曲3、海月3、卡厄斯3）。黑羽没有单独的“以黑羽为首发”的来源阵容组，页面只显示其可替换进残虹队的可见结果。此批是用户可见 UI 结果，不是原始数据库下载；完整性以 UI 实际展示为界。
+- 当前没有在页面找到结构化阵容导出，页面所见的导出是阵容图。批量保存的原始源码路径不可用，数据须标明从公开 UI 观察整理、来源许可未披露、仅供当前本地项目评估，不声称完整复制源站数据库。
+
+## Phase 17 implementation outcome — Automatic Team Builder 1.0
+
+- data/knowledge/team_templates.json is the canonical local catalog for the 27 lineup choices visible through the guide site's public UI. It maps all members to stable local character IDs, preserves source order and team labels, and reserves separate editorial status/tags/notes fields for the later management phase.
+- data/knowledge/team_templates.js is generated from the JSON by scripts/build_team_templates_bundle.py; index.html loads that bundle before app.js.
+- The public page exposed image export but no structured lineup export. The source license was not displayed. Catalog metadata records the source URL, capture date and method, unknown license, observed scope, and incomplete coverage. No hidden source code or API was retrieved.
+- The user roster now starts empty, supports selecting all or clearing the pool, and stores owned characters, ordered main-C locks, resonance 0–6, signature-arc ownership, team count, and preference in browser localStorage only.
+- Main-C investment inputs are available on locked cores; other owned characters can expand the same controls. The signature-arc checkbox records the user's self-report without inventing an arc name. Resonance and signature-arc ownership affect candidate ranking only.
+- The solver prioritizes eligible visible guide-site lineups and fills remaining candidate slots with clearly labeled local rule candidates. It displays up to three choices per team, can plan one or two teams, and blocks the first team's members from the second team. A second locked core is excluded from team one and required in team two.
+- Phase 18 remains the planned admin workflow for reviewing and editing these records. Browser interaction and responsive visual review were not run in this implementation pass.
+
+## 2026-09-30 — Startup regression found from user screenshot
+
+- The screenshot's page shell, empty Hero, “载入中” count, and admin topbar match the static initial HTML, indicating that `app.js` did not finish startup.
+- The Phase 17 `app.js` diff shows the single-element selector helper `const $ = ...` was accidentally removed. Execution then fails at `const toast = $("#toast")` with `ReferenceError: $ is not defined`, skipping all later rendering and event binding. Restored the helper before `$$`.
+- The team route also read an undeclared `userTeamTeamCount`; initialized it from saved `teamCount`, defaulting to one team.
+- Added `scripts/smoke_check_app.js` to check HTML script order/existence, script syntax, non-empty local catalogs, valid template character IDs, and the required startup declarations. It passes with 25 characters and 27 templates.
+- Browser automation could not run: CUA rejected the local `file://` URL and explicitly prohibited using a local server, another browser surface, or indirect execution to bypass that restriction. This turn verifies source/data contracts only; it does not claim actual click behavior is confirmed.
+
+## 2026-09-30 — Recommended cassette acquisition consistency
+
+- Character recommendations read acquisition from separate character snapshots, while both encyclopedia views read the shared sky curtain catalog. Of 20 character recommendations, 19 snapshots had empty acquisition despite valid catalog IDs.
+- Added `resolveRecommendedCassette` to associate acquisition by stable cassette ID. Catalog acquisition takes precedence; unlisted cassettes retain their character-source acquisition. Character-specific recommended affixes and terminal data are preserved without mutating source snapshots.
+- Connected the resolver to admin cassette details, user character overview, and user build recommendations. Diabolos now uses the catalog's dark-element Rabbit Hole acquisition in those views.
+- Pure data regression checks passed for all 20 character recommendations, canonical precedence, fallback, absent recommendations, and snapshot/affix preservation. Script parsing and diff checks passed; no browser interaction test was performed.
+
+## 2026-09-30 — Automatic main-C selection
+
+- Requiring a core lock prevented users who do not know their main DPS from receiving recommendations. Main-C locks now express optional preferences.
+- `userTeamRecommendPlans` compares plans across eligible owned cores when unlocked, prioritizing complete teams, visible source templates, and local scores. Manual locks constrain that same entry point.
+- Candidate labels identify their recommended core; selected result titles follow that candidate. Second-team recommendations use the first team's selected member set as an exclusion constraint.
+- A sole owned main-C now produces an honest partial candidate. Empty and support-only pools produce no invented main-C. UI instructions no longer ask users to lock a core before generation.
+- Pure solver regression passed for unlocked cores, every full-roster first candidate's non-overlapping second team, ordered manual locks, preferences, partial/empty/support-only pools, and rule fallback. Browser interaction was not run.
+
+## 2026-09-30 — Character icon identity mix-up
+
+- The imported 真红 character record contains 11 related-character icon assets in its `assets` array. The generic `.find(type === "character_icon")` selected the first entry, `bohe-icon.webp`, instead of 真红's own `zhenhong-icon.webp`.
+- 薄荷's own icon and the mistakenly selected 真红 icon share the same SHA-256 because they are the same file content; the correct 真红 icon was already present in the local bundle.
+- Added `findCharacterIcon`, which prefers the filename `<character ID>-icon.*` and only falls back to the first icon when no identity-matched asset exists.
+- The smoke check now verifies every character picks its own icon, each file exists, and selected icon image hashes are unique. All 25 character icons passed; app syntax and `git diff --check` passed.

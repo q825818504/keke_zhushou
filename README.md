@@ -54,6 +54,19 @@ python .\scripts\import_mysqil_driver_blocks.py
 
 下载器核对 Mysqil 驱动块目录中的 12 种形状、36 个品质详情页及其引用图片，并保存驱动块机制说明页；离线导入器从本地快照生成 `driver_blocks.json` 与 `driver_blocks.js`，每种形状包含金/紫/蓝品质、+0 至 +20 主属性成长、11 种候选副词条和来源记录。日常增量下载可省略 `-Refresh`。
 
+## 自动配队 1.0
+
+用户端自动配队只需选择持有角色即可生成，助手会比较可用主C及其阵容并推荐主C与队友。也可按顺序手动锁定最多两名主C作为偏好，填写每名角色共鸣 0–6 与专属弧盘持有标记、查看多套候选，以及从第一队剩余角色生成第二队。持有与养成输入保存在当前浏览器，不会上传。共鸣与专属弧盘只作为候选排序偏好，不代表伤害模拟。
+
+可见的攻略站阵容单独保存在 data/knowledge/team_templates.json，浏览器读取由 team_templates.js 提供。更新 JSON 后运行：
+python .\scripts\build_team_templates_bundle.py
+
+当前保存了会火攻略站公开界面实际展示的 27 条候选、覆盖 9 个主C组；站点没有结构化阵容导出，数据来自可见界面的人工整理，不能视为完整阵容库。来源未显示复用许可，发布或再分发前需复核授权。记录还预留了本地审核和编辑字段，后续可由管理端维护。
+
+运行 `node .\scripts\smoke_check_app.js` 可检查页面脚本引用、JavaScript 语法、本地角色与图鉴数据、阵容角色 ID、角色头像映射及其重复文件，以及角色推荐与空幕图鉴获取方式的一致性。该检查不替代浏览器交互回归。
+
+运行 `node .\scripts\check_team_recommendations.js` 可回归自动推荐主C、手动锁定、两队角色互斥、偏好选择、空池与不足人数，以及本地规则候选回退。
+
 ## 数据与来源
 
 - 结构化角色知识：`data/knowledge/characters/<角色 ID>.json`

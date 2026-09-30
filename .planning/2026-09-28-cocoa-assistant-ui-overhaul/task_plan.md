@@ -16,11 +16,11 @@
 
 ## Next Step
 
-Phase 15 用户端主导航与多模块路由实现完成；浏览器交互验证仍受本机自动化环境阻塞。
+Phase 17 自动配队 1.0 已完成本地实现；Phase 18 阵容管理工作台仍为后续计划。
 
 ## Current Phase
 
-Phase 15 - User-facing Navigation and Module Routing；implementation complete, browser verification blocked by environment.
+Phase 17 - Automatic Team Builder 1.0 and Reference Lineup Catalog；local implementation complete, browser review not run.
 
 ## Phases
 
@@ -308,3 +308,76 @@ Phase 15 - User-facing Navigation and Module Routing；implementation complete, 
 - [x] 创建交付提交并推送到 origin/main（c256750）
 - [x] 推送后核对本地 HEAD、origin/main 与工作区状态
 - **Status:** complete; pushed to origin/main at c256750; desktop browser interaction complete; responsive visual verification not run
+
+### Phase 17: Automatic Team Builder 1.0 and Reference Lineup Catalog
+
+**Goal:** 对标会火攻略站一键配队的完整输入与多方案流程。仅使用正常公开 UI 和站点提供的导出；不尝试读取隐藏源码或接口。1.0 支持本地持有角色池、共鸣 0–6、专属弧盘持有状态、最多两名按顺序锁定的主C、多个四人候选和从剩余角色生成第二队。来源阵容与本地规则候选分开展示；2.0 强度/轮转模型不在本阶段。
+
+- [x] 记录参考站一键配队的公开交互、角色/阵容数量、数据来源和许可说明；授权状态未披露。
+- [x] 确认公开 UI 没有结构化阵容导出；不通过隐藏源码/API获取数据。
+- [x] 保存 27 条实际可见阵容与 URL、采集日期、方法、许可状态和覆盖范围；源站没有可保存的结构化快照，数据标为人工整理且不声称完整。
+- [x] 定义 canonical JSON 阵容结构，区分来源阵容、本地规则候选与可编辑的审核字段。
+- [x] 将配队角色池改为真实持有选择；空池为空，并提供全部纳入/清空。
+- [x] 为已纳入角色保存共鸣 0–6 和专属弧盘持有状态；保存在浏览器本地，且不臆测弧盘名称。
+- [x] 支持最多两名按点击顺序锁定的主C，第二主C不会被第一队占用。
+- [x] 每队最多展示三套不同候选；选定第一队后第二队只从剩余角色生成，并提供 1 队/2 队选择。
+- [x] 区分攻略站可见阵容与本地规则候选，显示定位、属性依据和缺人提示。
+- [x] 将管理端全面阵容维护、轮转与伤害计算留在后续阶段，当前不实现 2.0。
+- [x] 完成本地 JS 语法、JSON 数量与角色 ID 覆盖检查。
+- **Status:** local implementation complete; static syntax and catalog checks passed; browser interaction and responsive review not run.
+
+### Phase 18: Team Composition Administration (planned)
+
+**Goal:** 为本地阵容数据提供维护端管理流程，能审核来源、补充或修正角色位、管理标签与版本，并明确区分外部来源原始记录和本站编辑记录。
+
+- [ ] 基于 Phase 17 最终确认的数据结构实现阵容浏览、创建、编辑、停用和来源审阅。
+- [ ] 校验队伍人数、角色 ID、主C指派、重复角色、版本和来源字段。
+- [ ] 确保来源阵容和本站规则候选分开编辑与展示。
+- **Status:** planned; depends on Phase 17 source/schema decisions.
+
+### Phase 19: App Startup Crash and Smoke Regression Check
+
+**Goal:** Restore app initialization after the user reported an empty, non-interactive page, and add a small automated check for script/data bootstrap regressions.
+
+- [x] Trace the screenshot's loading placeholders to the script startup path.
+- [x] Restore the missing single-element `$()` DOM selector used before all UI initialization.
+- [x] Initialize the persisted automatic-team count before rendering that route.
+- [x] Add `scripts/smoke_check_app.js` for script references, parse checks, local data presence, and lineup ID integrity.
+- [x] Run the smoke check, syntax checks, and `git diff --check`.
+- [ ] Run browser interaction regression after a permitted browser URL/host is available; the local-file request was blocked and alternate routes were explicitly prohibited.
+- **Status:** code repair and source/data smoke checks complete; browser interaction remains unverified by this environment.
+
+### Phase 20: Recommended Cassette Acquisition Consistency
+
+- [x] Identify the separate character snapshot and shared catalog data paths.
+- [x] Resolve acquisition by cassette ID in admin character details and user overview/build recommendations.
+- [x] Preserve character-specific recommendation data and source fallback.
+- [x] Verify all 20 character recommendations and resolver edge cases with automated data checks.
+- **Status:** local fix complete; data regression and syntax checks passed; browser interaction not run.
+
+### Phase 21: Optional Main-C Locks and Automatic Core Recommendations
+
+- [x] Remove the mandatory main-C lock before generation.
+- [x] Compare eligible owned main-C candidates and their teams when no core is locked.
+- [x] Show the recommended core in each candidate and update the selected team's title.
+- [x] Preserve ordered manual locks and exclude first-team members from second-team recommendations.
+- [x] Update guidance to make core locks optional and handle empty/partial/no-main-C pools.
+- [x] Run pure solver regression, data smoke checks, syntax and diff checks.
+- **Status:** local implementation and algorithm regression complete; browser interaction not run.
+
+### Phase 22: Character Icon Identity Mapping
+
+- [x] Trace the duplicated portrait to the asset selection logic and source record.
+- [x] Select each character's own icon by stable character ID before using any fallback.
+- [x] Add automated checks for correct identity, file existence, and duplicate icon content.
+- [x] Verify all 25 characters have distinct identity-matched icon images.
+- **Status:** local fix and asset checks complete; syntax and diff checks passed.
+
+### Phase 23: GitHub Delivery of Pending Feature Work
+
+- [x] Fetch `origin` and confirm the remote branch state before publishing (main and origin/main were even at 5f13b34).
+- [x] Run the character/catalog smoke checks and automatic-team solver regression.
+- [ ] Review the complete staged change set, including planning records and generated team data.
+- [ ] Commit the authorized local feature work and push it to the repository.
+- [ ] Confirm local `main` and `origin/main` point to the same commit and the worktree is clean.
+- **Status:** in progress.

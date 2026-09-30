@@ -2,14 +2,22 @@ const allKnowledge = window.characterKnowledge || {};
 const arcDriveCatalog = window.arcDriveKnowledge || { items: [], source: {} };
 const skyCurtainCatalog = window.skyCurtainKnowledge || { items: [], source: {} };
 const driverBlockCatalog = window.driverBlockKnowledge || { items: [], source: {}, mechanism_guide: {} };
+const teamTemplateKnowledge = window.teamTemplateKnowledge || { teams: [], source_catalog: {} };
 const importedKnowledge = allKnowledge.zhenhong || null;
 let activeKnowledge = importedKnowledge;
 const importedAssetUrl = (asset) => asset?.local_path || "";
+function findCharacterIcon(knowledge) {
+  const assets = knowledge.assets || [];
+  const ownIconName = `${knowledge.id}-icon.`.toLowerCase();
+  return assets.find((asset) => asset.type === "character_icon" && String(asset.local_path || "").split(/[\\/]/).pop().toLowerCase().startsWith(ownIconName))
+    || assets.find((asset) => asset.type === "character_icon");
+}
+
 const characterData = Object.fromEntries(Object.values(allKnowledge).filter((knowledge) => knowledge?.name).map((knowledge) => {
   const basic = knowledge.basic || {};
   const facts = knowledge.mechanism_facts || {};
   const portrait = knowledge.assets?.find((asset) => asset.type === "character_portrait");
-  const icon = knowledge.assets?.find((asset) => asset.type === "character_icon");
+  const icon = findCharacterIcon(knowledge);
   const skills = knowledge.skills || [];
   const parameterCount = skills.reduce((sum, skill) => sum + (skill.parameters || []).length, 0);
   const awakenings = knowledge.awakenings || [];
@@ -52,6 +60,15 @@ const characterData = Object.fromEntries(Object.values(allKnowledge).filter((kno
     knowledge
   }];
 }));
+const userTeamSavedState = (() => {
+  try {
+    const value = JSON.parse(localStorage.getItem("keke-user-team-v1") || "{}");
+    return value && typeof value === "object" ? value : {};
+  } catch {
+    return {};
+  }
+})();
+const userTeamNameById = Object.fromEntries(Object.entries(characterData).map(([name, data]) => [data.id, name]));
 const $ = (selector, scope = document) => scope.querySelector(selector);
 const $$ = (selector, scope = document) => [...scope.querySelectorAll(selector)];
 const toast = $("#toast");
@@ -84,8 +101,9 @@ let userCarouselDrag = null;
 let userCarouselDragOffset = 0;
 let userCarouselSuppressClick = false;
 let userActiveRoute = "characters";
-let userTeamCore = selectedCharacter;
-let userTeamGoal = "均衡";
+
+let userTeamGoal = ["均衡", "速切", "生存"].includes(userTeamSavedState.goal) ? userTeamSavedState.goal : "均衡";
+let userTeamTeamCount = userTeamSavedState.teamCount === 2 ? 2 : 1;
 let userArcDriveSearchQuery = "";
 let userSkyCurtainSearchQuery = "";
 let userDriverBlockSearchQuery = "";
@@ -98,7 +116,11 @@ let userSelectedDriverBlockLevel = 20;
 let userArcDriveLevel = 80;
 let userArcDriveRank = 1;
 let userSkyCurtainQuality = "gold";
-let userTeamOwnedNames = new Set(Object.keys(characterData));
+let userTeamOwnedNames = new Set((Array.isArray(userTeamSavedState.ownedCharacterIds) ? userTeamSavedState.ownedCharacterIds : []).map((id) => userTeamNameById[id]).filter(Boolean));
+let userTeamInvestmentByCharacterId = userTeamSavedState.investmentsByCharacterId && typeof userTeamSavedState.investmentsByCharacterId === "object" ? userTeamSavedState.investmentsByCharacterId : {};
+let userTeamPinnedCoreNames = [...new Set((Array.isArray(userTeamSavedState.pinnedMainCIds) ? userTeamSavedState.pinnedMainCIds : []).map((id) => userTeamNameById[id]).filter(Boolean))].slice(0, 2);
+let userTeamExpandedInvestmentNames = new Set(userTeamPinnedCoreNames);
+let userTeamSelectedCandidateIndexes = [0, 0];
 let userTeamGenerated = false;
 const userRouteLabels = { characters: "角色", team: "自动配队", "arc-drives": "弧盘", cassettes: "空幕", "drive-blocks": "驱动块" };
 const userTeamElementRing = ["光", "灵", "咒", "暗", "魂", "相"];
@@ -405,9 +427,16 @@ function renderCassetteRecommendationEditor(knowledge) {
   });
 }
 
+function resolveRecommendedCassette(knowledge) {
+  const cassette = knowledge.recommended?.cassette;
+  if (!cassette) return cassette;
+  const catalogItem = (skyCurtainCatalog.items || []).find((item) => item.id === cassette.id);
+  return { ...cassette, acquisition: catalogItem?.acquisition || cassette.acquisition || "" };
+}
+
 function renderCassette(knowledge) {
   const target = $("#cassetteDetails");
-  const data = knowledge.recommended?.cassette;
+  const data = resolveRecommendedCassette(knowledge);
   if (!target) return;
   const terminalMarkup = renderTerminalCard(knowledge.terminal || data?.terminal);
   if (!data) { target.innerHTML = terminalMarkup || emptyState("没有来源卡带详情"); return; }
@@ -1477,7 +1506,8 @@ function renderUserOverview(knowledge) {
   const skills = knowledge.skills || [];
   const materials = userMaterialEntries(knowledge, knowledge.base_stats?.level_cap || 80, userSkillTargets);
   const recommended = knowledge.recommended || {};
-  return `<section class="user-section-heading"><div><span class="user-section-kicker">角色概览</span><h2>先知道怎么用，再决定怎么养。</h2><p>${escapeHtml(factsForUser(knowledge))}</p></div></section><div class="user-overview-grid"><article class="user-metric-card"><span>定位</span><b>${escapeHtml(basic.role || "待补充")}</b><small>${escapeHtml(basic.position || "站位待补充")}</small></article><article class="user-metric-card"><span>技能资料</span><b>${skills.length}</b><small>项结构化技能</small></article><article class="user-metric-card"><span>养成材料</span><b>${materials.length}</b><small>种材料汇总</small></article><article class="user-metric-card"><span>等级上限</span><b>Lv.${knowledge.base_stats?.level_cap || "—"}</b><small>基础属性成长</small></article></div><div class="user-overview-columns"><section class="user-surface"><div class="user-section-heading"><div><span class="user-section-kicker">推荐起点</span><h2>先从这套配置开始。</h2></div><button class="user-text-action pressable" type="button" data-user-action="build">查看完整配装 →</button></div><div class="user-build-grid">${userBuildCard(recommended.weapon, "推荐武器", "武", recommended.weapon?.rating ? `${recommended.weapon.rating}级推荐` : "来源资料已整理")}${userBuildCard(recommended.cassette, "推荐空幕", "幕", recommended.cassette?.acquisition || "获取方式待补充")}</div></section><section class="user-surface user-highlight-card"><span class="user-section-kicker">玩法提示</span><div><h3>${escapeHtml(basic.role || "这个角色")}的核心是把机制用在正确时机。</h3><p>进入技能页查看完整描述，再到养成页按你的实际目标规划材料。</p></div><div class="user-highlight-foot"><span>资料来源</span><strong>本地知识包</strong></div></section></div>`;
+  const cassette = resolveRecommendedCassette(knowledge);
+  return `<section class="user-section-heading"><div><span class="user-section-kicker">角色概览</span><h2>先知道怎么用，再决定怎么养。</h2><p>${escapeHtml(factsForUser(knowledge))}</p></div></section><div class="user-overview-grid"><article class="user-metric-card"><span>定位</span><b>${escapeHtml(basic.role || "待补充")}</b><small>${escapeHtml(basic.position || "站位待补充")}</small></article><article class="user-metric-card"><span>技能资料</span><b>${skills.length}</b><small>项结构化技能</small></article><article class="user-metric-card"><span>养成材料</span><b>${materials.length}</b><small>种材料汇总</small></article><article class="user-metric-card"><span>等级上限</span><b>Lv.${knowledge.base_stats?.level_cap || "—"}</b><small>基础属性成长</small></article></div><div class="user-overview-columns"><section class="user-surface"><div class="user-section-heading"><div><span class="user-section-kicker">推荐起点</span><h2>先从这套配置开始。</h2></div><button class="user-text-action pressable" type="button" data-user-action="build">查看完整配装 →</button></div><div class="user-build-grid">${userBuildCard(recommended.weapon, "推荐武器", "武", recommended.weapon?.rating ? `${recommended.weapon.rating}级推荐` : "来源资料已整理")}${userBuildCard(cassette, "推荐空幕", "幕", cassette?.acquisition || "获取方式待补充")}</div></section><section class="user-surface user-highlight-card"><span class="user-section-kicker">玩法提示</span><div><h3>${escapeHtml(basic.role || "这个角色")}的核心是把机制用在正确时机。</h3><p>进入技能页查看完整描述，再到养成页按你的实际目标规划材料。</p></div><div class="user-highlight-foot"><span>资料来源</span><strong>本地知识包</strong></div></section></div>`;
 }
 
 function userSkillCard(skill, index) {
@@ -1493,7 +1523,7 @@ function renderUserSkills(knowledge) {
 
 function renderUserBuild(knowledge) {
   const recommended = knowledge.recommended || {};
-  const cassette = recommended.cassette;
+  const cassette = resolveRecommendedCassette(knowledge);
   const mainAffixes = renderAffixRanking(recommendedAffixes(cassette, "main"));
   const subAffixes = renderAffixRanking(recommendedAffixes(cassette, "sub"));
   return `<section class="user-section-heading"><div><span class="user-section-kicker">配装建议</span><h2>从一套舒服的配置开始。</h2><p>推荐属性按优先级排列；同一优先级代表近似选择，不等于唯一答案。</p></div></section><div class="user-build-layout"><section class="user-surface user-build-large"><div class="user-build-grid">${userBuildCard(recommended.weapon, "推荐武器", "武", recommended.weapon?.rating ? `${recommended.weapon.rating}级推荐` : "来源资料已整理")}${userBuildCard(cassette, "推荐空幕", "幕", cassette?.acquisition || "获取方式待补充")}</div><div class="user-affix-groups"><div class="user-affix-group"><span>推荐主属性</span><div class="user-affix-ranking">${mainAffixes}</div></div><div class="user-affix-group"><span>推荐副属性</span><div class="user-affix-ranking">${subAffixes}</div></div></div><div class="user-source-note"><i></i><span>原始可能词条池与维护者推荐已分开保存。</span></div></section><div class="user-surface user-empty">终端与细节资料请在来源页核对。</div></div>`;
@@ -1615,9 +1645,61 @@ function userTeamRoleLabel(data) {
 }
 
 function userTeamAvailableNames() {
-  const allNames = Object.keys(characterData);
-  const selectedNames = allNames.filter((name) => userTeamOwnedNames.has(name));
-  return selectedNames.length ? selectedNames : allNames;
+  return Object.keys(characterData).filter((name) => userTeamOwnedNames.has(name));
+}
+
+function userTeamCanPin(name) {
+  const data = characterData[name];
+  if (!data) return false;
+  if (userTeamRoleKind(data) === "main") return true;
+  return (teamTemplateKnowledge.teams || []).some((team) => team.source_core_character_id === data.id);
+}
+
+function userTeamInvestmentState(name) {
+  const id = characterData[name]?.id;
+  const value = id ? userTeamInvestmentByCharacterId[id] : null;
+  const resonance = Number(value?.resonance);
+  return {
+    resonance: Number.isInteger(resonance) ? Math.max(0, Math.min(6, resonance)) : 0,
+    hasSignatureArc: Boolean(value?.hasSignatureArc)
+  };
+}
+
+function userTeamSaveSettings() {
+  const investments = {};
+  Object.keys(characterData).forEach((name) => {
+    const id = characterData[name].id;
+    const value = userTeamInvestmentState(name);
+    investments[id] = { resonance: value.resonance, hasSignatureArc: value.hasSignatureArc };
+  });
+  const state = {
+    schemaVersion: 1,
+    ownedCharacterIds: userTeamAvailableNames().map((name) => characterData[name].id),
+    pinnedMainCIds: userTeamPinnedCoreNames.map((name) => characterData[name]?.id).filter(Boolean),
+    investmentsByCharacterId: investments,
+    goal: userTeamGoal,
+    teamCount: userTeamTeamCount
+  };
+  try {
+    localStorage.setItem("keke-user-team-v1", JSON.stringify(state));
+  } catch {}
+}
+
+function userTeamInvestmentRank(name) {
+  const investment = userTeamInvestmentState(name);
+  return investment.resonance * 0.45 + (investment.hasSignatureArc ? 0.8 : 0);
+}
+
+function userTeamRankedMainCNames(names) {
+  return names.filter(userTeamCanPin).sort((firstName, secondName) => {
+    const firstData = characterData[firstName];
+    const secondData = characterData[secondName];
+    const firstSourceCount = (teamTemplateKnowledge.teams || []).filter((team) => team.source_core_character_id === firstData.id).length;
+    const secondSourceCount = (teamTemplateKnowledge.teams || []).filter((team) => team.source_core_character_id === secondData.id).length;
+    const firstScore = userTeamTierScore(firstData) + firstSourceCount * 0.25 + userTeamInvestmentRank(firstName);
+    const secondScore = userTeamTierScore(secondData) + secondSourceCount * 0.25 + userTeamInvestmentRank(secondName);
+    return secondScore - firstScore || firstName.localeCompare(secondName, "zh-CN");
+  });
 }
 
 function userTeamIsElement(element) {
@@ -1673,43 +1755,125 @@ function userTeamEvaluate(coreName, memberNames) {
   score += profile.adjacentPairs.length * 5;
   score += profile.derivedReactions.length * 7;
   if (members.some((member) => userTeamAdjacent(core.element, member.element))) score += 4;
-  if (userTeamGoal === "速切") score += counts.secondary * 4 + counts.support * 3 - counts.sustain * 1;
-  if (userTeamGoal === "生存") score += counts.sustain * 5 + counts.support * 2 + counts.secondary * 1;
+  if (userTeamGoal === "速切") score += counts.secondary * 4 + counts.support * 3 - counts.sustain;
+  if (userTeamGoal === "生存") score += counts.sustain * 5 + counts.support * 2 + counts.secondary;
   if (userTeamGoal === "均衡") score += counts.support + counts.sustain * 2;
   score += members.reduce((sum, member) => sum + userTeamTierScore(member), 0) * 0.4;
   score += new Set(members.map((member) => member.element).filter(userTeamIsElement)).size;
   score -= members.filter((member) => member.element === core.element).length * 0.75;
+  score += [coreName, ...memberNames].reduce((sum, name) => sum + userTeamInvestmentRank(name) * 0.45, 0);
   return { score, members, memberNames, counts, profile, coreKind, primaryReaction };
 }
 
-function userTeamBuildPlan(coreName) {
-  const pool = userTeamAvailableNames().filter((name) => name !== coreName);
+function userTeamCandidateKey(names) {
+  return [...names].sort().join("|");
+}
+
+function userTeamCreateCandidate(coreName, memberNames, options = {}) {
+  const companions = memberNames.filter((name) => name !== coreName);
+  const evaluated = userTeamEvaluate(coreName, companions);
+  const orderedNames = options.orderedNames || [coreName, ...companions];
+  return {
+    ...evaluated,
+    coreName,
+    memberNames: orderedNames,
+    missing: Math.max(0, 4 - orderedNames.length),
+    candidateKind: options.sourceRecord ? "source" : "rule",
+    sourceRecord: options.sourceRecord || null,
+    id: options.sourceRecord?.id || "rule-" + userTeamCandidateKey(orderedNames)
+  };
+}
+
+function userTeamBuildPlans(coreName, blockedNames = new Set(), limit = 3) {
+  const available = userTeamAvailableNames().filter((name) => !blockedNames.has(name));
+  if (!coreName || !available.includes(coreName)) return [];
+  const plans = [];
+  const seen = new Set();
+  const templates = (teamTemplateKnowledge.teams || [])
+    .filter((team) => team.editorial?.active !== false && team.source_core_character_id === characterData[coreName]?.id)
+    .map((team) => {
+      const orderedNames = (team.member_character_ids || []).map((id) => userTeamNameById[id]);
+      return { team, orderedNames };
+    })
+    .filter(({ orderedNames }) => orderedNames.length === 4 && orderedNames.includes(coreName) && orderedNames.every((name) => name && available.includes(name)))
+    .sort((first, second) => (first.team.source_order || 0) - (second.team.source_order || 0));
+  templates.forEach(({ team, orderedNames }) => {
+    const candidate = userTeamCreateCandidate(coreName, orderedNames, { sourceRecord: team, orderedNames });
+    candidate.score += userTeamInvestmentRank(coreName) * 0.3;
+    const key = userTeamCandidateKey(orderedNames);
+    if (!seen.has(key)) {
+      plans.push(candidate);
+      seen.add(key);
+    }
+  });
+
+  const pool = available.filter((name) => name !== coreName);
+  const rulePlans = [];
   if (pool.length < 3) {
-    const partial = userTeamEvaluate(coreName, pool);
-    return { ...partial, missing: 3 - pool.length, members: pool.map((name) => ({ name, data: characterData[name] })) };
-  }
-  let best = null;
-  for (let first = 0; first < pool.length - 2; first += 1) {
-    for (let second = first + 1; second < pool.length - 1; second += 1) {
-      for (let third = second + 1; third < pool.length; third += 1) {
-        const candidate = userTeamEvaluate(coreName, [pool[first], pool[second], pool[third]]);
-        if (!best || candidate.score > best.score) best = candidate;
+    rulePlans.push(userTeamCreateCandidate(coreName, [coreName, ...pool]));
+  } else {
+    for (let first = 0; first < pool.length - 2; first += 1) {
+      for (let second = first + 1; second < pool.length - 1; second += 1) {
+        for (let third = second + 1; third < pool.length; third += 1) {
+          rulePlans.push(userTeamCreateCandidate(coreName, [coreName, pool[first], pool[second], pool[third]]));
+        }
       }
     }
   }
-  return { ...best, missing: 0, members: best.memberNames.map((name) => ({ name, data: characterData[name] })) };
+  rulePlans.sort((first, second) => second.score - first.score || first.id.localeCompare(second.id));
+  rulePlans.forEach((candidate) => {
+    const key = userTeamCandidateKey(candidate.memberNames);
+    if (!seen.has(key) && plans.length < limit) {
+      plans.push(candidate);
+      seen.add(key);
+    }
+  });
+  return plans.slice(0, limit);
 }
 
-function userTeamMemberCard(entry, label) {
+function userTeamRecommendPlans(lockedCoreName = "", blockedNames = new Set(), limit = 3) {
+  if (lockedCoreName) return userTeamBuildPlans(lockedCoreName, blockedNames, limit);
+  const available = userTeamAvailableNames().filter((name) => !blockedNames.has(name));
+  const cores = userTeamRankedMainCNames(available);
+  const candidates = cores.flatMap((name) => userTeamBuildPlans(name, blockedNames, limit));
+  candidates.sort((first, second) => first.missing - second.missing
+    || Number(second.candidateKind === "source") - Number(first.candidateKind === "source")
+    || (second.score + userTeamTierScore(characterData[second.coreName])) - (first.score + userTeamTierScore(characterData[first.coreName]))
+    || cores.indexOf(first.coreName) - cores.indexOf(second.coreName)
+    || first.id.localeCompare(second.id));
+  const seen = new Set();
+  return candidates.filter((candidate) => {
+    const key = userTeamCandidateKey(candidate.memberNames);
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  }).slice(0, limit);
+}
+
+function userTeamMemberCard(entry, label, isCore = false) {
   const role = userTeamRoleLabel(entry.data);
   const element = entry.data.element && entry.data.element !== "待补充" ? " · " + entry.data.element : "";
-  return '<article class="user-team-member ' + (label === "核心角色" ? "is-core" : "") + '">' + '<div class="user-team-member-art">' + userMediaMarkup(entry.data.icon, entry.name, entry.name.slice(0, 1)) + '</div><div class="user-team-member-copy"><span>' + escapeHtml(label) + " · " + escapeHtml(role) + '</span><b>' + escapeHtml(entry.name) + '</b><small>' + escapeHtml(role + element) + '</small></div></article>';
+  return '<article class="user-team-member ' + (isCore ? "is-core" : "") + '">' + '<div class="user-team-member-art">' + userMediaMarkup(entry.data.icon, entry.name, entry.name.slice(0, 1)) + '</div><div class="user-team-member-copy"><span>' + escapeHtml(label) + " · " + escapeHtml(role) + '</span><b>' + escapeHtml(entry.name) + '</b><small>' + escapeHtml(role + element) + '</small></div></article>';
+}
+
+function userTeamInvestmentMarkup(name) {
+  const state = userTeamInvestmentState(name);
+  const resonanceOptions = Array.from({ length: 7 }, (_, level) => '<option value="' + level + '"' + (state.resonance === level ? " selected" : "") + '>共鸣 ' + level + '</option>').join("");
+  return '<div class="user-team-investment"><label><span>共鸣</span><select data-user-team-resonance="' + escapeHtml(name) + '" aria-label="' + escapeHtml(name) + '共鸣等级">' + resonanceOptions + '</select></label><label class="user-team-arc-toggle"><input type="checkbox" data-user-team-signature="' + escapeHtml(name) + '"' + (state.hasSignatureArc ? " checked" : "") + '><span>专属弧盘已持有</span></label><small>按你的账号情况填写；共鸣和专属弧盘只影响方案排序，不参与伤害模拟。</small></div>';
 }
 
 function userTeamRosterCard(name, data) {
   const selected = userTeamOwnedNames.has(name);
-  const core = userTeamCore === name;
-  return '<button class="user-team-roster-card' + (selected ? " is-selected" : "") + (core ? " is-core-choice" : "") + '" type="button" data-user-team-roster="' + escapeHtml(name) + '" aria-pressed="' + String(selected) + '"><span class="user-team-roster-avatar">' + (data.icon ? '<img src="' + escapeHtml(data.icon) + '" alt="">' : escapeHtml(name.slice(0, 1))) + '</span><span><b>' + escapeHtml(name) + '</b><small>' + escapeHtml(userTeamRoleLabel(data) + " · " + (data.element || "属性待补充")) + '</small></span><i aria-hidden="true">' + (selected ? "✓" : "+") + '</i></button>';
+  const pinIndex = userTeamPinnedCoreNames.indexOf(name);
+  const canPin = userTeamCanPin(name);
+  const expanded = userTeamExpandedInvestmentNames.has(name) || pinIndex >= 0;
+  const sourceCount = (teamTemplateKnowledge.teams || []).filter((team) => team.source_core_character_id === data.id).length;
+  const pinLabel = pinIndex === 0 ? "1队主C" : pinIndex === 1 ? "2队主C" : "锁定主C";
+  return '<article class="user-team-roster-card' + (selected ? " is-selected" : "") + (pinIndex >= 0 ? " is-core-choice" : "") + '">' +
+    '<div class="user-team-roster-row"><button class="user-team-roster-toggle" type="button" data-user-team-roster="' + escapeHtml(name) + '" aria-pressed="' + String(selected) + '"><span class="user-team-roster-avatar">' + (data.icon ? '<img src="' + escapeHtml(data.icon) + '" alt="">' : escapeHtml(name.slice(0, 1))) + '</span><span class="user-team-roster-name"><b>' + escapeHtml(name) + '</b><small>' + escapeHtml(userTeamRoleLabel(data) + " · " + (data.element || "属性待补充")) + (sourceCount ? " · " + sourceCount + " 条公开阵容" : "") + '</small></span><i aria-hidden="true">' + (selected ? "✓" : "+") + '</i></button><div class="user-team-roster-tools">' +
+    (canPin ? '<button class="user-team-pin' + (pinIndex >= 0 ? " is-pinned" : "") + '" type="button" data-user-team-pin="' + escapeHtml(name) + '" aria-pressed="' + String(pinIndex >= 0) + '"' + (!selected ? " disabled" : "") + '>' + (pinIndex >= 0 ? pinLabel : "锁定主C") + '</button>' : "") +
+    (selected && pinIndex < 0 ? '<button class="user-team-investment-toggle" type="button" data-user-team-investment-toggle="' + escapeHtml(name) + '" aria-expanded="' + String(expanded) + '">' + (expanded ? "收起养成" : "养成") + '</button>' : "") +
+    '</div></div>' + (selected && expanded ? userTeamInvestmentMarkup(name) : "") + '</article>';
 }
 
 function userTeamReasonMarkup(plan) {
@@ -1721,6 +1885,35 @@ function userTeamReasonMarkup(plan) {
     "生存 " + (plan.counts.sustain ? "已补齐" : "缺少")
   ].join(" · ");
   return '<div class="user-team-reason-grid"><div><span>定位结构</span><b>' + escapeHtml(structure) + '</b></div><div><span>属性环合</span><b>' + escapeHtml(reactionText) + '</b></div><div><span>属性组合</span><b>' + escapeHtml(plan.profile.attrs.join(" · ") || "待补充") + '</b></div></div>';
+}
+
+function userTeamCandidatePickerMarkup(plans, selectedIndex, teamIndex) {
+  return '<div class="user-team-candidates" role="group" aria-label="第' + (teamIndex + 1) + '队候选方案">' + plans.map((plan, index) => {
+    const selected = selectedIndex === index;
+    const origin = plan.candidateKind === "source" ? "攻略站可见阵容" : "本地规则候选";
+    const archetype = plan.sourceRecord?.source_archetype || (plan.profile.reactions[0] ? plan.profile.reactions[0] + "反应" : "定位组合");
+    return '<button class="user-team-candidate' + (selected ? " is-active" : "") + '" type="button" data-user-team-candidate="' + teamIndex + ':' + index + '" aria-pressed="' + String(selected) + '"><span>' + escapeHtml("方案 " + (index + 1)) + '</span><b>' + escapeHtml(plan.coreName + " · " + archetype) + '</b><small>' + escapeHtml(origin) + '</small></button>';
+  }).join("") + '</div>';
+}
+
+function userTeamResultSection(title, teamIndex, plans, selectedIndex) {
+  if (!plans.length) {
+    return '<section class="user-team-result user-team-result-empty"><div class="user-section-heading"><div><span class="user-section-kicker">' + escapeHtml(title) + '</span><h2>剩余角色暂时无法组成第二队</h2><p>纳入更多主C及队友后，助手会从未被第一队占用的角色中推荐。</p></div><span class="user-result-pill">待选择</span></div></section>';
+  }
+  const safeIndex = Math.min(Math.max(0, selectedIndex), plans.length - 1);
+  const plan = plans[safeIndex];
+  const memberMarkup = plan.memberNames.map((name) => {
+    const entry = { name, data: characterData[name] };
+    const isCore = name === plan.coreName;
+    const roleLabel = isCore ? (teamIndex === 0 ? "1队主C" : "2队主C") : "队友";
+    return userTeamMemberCard(entry, roleLabel, isCore);
+  }).join("");
+  const missingMarkup = plan.missing ? '<div class="user-team-missing"><b>还差 ' + plan.missing + ' 位角色</b><span>目前有 ' + plan.memberNames.length + ' 位可用角色，纳入更多未被另一队占用的角色后可补齐。</span></div>' : "";
+  const sourceRecord = plan.sourceRecord;
+  const sourceMarkup = sourceRecord
+    ? '<div class="user-team-source-note"><span>来源</span><b>会火攻略站 · ' + escapeHtml(sourceRecord.source_archetype || "公开阵容") + '</b><a href="' + escapeHtml(teamTemplateKnowledge.source_catalog?.source_url || "https://sifangshangxia.cn/team.html") + '" target="_blank" rel="noreferrer">查看公开页面 ↗</a><small>从公开界面整理；来源未说明复用许可，记录范围不代表站点完整阵容库。</small></div>'
+    : '<div class="user-team-source-note is-local"><span>来源</span><b>可可助手本地规则候选</b><small>按当前本地角色定位、属性环合和你填写的养成信息排序；没有把它标成攻略站推荐。</small></div>';
+  return '<section class="user-team-result"><div class="user-section-heading"><div><span class="user-section-kicker">' + escapeHtml(title) + '</span><h2>' + escapeHtml(plan.coreName) + ' 的方案</h2><p>先看多个方案，再选中一套；另一队会自动避开这里的四名角色。</p></div><span class="user-result-pill">' + (plan.missing ? "队伍未满" : plan.candidateKind === "source" ? "攻略站可见阵容" : "本地规则候选") + '</span></div>' + userTeamCandidatePickerMarkup(plans, safeIndex, teamIndex) + '<div class="user-team-grid">' + memberMarkup + '</div>' + missingMarkup + userTeamReasonMarkup(plan) + sourceMarkup + '</section>';
 }
 
 function renderUserTeamRoute() {
@@ -1735,19 +1928,38 @@ function renderUserTeamRoute() {
     target.innerHTML = '<div class="user-empty">当前没有可用于配队的角色资料。</div>';
     return;
   }
-  if (!characterData[userTeamCore]) userTeamCore = selectedCharacter && characterData[selectedCharacter] ? selectedCharacter : allNames[0];
-  const plan = userTeamBuildPlan(userTeamCore);
-  const selectedCount = userTeamOwnedNames.size;
-  const rosterStatus = selectedCount ? selectedCount + " / " + allNames.length + " 人已纳入角色池" : "未限定角色池 · 使用全部本地角色";
-  const options = allNames.map((name) => '<option value="' + escapeHtml(name) + '"' + (name === userTeamCore ? " selected" : "") + '>' + escapeHtml(name) + '</option>').join("");
-  const goalOptions = ["均衡", "速切", "生存"].map((goal) => '<button class="user-route-segment ' + (goal === userTeamGoal ? "is-active" : "") + ' pressable" type="button" data-user-team-goal="' + goal + '" aria-pressed="' + String(goal === userTeamGoal) + '">' + goal + '</button>').join("");
+  userTeamPinnedCoreNames = userTeamPinnedCoreNames.filter((name) => userTeamOwnedNames.has(name) && userTeamCanPin(name)).slice(0, 2);
+  const rosterStatus = userTeamOwnedNames.size + " / " + allNames.length + " 人已纳入角色池";
   const rosterCards = allEntries.map(([name, data]) => userTeamRosterCard(name, data)).join("");
-  const memberEntries = [{ name: userTeamCore, data: characterData[userTeamCore] }, ...plan.members];
-  const memberMarkup = memberEntries.map((entry, index) => { const roleLabels = { secondary: "候选副C", support: "候选辅助", sustain: "候选生存", flex: "候选功能" }; return userTeamMemberCard(entry, index === 0 ? "核心角色" : roleLabels[userTeamRoleKind(entry.data)] || "候选功能"); }).join("");
-  const missingMarkup = plan.missing ? '<div class="user-team-missing"><b>还差 ' + plan.missing + ' 位角色</b><span>继续纳入更多角色后，才能组成完整的 4 人候选队。</span></div>' : "";
-  target.innerHTML = '<div class="user-route-intro"><div><span class="user-section-kicker">规则型候选</span><h1 id="userTeamTitle">自动配队</h1><p>先选你拥有的角色，再让角色定位和相邻属性一起参与计算。</p></div><div class="user-route-status"><i></i><span>' + escapeHtml(rosterStatus) + '</span></div></div><section class="user-surface user-team-builder"><div class="user-team-builder-head"><div><span class="user-section-kicker">01 · 角色池</span><h2>把你有的人交给助手。</h2><p>默认纳入本地全部角色；取消角色即可模拟自己的持有情况。</p></div><div class="user-team-roster-actions"><button class="user-secondary-action pressable" type="button" data-user-team-roster-action="all">全部纳入</button><button class="user-secondary-action pressable" type="button" data-user-team-roster-action="clear">清空重选</button></div></div><div class="user-team-roster-grid">' + rosterCards + '</div></section><section class="user-surface user-team-builder user-team-controls-surface"><div class="user-team-controls"><label class="user-route-select"><span>核心角色</span><select data-user-team-core aria-label="选择配队核心角色">' + options + '</select></label><div class="user-route-control"><span>配队偏好</span><div class="user-route-segments" role="group" aria-label="配队偏好">' + goalOptions + '</div></div><button class="user-primary-action pressable" type="button" data-user-team-generate>生成候选</button></div><div class="user-team-rule-note"><span class="user-section-kicker">计算依据</span><p>优先满足「主C + 副C + 辅助 + 生存」的 4 人结构，再奖励相邻属性环合；这是基于当前本地角色字段的候选，不是官方阵容模板。</p></div></section><section class="user-team-result"><div class="user-section-heading"><div><span class="user-section-kicker">02 · 候选结果</span><h2>' + escapeHtml(userTeamCore) + ' 的起点</h2><p>结果会随角色池、核心角色和偏好重新计算。</p></div><span class="user-result-pill">' + (plan.missing ? "队伍未满" : "4 人候选") + '</span></div><div class="user-team-grid">' + memberMarkup + '</div>' + missingMarkup + userTeamReasonMarkup(plan) + '</section>';
+  const goalOptions = ["均衡", "速切", "生存"].map((goal) => '<button class="user-route-segment ' + (goal === userTeamGoal ? "is-active" : "") + ' pressable" type="button" data-user-team-goal="' + goal + '" aria-pressed="' + String(goal === userTeamGoal) + '">' + goal + '</button>').join("");
+  const teamCountOptions = [1, 2].map((count) => '<button class="user-route-segment ' + (count === userTeamTeamCount ? "is-active" : "") + ' pressable" type="button" data-user-team-count="' + count + '" aria-pressed="' + String(count === userTeamTeamCount) + '">' + count + '队</button>').join("");
+  const pinnedMarkup = userTeamPinnedCoreNames.length
+    ? userTeamPinnedCoreNames.map((name, index) => '<span class="user-team-pin-slot"><i>' + (index + 1) + '</i>' + escapeHtml(name) + '</span>').join("")
+    : '<span class="user-team-pin-empty">交给助手推荐主C；有明确偏好时，可在角色卡片上锁定，最多两位。</span>';
+  let resultMarkup = '<section class="user-team-result user-team-result-empty"><div class="user-section-heading"><div><span class="user-section-kicker">02 · 候选结果</span><h2>先选你的持有角色</h2><p>选择持有角色后直接生成；助手会推荐主C，也可手动锁定。</p></div><span class="user-result-pill">待生成</span></div></section>';
+  if (userTeamGenerated) {
+    const firstBlocked = new Set(userTeamPinnedCoreNames.slice(1));
+    const firstPlans = userTeamRecommendPlans(userTeamPinnedCoreNames[0], firstBlocked, 3);
+    if (!firstPlans.length) {
+      resultMarkup = '<section class="user-team-result user-team-result-empty"><div class="user-section-heading"><div><span class="user-section-kicker">02 · 候选结果</span><h2>无法生成第一队</h2><p>当前角色池没有可用的主C候选；请纳入主C角色及队友后生成。</p></div><span class="user-result-pill">缺少主C</span></div></section>';
+    } else {
+      const selectedFirstIndex = Math.min(userTeamSelectedCandidateIndexes[0] || 0, firstPlans.length - 1);
+      const firstPlan = firstPlans[selectedFirstIndex];
+      const firstSection = userTeamResultSection("02 · 第一队候选", 0, firstPlans, selectedFirstIndex);
+      let secondSection = "";
+      if (userTeamTeamCount === 2) {
+        const firstMembers = new Set(firstPlan.memberNames);
+        const secondPlans = userTeamRecommendPlans(userTeamPinnedCoreNames[1], firstMembers, 3);
+        secondSection = userTeamResultSection("03 · 第二队候选", 1, secondPlans, userTeamSelectedCandidateIndexes[1] || 0);
+      }
+      resultMarkup = firstSection + secondSection;
+    }
+  }
+  const sourceCount = (teamTemplateKnowledge.teams || []).length;
+  target.innerHTML = '<div class="user-route-intro"><div><span class="user-section-kicker">角色池 · 多方案 · 双队去重</span><h1 id="userTeamTitle">自动配队 1.0</h1><p>勾选你的角色，助手会一起推荐主C与队友；有明确偏好时可手动锁定，再从剩余角色规划第二队。</p></div><div class="user-route-status"><i></i><span>' + escapeHtml(rosterStatus) + '</span></div></div>' +
+    '<section class="user-surface user-team-builder"><div class="user-team-builder-head"><div><span class="user-section-kicker">01 · 角色池</span><h2>先告诉助手你有哪些角色。</h2><p>首次使用从空角色池开始；持有状态、共鸣和专属弧盘只保存在当前浏览器。</p></div><div class="user-team-roster-actions"><button class="user-secondary-action pressable" type="button" data-user-team-roster-action="all">全部纳入</button><button class="user-secondary-action pressable" type="button" data-user-team-roster-action="clear">清空角色池</button></div></div><div class="user-team-roster-grid">' + rosterCards + '</div></section>' +
+    '<section class="user-surface user-team-builder user-team-controls-surface"><div class="user-team-controls"><div class="user-team-core-locks"><span>主C偏好（可选）</span><div class="user-team-pin-slots">' + pinnedMarkup + '</div></div><div class="user-route-control"><span>配队偏好</span><div class="user-route-segments" role="group" aria-label="配队偏好">' + goalOptions + '</div></div><div class="user-route-control"><span>生成队伍数</span><div class="user-route-segments" role="group" aria-label="生成队伍数">' + teamCountOptions + '</div></div><button class="user-primary-action pressable" type="button" data-user-team-generate>生成候选</button></div><div class="user-team-rule-note"><span class="user-section-kicker">候选依据</span><p>本地已保存 ' + sourceCount + ' 条攻略站可见阵容；先按持有角色筛选，不足时才补本地规则候选。未锁定时自动推荐主C；最多可锁定两位，分别用于第一队和第二队，成员不会跨队重复。共鸣和专属弧盘只用于方案排序，不等同伤害模拟。</p></div></section>' + resultMarkup;
 }
-
 function renderUserArcDriveRoute() {
   const target = $("#userArcDriveRoute");
   if (!target) return;
@@ -1859,43 +2071,121 @@ function bindUserRouteNavigation() {
 
 function bindUserCatalogRoutes() {
   $("#userTeamRoute")?.addEventListener("change", (event) => {
-    if (!event.target.matches("[data-user-team-core]")) return;
-    userTeamCore = event.target.value;
-    userTeamOwnedNames.add(userTeamCore);
-    if (characterData[userTeamCore]) applyCharacter(userTeamCore, { skipUserRail: true, silent: true });
+    const resonanceInput = event.target.closest("[data-user-team-resonance]");
+    const signatureInput = event.target.closest("[data-user-team-signature]");
+    if (!resonanceInput && !signatureInput) return;
+    const input = resonanceInput || signatureInput;
+    const name = input.dataset.userTeamResonance || input.dataset.userTeamSignature;
+    const id = characterData[name]?.id;
+    if (!id) return;
+    const current = userTeamInvestmentState(name);
+    userTeamInvestmentByCharacterId[id] = {
+      resonance: resonanceInput ? Number(resonanceInput.value) : current.resonance,
+      hasSignatureArc: signatureInput ? signatureInput.checked : current.hasSignatureArc
+    };
+    userTeamGenerated = false;
+    userTeamSaveSettings();
     renderUserTeamRoute();
   });
   $("#userTeamRoute")?.addEventListener("click", (event) => {
     const rosterAction = event.target.closest("[data-user-team-roster-action]");
     if (rosterAction) {
-      const allNames = Object.keys(characterData);
-      if (rosterAction.dataset.userTeamRosterAction === "all") userTeamOwnedNames = new Set(allNames);
-      if (rosterAction.dataset.userTeamRosterAction === "clear") userTeamOwnedNames = new Set();
+      if (rosterAction.dataset.userTeamRosterAction === "all") userTeamOwnedNames = new Set(Object.keys(characterData));
+      if (rosterAction.dataset.userTeamRosterAction === "clear") {
+        userTeamOwnedNames = new Set();
+        userTeamPinnedCoreNames = [];
+      }
+      userTeamGenerated = false;
+      userTeamSelectedCandidateIndexes = [0, 0];
+      userTeamSaveSettings();
       renderUserTeamRoute();
       return;
     }
+
+    const pinButton = event.target.closest("[data-user-team-pin]");
+    if (pinButton) {
+      const name = pinButton.dataset.userTeamPin;
+      const index = userTeamPinnedCoreNames.indexOf(name);
+      if (index >= 0) {
+        userTeamPinnedCoreNames.splice(index, 1);
+      } else if (userTeamPinnedCoreNames.length >= 2) {
+        notify("最多锁定两位主C；先取消一位再添加");
+        return;
+      } else if (userTeamOwnedNames.has(name)) {
+        userTeamPinnedCoreNames.push(name);
+        userTeamExpandedInvestmentNames.add(name);
+        if (userTeamPinnedCoreNames.length === 2) userTeamTeamCount = 2;
+      }
+      userTeamGenerated = false;
+      userTeamSelectedCandidateIndexes = [0, 0];
+      userTeamSaveSettings();
+      renderUserTeamRoute();
+      return;
+    }
+
+    const investmentToggle = event.target.closest("[data-user-team-investment-toggle]");
+    if (investmentToggle) {
+      const name = investmentToggle.dataset.userTeamInvestmentToggle;
+      if (userTeamExpandedInvestmentNames.has(name)) userTeamExpandedInvestmentNames.delete(name);
+      else userTeamExpandedInvestmentNames.add(name);
+      renderUserTeamRoute();
+      return;
+    }
+
     const rosterCard = event.target.closest("[data-user-team-roster]");
     if (rosterCard) {
       const name = rosterCard.dataset.userTeamRoster;
-      if (userTeamOwnedNames.has(name)) userTeamOwnedNames.delete(name);
-      else userTeamOwnedNames.add(name);
-      if (userTeamOwnedNames.size && !userTeamOwnedNames.has(userTeamCore)) {
-        userTeamCore = [...userTeamOwnedNames][0];
-        applyCharacter(userTeamCore, { skipUserRail: true, silent: true });
+      if (userTeamOwnedNames.has(name)) {
+        userTeamOwnedNames.delete(name);
+        userTeamPinnedCoreNames = userTeamPinnedCoreNames.filter((coreName) => coreName !== name);
+      } else {
+        userTeamOwnedNames.add(name);
       }
+      userTeamGenerated = false;
+      userTeamSelectedCandidateIndexes = [0, 0];
+      userTeamSaveSettings();
       renderUserTeamRoute();
       return;
     }
+
+    const candidateButton = event.target.closest("[data-user-team-candidate]");
+    if (candidateButton) {
+      const [teamIndex, candidateIndex] = candidateButton.dataset.userTeamCandidate.split(":").map(Number);
+      if (Number.isInteger(teamIndex) && Number.isInteger(candidateIndex) && teamIndex >= 0 && teamIndex <= 1) {
+        userTeamSelectedCandidateIndexes[teamIndex] = candidateIndex;
+        if (teamIndex === 0) userTeamSelectedCandidateIndexes[1] = 0;
+        renderUserTeamRoute();
+      }
+      return;
+    }
+
+    const teamCount = event.target.closest("[data-user-team-count]");
+    if (teamCount) {
+      userTeamTeamCount = Number(teamCount.dataset.userTeamCount) === 1 ? 1 : 2;
+      userTeamGenerated = false;
+      userTeamSaveSettings();
+      renderUserTeamRoute();
+      return;
+    }
+
     const goal = event.target.closest("[data-user-team-goal]");
     if (goal) {
       userTeamGoal = goal.dataset.userTeamGoal;
+      userTeamGenerated = false;
+      userTeamSaveSettings();
       renderUserTeamRoute();
       return;
     }
+
     if (event.target.closest("[data-user-team-generate]")) {
+      if (!userTeamOwnedNames.size) {
+        notify("先把你的角色纳入角色池");
+        return;
+      }
       userTeamGenerated = true;
+      userTeamSelectedCandidateIndexes = [0, 0];
       renderUserTeamRoute();
-      notify("已按角色池、定位结构和相邻属性重新生成候选队伍");
+      notify(!userTeamAvailableNames().some(userTeamCanPin) ? "当前角色池没有可推荐的主C，请纳入更多角色" : userTeamTeamCount === 2 ? "已生成候选；第二队只使用第一队剩余角色" : "已生成多套候选阵容");
     }
   });
   $("#userArcDriveRoute")?.addEventListener("input", (event) => {
