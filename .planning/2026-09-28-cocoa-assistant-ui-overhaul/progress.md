@@ -576,3 +576,7 @@ Phase 25: importer completed with exact article text coverage; all local images 
 
 - Payload review: 45 staged files, 1699 insertions and 49 deletions; includes Phase 24 lineup management and Phase 25 admin/reaction-system delivery. git diff --cached --check passed.
 - Tool hiccups: the first planning-log write was rejected by JS template-string quoting before changing files; corrected on retry. The default command helper then failed to start, so an elevated shell was used for the authorized repository sync. No content was changed by failed attempts.
+
+- Delivery result: committed as c38a59a (eat: add lineup manager and esper reaction guide) and pushed successfully to origin/main (GitHub repository q825818504/keke_zhushou).
+- Post-push verification: local HEAD and origin/main both resolved to c38a59a9ebf9eca082f039ac1d35db5bdf8ee40b; ahead/behind 0/0; worktree clean.
+- Phase 24 and Phase 25 are now published together, including the full reaction source snapshot/assets and attribution.
