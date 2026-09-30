@@ -377,7 +377,7 @@ Phase 17 - Automatic Team Builder 1.0 and Reference Lineup Catalog；local imple
 
 - [x] Fetch `origin` and confirm the remote branch state before publishing (main and origin/main were even at 5f13b34).
 - [x] Run the character/catalog smoke checks and automatic-team solver regression.
-- [ ] Review the complete staged change set, including planning records and generated team data.
-- [ ] Commit the authorized local feature work and push it to the repository.
-- [ ] Confirm local `main` and `origin/main` point to the same commit and the worktree is clean.
-- **Status:** in progress.
+- [x] Review the complete staged change set, including planning records and generated team data.
+- [x] Commit the authorized local feature work and push it to the repository (`66d9545`).
+- [x] Confirm local `main` and `origin/main` point to the same commit and the worktree is clean.
+- **Status:** complete; implementation pushed to `origin/main` at `66d9545`.

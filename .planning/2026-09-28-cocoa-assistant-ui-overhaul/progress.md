@@ -536,3 +536,5 @@ ame to a PSCustomObject without a declared property. No roster was written; add 
 - `node scripts/smoke_check_app.js` passed for 25 identity-matched unique icons, 25 characters, 27 team templates, and 20 cassette recommendations.
 - `node scripts/check_team_recommendations.js` passed unlocked core recommendations, two-team exclusion, manual locks, preferences, empty/partial/support-only pools, and local-rule fallback.
 - `git diff --check` passed; Git reported only expected LF/CRLF normalization notices.
+- Commit `66d9545` (`feat: improve team recommendations and data consistency`) pushed successfully to `origin/main`.
+- Phase 23 is marked complete against `66d9545`; this final planning status will be published as a separate documentation commit.
