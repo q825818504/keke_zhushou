@@ -1,0 +1,1 @@
+window.characterOverrides = {"schema_version":"1.0.0","characters":{"nanali":{"name":"娜娜莉","basic":{"rarity":"S","element":"灵","cassette_type":"等离子","role":"主C","position":"前排","rating":"T0","summary":"尚在扩招中的「柯林斯家族」的一代目。"}}}};
