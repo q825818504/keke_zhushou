@@ -4,9 +4,15 @@ window.CharacterRecommendations = (() => {
   const clone = value => JSON.parse(JSON.stringify(value));
   const originals = window.characterKnowledge || {};
   let saved = {};
+  for (const [id, override] of Object.entries(window.characterOverrides?.characters || {})) {
+    if (override?.recommended && typeof override.recommended === "object") saved[id] = clone(override.recommended);
+  }
+  let hasLegacy = false;
   try {
-    const value = JSON.parse(localStorage.getItem(key) || "{}");
-    if (value && typeof value === "object" && !Array.isArray(value)) saved = value;
+    const legacyText = localStorage.getItem(key);
+    const value = JSON.parse(legacyText || "{}");
+    hasLegacy = Boolean(legacyText);
+    if (value && typeof value === "object" && !Array.isArray(value)) saved = { ...saved, ...value };
   } catch (_) { /* Imported defaults remain available. */ }
   function createKnowledge(original) {
     const recommended = clone(original.recommended || {});
@@ -57,5 +63,15 @@ window.CharacterRecommendations = (() => {
     knowledge.recommended = clone(originals[knowledge.id]?.recommended || {});
     return true;
   }
-  return { createKnowledge, select, save, reset };
+  function exportOverrides() { return clone(saved); }
+  function clearLegacy() { localStorage.removeItem(key); hasLegacy = false; }
+  function clearPersistedCharacter(id) {
+    const pending = JSON.parse(localStorage.getItem(key) || "{}");
+    delete pending[id];
+    if (Object.keys(pending).length) localStorage.setItem(key, JSON.stringify(pending));
+    else localStorage.removeItem(key);
+    hasLegacy = Object.keys(pending).length > 0;
+  }
+  function hasLegacyOverrides() { return hasLegacy; }
+  return { createKnowledge, select, save, reset, export: exportOverrides, clearLegacy, clearPersistedCharacter, hasLegacy: hasLegacyOverrides };
 })();

@@ -1,0 +1,6 @@
+{
+  "name": "keke-desktop-build",
+  "private": true,
+  "version": "0.1.0",
+  "dependencies": { "acorn": "^8.15.0" }
+}

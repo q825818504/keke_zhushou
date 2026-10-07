@@ -1,4 +1,23 @@
-const allKnowledge = window.characterKnowledge || {};
+const rawCharacterKnowledge = window.characterKnowledge || {};
+const roleBasicStorageKey = "keke-role-basics-v1";
+const localRoleBasicOverrides = (() => {
+  try {
+    const value = JSON.parse(localStorage.getItem(roleBasicStorageKey) || "{}");
+    return value && typeof value === "object" && !Array.isArray(value) ? value : {};
+  } catch { return {}; }
+})();
+const allKnowledge = Object.fromEntries(Object.entries(rawCharacterKnowledge).map(([key, original]) => {
+  const canonical = window.characterOverrides?.characters?.[original.id] || {};
+  const local = localRoleBasicOverrides[original.id] || {};
+  return [key, {
+    ...original,
+    name: local.name || canonical.name || original.name,
+    basic: { ...(original.basic || {}), ...(canonical.basic || {}), ...(local.basic || {}) },
+    drive_layout_image: Object.prototype.hasOwnProperty.call(local, "drive_layout_image")
+      ? local.drive_layout_image
+      : canonical.drive_layout_image || original.drive_layout_image || ""
+  }];
+}));
 const arcDriveCatalog = window.arcDriveKnowledge || { items: [], source: {} };
 const skyCurtainCatalog = window.skyCurtainKnowledge || { items: [], source: {} };
 const driverBlockCatalog = window.driverBlockKnowledge || { items: [], source: {}, mechanism_guide: {} };
@@ -216,23 +235,23 @@ function renderRecommendationControls(knowledge) {
     refreshRecommendationPreview(activeKnowledge);
     setText("#recommendationStatus", "已修改，待保存");
   });
-  root.addEventListener("click", event => {
+  root.addEventListener("click", async event => {
     if (event.target.closest("[data-save-recommendation]")) {
-      const cassette = activeKnowledge.recommended?.cassette;
-      if (cassette) {
-        for (const kind of ["main", "sub"]) {
-          const key = "recommended_" + kind + "_affixes";
-          cassette[key] = recommendedAffixes(cassette, kind).map(item => ({ ...item, priority: normalizeAffixPriority(item.priority) }));
-        }
-      }
-      const ok = window.CharacterRecommendations.save(activeKnowledge);
-      setText("#recommendationStatus", ok ? "推荐已保存" : "保存失败");
-      notify(ok ? "推荐配置已保存" : "保存失败，请检查浏览器存储空间或权限");
+      $("#saveDraftButton").click();
+      return;
     }
     if (event.target.closest("[data-reset-recommendation]")) {
       if (!window.CharacterRecommendations.reset(activeKnowledge)) { notify("恢复失败，请检查浏览器存储权限"); return; }
       refreshRecommendationPreview(activeKnowledge);
-      setText("#recommendationStatus", "已恢复默认");
+      try {
+        const connected = window.KekeAdminBridge ? await window.KekeAdminBridge.ready : false;
+        if (connected) await window.KekeAdminBridge.persistCharacterRecommendations();
+        setText("#recommendationStatus", connected ? "默认推荐已写入项目" : "默认推荐仅在当前浏览器恢复");
+        notify(connected ? "已恢复默认推荐并写入项目" : "已在当前浏览器恢复默认；尚未写入项目");
+      } catch (error) {
+        setText("#recommendationStatus", "浏览器已恢复，项目写入失败");
+        notify(`浏览器状态已更新，但写入项目失败：${error.message}`);
+      }
     }
   });
 }
@@ -430,6 +449,7 @@ function syncCassetteRecommendations(knowledge, root, rerenderEditor = false) {
   renderCassette(knowledge);
   setText("#recommendationStatus", "已修改，待保存");
   setText("#draftLabel", "草稿未保存");
+  window.dispatchEvent(new Event("keke-role-dirty"));
   if (rerenderEditor) renderCassetteRecommendationEditor(knowledge);
 }
 
@@ -603,6 +623,36 @@ async function deleteDriveLayoutRecord(characterId) {
   try { localStorage.removeItem(DRIVE_LAYOUT_FALLBACK_PREFIX + characterId); } catch (error) { /* storage may be disabled */ }
 }
 
+window.KekeDriveLayoutStore = {
+  async exportAll() {
+    const records = [];
+    try {
+      const database = await openDriveLayoutDb();
+      const stored = await new Promise((resolve, reject) => {
+        const request = database.transaction(DRIVE_LAYOUT_STORE, "readonly").objectStore(DRIVE_LAYOUT_STORE).getAll();
+        request.onsuccess = () => resolve(request.result || []);
+        request.onerror = () => reject(request.error || new Error("读取本地摆放图失败"));
+      });
+      records.push(...stored);
+    } catch { /* The fallback storage is checked below. */ }
+    const ids = new Set(records.map(record => record.characterId));
+    for (let index = 0; index < localStorage.length; index++) {
+      const key = localStorage.key(index);
+      if (!key?.startsWith(DRIVE_LAYOUT_FALLBACK_PREFIX)) continue;
+      try {
+        const record = JSON.parse(localStorage.getItem(key) || "null");
+        if (record?.characterId && !ids.has(record.characterId)) records.push(record);
+      } catch { /* Ignore malformed legacy records without deleting them. */ }
+    }
+    return records;
+  },
+  async clearExported(characterIds) {
+    for (const id of new Set(characterIds || [])) {
+      if (typeof id === "string" && id) await deleteDriveLayoutRecord(id);
+    }
+  }
+};
+
 function driveLayoutSourceFromKnowledge(knowledge) {
   const image = knowledge.drive_layout_image;
   if (typeof image === "string" && image.trim()) return { src: image.trim(), filename: image.trim().split(/[\\/]/).pop() };
@@ -688,14 +738,30 @@ function bindDriveLayoutUpload() {
       notify("图片不能超过 15 MB");
       return;
     }
+    let savedToBrowser = false;
     try {
       await putDriveLayoutRecord(knowledge.id, file);
+      savedToBrowser = true;
+      const connected = window.KekeAdminBridge ? await window.KekeAdminBridge.ready : false;
+      if (connected) {
+        const saved = await window.KekeAdminBridge.uploadDriveLayout(knowledge.id, file);
+        knowledge.drive_layout_image = saved.path;
+        window.characterOverrides ||= { schema_version: "1.0.0", characters: {} };
+        window.characterOverrides.characters ||= {};
+        window.characterOverrides.characters[knowledge.id] = {
+          ...(window.characterOverrides.characters[knowledge.id] || {}),
+          drive_layout_image: saved.path
+        };
+        await deleteDriveLayoutRecord(knowledge.id);
+      }
       if (activeKnowledge?.id === knowledge.id) {
         await renderDriveLayout(knowledge);
-        notify(`${knowledge.name} 的摆放图已保存在此浏览器`);
+        notify(connected ? `${knowledge.name} 的摆放图已写入项目` : `${knowledge.name} 的摆放图仅保存在此浏览器，尚未写入项目`);
       }
     } catch (error) {
-      notify(error.message || "图片保存失败");
+      notify(savedToBrowser
+        ? `摆放图已保留在当前浏览器，但写入项目失败；项目原图未变：${error.message}`
+        : error.message || "图片保存失败");
     } finally {
       input.value = "";
     }
@@ -704,11 +770,21 @@ function bindDriveLayoutUpload() {
     const button = event.target.closest("[data-remove-drive-layout]");
     if (!button || !activeKnowledge?.id) return;
     const knowledge = activeKnowledge;
+    const connected = window.KekeAdminBridge ? await window.KekeAdminBridge.ready : false;
+    if (knowledge.drive_layout_image && !connected) {
+      notify("这张图已属于项目资料；请通过 scripts/start_admin.ps1 启动后再删除，避免只在当前浏览器隐藏");
+      return;
+    }
+    if (knowledge.drive_layout_image && connected) {
+      await window.KekeAdminBridge.deleteDriveLayout(knowledge.id);
+      const override = window.characterOverrides?.characters?.[knowledge.id];
+      if (override) delete override.drive_layout_image;
+    }
     await deleteDriveLayoutRecord(knowledge.id);
     if (activeKnowledge?.id === knowledge.id) {
       knowledge.drive_layout_image = "";
       await renderDriveLayout(knowledge);
-      notify(`${knowledge.name} 的摆放图已移除`);
+      notify(connected ? `${knowledge.name} 的摆放图已从项目移除` : `${knowledge.name} 的浏览器摆放图已移除，尚未同步项目`);
     }
   });
 }
@@ -1276,12 +1352,114 @@ function bindSearch() {
 }
 
 function bindSave() {
-  const save = () => {
-    setText("#draftLabel", "已保存刚刚");
-    setText(".updated-time", "最后保存刚刚");
-    notify(`${selectedCharacter} 的草稿已保存`);
+  const save = async () => {
+    const guideView = $("#guideManagerView");
+    if (guideView && !guideView.hidden && !document.body.classList.contains("user-mode")) {
+      $("#guideForm")?.requestSubmit();
+      return;
+    }
+    const previousName = selectedCharacter;
+    const data = characterData[previousName];
+    const knowledge = data?.knowledge;
+    if (!data || !knowledge?.id) { notify("没有可保存的角色资料"); return; }
+    const name = $("#roleName").value.trim();
+    if (!name || name.length > 80) { notify("角色名称需为 1–80 个字符"); return; }
+    if (name !== previousName && characterData[name]) { notify("已有同名角色，请换一个名称"); return; }
+    const patch = {
+      name,
+      basic: {
+        rarity: $("#roleRarity").value,
+        element: $("#roleElement").value,
+        cassette_type: $("#roleCassetteType").value.trim(),
+        role: $("#rolePosition").value.trim(),
+        position: $("#roleStation").value.trim(),
+        rating: $("#roleRating").value.trim(),
+        summary: knowledge.basic?.summary || ""
+      }
+    };
+    const cassette = knowledge.recommended?.cassette;
+    if (cassette) {
+      for (const kind of ["main", "sub"]) {
+        const key = "recommended_" + kind + "_affixes";
+        cassette[key] = recommendedAffixes(cassette, kind).map(item => ({ ...item, priority: normalizeAffixPriority(item.priority) }));
+      }
+    }
+    if (!window.CharacterRecommendations.save(knowledge)) {
+      notify("推荐保存失败，修改仍保留在编辑器中");
+      return;
+    }
+    try {
+      localRoleBasicOverrides[knowledge.id] = patch;
+      localStorage.setItem(roleBasicStorageKey, JSON.stringify(localRoleBasicOverrides));
+    } catch { notify("浏览器存储不可用，角色资料没有保存"); return; }
+
+    const original = allKnowledge[knowledge.id];
+    if (original) {
+      original.name = name;
+      original.basic = { ...(original.basic || {}), ...patch.basic };
+    }
+    knowledge.name = name;
+    knowledge.basic = { ...(knowledge.basic || {}), ...patch.basic };
+    data.rarity = patch.basic.rarity || "—";
+    data.element = patch.basic.element || "—";
+    data.cassetteType = patch.basic.cassette_type || "—";
+    data.rating = patch.basic.rating || "—";
+    data.role = patch.basic.role || "";
+    data.sourcePosition = patch.basic.position || "";
+    data.position = `${data.role || "定位待补充"} · ${data.sourcePosition || "站位待补充"}`;
+    data.summaryTitle = `${name} · ${data.role || "定位待补充"}`;
+    data.summary = patch.basic.summary || "暂无角色简介。";
+    data.knowledge = knowledge;
+    if (name !== previousName) {
+      delete characterData[previousName];
+      characterData[name] = data;
+      userTeamNameById[knowledge.id] = name;
+      if (userTeamOwnedNames.delete(previousName)) userTeamOwnedNames.add(name);
+      userTeamPinnedCoreNames = userTeamPinnedCoreNames.map(item => item === previousName ? name : item);
+      if (userTeamExpandedInvestmentNames.delete(previousName)) userTeamExpandedInvestmentNames.add(name);
+      userTeamSaveSettings();
+      selectedCharacter = name;
+    }
+    renderCharacterCards();
+    applyCharacter(name, { silent: true });
+
+    let persisted = false;
+    try {
+      const connected = window.KekeAdminBridge ? await window.KekeAdminBridge.ready : false;
+      if (connected) {
+        await window.KekeAdminBridge.saveCharacter(knowledge.id, patch, knowledge.recommended || {});
+        window.characterOverrides ||= { schema_version: "1.0.0", characters: {} };
+        window.characterOverrides.characters ||= {};
+        const existing = window.characterOverrides.characters[knowledge.id] || {};
+        window.characterOverrides.characters[knowledge.id] = { ...existing, name, basic: { ...(existing.basic || {}), ...patch.basic }, recommended: JSON.parse(JSON.stringify(knowledge.recommended || {})) };
+        delete localRoleBasicOverrides[knowledge.id];
+        if (Object.keys(localRoleBasicOverrides).length) localStorage.setItem(roleBasicStorageKey, JSON.stringify(localRoleBasicOverrides));
+        else localStorage.removeItem(roleBasicStorageKey);
+        persisted = true;
+        window.CharacterRecommendations.clearPersistedCharacter(knowledge.id);
+      }
+    } catch (error) {
+      notify(`已保存在本浏览器，但写入项目失败：${error.message}`);
+    }
+    setText("#draftLabel", persisted ? "已写入项目" : "仅保存在浏览器");
+    setText(".updated-time", persisted ? "资料已写入项目" : "尚未写入项目");
+    setText("#recommendationStatus", persisted ? "全部修改已保存" : "仅保存在本机，尚未写入项目");
+    if (persisted) window.dispatchEvent(new Event("keke-role-saved"));
+    if (persisted) notify(`${name} 的基础资料、推荐配置和词条优先级已全部保存`);
+    else if (!window.KekeAdminBridge?.connected) notify(`${name} 已保存在当前浏览器，尚未写入项目`);
   };
-  $("#saveDraftButton").addEventListener("click", save);
+  $("#saveDraftButton").addEventListener("click", async () => {
+    const button = $("#saveDraftButton");
+    if (button.disabled) return;
+    button.disabled = true;
+    const editor = $("#editorCard");
+    if (editor) editor.inert = true;
+    try {
+      await window.KekeAdminBridge?.waitForWrites?.();
+      await save();
+    } catch (error) { notify(`保存未完成，修改已保留：${error.message}`); }
+    finally { button.disabled = false; if (editor) editor.inert = false; }
+  });
   $("#roleName").addEventListener("input", () => setText("#draftLabel", "草稿未保存"));
 }
 
@@ -1324,6 +1502,7 @@ bindImpact();
 bindMisc();
 bindDriveLayoutUpload();
 bindUserExperience();
+window.KekeAdminBridge?.bindDialog();
 showUserExperience();
 applyCharacter(selectedCharacter);
 

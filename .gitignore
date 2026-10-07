@@ -1,0 +1,6 @@
+.venv-desktop/
+desktop/node_modules/
+build/
+dist/
+__pycache__/
+*.pyc

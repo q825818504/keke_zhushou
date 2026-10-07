@@ -1,5 +1,9 @@
 # 可可助手 · 角色资料与养成指南
 
+Windows 桌面新版：双击 dist/windows-updated/KekeAssistant.exe 使用用户端；双击 dist/windows-updated/KekeAssistantAdmin.exe 管理资料（关闭正在运行的旧版后再打开新版）。顶栏「保存」统一保存角色基础资料与推荐配置。用户版优先只读本机管理资料库，保存后自动检测刷新；没有本机资料库时读取内置资料。两者均使用独立应用窗口，用户包不含管理入口或写入接口。桌面构建、项目选择、旧数据迁移和维护说明见 [desktop/README.md](desktop/README.md)。公共在线更新尚未配置。
+
+下面的静态页面启动方式用于开发与旧浏览器数据迁移，日常桌面使用无需运行 PowerShell 脚本。
+
 零依赖的本地角色资料与图鉴页面。页面默认进入面向用户的 Apple 风格角色指南：可以搜索角色、浏览基础定位、技能、推荐配装和养成材料；通过右上角“进入管理端”可切回维护者编辑工作台。角色资料从 `data/knowledge/characters/` 加载，目前包含真红和 Mysqil 页面中列出的其他 24 名角色；图鉴接入完整的 51 件弧盘、12 套空幕和 12 种驱动块形状。源页面未提供的数据会标记待补充。
 
 ## 用户端与管理端
@@ -81,14 +85,26 @@ python .\scripts\build_team_templates_bundle.py
 - 空幕品质图片：`data/resources/encyclopedia/cassettes/<套装 ID>/`
 - 驱动块形状图和词条图标：`data/resources/encyclopedia/driver_blocks/site/`
 - 来源及许可说明：[`data/mysqil/ATTRIBUTION.md`](./data/mysqil/ATTRIBUTION.md)
-- 唯一项目计划与进度：`.planning/2026-09-28-cocoa-assistant-ui-overhaul/`
 
 来源站 [Mysqil · 环世全鉴](https://wiki.mysqil.com/) 为社区维护的非官方资料，页面注明 [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)，并署名 Matsuzaka Yuki。原始 HTML 快照保留在本地，结构化图鉴记录说明了来源和规范化整理；分享导入或改编的资料时应保留署名与许可链接、说明修改，并遵守非商业和相同方式共享条件。配队推荐不进入标准化角色数据。
 
-## 可视化攻略阵容管理
-进入管理端后选择侧栏「攻略阵容」。从角色库拖入四个位置，或选中位置后点击角色；队内拖动会交换位置。选择主C、填写阵容名称与攻略说明，点击「保存阵容」即可纳入用户端攻略候选。已有阵容可搜索、编辑、复制、停用、删除及撤销删除。
+## 本地管理资料保存与 GitHub 同步
 
-保存使用当前浏览器的本地存储；不同浏览器或设备不会自动同步。可导出 JSON 备份并在另一浏览器导入。导入按阵容编号合并，校验失败不会部分写入。若要将导出内容发布到仓库，将导出的 team_templates.json 替换 data/knowledge/team_templates.json，再运行 scripts/build_team_templates_bundle.py 生成发布包。页面保存本身不会修改仓库文件。
+用户日常可直接打开 `index.html` 使用用户端。维护资料时请运行：
+
+```powershell
+.\scripts\start_admin.ps1
+```
+
+需要 Windows PowerShell 与 Python 3.10+；服务默认使用固定的 `127.0.0.1:8765`，只监听本机，启动后会打开管理页面。固定端口可让此来源下的个人浏览器设置在管理端重启后继续保留；如果端口已被占用，可用 `.\scripts\start_admin.ps1 8766` 指定其他空闲端口。管理端的角色基础资料、推荐弧盘/卡带及词条优先级、驱动块摆放图、攻略阵容编辑会写入 `data/knowledge/` 或对应的本地资源目录。每次写文件前，旧文件会备份到 `%LOCALAPPDATA%\KekeAssistant\repo-write-backups\`。管理端不保存、也不同步用户持有角色、共鸣和其他个人偏好；这些仍保存在浏览器本地。
+
+顶部「资料同步」可检查 GitHub、拉取更新，或提交并推送管理资料。程序只会将明确列出的知识数据与驱动块摆放图加入提交，不会把其他工作区修改或用户个人数据一起提交；不执行强制覆盖。请先在 GitHub Desktop 中为本地仓库配置私有仓库 `origin`，并使用本机 Git Credential Manager 登录。遇到冲突时，页面会保留本地提交，需用 GitHub Desktop 检查解决。
+
+旧版直接打开 `file:///.../index.html` 时，浏览器保存的数据与本地管理服务属于不同来源，无法自动读取。请先在旧页面打开管理端，进入「资料同步」并点击「导出本浏览器维护数据」；再运行 `start_admin.ps1`，在新页面选择「导入旧浏览器备份」。导入会合并到项目文件，并保留旧浏览器数据及项目文件的本机备份；确认新页面资料正确后，再继续 GitHub 同步。JSON 备份文件也请妥善保管，因为其中包含你维护的公共攻略资料和图片。
+
+进入管理端的「攻略阵容」，可以拖动角色生成四人阵容并保存；已有阵容支持搜索、编辑、复制、停用、删除、撤销和重复阵容对比。浏览器本地模式仍可临时编辑，但仅在本浏览器内有效；切换到上述本地管理端后，保存会写入项目并可跨电脑同步。
+
+验证本地写回可运行 `node scripts/check_admin_migration_merge.js`、`python -B scripts/check_admin_server_storage.py` 与 `python -B scripts/check_admin_git_pull.py`，后者只创建临时本地 Git 仓库。HTTP 安全检查需先在一个终端启动 `python -B scripts/admin_server.py --no-browser`，再在另一个终端运行 `python -B scripts/check_admin_server_http.py --url http://127.0.0.1:8765`；检查不会提交或推送当前仓库。
 ## 反应体系 · 异能环合
 管理端「反应体系」可浏览、搜索和按属性筛选全部 8 种环合及 20 条角色强化被动。用户端预览在所有管理端页面常驻；资料与配队使用同一份环合定义，属性组合表示可形成的反应，实际触发还需满足资料中的条件。
 

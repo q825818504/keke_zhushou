@@ -61,8 +61,9 @@
       <header class="topbar">
         <div class="breadcrumb"><span>知识管理</span><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m9 5 7 7-7 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><strong id="activeBreadcrumb">角色管理</strong></div>
         <div class="topbar-actions" id="adminTopbarActions">
+          <button class="ghost-button pressable" type="button" id="repoSyncButton">资料同步</button>
           <button class="ghost-button pressable" type="button" id="previewButton"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 12s3-5 8-5 8 5 8 5-3 5-8 5-8-5-8-5Z" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="12" r="2" stroke="currentColor" stroke-width="1.6"/></svg>用户端预览</button>
-          <button class="primary-button pressable" type="button" id="saveDraftButton"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 4h11l3 3v13H5V4Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M8 4v5h7V4M8 16h8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>保存草稿</button>
+          <button class="primary-button pressable" type="button" id="saveDraftButton"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 4h11l3 3v13H5V4Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M8 4v5h7V4M8 16h8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>保存</button>
         </div>
         <div class="topbar-actions user-topbar-actions" id="userTopbarActions" hidden>
           <nav class="user-primary-nav" id="userPrimaryNav" aria-label="用户端主导航">
@@ -196,7 +197,7 @@
                 <div id="cassetteDetails"></div>
                 <section class="drive-layout-editor" aria-labelledby="driveLayoutEditorTitle">
                   <div class="data-block-heading"><span id="driveLayoutEditorTitle">驱动摆放示意图</span><small>管理端上传 · 图片存在时才向用户预览展示</small></div>
-                  <label class="drive-layout-upload"><span>选择摆放示意图</span><input id="driveLayoutUpload" type="file" accept="image/png,image/jpeg,image/webp"><small>图片保存在当前浏览器并关联当前角色，不会同步到 GitHub。支持 PNG、JPG、WebP。</small></label>
+                  <label class="drive-layout-upload"><span>选择摆放示意图</span><input id="driveLayoutUpload" type="file" accept="image/png,image/jpeg,image/webp"><small>本地管理端可写入项目并随 Git 同步；浏览器模式仅保存在此浏览器。支持 PNG、JPG、WebP。</small></label>
                   <div id="driveLayoutAdminPreview" class="drive-layout-admin-preview"></div>
                 </section>
                 <section id="driveLayoutPublic" class="drive-layout-public" aria-labelledby="driveLayoutPublicTitle" hidden>
@@ -305,13 +306,27 @@
     </main>
   </div>
   <div class="toast" id="toast" role="status" aria-live="polite"><span class="toast-mark">✓</span><span id="toastText">草稿已保存</span></div>
+  <dialog id="repoSyncDialog" class="repo-sync-dialog" aria-labelledby="repoSyncTitle">
+    <div class="repo-sync-shell">
+      <header><span class="user-section-kicker">本地资料库</span><h2 id="repoSyncTitle">资料与 GitHub</h2><button type="button" class="repo-sync-close" data-repo-close aria-label="关闭">×</button></header>
+      <p id="repoSyncSummary" role="status">正在连接本地管理服务…</p>
+      <section id="repoGitDetails" hidden><pre id="repoGitChanges"></pre><p id="repoReloadNote" hidden>远端资料已拉取，请刷新页面后查看最新内容。</p></section>
+      <div class="repo-sync-actions"><button type="button" class="outline-button" id="repoCheckButton">检查 GitHub</button><button type="button" class="outline-button" id="repoPullButton" hidden>拉取更新</button></div>
+      <label class="repo-commit-label" id="repoCommitLabel">提交说明<input id="repoCommitMessage" maxlength="120" value="更新可可助手资料"></label>
+      <button type="button" class="primary-button" id="repoSyncNowButton" hidden>提交并推送资料</button>
+      <div class="repo-legacy-tools"><button type="button" class="ghost-button" id="repoExportLocalButton">导出本浏览器维护数据</button><label class="ghost-button repo-import-label" id="repoImportLabel" hidden>导入旧浏览器备份<input type="file" id="repoImportFile" accept=".json,application/json"></label></div>
+      <small>状态列表显示整个工作区；提交按钮只纳入公共知识资料、维护者编辑和摆放图，不会同步持有角色、共鸣等个人设置或其他文件。GitHub 凭据由本机 Git 管理。</small>
+    </div>
+  </dialog>
   <script src="data/knowledge/characters/zhenhong.js"></script>
   <script src="data/knowledge/characters/other_characters.js"></script>
+  <script src="data/knowledge/character_overrides.js"></script>
   <script src="data/knowledge/encyclopedia/arc_drives.js"></script>
   <script src="data/knowledge/encyclopedia/sky_curtains.js"></script>
   <script src="data/knowledge/encyclopedia/driver_blocks.js"></script>
   <script src="data/knowledge/team_templates.js"></script>
   <script src="data/knowledge/esper_cycles.js"></script>
+  <script src="admin_bridge.js"></script>
   <script src="team_manager.js"></script>
   <script src="reactions.js"></script>
   <script src="character_recommendations.js"></script>
