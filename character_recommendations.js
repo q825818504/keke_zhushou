@@ -21,7 +21,13 @@ window.CharacterRecommendations = (() => {
       const item = override?.[kind];
       if (item && typeof item.id === "string" && typeof item.name === "string") recommended[kind] = clone(item);
     }
-    return { ...original, recommended };
+    if (override?.terminal_puzzle) recommended.terminal_puzzle = clone(override.terminal_puzzle);
+    const terminalOverride = window.characterOverrides?.characters?.[original.id]?.terminal;
+    const terminal = terminalOverride && typeof terminalOverride === "object"
+      ? { ...(original.terminal || {}), ...clone(terminalOverride) }
+      : original.terminal;
+    if (terminal && recommended.cassette) recommended.cassette.terminal = clone(terminal);
+    return { ...original, terminal, recommended };
   }
   function select(knowledge, kind, id) {
     if (knowledge.recommended?.[kind]?.id === id) return;

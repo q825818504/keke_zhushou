@@ -1,7 +1,7 @@
 # 可可助手 Windows 桌面版
 
 双击 dist/windows/KekeAssistant.exe 使用用户端；双击 dist/windows/KekeAssistantAdmin.exe 维护资料。
-本次「统一保存 + 本机资料实时读取」新版位于 dist/windows-updated/，请关闭旧版后使用此目录下的两个EXE；旧windows目录保留，未强制关闭或覆盖正在运行的旧软件。
+当前正式发行版位于 dist/windows/：KekeAssistant.exe 为用户端，KekeAssistantAdmin.exe 为管理端。重建会更新这两个正式入口；若管理程序正在运行，应先正常退出以便清理旧暂存副本。
 保存404修复后，两目录中的常用EXE已统一为新版；此前旧二进制另存为pre-save-fix.exe用于恢复，不要用备份文件日常管理。接口能力会在保存前核对，后台过旧时明确提示更新而不发送无效请求。
 它们显示独立 Windows 应用窗口，没有浏览器地址栏或浏览器标签页。界面采用现有资料与交互代码，在 WebView2 中呈现桌面侧栏和工具栏；不是全套 Windows 原生控件重写。
 

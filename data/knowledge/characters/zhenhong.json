@@ -110,12 +110,11 @@
       "terminal": {
         "id": "shiluo-guangmang-terminal",
         "name": "[卡带] 属性",
-        "description": "每装配一个亚型驱动，使暴击伤害增加16%",
+        "description": "每装配一个Ⅲ型驱动，使暴击伤害增加16%",
         "effects": [
           "暴击伤害 +16%"
         ],
-        "source_type": "user_screenshot",
-        "source_note": "根据用户提供的攻略站截图补录",
+        "source_type": "mysqil_page",
         "layout": {
           "rows": 7,
           "columns": 7,
@@ -202,7 +201,8 @@
             }
           ],
           "source_type": "mysqil_page"
-        }
+        },
+        "source_url": "https://wiki.mysqil.com/characters/zhenhong/"
       }
     }
   },
@@ -2869,12 +2869,11 @@
   "terminal": {
     "id": "shiluo-guangmang-terminal",
     "name": "[卡带] 属性",
-    "description": "每装配一个亚型驱动，使暴击伤害增加16%",
+    "description": "每装配一个Ⅲ型驱动，使暴击伤害增加16%",
     "effects": [
       "暴击伤害 +16%"
     ],
-    "source_type": "user_screenshot",
-    "source_note": "根据用户提供的攻略站截图补录",
+    "source_type": "mysqil_page",
     "layout": {
       "rows": 7,
       "columns": 7,
@@ -2961,7 +2960,8 @@
         }
       ],
       "source_type": "mysqil_page"
-    }
+    },
+    "source_url": "https://wiki.mysqil.com/characters/zhenhong/"
   },
   "drive_layout_image": ""
 }

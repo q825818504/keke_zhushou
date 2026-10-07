@@ -19,8 +19,8 @@
       "category": "属性专属",
       "element": "光属性",
       "set_effects": {
-        "two_piece": "光属性伤害 +10%",
-        "four_piece": "佩戴者施放必杀技后，造成的伤害无视 25% 防御力，持续 20 秒（不可叠加）"
+        "two_piece": "光属性异能伤害提升10%。",
+        "four_piece": "装备者释放「极轨终结」后，造成的伤害无视25%防御力，持续20秒，该效果不可叠加。"
       },
       "acquisition": "兔子洞副本（光系产出关）",
       "main_affix_pool": {
@@ -102,7 +102,37 @@
         "review_status": "pending",
         "url": "https://wiki.mysqil.com/cassettes/shiluo-guangmang",
         "snapshot_path": "data/mysqil/cassettes/shiluo-guangmang/raw/page.html"
-      }
+      },
+      "source_set_effects": {
+        "two_piece": "光属性伤害 +10%",
+        "four_piece": "佩戴者施放必杀技后，造成的伤害无视 25% 防御力，持续 20 秒（不可叠加）"
+      },
+      "set_requirements": {
+        "required_drives": [
+          {
+            "shape_id": "cell2_style1_1",
+            "count": 1
+          },
+          {
+            "shape_id": "cell3_style5_1",
+            "count": 1
+          },
+          {
+            "shape_id": "cell3_style4_1",
+            "count": 1
+          },
+          {
+            "shape_id": "cell4_style2_1",
+            "count": 1
+          }
+        ],
+        "source": {
+          "kind": "user_screenshot",
+          "captured_version": "unknown",
+          "added_at": "2026-10-07"
+        }
+      },
+      "screenshot_name": "失落光芒"
     },
     {
       "id": "emozhixie-zuzhou",
@@ -110,8 +140,8 @@
       "category": "属性专属",
       "element": "魂属性",
       "set_effects": {
-        "two_piece": "魂属性伤害 +10%",
-        "four_piece": "佩戴者造成的伤害 +18%。攻击处于浸染或黯星状态的敌人时，伤害提升变为 +36%"
+        "two_piece": "魂属性异能伤害提升10%。",
+        "four_piece": "造成的伤害提升18%。攻击受到「黯星」或「浸染」影响的单位时，伤害提升效果变为36%。"
       },
       "acquisition": "兔子洞副本（魂系产出关）/ 材料自选箱",
       "main_affix_pool": {
@@ -193,7 +223,37 @@
         "review_status": "pending",
         "url": "https://wiki.mysqil.com/cassettes/emozhixie-zuzhou",
         "snapshot_path": "data/mysqil/cassettes/emozhixie-zuzhou/raw/page.html"
-      }
+      },
+      "source_set_effects": {
+        "two_piece": "魂属性伤害 +10%",
+        "four_piece": "佩戴者造成的伤害 +18%。攻击处于浸染或黯星状态的敌人时，伤害提升变为 +36%"
+      },
+      "set_requirements": {
+        "required_drives": [
+          {
+            "shape_id": "cell2_style2_1",
+            "count": 1
+          },
+          {
+            "shape_id": "cell3_style2_1",
+            "count": 1
+          },
+          {
+            "shape_id": "cell3_style3_1",
+            "count": 1
+          },
+          {
+            "shape_id": "cell4_style6_1",
+            "count": 1
+          }
+        ],
+        "source": {
+          "kind": "user_screenshot",
+          "captured_version": "unknown",
+          "added_at": "2026-10-07"
+        }
+      },
+      "screenshot_name": "恶魔之血：诅咒"
     },
     {
       "id": "senlin-yinghuozhixin",
@@ -201,8 +261,8 @@
       "category": "属性专属",
       "element": "灵属性",
       "set_effects": {
-        "two_piece": "灵属性伤害 +10%",
-        "four_piece": "附近敌人受到队伍造成的灵属性伤害时，佩戴者暴击伤害 +8%，最多叠加 7 层，每层持续 10 秒（后台也生效）"
+        "two_piece": "灵属性异能伤害提升10%。",
+        "four_piece": "附近每有敌人受到由己方编队造成的灵属性异能伤害，则装备者暴击伤害提升8%，最多叠加7层，每层持续10秒，角色位于后台依旧生效。"
       },
       "acquisition": "兔子洞副本（灵系产出关）",
       "main_affix_pool": {
@@ -284,7 +344,37 @@
         "review_status": "pending",
         "url": "https://wiki.mysqil.com/cassettes/senlin-yinghuozhixin",
         "snapshot_path": "data/mysqil/cassettes/senlin-yinghuozhixin/raw/page.html"
-      }
+      },
+      "source_set_effects": {
+        "two_piece": "灵属性伤害 +10%",
+        "four_piece": "附近敌人受到队伍造成的灵属性伤害时，佩戴者暴击伤害 +8%，最多叠加 7 层，每层持续 10 秒（后台也生效）"
+      },
+      "set_requirements": {
+        "required_drives": [
+          {
+            "shape_id": "cell2_style1_1",
+            "count": 1
+          },
+          {
+            "shape_id": "cell3_style2_1",
+            "count": 1
+          },
+          {
+            "shape_id": "cell3_style5_1",
+            "count": 1
+          },
+          {
+            "shape_id": "cell4_style6_1",
+            "count": 1
+          }
+        ],
+        "source": {
+          "kind": "user_screenshot",
+          "captured_version": "unknown",
+          "added_at": "2026-10-07"
+        }
+      },
+      "screenshot_name": "森林萤火之心"
     },
     {
       "id": "zhenhong-shuangshengdie",
@@ -292,8 +382,8 @@
       "category": "属性专属",
       "element": "咒属性",
       "set_effects": {
-        "two_piece": "咒属性伤害 +10%",
-        "four_piece": "附近敌人受到队伍造成的咒属性伤害时，佩戴者攻击力 +6%，最多叠加 6 层，每层持续 10 秒（后台也生效）"
+        "two_piece": "咒属性异能伤害提升10%。",
+        "four_piece": "附近敌人每受到一次己方编队造成的咒属性异能伤害，则装备者攻击力提升6%，最多叠加6层，每层持续10秒，角色位于后台依旧生效。"
       },
       "acquisition": "兔子洞副本（咒系产出关）",
       "main_affix_pool": {
@@ -375,7 +465,37 @@
         "review_status": "pending",
         "url": "https://wiki.mysqil.com/cassettes/zhenhong-shuangshengdie",
         "snapshot_path": "data/mysqil/cassettes/zhenhong-shuangshengdie/raw/page.html"
-      }
+      },
+      "source_set_effects": {
+        "two_piece": "咒属性伤害 +10%",
+        "four_piece": "附近敌人受到队伍造成的咒属性伤害时，佩戴者攻击力 +6%，最多叠加 6 层，每层持续 10 秒（后台也生效）"
+      },
+      "set_requirements": {
+        "required_drives": [
+          {
+            "shape_id": "cell2_style2_1",
+            "count": 1
+          },
+          {
+            "shape_id": "cell3_style1_1",
+            "count": 1
+          },
+          {
+            "shape_id": "cell3_style6_1",
+            "count": 1
+          },
+          {
+            "shape_id": "cell4_style5_1",
+            "count": 1
+          }
+        ],
+        "source": {
+          "kind": "user_screenshot",
+          "captured_version": "unknown",
+          "added_at": "2026-10-07"
+        }
+      },
+      "screenshot_name": "真红：双生蝶"
     },
     {
       "id": "jietou-quanwang",
@@ -383,8 +503,8 @@
       "category": "属性专属",
       "element": "相属性",
       "set_effects": {
-        "two_piece": "相属性伤害 +10%",
-        "four_piece": "暴击率 +14%。队伍触发盈蓄或浸染反应时，额外获得 14% 暴击率，持续 20 秒"
+        "two_piece": "相属性异能伤害提升10%。",
+        "four_piece": "暴击率提升14%。己方编队触发「延滞」或「浸染」之后，则暴击率额外提升14%，持续20秒。"
       },
       "acquisition": "兔子洞副本（相系产出关）",
       "main_affix_pool": {
@@ -466,7 +586,37 @@
         "review_status": "pending",
         "url": "https://wiki.mysqil.com/cassettes/jietou-quanwang",
         "snapshot_path": "data/mysqil/cassettes/jietou-quanwang/raw/page.html"
-      }
+      },
+      "source_set_effects": {
+        "two_piece": "相属性伤害 +10%",
+        "four_piece": "暴击率 +14%。队伍触发盈蓄或浸染反应时，额外获得 14% 暴击率，持续 20 秒"
+      },
+      "set_requirements": {
+        "required_drives": [
+          {
+            "shape_id": "cell2_style1_1",
+            "count": 1
+          },
+          {
+            "shape_id": "cell3_style1_1",
+            "count": 1
+          },
+          {
+            "shape_id": "cell3_style4_1",
+            "count": 1
+          },
+          {
+            "shape_id": "cell4_style5_1",
+            "count": 1
+          }
+        ],
+        "source": {
+          "kind": "user_screenshot",
+          "captured_version": "unknown",
+          "added_at": "2026-10-07"
+        }
+      },
+      "screenshot_name": "街头拳王"
     },
     {
       "id": "diyabolosi",
@@ -474,8 +624,8 @@
       "category": "属性专属",
       "element": "暗属性",
       "set_effects": {
-        "two_piece": "暗属性伤害 +10%",
-        "four_piece": "无视敌人 12% 暗属性抗性。佩戴者触发浊燃反应后，无视效果提升至 24%，持续 20 秒"
+        "two_piece": "暗属性异能伤害提升10%。",
+        "four_piece": "无视敌人12%暗属性异能抗性。当装备者参与触发「黯星」或「浊燃」反应之后，则提升至无视敌人24%暗属性异能抗性，持续20秒。"
       },
       "acquisition": "兔子洞副本（暗系产出关）",
       "main_affix_pool": {
@@ -557,7 +707,37 @@
         "review_status": "pending",
         "url": "https://wiki.mysqil.com/cassettes/diyabolosi",
         "snapshot_path": "data/mysqil/cassettes/diyabolosi/raw/page.html"
-      }
+      },
+      "source_set_effects": {
+        "two_piece": "暗属性伤害 +10%",
+        "four_piece": "无视敌人 12% 暗属性抗性。佩戴者触发浊燃反应后，无视效果提升至 24%，持续 20 秒"
+      },
+      "set_requirements": {
+        "required_drives": [
+          {
+            "shape_id": "cell2_style2_1",
+            "count": 1
+          },
+          {
+            "shape_id": "cell3_style3_1",
+            "count": 1
+          },
+          {
+            "shape_id": "cell3_style6_1",
+            "count": 1
+          },
+          {
+            "shape_id": "cell4_style1_1",
+            "count": 1
+          }
+        ],
+        "source": {
+          "kind": "user_screenshot",
+          "captured_version": "unknown",
+          "added_at": "2026-10-07"
+        }
+      },
+      "screenshot_name": "迪亚波罗斯"
     },
     {
       "id": "shouwei-wangguo",
@@ -565,8 +745,8 @@
       "category": "泛用功能",
       "element": "",
       "set_effects": {
-        "two_piece": "防御力 +15%",
-        "four_piece": "佩戴者的护盾效果 +20%"
+        "two_piece": "防御力提升15%。",
+        "four_piece": "装备者的护盾效果提升20%。"
       },
       "acquisition": "兔子洞副本",
       "main_affix_pool": {
@@ -648,7 +828,37 @@
         "review_status": "pending",
         "url": "https://wiki.mysqil.com/cassettes/shouwei-wangguo",
         "snapshot_path": "data/mysqil/cassettes/shouwei-wangguo/raw/page.html"
-      }
+      },
+      "source_set_effects": {
+        "two_piece": "防御力 +15%",
+        "four_piece": "佩戴者的护盾效果 +20%"
+      },
+      "set_requirements": {
+        "required_drives": [
+          {
+            "shape_id": "cell3_style1_1",
+            "count": 1
+          },
+          {
+            "shape_id": "cell3_style2_1",
+            "count": 1
+          },
+          {
+            "shape_id": "cell3_style4_1",
+            "count": 1
+          },
+          {
+            "shape_id": "cell3_style6_1",
+            "count": 1
+          }
+        ],
+        "source": {
+          "kind": "user_screenshot",
+          "captured_version": "unknown",
+          "added_at": "2026-10-07"
+        }
+      },
+      "screenshot_name": "守卫王国"
     },
     {
       "id": "xiaoxiao-damaoxian",
@@ -656,8 +866,8 @@
       "category": "泛用功能",
       "element": "",
       "set_effects": {
-        "two_piece": "生命值上限 +10%",
-        "four_piece": "佩戴者 HP 降低时，最大 HP +4%，最多叠加 10 层，每层持续 10 秒。施放必杀技立即获得 10 层"
+        "two_piece": "生命值提升10%。",
+        "four_piece": "装备者每次降低血量时，生命值上限提升4%，最多叠加10层，每层持续10秒。释放「极轨终结」时，直接获得10层该效果。"
       },
       "acquisition": "兔子洞副本",
       "main_affix_pool": {
@@ -739,7 +949,37 @@
         "review_status": "pending",
         "url": "https://wiki.mysqil.com/cassettes/xiaoxiao-damaoxian",
         "snapshot_path": "data/mysqil/cassettes/xiaoxiao-damaoxian/raw/page.html"
-      }
+      },
+      "source_set_effects": {
+        "two_piece": "生命值上限 +10%",
+        "four_piece": "佩戴者 HP 降低时，最大 HP +4%，最多叠加 10 层，每层持续 10 秒。施放必杀技立即获得 10 层"
+      },
+      "set_requirements": {
+        "required_drives": [
+          {
+            "shape_id": "cell2_style1_1",
+            "count": 1
+          },
+          {
+            "shape_id": "cell2_style2_1",
+            "count": 1
+          },
+          {
+            "shape_id": "cell4_style1_1",
+            "count": 1
+          },
+          {
+            "shape_id": "cell4_style5_1",
+            "count": 1
+          }
+        ],
+        "source": {
+          "kind": "user_screenshot",
+          "captured_version": "unknown",
+          "added_at": "2026-10-07"
+        }
+      },
+      "screenshot_name": "小小大冒险"
     },
     {
       "id": "yingzhi-xintiao",
@@ -747,8 +987,8 @@
       "category": "泛用功能",
       "element": "",
       "set_effects": {
-        "two_piece": "攻击力 +10%",
-        "four_piece": "施放技能后，佩戴者攻击力 +25%，持续 20 秒"
+        "two_piece": "攻击力提升10%。",
+        "four_piece": "装备者释放「变轨技能」以后，攻击力增加25%，持续20秒。"
       },
       "acquisition": "兔子洞副本",
       "main_affix_pool": {
@@ -830,7 +1070,37 @@
         "review_status": "pending",
         "url": "https://wiki.mysqil.com/cassettes/yingzhi-xintiao",
         "snapshot_path": "data/mysqil/cassettes/yingzhi-xintiao/raw/page.html"
-      }
+      },
+      "source_set_effects": {
+        "two_piece": "攻击力 +10%",
+        "four_piece": "施放技能后，佩戴者攻击力 +25%，持续 20 秒"
+      },
+      "set_requirements": {
+        "required_drives": [
+          {
+            "shape_id": "cell2_style1_1",
+            "count": 1
+          },
+          {
+            "shape_id": "cell2_style2_1",
+            "count": 1
+          },
+          {
+            "shape_id": "cell4_style1_1",
+            "count": 1
+          },
+          {
+            "shape_id": "cell4_style6_1",
+            "count": 1
+          }
+        ],
+        "source": {
+          "kind": "user_screenshot",
+          "captured_version": "unknown",
+          "added_at": "2026-10-07"
+        }
+      },
+      "screenshot_name": "影之信条"
     },
     {
       "id": "tiyà-yèjianjiuguan",
@@ -838,8 +1108,8 @@
       "category": "泛用功能",
       "element": "",
       "set_effects": {
-        "two_piece": "生命值上限 +10%",
-        "four_piece": "佩戴者的治疗加成 +20%"
+        "two_piece": "生命值提升10%。",
+        "four_piece": "装备者的治疗效率提升20%。"
       },
       "acquisition": "兔子洞副本",
       "main_affix_pool": {
@@ -921,7 +1191,37 @@
         "review_status": "pending",
         "url": "https://wiki.mysqil.com/cassettes/tiy%C3%A0-y%C3%A8jianjiuguan",
         "snapshot_path": "data/mysqil/cassettes/tiyà-yèjianjiuguan/raw/page.html"
-      }
+      },
+      "source_set_effects": {
+        "two_piece": "生命值上限 +10%",
+        "four_piece": "佩戴者的治疗加成 +20%"
+      },
+      "set_requirements": {
+        "required_drives": [
+          {
+            "shape_id": "cell3_style1_1",
+            "count": 1
+          },
+          {
+            "shape_id": "cell3_style2_1",
+            "count": 1
+          },
+          {
+            "shape_id": "cell3_style5_1",
+            "count": 1
+          },
+          {
+            "shape_id": "cell3_style3_1",
+            "count": 1
+          }
+        ],
+        "source": {
+          "kind": "user_screenshot",
+          "captured_version": "unknown",
+          "added_at": "2026-10-07"
+        }
+      },
+      "screenshot_name": "缇娅的夜间酒馆"
     },
     {
       "id": "jingmi-shanzhuang",
@@ -929,8 +1229,8 @@
       "category": "泛用功能",
       "element": "",
       "set_effects": {
-        "two_piece": "心灵伤害 +10%",
-        "four_piece": "佩戴者使用普通攻击时，心灵伤害 +12%，最多叠加 3 层，每层持续 6 秒"
+        "two_piece": "心灵伤害提高10%。",
+        "four_piece": "装备者普通攻击后，造成的心灵伤害提升12%，最多叠加3层，每层持续6秒。"
       },
       "acquisition": "兔子洞副本",
       "main_affix_pool": {
@@ -1012,7 +1312,37 @@
         "review_status": "pending",
         "url": "https://wiki.mysqil.com/cassettes/jingmi-shanzhuang",
         "snapshot_path": "data/mysqil/cassettes/jingmi-shanzhuang/raw/page.html"
-      }
+      },
+      "source_set_effects": {
+        "two_piece": "心灵伤害 +10%",
+        "four_piece": "佩戴者使用普通攻击时，心灵伤害 +12%，最多叠加 3 层，每层持续 6 秒"
+      },
+      "set_requirements": {
+        "required_drives": [
+          {
+            "shape_id": "cell2_style1_1",
+            "count": 1
+          },
+          {
+            "shape_id": "cell2_style2_1",
+            "count": 1
+          },
+          {
+            "shape_id": "cell4_style2_1",
+            "count": 1
+          },
+          {
+            "shape_id": "cell4_style6_1",
+            "count": 1
+          }
+        ],
+        "source": {
+          "kind": "user_screenshot",
+          "captured_version": "unknown",
+          "added_at": "2026-10-07"
+        }
+      },
+      "screenshot_name": "静谧山庄"
     },
     {
       "id": "yinsu-lancìwei",
@@ -1020,8 +1350,8 @@
       "category": "泛用功能",
       "element": "",
       "set_effects": {
-        "two_piece": "充能效率 +12%",
-        "four_piece": "佩戴者施放必杀技后，全队攻击力 +15%，持续 20 秒（不可叠加）"
+        "two_piece": "充能效率提高12%。",
+        "four_piece": "装备者释放「极轨终结」以后，全队角色获得15%攻击力提升（该效果不可叠加），持续20秒。"
       },
       "acquisition": "兔子洞副本",
       "main_affix_pool": {
@@ -1103,7 +1433,37 @@
         "review_status": "pending",
         "url": "https://wiki.mysqil.com/cassettes/yinsu-lanc%C3%ACwei",
         "snapshot_path": "data/mysqil/cassettes/yinsu-lancìwei/raw/page.html"
-      }
+      },
+      "source_set_effects": {
+        "two_piece": "充能效率 +12%",
+        "four_piece": "佩戴者施放必杀技后，全队攻击力 +15%，持续 20 秒（不可叠加）"
+      },
+      "set_requirements": {
+        "required_drives": [
+          {
+            "shape_id": "cell3_style5_1",
+            "count": 1
+          },
+          {
+            "shape_id": "cell3_style3_1",
+            "count": 1
+          },
+          {
+            "shape_id": "cell3_style4_1",
+            "count": 1
+          },
+          {
+            "shape_id": "cell3_style6_1",
+            "count": 1
+          }
+        ],
+        "source": {
+          "kind": "user_screenshot",
+          "captured_version": "unknown",
+          "added_at": "2026-10-07"
+        }
+      },
+      "screenshot_name": "音速蓝刺猬"
     }
   ]
 }

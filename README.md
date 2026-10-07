@@ -1,6 +1,6 @@
 # 可可助手 · 角色资料与养成指南
 
-Windows 桌面新版：双击 dist/windows-updated/KekeAssistant.exe 使用用户端；双击 dist/windows-updated/KekeAssistantAdmin.exe 管理资料（关闭正在运行的旧版后再打开新版）。顶栏「保存」统一保存角色基础资料与推荐配置。用户版优先只读本机管理资料库，保存后自动检测刷新；没有本机资料库时读取内置资料。两者均使用独立应用窗口，用户包不含管理入口或写入接口。桌面构建、项目选择、旧数据迁移和维护说明见 [desktop/README.md](desktop/README.md)。公共在线更新尚未配置。
+Windows 桌面版：双击 dist/windows/KekeAssistant.exe 使用用户端；双击 dist/windows/KekeAssistantAdmin.exe 管理资料。顶栏「保存」统一保存角色基础资料与推荐配置。用户版优先只读本机管理资料库，保存后自动检测刷新；没有本机资料库时读取内置资料。两者均使用独立应用窗口，用户包不含管理入口或写入接口。桌面构建、项目选择、旧数据迁移和维护说明见 [desktop/README.md](desktop/README.md)。公共在线更新尚未配置。
 
 下面的静态页面启动方式用于开发与旧浏览器数据迁移，日常桌面使用无需运行 PowerShell 脚本。
 
@@ -111,3 +111,15 @@ python .\scripts\build_team_templates_bundle.py
 资料来源：[环世全鉴 · 异能环合](https://wiki.mysqil.com/esper-cycles)，作者 Matsuzaka Yuki，许可 [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)。原始 HTML 保存在 data/mysqil/esper-cycles/raw/page.html，26 张正文图片及 SHA-256 校验清单保存在同目录 assets/ 和 roster.json。结构化资料及浏览器包位于 data/knowledge/esper_cycles.json 和 esper_cycles.js。本地版本调整展示与分类，保留来源文字、数值、角色强化条件与图片；派生资料按同一许可使用。
 
 更新：运行 python scripts/import_mysqil_esper_cycles.py --refresh 下载并重建；无网络时运行不带参数的同一命令，从快照重建。导入器检查正文逐字覆盖、8 项清单、20 条被动和全部图片。运行 node scripts/check_esper_cycles.js 独立核对正文、全部数值、资源哈希和 JSON/JS 一致性。
+
+## 终端驱动摆法
+角色配装展示自动生成的金灰拼图，每块驱动有独立编号和型号。默认必须先满足所选空幕完整4件套的四种形状，再铺满可用槽位并尽量增加角色终端加成所需型号；它是形状参考，不依赖或假定玩家库存。24个已有终端与12套空幕的288种组合均可满足完整套装并铺满。真红搭配失落光芒时为4块Ⅲ型、2块Ⅱ型、1块Ⅳ型；未配置推荐空幕时不会编造套装状态。未提供槽位的角色不生成虚构摆法。
+管理端角色页下方的「终端驱动摆法」可选择/拖入固定朝向的形状、点击槽位放置、选择已有块并点击空槽移动、移除、撤销、保留已摆块补满，以及恢复默认。可调整优先型号；点击「保存摆法」或顶部保存，使用现有角色保存流程写回。图片上传仍可作为额外参考。
+摆法数据在角色recommended.terminal_puzzle中保存，包含版本、所选cassette_id、优先型号以及每块的id、shape_id、row、column；不会改动来源角色JSON。浏览器模式保存在本浏览器，本地管理服务模式写入角色覆盖资料并可同步；用户发行物只包含展示与计算，不包含拼图编辑器。
+验证：node scripts/check_terminal_puzzle.cjs；python -B scripts/check_terminal_storage.py；node scripts/check_terminal_browser.cjs（需要Playwright及Chrome）。
+
+空幕图鉴的「套装搭配」显示四种固定朝向驱动及数量，重复同形状不替代缺少的形状。12套形状和完整触发条件来自维护者提供的截图，补充清单位于data/knowledge/encyclopedia/cassette_set_requirements.json；原截图保存在data/mysqil/cassettes/maintainer-screenshots，来源站旧效果保留source_set_effects。重新导入空幕会合并补充清单，不丢失维护内容。管理员缺少形状时页面显示缺项，前端保存和本地服务都拒绝不完整4件套；切换推荐空幕或发现旧摆法无空幕身份时重算。
+
+## 多方案计算与库存匹配接口
+纯计算模块drive_layout_solver.js可在浏览器或Node复用，调用generateCandidates返回去重的形状数量组合；placementsFor枚举同一组合的坐标变体。终端绘图与管理编辑留在terminal_puzzle.js、terminal_editor.js。现有按型号重排在不同最优组合间循环，不增加界面板块。
+支持库存数量硬约束、具体驱动UID、固定/排除实例、标准化属性权重或评分回调，并明确返回候选截断与预算耗尽状态。目前未接玩家仓库UI；接口、单位、排序和边界见docs/drive-layout-solver.md。运行node scripts/check_drive_layout_solver.cjs验证不同Ⅱ型库存、加权实例选择和多解。

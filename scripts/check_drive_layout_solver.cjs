@@ -1,0 +1,31 @@
+const assert=require('node:assert/strict'),fs=require('node:fs');
+const e=require('../drive_layout_solver.js'),terminal=require('../data/knowledge/characters/canhong.json').terminal;
+const required=require('../data/knowledge/encyclopedia/sky_curtains.json').items.find(x=>x.id==='shiluo-guangmang').set_requirements.required_drives;
+const H2='cell2_style1_1',V2='cell2_style2_1',H3='cell3_style1_1';
+const request={terminal,required,preferredModel:3,allowPartial:false,limit:256};
+const all=e.generateCandidates(request);assert.equal(all.status,'ok');assert(all.searchComplete);
+assert.equal(new Set(all.candidates.map(c=>c.profileKey)).size,all.candidates.length,'deduplicate equivalent shape needs');
+const optimal=all.candidates.filter(c=>c.metrics.preferred===4);
+assert(optimal.some(c=>c.shape_counts[H2]===2),'two horizontal II feasible');
+const mixed=optimal.find(c=>c.shape_counts[H2]===1&&c.shape_counts[V2]===1);assert(mixed,'horizontal + vertical II feasible');
+for(const c of all.candidates){assert.equal(e.validate(terminal,c.plan).filled,20);for(const r of required)assert(c.shape_counts[r.shape_id]>=r.count);}
+const inventoryCounts={...mixed.shape_counts};
+const limited=e.generateCandidates({...request,inventoryCounts});assert.equal(limited.status,'ok');assert(limited.candidates.every(c=>c.shape_counts[H2]===1&&c.shape_counts[V2]===1));
+const unavailable=e.generateCandidates({...request,inventoryCounts:{}});assert.equal(unavailable.status,'infeasible');assert(unavailable.searchComplete);
+const timeout=e.generateCandidates({...request,maxNodes:1});assert.equal(timeout.status,'budget_exhausted');assert.equal(timeout.searchComplete,false);
+const inventory=[];for(const [shape,n] of Object.entries(inventoryCounts))for(let i=0;i<n+1;i++)inventory.push({uid:`${shape}-${i}`,shape_id:shape,stats:{crit_damage:i/100,atk:1}});
+const before=JSON.stringify(inventory),weights={crit_damage:100,atk:1};
+const matched=e.generateCandidates({...request,inventory,inventoryCounts,weights});assert(matched.candidates.length);
+for(const c of matched.candidates){const uids=c.plan.pieces.map(p=>p.inventory_uid);assert.equal(new Set(uids).size,uids.length);const assigned=uids.map(uid=>inventory.find(i=>i.uid===uid));assert.equal(c.metrics.equipmentScore,assigned.reduce((sum,i)=>sum+e.weightedItemScore(i,weights),0));}
+assert.equal(JSON.stringify(inventory),before,'solver does not rewrite inventory');
+const first=matched.candidates[0],fixed=first.plan.pieces[0];
+const bound=e.generateCandidates({...request,inventory,inventoryCounts,weights,fixed:[fixed]});assert(bound.candidates.length);assert(bound.candidates.every(c=>c.plan.pieces[0].inventory_uid===fixed.inventory_uid));
+const excluded=e.generateCandidates({...request,inventory,weights,excludedUids:[fixed.inventory_uid]});assert(excluded.candidates.every(c=>c.plan.pieces.every(p=>p.inventory_uid!==fixed.inventory_uid)));
+assert.throws(()=>e.generateCandidates({...request,inventory:[inventory[0],inventory[0]]}),/unique UID/);
+assert.throws(()=>e.generateCandidates({...request,inventoryCounts:{bad:1}}),/Invalid inventory count/);
+const spatial=all.candidates.map(c=>e.placementsFor(terminal,c.shape_counts,{limit:4})).find(r=>r.plans.length>1);assert(spatial && spatial.plans.length>1);assert.equal(new Set(spatial.plans.map(p=>p.pieces.map(p=>`${p.shape_id}@${p.row},${p.column}`).sort().join('|'))).size,spatial.plans.length);
+const quantity={layout:{rows:1,columns:4,active_slots:[1,2,3,4].map(column=>({row:1,column}))}};
+const weighted=e.generateCandidates({terminal:quantity,preferredModel:2,required:[],allowPartial:false,inventory:[{uid:'h2a',shape_id:H2,stats:{atk:2}},{uid:'h2b',shape_id:H2,stats:{atk:3}},{uid:'h4',shape_id:'cell4_style1_1',stats:{atk:100}}],weights:{atk:1},rankBy:'equipment_first'});
+assert.equal(weighted.candidates[0].metrics.equipmentScore,100,'explicit equipment-first ranking');
+fs.mkdirSync('build/terminal-qa',{recursive:true});fs.writeFileSync('build/terminal-qa/multi-candidates.json',JSON.stringify({candidateCount:all.candidates.length,optimalProfileCount:optimal.length,mixedIIExample:mixed,inventoryMatched:matched.candidates[0]},null,2));
+console.log(`Multi-candidate engine passed: ${all.candidates.length} feasible shape profiles (${optimal.length} optimal III profiles); mixed II stock, weighted UIDs, fixed/excluded instances, spatial variants and budgets.`);

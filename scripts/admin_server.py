@@ -32,7 +32,7 @@ MAX_JSON_BYTES = 8 * 1024 * 1024
 MAX_IMAGE_BYTES = 15 * 1024 * 1024
 SAFE_ROOT_FILES = {
     "index.html", "app.js", "styles.css", "team_manager.js",
-    "character_recommendations.js", "reactions.js", "admin_bridge.js",
+    "character_recommendations.js", "reactions.js", "admin_bridge.js", "terminal_puzzle.js", "terminal_editor.js", "drive_layout_solver.js",
 }
 ELEMENTS = {"光", "暗", "灵", "咒", "魂", "相"}
 ROLE_BASIC_FIELDS = {"rarity", "element", "cassette_type", "role", "position", "rating", "summary"}
@@ -167,6 +167,50 @@ def _validate_team_overrides(value: dict) -> dict:
     return {"schema_version": "1.0.0", "edits": checked, "removed": sorted(set(removed))}
 
 
+def _validate_terminal_puzzle(ident: str, value: dict, cassette_id=None) -> dict:
+    """Validate fixed catalog footprints against the character's actual terminal."""
+    footprints = {
+        "cell2_style1_1": [(0, 0), (0, 1)], "cell2_style2_1": [(0, 0), (1, 0)],
+        "cell3_style1_1": [(0, 0), (0, 1), (0, 2)], "cell3_style2_1": [(0, 0), (1, 0), (2, 0)],
+        "cell3_style3_1": [(0, 0), (0, 1), (1, 0)], "cell3_style4_1": [(0, 0), (0, 1), (1, 1)],
+        "cell3_style5_1": [(0, 0), (1, 0), (1, 1)], "cell3_style6_1": [(0, 1), (1, 0), (1, 1)],
+        "cell4_style1_1": [(0, 0), (0, 1), (0, 2), (0, 3)], "cell4_style2_1": [(0, 0), (1, 0), (2, 0), (3, 0)],
+        "cell4_style5_1": [(0, 1), (0, 2), (1, 0), (1, 1)], "cell4_style6_1": [(0, 1), (1, 0), (1, 1), (2, 0)],
+    }
+    character = json.loads((KNOWLEDGE / "characters" / (ident + ".json")).read_text(encoding="utf-8"))
+    terminal = character.get("terminal") or character.get("recommended", {}).get("cassette", {}).get("terminal") or {}
+    slots = {(slot["row"], slot["column"]) for slot in terminal.get("layout", {}).get("active_slots", [])}
+    if (not isinstance(value, dict) or type(value.get("version")) is not int or value["version"] != 1
+            or type(value.get("preferred_model")) is not int or value["preferred_model"] not in (0, 2, 3, 4)
+            or not isinstance(value.get("pieces"), list) or not slots or len(value["pieces"]) > len(slots) // 2):
+        raise ValueError("终端摆法格式无效")
+    occupied, ids, pieces = set(), set(), []
+    for piece in value["pieces"]:
+        if (not isinstance(piece, dict) or not isinstance(piece.get("id"), str)
+                or not re.fullmatch(r"D\d{2,3}", piece["id"]) or piece["id"] in ids
+                or not isinstance(piece.get("shape_id"), str) or piece["shape_id"] not in footprints
+                or type(piece.get("row")) is not int or type(piece.get("column")) is not int):
+            raise ValueError("终端驱动编号或形状无效")
+        cells = {(piece["row"] + r, piece["column"] + c) for r, c in footprints[piece["shape_id"]]}
+        if not cells <= slots or cells & occupied:
+            raise ValueError("终端驱动重叠或超出可用槽位")
+        occupied.update(cells)
+        ids.add(piece["id"])
+        pieces.append({key: piece[key] for key in ("id", "shape_id", "row", "column")})
+    cassette_id = cassette_id or value.get("cassette_id")
+    catalog = json.loads((KNOWLEDGE / "encyclopedia/sky_curtains.json").read_text(encoding="utf-8"))
+    cassette = next((item for item in catalog["items"] if item["id"] == cassette_id), None)
+    required = cassette.get("set_requirements", {}).get("required_drives") if cassette else None
+    if not required or value.get("cassette_id") != cassette_id:
+        raise ValueError("摆法与所选空幕不一致，请重新计算")
+    counts = {}
+    for piece in pieces:
+        counts[piece["shape_id"]] = counts.get(piece["shape_id"], 0) + 1
+    if any(counts.get(item["shape_id"], 0) < item["count"] for item in required):
+        raise ValueError("摆法未满足完整4件套所需形状")
+    return {"version": 1, "preferred_model": value["preferred_model"], "cassette_id": cassette_id, "pieces": pieces}
+
+
 def _validate_recommendations(value: dict) -> dict:
     if not isinstance(value, dict) or len(value) > 200:
         raise ValueError("角色推荐数据格式无效")
@@ -195,6 +239,8 @@ def _validate_recommendations(value: dict) -> dict:
                             or type(priority) is not int or not 1 <= priority <= 5):
                         raise ValueError("词条优先级必须为 1–5")
             record[kind] = copy.deepcopy(item)
+        if "terminal_puzzle" in recommendation:
+            record["terminal_puzzle"] = _validate_terminal_puzzle(ident, recommendation["terminal_puzzle"], (recommendation.get("cassette") or {}).get("id"))
         checked[ident] = record
     return checked
 

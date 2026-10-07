@@ -4250,6 +4250,268 @@
           "detail_source_url": "https://wiki.mysqil.com/cassettes/senlin-yinghuozhixin"
         }
       }
+    },
+    "zhenhong": {
+      "name": "真红",
+      "basic": {
+        "rarity": "S",
+        "element": "光",
+        "cassette_type": "聚合",
+        "role": "主C",
+        "position": "前排",
+        "rating": "T0",
+        "summary": "习惯与人保持距离的冷面行动派。"
+      },
+      "recommended": {
+        "weapon": {
+          "id": "chuanguo-yanhong-shenjing",
+          "name": "穿过胭红蜃景",
+          "rating": "S",
+          "source_url": "https://wiki.mysqil.com/weapons/chuanguo-yanhong-shenjing",
+          "asset": "data/resources/characters/zhenhong/weapons/chuanguo-yanhong-shenjing.webp"
+        },
+        "cassette": {
+          "id": "shiluo-guangmang",
+          "name": "失落光芒",
+          "category": "属性专属",
+          "cassette_type": "空幕卡带",
+          "element": "光",
+          "source_url": "https://wiki.mysqil.com/cassettes/shiluo-guangmang",
+          "icon": "data/resources/characters/zhenhong/cassettes/lost-radiance/gold.webp",
+          "set_effects": [
+            {
+              "pieces": 2,
+              "description": "光属性伤害 +10%"
+            },
+            {
+              "pieces": 4,
+              "description": "佩戴者施放必杀技后，造成的伤害无视 25% 防御力，持续 20 秒（不可叠加）"
+            }
+          ],
+          "acquisition": "兔子洞副本（光系产出关）",
+          "main_affix_pool": [
+            "攻击力（% / 固定值）",
+            "生命值（% / 固定值）",
+            "防御力（% / 固定值）",
+            "暴击率",
+            "暴击伤害",
+            "元素伤害（光/暗/灵/咒/魂/相）",
+            "倾陷强度",
+            "环合强度"
+          ],
+          "sub_affix_pool": [
+            "暴击率",
+            "暴击伤害",
+            "攻击力（%）",
+            "攻击力（固定值）",
+            "生命值（%）",
+            "生命值（固定值）",
+            "防御力（%）",
+            "防御力（固定值）",
+            "元素伤害加成",
+            "全伤害加成",
+            "倾陷强度",
+            "环合强度"
+          ],
+          "quality": [
+            {
+              "tier": "金",
+              "description": "毕业 · 数值上限最高"
+            },
+            {
+              "tier": "紫",
+              "description": "约为金色 80%"
+            },
+            {
+              "tier": "蓝",
+              "description": "前期过渡"
+            }
+          ],
+          "structure": {
+            "main_affix_count": 1,
+            "sub_affix_count": 4,
+            "rerollable": false
+          },
+          "recommended_main_affixes": [
+            {
+              "name": "暴击率",
+              "priority": 2
+            },
+            {
+              "name": "暴击伤害",
+              "priority": 4
+            }
+          ],
+          "recommended_sub_affixes": [
+            {
+              "name": "暴击率",
+              "priority": 2
+            },
+            {
+              "name": "暴击伤害",
+              "priority": 4
+            },
+            {
+              "name": "攻击力（%）",
+              "priority": 3
+            }
+          ],
+          "terminal": {
+            "id": "shiluo-guangmang-terminal",
+            "name": "[卡带] 属性",
+            "description": "每装配一个Ⅲ型驱动，使暴击伤害增加16%",
+            "effects": [
+              "暴击伤害 +16%"
+            ],
+            "source_type": "mysqil_page",
+            "layout": {
+              "rows": 7,
+              "columns": 7,
+              "active_slots": [
+                {
+                  "row": 2,
+                  "column": 1
+                },
+                {
+                  "row": 2,
+                  "column": 2
+                },
+                {
+                  "row": 2,
+                  "column": 3
+                },
+                {
+                  "row": 2,
+                  "column": 4
+                },
+                {
+                  "row": 2,
+                  "column": 5
+                },
+                {
+                  "row": 3,
+                  "column": 1
+                },
+                {
+                  "row": 3,
+                  "column": 2
+                },
+                {
+                  "row": 3,
+                  "column": 3
+                },
+                {
+                  "row": 3,
+                  "column": 4
+                },
+                {
+                  "row": 3,
+                  "column": 5
+                },
+                {
+                  "row": 4,
+                  "column": 1
+                },
+                {
+                  "row": 4,
+                  "column": 2
+                },
+                {
+                  "row": 4,
+                  "column": 3
+                },
+                {
+                  "row": 4,
+                  "column": 4
+                },
+                {
+                  "row": 4,
+                  "column": 5
+                },
+                {
+                  "row": 5,
+                  "column": 1
+                },
+                {
+                  "row": 5,
+                  "column": 2
+                },
+                {
+                  "row": 5,
+                  "column": 3
+                },
+                {
+                  "row": 5,
+                  "column": 4
+                },
+                {
+                  "row": 5,
+                  "column": 5
+                }
+              ],
+              "source_type": "mysqil_page"
+            },
+            "source_url": "https://wiki.mysqil.com/characters/zhenhong/"
+          }
+        },
+        "terminal_puzzle": {
+          "version": 1,
+          "preferred_model": 3,
+          "cassette_id": "shiluo-guangmang",
+          "pieces": [
+            {
+              "id": "D01",
+              "shape_id": "cell3_style1_1",
+              "row": 2,
+              "column": 1
+            },
+            {
+              "id": "D02",
+              "shape_id": "cell3_style2_1",
+              "row": 2,
+              "column": 4
+            },
+            {
+              "id": "D03",
+              "shape_id": "cell4_style2_1",
+              "row": 2,
+              "column": 5
+            },
+            {
+              "id": "D04",
+              "shape_id": "cell3_style4_1",
+              "row": 3,
+              "column": 1
+            },
+            {
+              "id": "D05",
+              "shape_id": "cell2_style2_1",
+              "row": 3,
+              "column": 3
+            },
+            {
+              "id": "D06",
+              "shape_id": "cell3_style5_1",
+              "row": 4,
+              "column": 1
+            },
+            {
+              "id": "D07",
+              "shape_id": "cell2_style1_1",
+              "row": 5,
+              "column": 3
+            }
+          ]
+        }
+      },
+      "terminal": {
+        "description": "每装配一个Ⅲ型驱动，使暴击伤害增加16%",
+        "effects": [
+          "暴击伤害 +16%"
+        ],
+        "source_type": "mysqil_page",
+        "source_url": "https://wiki.mysqil.com/characters/zhenhong/"
+      }
     }
   }
 }

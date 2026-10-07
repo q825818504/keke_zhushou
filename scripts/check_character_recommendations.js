@@ -15,6 +15,9 @@ const { chromium } = require(process.env.KEKE_PLAYWRIGHT_MODULE || "playwright")
     await page.goto("file:///D:/keke_zhushou/index.html");
     await page.waitForLoadState("networkidle");
     const defaults = await page.evaluate(() => window.characterKnowledge);
+    const correctTerminal = "每装配一个Ⅲ型驱动，使暴击伤害增加16%";
+    assert.equal(defaults.zhenhong.terminal.description, correctTerminal, "Zhenhong default terminal must match the live guide");
+    assert.equal(defaults.zhenhong.recommended.cassette.terminal.description, correctTerminal, "nested terminal must be corrected too");
     assert.deepEqual(await page.evaluate(() => Object.fromEntries(Object.values(characterData).map(data => [data.id, data.knowledge]))), defaults, "all 25 default records must remain identical");
     await page.evaluate(() => localStorage.setItem("keke-character-builds-v1", JSON.stringify({ zhenhong: { weapon: null, cassette: null } })));
     await reload();

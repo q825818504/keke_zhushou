@@ -13,6 +13,12 @@ const allKnowledge = Object.fromEntries(Object.entries(rawCharacterKnowledge).ma
     ...original,
     name: local.name || canonical.name || original.name,
     basic: { ...(original.basic || {}), ...(canonical.basic || {}), ...(local.basic || {}) },
+    terminal: canonical.terminal
+      ? { ...(original.terminal || {}), ...canonical.terminal }
+      : original.terminal,
+    recommended: canonical.terminal && original.recommended?.cassette
+      ? { ...original.recommended, cassette: { ...original.recommended.cassette, terminal: { ...(original.recommended.cassette.terminal || original.terminal || {}), ...canonical.terminal } } }
+      : original.recommended,
     drive_layout_image: Object.prototype.hasOwnProperty.call(local, "drive_layout_image")
       ? local.drive_layout_image
       : canonical.drive_layout_image || original.drive_layout_image || ""
@@ -260,6 +266,7 @@ function refreshRecommendationPreview(knowledge) {
   renderRecommended(knowledge);
   renderCassetteRecommendationEditor(knowledge);
   renderCassette(knowledge);
+  window.TerminalPuzzleEditor?.render(knowledge);
   setText("#cassetteSummaryLabel", knowledge.recommended?.cassette?.name || "暂无推荐卡带");
   renderUserTabPanel(knowledge);
 }
@@ -469,9 +476,9 @@ function renderTerminalDiagram(layout) {
   return `<div class="terminal-layout" role="img" aria-label="终端驱动槽位示意图" style="--terminal-columns:${columns};--terminal-rows:${rows}">${cells}</div>`;
 }
 
-function renderTerminalCard(terminal) {
+function renderTerminalCard(terminal, knowledge) {
   if (!terminal) return "";
-  const diagram = renderTerminalDiagram(terminal.layout);
+  const diagram = knowledge && window.TerminalPuzzle ? window.TerminalPuzzle.render(knowledge) : renderTerminalDiagram(terminal.layout);
   return `<section class="terminal-card">${diagram}<div class="terminal-copy"><span class="terminal-kicker">终端 · 驱动加成</span><b>${escapeHtml(terminal.name || "卡带属性")}</b><p>${escapeHtml(terminal.description || "")}</p><span class="terminal-effect">${(terminal.effects || []).map(escapeHtml).join(" · ")}</span></div></section>`;
 }
 
@@ -519,18 +526,20 @@ function resolveRecommendedCassette(knowledge) {
   const cassette = knowledge.recommended?.cassette;
   if (!cassette) return cassette;
   const catalogItem = (skyCurtainCatalog.items || []).find((item) => item.id === cassette.id);
-  return { ...cassette, acquisition: catalogItem?.acquisition || cassette.acquisition || "" };
+  return { ...cassette, acquisition: catalogItem?.acquisition || cassette.acquisition || "",
+    set_effects: catalogItem?.set_effects ? [{pieces:2,description:catalogItem.set_effects.two_piece},{pieces:4,description:catalogItem.set_effects.four_piece}] : cassette.set_effects,
+    set_requirements: catalogItem?.set_requirements };
 }
 
 function renderCassette(knowledge) {
   const target = $("#cassetteDetails");
   const data = resolveRecommendedCassette(knowledge);
   if (!target) return;
-  const terminalMarkup = renderTerminalCard(knowledge.terminal || data?.terminal);
+  const terminalMarkup = renderTerminalCard(knowledge.terminal || data?.terminal, knowledge);
   if (!data) { target.innerHTML = terminalMarkup || emptyState("没有来源卡带详情"); return; }
   const effects = data.set_effects || [];
   const structure = data.structure || {};
-  target.innerHTML = '<div class="cassette-summary">' + (data.icon ? '<img src="' + escapeHtml(importedAssetUrl({ local_path: data.icon })) + '" alt="' + escapeHtml(data.name) + '">' : '<span class="asset-placeholder">带</span>') + '<div><b>' + escapeHtml(data.name) + '</b><span>' + [data.category, data.cassette_type, data.element && `${data.element}属性`].filter(Boolean).map(escapeHtml).join(" · ") + '</span><small>' + escapeHtml(data.acquisition || "获取方式待补充") + '</small></div></div><div class="set-effects">' + (effects.length ? effects.map((effect) => '<div><b>' + effect.pieces + '件套</b><span>' + escapeHtml(effect.description) + '</span></div>').join("") : emptyState("暂无套装效果")) + '</div><div class="recommended-affixes"><div class="affix-section"><b>推荐主属性</b><div class="affix-ranking">' + renderAffixRanking(recommendedAffixes(data, "main")) + '</div></div><div class="affix-section"><b>推荐副属性</b><div class="affix-ranking">' + renderAffixRanking(recommendedAffixes(data, "sub")) + '</div></div><small class="affix-source-note">推荐结果由维护者配置；原始随机词条池仅作为编辑参考。</small></div>' + terminalMarkup + (structure.main_affix_count || structure.sub_affix_count ? '<div class="quality-note">' + (structure.main_affix_count ?? "—") + ' 个主属性 + ' + (structure.sub_affix_count ?? "—") + ' 个副属性 · ' + (structure.rerollable === false ? '词条不可洗练' : '洗练规则待补充') + '</div>' : '');
+  target.innerHTML = '<div class="cassette-summary">' + (data.icon ? '<img src="' + escapeHtml(importedAssetUrl({ local_path: data.icon })) + '" alt="' + escapeHtml(data.name) + '">' : '<span class="asset-placeholder">带</span>') + '<div><b>' + escapeHtml(data.name) + '</b><span>' + [data.category, data.cassette_type, data.element && `${data.element}属性`].filter(Boolean).map(escapeHtml).join(" · ") + '</span><small>' + escapeHtml(data.acquisition || "获取方式待补充") + '</small></div></div><div class="set-effects">' + (effects.length ? effects.map((effect) => '<div><b>' + effect.pieces + '件套</b><span>' + escapeHtml(effect.description) + '</span></div>').join("") : emptyState("暂无套装效果")) + '</div><div class="recommended-affixes"><div class="affix-section"><b>推荐主属性</b><div class="affix-ranking">' + renderAffixRanking(recommendedAffixes(data, "main")) + '</div></div><div class="affix-section"><b>推荐副属性</b><div class="affix-ranking">' + renderAffixRanking(recommendedAffixes(data, "sub")) + '</div></div><small class="affix-source-note">推荐结果由维护者配置；原始随机词条池仅作为编辑参考。</small></div>' + window.TerminalPuzzle.renderRequirements(window.TerminalPuzzle.cassetteOf(knowledge)) + terminalMarkup + (structure.main_affix_count || structure.sub_affix_count ? '<div class="quality-note">' + (structure.main_affix_count ?? "—") + ' 个主属性 + ' + (structure.sub_affix_count ?? "—") + ' 个副属性 · ' + (structure.rerollable === false ? '词条不可洗练' : '洗练规则待补充') + '</div>' : '');
 }
 
 const DRIVE_LAYOUT_DB = "keke-character-drive-layouts";
@@ -825,6 +834,7 @@ function updateImportedPanel(data) {
   renderSkillTargets(knowledge);
   renderCassetteRecommendationEditor(knowledge);
   renderCassette(knowledge);
+  window.TerminalPuzzleEditor?.render(knowledge);
   renderDriveLayout(knowledge);
   calculateMaterials(knowledge);
 
@@ -1053,7 +1063,7 @@ function renderSkyCurtainDetail() {
     return `<section class="arc-drive-description sky-curtain-pool"><h3>${escapeHtml(title)}</h3>${pool?.note ? `<p>${escapeHtml(pool.note)}</p>` : ""}<div class="sky-curtain-chip-list">${values.length ? values.map((value) => `<span class="sky-curtain-chip">${escapeHtml(value)}</span>`).join("") : `<span class="empty-state">暂无词条池。</span>`}</div></section>`;
   };
   const tierNotes = item.quality?.tiers || [];
-  target.innerHTML = `<div class="arc-drive-detail-head"><div class="arc-drive-detail-image">${image?.local_path ? `<img src="${escapeHtml(image.local_path)}" alt="${escapeHtml(item.name)}·${escapeHtml(qualityLabels[selectedSkyCurtainQuality] || "金")}">` : "幕"}</div><div class="arc-drive-detail-title"><span class="sky-curtain-category-chip">${escapeHtml(item.category || "空幕")}${item.element ? ` · ${escapeHtml(item.element)}` : ""}</span><h2>${escapeHtml(item.name)}</h2></div></div><section class="arc-drive-detail-section"><div class="arc-detail-section-head"><div><h3>品质图片</h3><small>金、紫、蓝品质图</small></div></div><div class="sky-curtain-quality-selector" role="group" aria-label="空幕品质图片">${Object.entries(qualityLabels).map(([qualityId, label]) => `<button type="button" class="${selectedSkyCurtainQuality === qualityId ? "is-active" : ""}" data-sky-quality="${qualityId}" aria-pressed="${selectedSkyCurtainQuality === qualityId}">${label}</button>`).join("")}</div></section><section class="arc-drive-detail-section"><div class="arc-detail-section-head"><div><h3>套装效果</h3><small>两件套与四件套效果</small></div></div><div class="sky-curtain-effect-grid"><div class="sky-curtain-effect-card"><span>2 件套</span><p>${escapeHtml(effects.two_piece || "暂无效果记录。")}</p></div><div class="sky-curtain-effect-card"><span>4 件套</span><p>${escapeHtml(effects.four_piece || "暂无效果记录。")}</p></div></div>${item.acquisition ? `<div class="arc-drive-description"><h3>获取途径</h3><p>${escapeHtml(item.acquisition)}</p></div>` : ""}</section>${renderPool("主属性可能词条", item.main_affix_pool)}${renderPool("副属性可能词条", item.sub_affix_pool)}<section class="arc-drive-description sky-curtain-quality-note"><h3>品质说明</h3>${item.quality?.role_note ? `<p><b>品质定位：</b>${escapeHtml(item.quality.role_note)}</p>` : ""}${item.quality?.note ? `<p>${escapeHtml(item.quality.note)}</p>` : ""}${tierNotes.length ? `<ul>${tierNotes.map((tier) => `<li><b>${escapeHtml(tier.quality)}</b><span>${escapeHtml(tier.description)}</span></li>`).join("")}</ul>` : ""}</section>${item.overview ? `<section class="arc-drive-overview"><h3>套装概述</h3><p>${escapeHtml(item.overview)}</p></section>` : ""}`;
+  target.innerHTML = `<div class="arc-drive-detail-head"><div class="arc-drive-detail-image">${image?.local_path ? `<img src="${escapeHtml(image.local_path)}" alt="${escapeHtml(item.name)}·${escapeHtml(qualityLabels[selectedSkyCurtainQuality] || "金")}">` : "幕"}</div><div class="arc-drive-detail-title"><span class="sky-curtain-category-chip">${escapeHtml(item.category || "空幕")}${item.element ? ` · ${escapeHtml(item.element)}` : ""}</span><h2>${escapeHtml(item.name)}</h2></div></div><section class="arc-drive-detail-section"><div class="arc-detail-section-head"><div><h3>品质图片</h3><small>金、紫、蓝品质图</small></div></div><div class="sky-curtain-quality-selector" role="group" aria-label="空幕品质图片">${Object.entries(qualityLabels).map(([qualityId, label]) => `<button type="button" class="${selectedSkyCurtainQuality === qualityId ? "is-active" : ""}" data-sky-quality="${qualityId}" aria-pressed="${selectedSkyCurtainQuality === qualityId}">${label}</button>`).join("")}</div></section>${window.TerminalPuzzle.renderRequirements(item)}<section class="arc-drive-detail-section"><div class="arc-detail-section-head"><div><h3>套装效果</h3><small>两件套与四件套效果</small></div></div><div class="sky-curtain-effect-grid"><div class="sky-curtain-effect-card"><span>2 件套</span><p>${escapeHtml(effects.two_piece || "暂无效果记录。")}</p></div><div class="sky-curtain-effect-card"><span>4 件套</span><p>${escapeHtml(effects.four_piece || "暂无效果记录。")}</p></div></div>${item.acquisition ? `<div class="arc-drive-description"><h3>获取途径</h3><p>${escapeHtml(item.acquisition)}</p></div>` : ""}</section>${renderPool("主属性可能词条", item.main_affix_pool)}${renderPool("副属性可能词条", item.sub_affix_pool)}<section class="arc-drive-description sky-curtain-quality-note"><h3>品质说明</h3>${item.quality?.role_note ? `<p><b>品质定位：</b>${escapeHtml(item.quality.role_note)}</p>` : ""}${item.quality?.note ? `<p>${escapeHtml(item.quality.note)}</p>` : ""}${tierNotes.length ? `<ul>${tierNotes.map((tier) => `<li><b>${escapeHtml(tier.quality)}</b><span>${escapeHtml(tier.description)}</span></li>`).join("")}</ul>` : ""}</section>${item.overview ? `<section class="arc-drive-overview"><h3>套装概述</h3><p>${escapeHtml(item.overview)}</p></section>` : ""}`;
 }
 
 function initSkyCurtainCatalog() {
@@ -1384,6 +1394,11 @@ function bindSave() {
         cassette[key] = recommendedAffixes(cassette, kind).map(item => ({ ...item, priority: normalizeAffixPriority(item.priority) }));
       }
     }
+    const puzzlePlan = window.TerminalPuzzle?.resolve(knowledge);
+    if (knowledge.recommended?.terminal_puzzle && puzzlePlan && !window.TerminalPuzzle.setStatus(knowledge,puzzlePlan).complete) {
+      notify("摆法尚未满足完整4件套，请补齐缺少形状后再保存"); return;
+    }
+    if (knowledge.recommended?.terminal_puzzle && puzzlePlan) knowledge.recommended.terminal_puzzle = JSON.parse(JSON.stringify(puzzlePlan));
     if (!window.CharacterRecommendations.save(knowledge)) {
       notify("推荐保存失败，修改仍保留在编辑器中");
       return;
@@ -1754,7 +1769,7 @@ function renderUserBuild(knowledge) {
   const cassette = resolveRecommendedCassette(knowledge);
   const mainAffixes = renderAffixRanking(recommendedAffixes(cassette, "main"));
   const subAffixes = renderAffixRanking(recommendedAffixes(cassette, "sub"));
-  return `<section class="user-section-heading"><div><span class="user-section-kicker">配装建议</span><h2>从一套舒服的配置开始。</h2><p>推荐属性按优先级排列；同一优先级代表近似选择，不等于唯一答案。</p></div></section><div class="user-build-layout"><section class="user-surface user-build-large"><div class="user-build-grid">${userBuildCard(recommended.weapon, "推荐武器", "武", recommended.weapon?.rating ? `${recommended.weapon.rating}级推荐` : "资料已整理")}${userBuildCard(cassette, "推荐空幕", "幕", cassette?.acquisition || "获取方式待补充")}</div><div class="user-affix-groups"><div class="user-affix-group"><span>推荐主属性</span><div class="user-affix-ranking">${mainAffixes}</div></div><div class="user-affix-group"><span>推荐副属性</span><div class="user-affix-ranking">${subAffixes}</div></div></div><div class="user-source-note"><i></i><span>原始可能词条池与维护者推荐已分开保存。</span></div></section><div class="user-surface user-empty">暂无终端与细节资料。</div></div>`;
+  return `<section class="user-section-heading"><div><span class="user-section-kicker">配装建议</span><h2>从一套舒服的配置开始。</h2><p>推荐属性按优先级排列；同一优先级代表近似选择，不等于唯一答案。</p></div></section><div class="user-build-layout"><section class="user-surface user-build-large"><div class="user-build-grid">${userBuildCard(recommended.weapon, "推荐武器", "武", recommended.weapon?.rating ? `${recommended.weapon.rating}级推荐` : "资料已整理")}${userBuildCard(cassette, "推荐空幕", "幕", cassette?.acquisition || "获取方式待补充")}</div><div class="user-affix-groups"><div class="user-affix-group"><span>推荐主属性</span><div class="user-affix-ranking">${mainAffixes}</div></div><div class="user-affix-group"><span>推荐副属性</span><div class="user-affix-ranking">${subAffixes}</div></div></div><div class="user-source-note"><i></i><span>原始可能词条池与维护者推荐已分开保存。</span></div></section>${window.TerminalPuzzle?.terminalOf(knowledge) ? `<section class="user-surface user-terminal-reference">${window.TerminalPuzzle.render(knowledge)}<div class="terminal-copy"><span class="terminal-kicker">终端 · 驱动加成</span><b>${escapeHtml(knowledge.terminal?.name || "卡带属性")}</b><p>${escapeHtml(knowledge.terminal?.description || "")}</p></div></section>` : `<div class="user-surface user-empty">暂无终端与细节资料。</div>`}</div>`;
 }
 
 function renderUserCultivation(knowledge) {
@@ -2233,7 +2248,7 @@ function renderUserSkyCurtainRoute() {
   };
   const effects = selected?.set_effects || {};
   const tierNotes = selected?.quality?.tiers || [];
-  const detail = selected ? '<article class="user-library-detail"><div class="user-library-detail-head"><div class="user-library-detail-image">' + (image?.local_path ? '<img src="' + escapeHtml(image.local_path) + '" alt="' + escapeHtml(selected.name) + '">' : "幕") + '</div><div><span class="user-result-pill">' + escapeHtml(selected.category || "空幕") + (selected.element ? " · " + escapeHtml(selected.element) : "") + '</span><h2>' + escapeHtml(selected.name) + '</h2><p>' + escapeHtml(selected.overview || "查看套装效果与词条详情。") + '</p>' + '</div></div><section class="arc-drive-detail-section"><div class="arc-detail-section-head"><div><h3>品质图片</h3><small>切换品质查看对应图像</small></div></div><div class="sky-curtain-quality-selector" role="group" aria-label="用户端空幕品质">' + qualityButtons + '</div></section><div class="user-sky-effects"><div><span>2 件套</span><p>' + escapeHtml(effects.two_piece || "暂无") + '</p></div><div><span>4 件套</span><p>' + escapeHtml(effects.four_piece || "暂无") + '</p></div></div>' + (selected.acquisition ? '<section class="user-library-copy"><span>获取途径</span><p>' + escapeHtml(selected.acquisition) + '</p></section>' : "") + renderPool("主属性可能词条", selected.main_affix_pool) + renderPool("副属性可能词条", selected.sub_affix_pool) + '<section class="user-library-copy"><span>品质说明</span>' + (selected.quality?.role_note ? '<p><b>品质定位：</b>' + escapeHtml(selected.quality.role_note) + '</p>' : "") + (selected.quality?.note ? '<p>' + escapeHtml(selected.quality.note) + '</p>' : "") + (tierNotes.length ? '<ul>' + tierNotes.map((tier) => '<li><b>' + escapeHtml(tier.quality) + '</b><span>' + escapeHtml(tier.description) + '</span></li>').join("") + '</ul>' : "") + '</section></article>' : '<div class="user-empty">没有找到符合条件的空幕。</div>';
+  const detail = selected ? '<article class="user-library-detail"><div class="user-library-detail-head"><div class="user-library-detail-image">' + (image?.local_path ? '<img src="' + escapeHtml(image.local_path) + '" alt="' + escapeHtml(selected.name) + '">' : "幕") + '</div><div><span class="user-result-pill">' + escapeHtml(selected.category || "空幕") + (selected.element ? " · " + escapeHtml(selected.element) : "") + '</span><h2>' + escapeHtml(selected.name) + '</h2><p>' + escapeHtml(selected.overview || "查看套装效果与词条详情。") + '</p>' + '</div></div><section class="arc-drive-detail-section"><div class="arc-detail-section-head"><div><h3>品质图片</h3><small>切换品质查看对应图像</small></div></div><div class="sky-curtain-quality-selector" role="group" aria-label="用户端空幕品质">' + qualityButtons + '</div></section>' + window.TerminalPuzzle.renderRequirements(selected) + '<div class="user-sky-effects"><div><span>2 件套</span><p>' + escapeHtml(effects.two_piece || "暂无") + '</p></div><div><span>4 件套</span><p>' + escapeHtml(effects.four_piece || "暂无") + '</p></div></div>' + (selected.acquisition ? '<section class="user-library-copy"><span>获取途径</span><p>' + escapeHtml(selected.acquisition) + '</p></section>' : "") + renderPool("主属性可能词条", selected.main_affix_pool) + renderPool("副属性可能词条", selected.sub_affix_pool) + '<section class="user-library-copy"><span>品质说明</span>' + (selected.quality?.role_note ? '<p><b>品质定位：</b>' + escapeHtml(selected.quality.role_note) + '</p>' : "") + (selected.quality?.note ? '<p>' + escapeHtml(selected.quality.note) + '</p>' : "") + (tierNotes.length ? '<ul>' + tierNotes.map((tier) => '<li><b>' + escapeHtml(tier.quality) + '</b><span>' + escapeHtml(tier.description) + '</span></li>').join("") + '</ul>' : "") + '</section></article>' : '<div class="user-empty">没有找到符合条件的空幕。</div>';
   target.innerHTML = '<div class="user-route-intro"><div><span class="user-section-kicker">图鉴</span><h1 id="userSkyCurtainTitle">空幕</h1><p>查看套装效果、获取途径和可能词条。</p></div><div class="user-route-status"><i></i><span>' + items.length + ' / ' + (skyCurtainCatalog.items || []).length + ' 套</span></div></div><div class="user-library-toolbar"><label class="user-search"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="1.7"/><path d="m16 16 4 4" stroke="currentColor" stroke-linecap="round"/></svg><input id="userSkyCurtainSearch" type="search" value="' + escapeHtml(userSkyCurtainSearchQuery) + '" placeholder="搜索空幕名称、效果或属性" aria-label="搜索空幕"></label></div><div class="user-library-layout"><div class="user-library-grid" aria-label="用户端空幕列表">' + (cards || '<div class="user-empty">没有找到符合条件的空幕。</div>') + '</div>' + detail + '</div>';
 }
 

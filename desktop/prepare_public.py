@@ -38,6 +38,8 @@ def prepare_public() -> Path:
         target = OUTPUT / relative
         target.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(ROOT / relative, target)
+    (OUTPUT / "drive_layout_solver.js").write_bytes((ROOT / "drive_layout_solver.js").read_bytes())
+    (OUTPUT / "terminal_puzzle.js").write_bytes((ROOT / "terminal_puzzle.js").read_bytes())
     (OUTPUT / "styles.css").write_bytes((ROOT / "styles.css").read_bytes())
     (OUTPUT / "desktop.css").write_bytes((ROOT / "desktop/desktop.css").read_bytes())
     (OUTPUT / "desktop.js").write_bytes((ROOT / "desktop/user_chrome.js").read_bytes())
@@ -46,13 +48,14 @@ def prepare_public() -> Path:
         'const recommended = JSON.parse(JSON.stringify(original.recommended || {}));'
         'const override = window.characterOverrides?.characters?.[original.id]?.recommended;'
         'for (const kind of ["weapon","cassette"]) if (override?.[kind]) recommended[kind] = JSON.parse(JSON.stringify(override[kind]));'
+        'if (override?.terminal_puzzle) recommended.terminal_puzzle = JSON.parse(JSON.stringify(override.terminal_puzzle));'
         'return { ...original, recommended }; } };', encoding="utf-8")
     subprocess.run(["node", str(ROOT / "desktop/compile_user.cjs"), str(OUTPUT / "app.js")], check=True)
     nav = '<nav id="userPrimaryNav" aria-label="功能导航">'
     for route, label in [("team", "自动配队"), ("characters", "角色"), ("arc-drives", "弧盘"), ("cassettes", "空幕"), ("drive-blocks", "驱动块")]:
         nav += '<button class="user-primary-nav-item" type="button" data-user-route="' + route + '">' + label + '</button>'
     nav += "</nav>"
-    scripts = "".join('<script src="' + path + '"></script>' for path in bundles + ["recommendations.js", "app.js"])
+    scripts = "".join('<script src="' + path + '"></script>' for path in bundles + ["recommendations.js", "drive_layout_solver.js", "terminal_puzzle.js", "app.js"])
     html = (
         '<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">'
         '<meta name="viewport" content="width=device-width,initial-scale=1">'

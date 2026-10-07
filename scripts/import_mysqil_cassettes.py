@@ -257,6 +257,25 @@ def main():
         "source_license_url": manifest.get("source_license_url", LICENSE_URL),
     }
     entries = [import_item(item, provenance) for item in items]
+    # Curated screenshot facts augment imported pages; re-import must retain them.
+    supplements_path = ROOT / "data/knowledge/encyclopedia/cassette_set_requirements.json"
+    if supplements_path.exists():
+        supplements = json.loads(supplements_path.read_text(encoding="utf-8"))["items"]
+        driver_ids = {item["id"] for item in json.loads((ROOT / "data/knowledge/encyclopedia/driver_blocks.json").read_text(encoding="utf-8"))["items"]}
+        if set(supplements) - {entry["id"] for entry in entries}:
+            raise ValueError("Screenshot supplement contains unknown cassette IDs")
+        for entry in entries:
+            supplement = supplements.get(entry["id"])
+            if not supplement:
+                continue
+            required = supplement["required_drives"]
+            if sum(r["count"] for r in required) != 4 or any(r["shape_id"] not in driver_ids or type(r["count"]) is not int or r["count"] < 1 for r in required):
+                raise ValueError("Invalid four-piece drive requirements")
+            entry["source_set_effects"] = entry["set_effects"]
+            entry["set_effects"] = supplement["set_effects"]
+            entry["set_requirements"] = {"required_drives": required, "source": {key: value for key, value in supplement["source"].items() if key != "image_path"}}
+            entry["screenshot_name"] = supplement["display_name"]
+
     if len(entries) != expected_count:
         raise ValueError("Catalog import incomplete")
     if any(not entry["set_effects"]["two_piece"] or not entry["set_effects"]["four_piece"] for entry in entries):
