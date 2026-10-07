@@ -41,8 +41,8 @@ window.CharacterRecommendations = (() => {
       icon: item.images?.gold?.local_path || item.images?.purple?.local_path || item.images?.blue?.local_path || "",
       acquisition: item.acquisition || "", main_affix_pool: main, sub_affix_pool: sub,
       set_effects: [{ pieces: 2, description: item.set_effects?.two_piece || "" }, { pieces: 4, description: item.set_effects?.four_piece || "" }].filter(effect => effect.description),
-      recommended_main_affixes: clone((previous.recommended_main_affixes || []).filter(affix => main.includes(affix.name))),
-      recommended_sub_affixes: clone((previous.recommended_sub_affixes || []).filter(affix => sub.includes(affix.name)))
+      recommended_main_affixes: clone(previous.recommended_main_affixes || []),
+      recommended_sub_affixes: clone(previous.recommended_sub_affixes || [])
     };
   }
   function save(knowledge) {

@@ -436,3 +436,17 @@ Phase 27 - External-source UI cleanup; in progress.
 - [x] Commit and push the implementation and planning records to origin/main.
 - [x] Verify remote/local equality and record delivery.
 - **Status:** complete; feature e063f6f pushed to origin/main, local/remote equality and clean worktree verified.
+
+### Phase 31: NTE Drive Calculator 源码研究
+- [x] 固定公开提交、下载全部公开文本源码及组件清单。
+- [x] 静态覆盖全部模块并追踪业务核心调用链。
+- [x] 交付中文模块运行逻辑、源码索引、可可助手借鉴方案。
+- Status: complete。交付28节主报告、调用链与接口建议、逐文件/SQL索引；仅静态分析，未运行上游应用或测试。材料位于 artifacts/nte-analysis-2026-10-07。
+
+### Phase 32: 阵容重复检测与可视化确认
+- [x] 核对阵容管理的数据结构、保存入口和编辑/导入流程。
+- [x] 按角色 ID 集合比较阵容，忽略角色顺序；编辑时排除当前阵容自身。
+- [x] 保存发现重复时显示确认界面，并以头像和角色名并排对比已有阵容与当前草稿。
+- [x] 支持取消保存或明确选择仍然保存；多条重复时展示所有匹配阵容。
+- [ ] 自动化或浏览器交互验证（本轮未运行）。
+- **Status:** implementation complete locally; execution verification not run。

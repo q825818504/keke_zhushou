@@ -617,3 +617,17 @@ Phase 25: importer completed with exact article text coverage; all local images 
 - Kept author/license credit as plain text where the UI displays redistributed CC BY-NC-SA material; no clickable external navigation remains in the app templates.
 - `node --check app.js`, `node --check reactions.js`, `node --check team_manager.js`: passed. UI link/source-copy audit: no matches. `git diff --check`: passed.
 - Browser interaction was not run. Git commit/push was not requested in this turn and was not performed.
+
+2026-10-07：用户请求分析NTE开源项目。固定提交0e7a6b4e8e61d7a288e520bbc192a411d68c2fb1，下载1792份文本及61份补充文件无失败。git clone大型二进制传输无进展，已取消，改用固定提交raw文本。发现统一规划约定后将独立记录并入现有计划的artifacts，不保留同级计划。上游代码未执行。
+
+Phase 31完成：主报告495行、调用链/接口建议、约1MiB逐文件索引、SQL表索引及身份验证JSON已生成。没有运行上游程序/测试/构建/驱动或游戏，也未复制修改应用功能。
+错误记录：普通沙箱命令/node初始化失败，获准使用沙箱外命令；git ownership用命令级safe.directory解决；克隆大型二进制无进展改固定raw下载；早期读取猜测文件路径不存在，改实际树索引确认；apply_patch因环境写入失败，改PowerShell仅向工作区写报告；一次JS模板内嵌反引号语法失败，修正后生成索引。所有文本下载最终零失败、全部Git摘要匹配、报告链接零缺失。已清理仅含.git的未完成克隆目录。
+
+## Session: 2026-10-07 — Phase 32
+- 用户反馈攻略阵容保存没有检测与已有阵容重复；新要求明确顺序不影响重复判断，命中后须询问是否继续并提供图形对比。
+- 计划追加第一次因 Phase 31 行末锚点不匹配而失败，文件未修改；读取真实文件末尾后调整为精确锚点。
+- 接下来检查阵容保存、编辑、存储和角色身份数据流，避免更改既有阵容数据；“仍要保存”必须由用户明确点击触发。
+- 实现 `team_manager.js` 顺序无关的四角色 ID 判重：排除当前编辑记录，显示所有其他相同角色组成；并排头像按名称对齐，标出双方主C。
+- 新增响应式原生确认弹窗，操作为“返回修改”或“仍要保存”；取消或 Escape 不写入，继续才调用现有存储，写入错误保留在弹窗中。
+- `styles.css` 增加遮罩、比较卡片、角色头像布局和窄屏堆叠样式。未改动攻略阵容源数据或本地保存内容。
+- 人工审阅本次 `team_manager.js` 与 `styles.css` 差异；本轮未运行自动化或浏览器验证。未提交或推送。

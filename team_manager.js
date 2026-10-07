@@ -62,6 +62,7 @@ let guideSearch = "";
 let guideFilter = "all";
 let guideRosterSearch = "";
 let guideUndo = null;
+let guidePendingDuplicateDraft = null;
 
 function guideBlank() {
   return { id: "local-" + (window.crypto?.randomUUID?.() || Date.now() + "-" + Math.random().toString(36).slice(2)), source_core_character_id: "", member_character_ids: ["", "", "", ""], source_archetype: "", source_order: 0, source_visibility: "local_editor", editorial: { active: true, status: "reviewed", tags: [], notes: "", updated_at: null } };
@@ -94,6 +95,57 @@ function showGuideManager() {
 function guideCharacter(id) {
   const name = userTeamNameById[id];
   return name ? { name, ...characterData[name] } : null;
+}
+function guideCompositionKey(team) {
+  const ids = team?.member_character_ids;
+  if (!Array.isArray(ids) || ids.length !== 4 || ids.some(id => typeof id !== "string" || !id) || new Set(ids).size !== 4) return "";
+  return [...ids].sort().join("\u001f");
+}
+function guideFindCompositionDuplicates(team) {
+  const key = guideCompositionKey(team);
+  if (!key) return [];
+  return window.teamGuideStore.all().filter(record => record.id !== team.id && guideCompositionKey(record) === key);
+}
+function guideDuplicateSideMarkup(team, side) {
+  const ids = [...team.member_character_ids].sort((left, right) =>
+    (guideCharacter(left)?.name || left).localeCompare(guideCharacter(right)?.name || right, "zh-CN"));
+  return '<section class="guide-duplicate-side"><header><span>' + side + '</span><b>' + escapeHtml(team.source_archetype || "未命名阵容") + '</b></header><div class="guide-duplicate-members">' + ids.map(id => {
+    const character = guideCharacter(id);
+    const role = character ? userTeamRoleLabel(character) + " · " + character.element : "角色资料已不可用";
+    const isCore = id === team.source_core_character_id;
+    return '<article class="guide-duplicate-member' + (isCore ? " is-core" : "") + '"><div class="guide-duplicate-avatar">' + guideAvatar(id) + '</div><b>' + escapeHtml(character?.name || id) + '</b><small>' + escapeHtml(role) + '</small>' + (isCore ? '<span class="guide-duplicate-core">主C</span>' : "") + '</article>';
+  }).join("") + '</div></section>';
+}
+function guideDuplicateComparisonsMarkup(records, draft) {
+  return records.map(record => '<article class="guide-duplicate-comparison"><div class="guide-duplicate-match-label"><b>角色组成相同</b><span>已忽略角色顺序</span></div><div class="guide-duplicate-pair">' + guideDuplicateSideMarkup(record, "已有阵容") + '<span class="guide-duplicate-vs" aria-hidden="true">↔</span>' + guideDuplicateSideMarkup(draft, "当前草稿") + '</div></article>').join("");
+}
+function guidePrepareDraftForSave() {
+  const form = $("#guideForm");
+  guideDraft.source_archetype = form.elements.namedItem("title").value.trim();
+  guideDraft.editorial = {
+    ...guideDraft.editorial,
+    notes: form.elements.namedItem("notes").value,
+    active: form.elements.namedItem("active").checked,
+    status: "reviewed",
+    updated_at: new Date().toISOString()
+  };
+}
+function guidePersistDraft() {
+  try {
+    window.teamGuideStore.save(guideDraft);
+    guideDirty = false;
+    guidePendingDuplicateDraft = null;
+    const dialog = $("#guideDuplicateDialog");
+    if (dialog?.open) dialog.close();
+    renderGuideManager();
+    notify("已保存，阵容已同步到用户端攻略库");
+    return true;
+  } catch (error) {
+    const duplicateError = $("#guideDuplicateDialog[open] #guideDuplicateError");
+    if (duplicateError) duplicateError.textContent = error.message;
+    else $("#guideError").textContent = error.message;
+    return false;
+  }
 }
 function guideAvatar(id) {
   const c = guideCharacter(id);
@@ -128,8 +180,10 @@ function renderGuideManager() {
   const root = $("#guideManagerView");
   root.innerHTML = '<div class="guide-heading"><div><span class="user-section-kicker">阵容工作台</span><h1>攻略阵容</h1><p>把角色拖到队伍里，让你的攻略成为配队依据。</p></div><div class="guide-actions"><button type="button" class="ghost-button" data-guide-export>导出阵容</button><label class="ghost-button guide-import">导入 JSON<input id="guideImport" type="file" accept=".json,application/json"></label><button type="button" class="primary-button" data-guide-new>＋ 新建阵容</button></div></div>' +
     '<div class="guide-workspace"><section class="guide-editor user-surface"><div class="guide-section-head"><h2>阵容编辑</h2><span id="guideDraftStatus" role="status"></span></div><p class="guide-help">拖入角色填充四个位置；拖动队内角色可交换位置。也可先点击位置，再点击角色。</p><div class="guide-board" id="guideBoard"></div><form id="guideForm"><label>阵容名称<input name="title" maxlength="80" required placeholder="例如：真红 · 盈蓄队" value="' + escapeHtml(guideDraft.source_archetype) + '"></label><label>攻略说明<textarea name="notes" maxlength="3000" rows="4" placeholder="适用场景、出场顺序、关键养成要求…">' + escapeHtml(guideDraft.editorial?.notes || "") + '</textarea></label><label class="guide-active-label"><input type="checkbox" name="active"' + (guideDraft.editorial?.active !== false ? " checked" : "") + '>启用后纳入用户端攻略阵容</label><div class="guide-save-bar"><small>保存至当前浏览器；可导出备份。</small><button class="primary-button" type="submit">保存阵容</button></div><p id="guideError" class="guide-error" role="alert"></p></form></section><aside class="guide-roster-panel user-surface"><div class="guide-section-head"><h2>角色库</h2><span>' + Object.keys(characterData).length + ' 位</span></div><input class="guide-search" id="guideRosterSearch" type="search" placeholder="搜索角色" value="' + escapeHtml(guideRosterSearch) + '" aria-label="搜索角色"><div class="guide-roster" id="guideRoster"></div></aside></div>' +
-    '<section class="guide-library user-surface"><div class="guide-section-head"><div><h2>已有攻略阵容</h2><span id="guideListCount"></span></div><div class="guide-library-tools"><input class="guide-search" id="guideSearch" type="search" placeholder="搜索名称、角色或攻略" aria-label="搜索阵容" value="' + escapeHtml(guideSearch) + '"><select id="guideFilter" aria-label="筛选阵容状态"><option value="all">全部状态</option><option value="active">已启用</option><option value="inactive">已停用</option></select><button type="button" data-guide-undo' + (!guideUndo ? " hidden" : "") + '>撤销删除</button></div></div><div class="guide-list" id="guideList"></div></section>';
+    '<section class="guide-library user-surface"><div class="guide-section-head"><div><h2>已有攻略阵容</h2><span id="guideListCount"></span></div><div class="guide-library-tools"><input class="guide-search" id="guideSearch" type="search" placeholder="搜索名称、角色或攻略" aria-label="搜索阵容" value="' + escapeHtml(guideSearch) + '"><select id="guideFilter" aria-label="筛选阵容状态"><option value="all">全部状态</option><option value="active">已启用</option><option value="inactive">已停用</option></select><button type="button" data-guide-undo' + (!guideUndo ? " hidden" : "") + '>撤销删除</button></div></div><div class="guide-list" id="guideList"></div></section>' +
+    '<dialog id="guideDuplicateDialog" class="guide-duplicate-dialog" aria-labelledby="guideDuplicateTitle" aria-describedby="guideDuplicateDescription"><div class="guide-duplicate-shell"><header class="guide-duplicate-header"><span class="user-section-kicker">保存前核对</span><h2 id="guideDuplicateTitle">已有重复阵容</h2><p id="guideDuplicateDescription"></p></header><div class="guide-duplicate-comparisons" id="guideDuplicateComparisons"></div><p id="guideDuplicateError" class="guide-error" role="alert"></p><footer class="guide-duplicate-actions"><button type="button" class="ghost-button" data-guide-duplicate-cancel>返回修改</button><button type="button" class="primary-button" data-guide-duplicate-save>仍要保存</button></footer></div></dialog>';
   $("#guideFilter").value = guideFilter;
+  $("#guideDuplicateDialog").addEventListener("close", () => { guidePendingDuplicateDraft = null; });
   renderGuideBoard();
   renderGuideRoster();
   renderGuideList();
@@ -179,12 +233,17 @@ function bindGuideManager() {
     if (event.target.id !== "guideForm") return;
     event.preventDefault();
     try {
-      guideDraft.source_archetype = guideDraft.source_archetype.trim();
-      guideDraft.editorial = { ...guideDraft.editorial, active: $("#guideForm [name=active]").checked, status: "reviewed", updated_at: new Date().toISOString() };
-      window.teamGuideStore.save(guideDraft);
-      guideDirty = false;
-      renderGuideManager();
-      notify("已保存，阵容已同步到用户端攻略库");
+      guidePrepareDraftForSave();
+      const duplicates = guideFindCompositionDuplicates(guideDraft);
+      if (duplicates.length) {
+        guidePendingDuplicateDraft = JSON.parse(JSON.stringify(guideDraft));
+        $("#guideDuplicateDescription").textContent = "发现 " + duplicates.length + " 套已有攻略阵容包含相同的 4 名角色。角色顺序不影响重复判断。";
+        $("#guideDuplicateComparisons").innerHTML = guideDuplicateComparisonsMarkup(duplicates, guidePendingDuplicateDraft);
+        $("#guideDuplicateError").textContent = "";
+        $("#guideDuplicateDialog").showModal();
+        return;
+      }
+      guidePersistDraft();
     } catch (error) { $("#guideError").textContent = error.message; }
   });
   root.addEventListener("click", event => {
@@ -192,6 +251,17 @@ function bindGuideManager() {
     if (!el) return;
     const d = el.dataset;
     try {
+      if ("guideDuplicateCancel" in d) {
+        guidePendingDuplicateDraft = null;
+        $("#guideDuplicateDialog").close();
+        return;
+      }
+      if ("guideDuplicateSave" in d) {
+        if (!guidePendingDuplicateDraft) return;
+        guideDraft = guidePendingDuplicateDraft;
+        guidePersistDraft();
+        return;
+      }
       if ("guideNew" in d) { if (guideCanLeave()) guidePick(null); }
       if ("guideSlot" in d) { guideSlot = Number(d.guideSlot); renderGuideBoard(); }
       if ("guideAdd" in d) guidePlace(d.guideAdd, guideSlot);

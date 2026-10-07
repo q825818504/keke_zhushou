@@ -218,6 +218,13 @@ function renderRecommendationControls(knowledge) {
   });
   root.addEventListener("click", event => {
     if (event.target.closest("[data-save-recommendation]")) {
+      const cassette = activeKnowledge.recommended?.cassette;
+      if (cassette) {
+        for (const kind of ["main", "sub"]) {
+          const key = "recommended_" + kind + "_affixes";
+          cassette[key] = recommendedAffixes(cassette, kind).map(item => ({ ...item, priority: normalizeAffixPriority(item.priority) }));
+        }
+      }
       const ok = window.CharacterRecommendations.save(activeKnowledge);
       setText("#recommendationStatus", ok ? "推荐已保存" : "保存失败");
       notify(ok ? "推荐配置已保存" : "保存失败，请检查浏览器存储空间或权限");
@@ -370,10 +377,23 @@ function recommendedAffixes(cassette, kind) {
   return cassette?.["recommended_" + kind + "_affixes"] || [];
 }
 
+const CASSETTE_RECOMMENDATION_AFFIX_OPTIONS = {
+  main: [
+    "生命值百分比", "攻击力百分比", "防御力百分比", "暴击率", "暴击伤害",
+    "环合强度", "倾陷强度", "治疗加成", "光属性异能伤害增强", "灵属性异能伤害增强",
+    "咒属性异能伤害增强", "暗属性异能伤害增强", "魂属性异能伤害增强", "相属性异能伤害增强",
+    "心灵伤害增强"
+  ],
+  sub: [
+    "生命值百分比", "攻击力百分比", "防御力百分比", "生命值", "攻击力", "防御力",
+    "暴击率", "暴击伤害", "环合强度", "倾陷强度", "通用伤害增强"
+  ]
+};
+
 function rankAffixes(items) {
   const groups = [];
-  [...items].sort((a, b) => Number(b.priority) - Number(a.priority)).forEach((item) => {
-    const priority = Number(item.priority) || 1;
+  [...items].sort((a, b) => normalizeAffixPriority(b.priority) - normalizeAffixPriority(a.priority)).forEach((item) => {
+    const priority = normalizeAffixPriority(item.priority);
     const group = groups.find((entry) => entry.priority === priority);
     if (group) group.names.push(item.name);
     else groups.push({ priority, names: [item.name] });
@@ -387,20 +407,26 @@ function renderAffixRanking(items) {
   return groups.map((group, index) => '<span class="affix-rank-group">' + group.names.map(escapeHtml).join(" ≈ ") + '</span>' + (index < groups.length - 1 ? '<b class="affix-rank-separator">＞</b>' : '')).join('');
 }
 
-function readRecommendedAffixes(root, kind) {
+function normalizeAffixPriority(value) {
+  return Math.min(5, Math.max(1, Math.round(Number(value) || 1)));
+}
+
+function readRecommendedAffixes(root, kind, knowledge) {
+  const existing = new Map(recommendedAffixes(knowledge?.recommended?.cassette, kind).map(item => [item.name, item]));
   return [...root.querySelectorAll('[data-affix-option="' + kind + '"].is-selected')].map((button) => {
     const row = button.closest(".affix-editor-row");
     const input = row ? row.querySelector("[data-affix-priority]") : null;
-    const priority = Math.min(9, Math.max(1, Number(input?.value) || 1));
-    return { name: button.dataset.affixName, priority };
+    const name = button.dataset.affixName;
+    const priority = normalizeAffixPriority(input?.value);
+    return { ...existing.get(name), name, priority };
   });
 }
 
 function syncCassetteRecommendations(knowledge, root, rerenderEditor = false) {
   const cassette = knowledge.recommended?.cassette;
   if (!cassette || !root) return;
-  cassette.recommended_main_affixes = readRecommendedAffixes(root, "main");
-  cassette.recommended_sub_affixes = readRecommendedAffixes(root, "sub");
+  cassette.recommended_main_affixes = readRecommendedAffixes(root, "main", knowledge);
+  cassette.recommended_sub_affixes = readRecommendedAffixes(root, "sub", knowledge);
   renderCassette(knowledge);
   setText("#recommendationStatus", "已修改，待保存");
   setText("#draftLabel", "草稿未保存");
@@ -434,18 +460,21 @@ function renderCassetteRecommendationEditor(knowledge) {
   const cassette = knowledge.recommended?.cassette;
   if (!target) return;
   if (!cassette) { target.innerHTML = emptyState("没有来源卡带可供配置推荐属性"); return; }
-  const buildGroup = (kind, title, pool) => {
-    const selected = new Map(recommendedAffixes(cassette, kind).map((item) => [item.name, item.priority]));
-    return '<div class="affix-editor-group"><div class="affix-editor-group-head"><div><b>' + title + '</b><small>点击词条选择，再设置优先级</small></div><span>' + selected.size + ' 项已选</span></div><div class="affix-editor-options">' +
+  const buildGroup = (kind, title) => {
+    const selected = new Map(recommendedAffixes(cassette, kind).map((item) => [item.name, normalizeAffixPriority(item.priority)]));
+    const options = CASSETTE_RECOMMENDATION_AFFIX_OPTIONS[kind];
+    const preservedSelections = [...selected.keys()].filter((name) => !options.includes(name));
+    const pool = [...options, ...preservedSelections];
+    return '<div class="affix-editor-group"><div class="affix-editor-group-head"><div><b>' + title + '</b><small>点选属性，再拖动调节优先级（1–5）</small></div><span>' + selected.size + ' 项已选</span></div><div class="affix-editor-options">' +
       pool.map((name) => {
         const isSelected = selected.has(name);
         const priority = selected.get(name) || 1;
-        return '<div class="affix-editor-row"><button type="button" class="affix-choice pressable' + (isSelected ? ' is-selected' : '') + '" data-affix-option="' + kind + '" data-affix-name="' + escapeHtml(name) + '" aria-pressed="' + isSelected + '">' + (isSelected ? '✓ ' : '+ ') + escapeHtml(name) + '</button><label class="affix-priority"><span>优先级</span><input data-affix-priority type="number" min="1" max="9" value="' + priority + '"' + (isSelected ? '' : ' disabled') + '></label></div>';
+        return '<div class="affix-editor-row"><button type="button" class="affix-choice pressable' + (isSelected ? ' is-selected' : '') + '" data-affix-option="' + kind + '" data-affix-name="' + escapeHtml(name) + '" aria-pressed="' + isSelected + '">' + (isSelected ? '✓ ' : '+ ') + escapeHtml(name) + '</button><label class="affix-priority"><span>优先级</span><output data-affix-priority-value>' + priority + '/5</output><input data-affix-priority type="range" min="1" max="5" step="1" value="' + priority + '" aria-label="' + escapeHtml(name) + '优先级" aria-valuetext="' + priority + ' / 5"' + (isSelected ? '' : ' disabled') + '></label></div>';
       }).join("") + '</div></div>';
   };
   target.innerHTML = '<div class="affix-editor-note">这里只维护推荐，不改变原站记录的随机可出现词条池。</div>' +
-    buildGroup("main", "推荐主属性", cassette.main_affix_pool || []) +
-    buildGroup("sub", "推荐副属性", cassette.sub_affix_pool || []);
+    buildGroup("main", "推荐主属性") +
+    buildGroup("sub", "推荐副属性");
   if (target.dataset.bound === "true") return;
   target.dataset.bound = "true";
   target.addEventListener("click", (event) => {
@@ -457,8 +486,11 @@ function renderCassetteRecommendationEditor(knowledge) {
     if (input) input.disabled = !button.classList.contains("is-selected");
     syncCassetteRecommendations(activeKnowledge, target, true);
   });
-  target.addEventListener("change", (event) => {
+  target.addEventListener("input", (event) => {
     if (!event.target.matches("[data-affix-priority]")) return;
+    const output = event.target.closest(".affix-priority")?.querySelector("[data-affix-priority-value]");
+    if (output) output.textContent = event.target.value + "/5";
+    event.target.setAttribute("aria-valuetext", event.target.value + " / 5");
     syncCassetteRecommendations(activeKnowledge, target);
   });
 }

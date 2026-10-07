@@ -443,3 +443,20 @@ Source defines effect conditions beyond attribute membership; the UI retains tho
 - Reworded source-dependent empty states and source-ingestion notes as neutral user-facing copy. Removed local saved-template counts and user-facing management/catalog synchronization explanations; kept useful per-character count as “套适配阵容”.
 - Source-derived attribution remains in catalog/reaction UI as plain, non-clickable author/license text. Repository README, attribution files, imported catalog provenance, raw source snapshots, and game data remain unchanged.
 - Static audit found no `target="_blank"`, `https://`, source-page labels, local-knowledge-package badges, or admin-sync copy in the application templates. JavaScript syntax checks and `git diff --check` passed. Browser interaction was not run.
+
+## Phase 31 — NTE开源项目分析（2026-10-07）
+- 固定0e7a6b4e8e61d7a288e520bbc192a411d68c2fb1，应用2.3.1；1856份文本，src全部1000文件（915 Python/85 SQL），219081行。
+- 1613个Python文件AST静态解析成功，1856份下载文本Git blob SHA-1匹配固定文件树；报告链接无缺失，SQL静态提取206个表名。
+- 正式普通计算按钮评分/分配及战报使用私有Rust分析Core；公开Python实现保留供固定Context工具和差分。公开C++counterfactual切片未接正式入口。
+- 基础驱动评分主要依据sub_stats.keys、面积、品质；不等于完整伤害收益。Top-K/预算有界，失败不等于库存无解。
+- 可可助手优先借鉴单件鉴定、拼图、材料扣除/多人合并，后续个人面板/实例库/方案分配；采集/装配/HUD另立桌面阶段。
+- 养成历史已在源码与组合根接入，旧文档仍称页面会话，报告明确保留差异和未运行状态。
+- 报告位于artifacts/nte-analysis-2026-10-07/NTE项目模块化分析.md；未修改生产应用源码。
+
+## Phase 32 — 阵容重复检测与确认
+- 用户要求保存攻略阵容时按角色组成判重，不受角色顺序影响；命中已存在阵容后先明确提示“已有重复阵容，是否仍要保存”。
+- 确认界面须图示对比已存在阵容和当前草稿，以头像与角色名便于快速核对；用户可以取消，或明确继续保存。
+- 编辑已有阵容时不能把当前记录匹配成自己的重复；如果存在多条其他相同组成，应该全部可见。
+- 判重键由四名角色的稳定 ID 排序组成；名称、角色顺序、主C标记不影响判重。已停用的攻略阵容也仍是已存在记录。
+- 对比卡片按角色名称排序以便并排核对，保留各自主C标记；多个重复记录逐条展示。原攻略数据只在用户点击“仍要保存”时写入。
+- 采用原生 `<dialog>` 的模态确认，支持返回、Escape 取消、继续保存和存储错误提示；窄屏改为纵向比较。
