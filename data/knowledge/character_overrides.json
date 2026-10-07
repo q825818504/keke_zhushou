@@ -9,8 +9,4246 @@
         "cassette_type": "等离子",
         "role": "主C",
         "position": "前排",
-        "rating": "T0",
+        "rating": "T0.5",
         "summary": "尚在扩招中的「柯林斯家族」的一代目。"
+      },
+      "recommended": {
+        "weapon": {
+          "id": "yubeibei",
+          "name": "预备备",
+          "source_url": "https://wiki.mysqil.com/weapons/yubeibei",
+          "rating": "S",
+          "asset": "data/resources/characters/nanali/weapons/yubeibei.webp",
+          "description": "预备备是S级等离子类弧盘，娜娜莉的专属弧盘。 专属效果：娜娜莉装备时可改变武器外观。",
+          "detail_source_url": "https://wiki.mysqil.com/weapons/yubeibei"
+        },
+        "cassette": {
+          "id": "senlin-yinghuozhixin",
+          "name": "森林萤火之心",
+          "source_url": "https://wiki.mysqil.com/cassettes/senlin-yinghuozhixin",
+          "category": "属性专属",
+          "cassette_type": "空幕卡带",
+          "element": "灵",
+          "icon": "data/resources/characters/nanali/cassettes/fireflies-and-the-forest.webp",
+          "description": "森林萤火之心是灵属性专属输出卡带，4件套通过队伍造成灵伤害叠层提升佩戴者暴击伤害（每层 8%、最多 7 层 = +56%），且后台可生效。是娜娜莉等灵属性主C的毕业套装。",
+          "set_effects": [
+            {
+              "pieces": 2,
+              "description": "灵属性伤害 +10%"
+            },
+            {
+              "pieces": 4,
+              "description": "附近敌人受到队伍造成的灵属性伤害时，佩戴者暴击伤害 +8%，最多叠加 7 层，每层持续 10 秒（后台也生效）"
+            }
+          ],
+          "acquisition": "",
+          "main_affix_pool": [
+            "攻击力（% / 固定值）",
+            "生命值（% / 固定值）",
+            "防御力（% / 固定值）",
+            "暴击率",
+            "暴击伤害",
+            "元素伤害（光/暗/灵/咒/魂/相）",
+            "倾陷强度",
+            "环合强度"
+          ],
+          "sub_affix_pool": [
+            "暴击率",
+            "暴击伤害",
+            "攻击力（%）",
+            "攻击力（固定值）",
+            "生命值（%）",
+            "生命值（固定值）",
+            "防御力（%）",
+            "防御力（固定值）",
+            "元素伤害加成",
+            "全伤害加成",
+            "倾陷强度",
+            "环合强度"
+          ],
+          "quality": [
+            {
+              "tier": "金",
+              "description": "毕业 · 数值上限最高"
+            },
+            {
+              "tier": "金",
+              "description": "约为金色 80%"
+            },
+            {
+              "tier": "蓝",
+              "description": "前期过渡"
+            }
+          ],
+          "structure": {
+            "main_affix_count": 1,
+            "sub_affix_count": 4,
+            "rerollable": null
+          },
+          "recommended_main_affixes": [
+            {
+              "name": "攻击力百分比",
+              "priority": 3
+            },
+            {
+              "name": "暴击率",
+              "priority": 3
+            },
+            {
+              "name": "暴击伤害",
+              "priority": 4
+            },
+            {
+              "name": "灵属性异能伤害增强",
+              "priority": 5
+            }
+          ],
+          "recommended_sub_affixes": [
+            {
+              "name": "攻击力百分比",
+              "priority": 4
+            },
+            {
+              "name": "暴击率",
+              "priority": 5
+            },
+            {
+              "name": "暴击伤害",
+              "priority": 4
+            },
+            {
+              "name": "通用伤害增强",
+              "priority": 5
+            }
+          ],
+          "terminal": {
+            "id": "terminal",
+            "name": "「卡带」属性",
+            "description": "每装配一个Ⅱ型驱动，使暴击率增加6%",
+            "effects": [
+              "暴击率 +6%"
+            ],
+            "source_type": "mysqil_page",
+            "layout": {
+              "rows": 7,
+              "columns": 7,
+              "active_slots": [
+                {
+                  "row": 2,
+                  "column": 1
+                },
+                {
+                  "row": 2,
+                  "column": 2
+                },
+                {
+                  "row": 2,
+                  "column": 3
+                },
+                {
+                  "row": 2,
+                  "column": 4
+                },
+                {
+                  "row": 2,
+                  "column": 5
+                },
+                {
+                  "row": 3,
+                  "column": 1
+                },
+                {
+                  "row": 3,
+                  "column": 2
+                },
+                {
+                  "row": 3,
+                  "column": 3
+                },
+                {
+                  "row": 3,
+                  "column": 4
+                },
+                {
+                  "row": 3,
+                  "column": 5
+                },
+                {
+                  "row": 4,
+                  "column": 1
+                },
+                {
+                  "row": 4,
+                  "column": 2
+                },
+                {
+                  "row": 4,
+                  "column": 3
+                },
+                {
+                  "row": 4,
+                  "column": 4
+                },
+                {
+                  "row": 4,
+                  "column": 5
+                },
+                {
+                  "row": 5,
+                  "column": 1
+                },
+                {
+                  "row": 5,
+                  "column": 2
+                },
+                {
+                  "row": 5,
+                  "column": 3
+                },
+                {
+                  "row": 5,
+                  "column": 4
+                },
+                {
+                  "row": 5,
+                  "column": 5
+                }
+              ],
+              "source_type": "mysqil_page"
+            }
+          },
+          "detail_source_url": "https://wiki.mysqil.com/cassettes/senlin-yinghuozhixin"
+        }
+      }
+    },
+    "anhunqu": {
+      "name": "安魂曲",
+      "basic": {
+        "rarity": "S",
+        "element": "暗",
+        "cassette_type": "液态",
+        "role": "主C",
+        "position": "后排",
+        "rating": "T0",
+        "summary": "异象管理局员工后勤报修次数最多记录保持者。"
+      },
+      "recommended": {
+        "weapon": {
+          "id": "zuihouyiduomeigui",
+          "name": "「最后一朵玫瑰」",
+          "source_url": "https://wiki.mysqil.com/weapons/zuihouyiduomeigui",
+          "rating": "S",
+          "asset": "data/resources/characters/anhunqu/weapons/zuihouyiduomeigui.webp",
+          "description": "「最后一朵玫瑰」是S级液态类弧盘，安魂曲的专属弧盘。 专属效果：安魂曲装备时可改变武器外观。",
+          "detail_source_url": "https://wiki.mysqil.com/weapons/zuihouyiduomeigui"
+        },
+        "cassette": {
+          "id": "diyabolosi",
+          "name": "迪亚波罗斯",
+          "source_url": "https://wiki.mysqil.com/cassettes/diyabolosi",
+          "category": "属性专属",
+          "cassette_type": "空幕卡带",
+          "element": "暗",
+          "icon": "data/resources/characters/anhunqu/cassettes/diabolos.webp",
+          "description": "迪亚波罗斯是暗属性专属输出卡带，4件套提供无视暗抗（12%，触发浊燃反应后翻倍至 24%），是暗属性主C（安魂曲）与副C（达芙蒂尔）的核心套装，配合浊燃反应体系效果更佳。",
+          "set_effects": [
+            {
+              "pieces": 2,
+              "description": "暗属性伤害 +10%"
+            },
+            {
+              "pieces": 4,
+              "description": "无视敌人 12% 暗属性抗性。佩戴者触发浊燃反应后，无视效果提升至 24%，持续 20 秒"
+            }
+          ],
+          "acquisition": "",
+          "main_affix_pool": [
+            "攻击力（% / 固定值）",
+            "生命值（% / 固定值）",
+            "防御力（% / 固定值）",
+            "暴击率",
+            "暴击伤害",
+            "元素伤害（光/暗/灵/咒/魂/相）",
+            "倾陷强度",
+            "环合强度"
+          ],
+          "sub_affix_pool": [
+            "暴击率",
+            "暴击伤害",
+            "攻击力（%）",
+            "攻击力（固定值）",
+            "生命值（%）",
+            "生命值（固定值）",
+            "防御力（%）",
+            "防御力（固定值）",
+            "元素伤害加成",
+            "全伤害加成",
+            "倾陷强度",
+            "环合强度"
+          ],
+          "quality": [
+            {
+              "tier": "金",
+              "description": "毕业 · 数值上限最高"
+            },
+            {
+              "tier": "金",
+              "description": "约为金色 80%"
+            },
+            {
+              "tier": "蓝",
+              "description": "前期过渡"
+            }
+          ],
+          "structure": {
+            "main_affix_count": 1,
+            "sub_affix_count": 4,
+            "rerollable": null
+          },
+          "recommended_main_affixes": [
+            {
+              "name": "暴击率",
+              "priority": 4
+            },
+            {
+              "name": "暗属性异能伤害增强",
+              "priority": 5
+            }
+          ],
+          "recommended_sub_affixes": [
+            {
+              "name": "攻击力百分比",
+              "priority": 2
+            },
+            {
+              "name": "暴击率",
+              "priority": 5
+            },
+            {
+              "name": "暴击伤害",
+              "priority": 4
+            },
+            {
+              "name": "通用伤害增强",
+              "priority": 3
+            }
+          ],
+          "terminal": {
+            "id": "terminal",
+            "name": "「卡带」属性",
+            "description": "每装配一个Ⅲ型驱动，使暗属性异能伤害增强增加10%",
+            "effects": [
+              "暗属性异能伤害增强 +10%"
+            ],
+            "source_type": "mysqil_page",
+            "layout": {
+              "rows": 7,
+              "columns": 7,
+              "active_slots": [
+                {
+                  "row": 2,
+                  "column": 1
+                },
+                {
+                  "row": 2,
+                  "column": 2
+                },
+                {
+                  "row": 2,
+                  "column": 3
+                },
+                {
+                  "row": 2,
+                  "column": 4
+                },
+                {
+                  "row": 2,
+                  "column": 5
+                },
+                {
+                  "row": 3,
+                  "column": 1
+                },
+                {
+                  "row": 3,
+                  "column": 2
+                },
+                {
+                  "row": 3,
+                  "column": 3
+                },
+                {
+                  "row": 3,
+                  "column": 4
+                },
+                {
+                  "row": 3,
+                  "column": 5
+                },
+                {
+                  "row": 4,
+                  "column": 1
+                },
+                {
+                  "row": 4,
+                  "column": 2
+                },
+                {
+                  "row": 4,
+                  "column": 3
+                },
+                {
+                  "row": 4,
+                  "column": 4
+                },
+                {
+                  "row": 4,
+                  "column": 5
+                },
+                {
+                  "row": 5,
+                  "column": 1
+                },
+                {
+                  "row": 5,
+                  "column": 2
+                },
+                {
+                  "row": 5,
+                  "column": 3
+                },
+                {
+                  "row": 5,
+                  "column": 4
+                },
+                {
+                  "row": 5,
+                  "column": 5
+                }
+              ],
+              "source_type": "mysqil_page"
+            }
+          },
+          "detail_source_url": "https://wiki.mysqil.com/cassettes/diyabolosi"
+        }
+      }
+    },
+    "baizang": {
+      "name": "白藏",
+      "basic": {
+        "rarity": "S",
+        "element": "咒",
+        "cassette_type": "聚合",
+        "role": "主C",
+        "position": "前排",
+        "rating": "T1",
+        "summary": "在「最不像队长」票选中名列前茅的E.T.D四队队长。"
+      },
+      "recommended": {
+        "weapon": {
+          "id": "chahua-hui",
+          "name": "茶花会",
+          "source_url": "https://wiki.mysqil.com/weapons/chahua-hui",
+          "rating": "S",
+          "asset": "data/resources/characters/baizang/weapons/chahua-hui.webp",
+          "description": "茶花会是S级聚合类弧盘。",
+          "detail_source_url": "https://wiki.mysqil.com/weapons/chahua-hui"
+        },
+        "cassette": {
+          "id": "zhenhong-shuangshengdie",
+          "name": "真红双生蝶",
+          "source_url": "https://wiki.mysqil.com/cassettes/zhenhong-shuangshengdie",
+          "category": "属性专属",
+          "cassette_type": "空幕卡带",
+          "element": "咒",
+          "icon": "data/resources/characters/baizang/cassettes/crimson-twin-butterflies.webp",
+          "description": "真红双生蝶是咒属性专属输出卡带，4件套通过队伍造成咒伤害叠层提升佩戴者攻击力（每层 6%、最多 6 层），且后台可生效，是咒系输出角色的核心套装选择。",
+          "set_effects": [
+            {
+              "pieces": 2,
+              "description": "咒属性伤害 +10%"
+            },
+            {
+              "pieces": 4,
+              "description": "附近敌人受到队伍造成的咒属性伤害时，佩戴者攻击力 +6%，最多叠加 6 层，每层持续 10 秒（后台也生效）"
+            }
+          ],
+          "acquisition": "",
+          "main_affix_pool": [
+            "攻击力（% / 固定值）",
+            "生命值（% / 固定值）",
+            "防御力（% / 固定值）",
+            "暴击率",
+            "暴击伤害",
+            "元素伤害（光/暗/灵/咒/魂/相）",
+            "倾陷强度",
+            "环合强度"
+          ],
+          "sub_affix_pool": [
+            "暴击率",
+            "暴击伤害",
+            "攻击力（%）",
+            "攻击力（固定值）",
+            "生命值（%）",
+            "生命值（固定值）",
+            "防御力（%）",
+            "防御力（固定值）",
+            "元素伤害加成",
+            "全伤害加成",
+            "倾陷强度",
+            "环合强度"
+          ],
+          "quality": [
+            {
+              "tier": "金",
+              "description": "毕业 · 数值上限最高"
+            },
+            {
+              "tier": "金",
+              "description": "约为金色 80%"
+            },
+            {
+              "tier": "蓝",
+              "description": "前期过渡"
+            }
+          ],
+          "structure": {
+            "main_affix_count": 1,
+            "sub_affix_count": 4,
+            "rerollable": null
+          },
+          "recommended_main_affixes": [
+            {
+              "name": "暴击率",
+              "priority": 4
+            },
+            {
+              "name": "暴击伤害",
+              "priority": 4
+            },
+            {
+              "name": "咒属性异能伤害增强",
+              "priority": 5
+            }
+          ],
+          "recommended_sub_affixes": [
+            {
+              "name": "攻击力百分比",
+              "priority": 3
+            },
+            {
+              "name": "攻击力",
+              "priority": 3
+            },
+            {
+              "name": "暴击率",
+              "priority": 4
+            },
+            {
+              "name": "暴击伤害",
+              "priority": 5
+            },
+            {
+              "name": "通用伤害增强",
+              "priority": 5
+            }
+          ],
+          "terminal": {
+            "id": "terminal",
+            "name": "「卡带」属性",
+            "description": "每装配一个Ⅲ型驱动，使暴击率增加7.5%",
+            "effects": [
+              "暴击率 +7.5%"
+            ],
+            "source_type": "mysqil_page",
+            "layout": {
+              "rows": 7,
+              "columns": 7,
+              "active_slots": [
+                {
+                  "row": 1,
+                  "column": 2
+                },
+                {
+                  "row": 1,
+                  "column": 3
+                },
+                {
+                  "row": 1,
+                  "column": 4
+                },
+                {
+                  "row": 1,
+                  "column": 5
+                },
+                {
+                  "row": 2,
+                  "column": 1
+                },
+                {
+                  "row": 2,
+                  "column": 2
+                },
+                {
+                  "row": 2,
+                  "column": 3
+                },
+                {
+                  "row": 2,
+                  "column": 4
+                },
+                {
+                  "row": 2,
+                  "column": 5
+                },
+                {
+                  "row": 3,
+                  "column": 1
+                },
+                {
+                  "row": 3,
+                  "column": 2
+                },
+                {
+                  "row": 3,
+                  "column": 3
+                },
+                {
+                  "row": 3,
+                  "column": 5
+                },
+                {
+                  "row": 4,
+                  "column": 1
+                },
+                {
+                  "row": 4,
+                  "column": 2
+                },
+                {
+                  "row": 4,
+                  "column": 5
+                },
+                {
+                  "row": 5,
+                  "column": 1
+                },
+                {
+                  "row": 5,
+                  "column": 2
+                },
+                {
+                  "row": 5,
+                  "column": 3
+                },
+                {
+                  "row": 5,
+                  "column": 4
+                }
+              ],
+              "source_type": "mysqil_page"
+            }
+          },
+          "detail_source_url": "https://wiki.mysqil.com/cassettes/zhenhong-shuangshengdie"
+        }
+      }
+    },
+    "canhong": {
+      "name": "残虹",
+      "basic": {
+        "rarity": "S",
+        "element": "咒",
+        "cassette_type": "气态",
+        "role": "主C",
+        "position": "前排",
+        "rating": "待确认",
+        "summary": "前秘密组织「红字」的成员，代号「赤葵」，现为格赫罗斯岛囚犯。"
+      },
+      "recommended": {
+        "weapon": {
+          "id": "shixin-guiren",
+          "name": "噬心诡刃",
+          "rating": "S",
+          "asset": "data/resources/encyclopedia/weapons/shixin-guiren/shixin-guiren.webp"
+        },
+        "cassette": {
+          "id": "zhenhong-shuangshengdie",
+          "name": "真红双生蝶",
+          "source_url": "https://wiki.mysqil.com/cassettes/zhenhong-shuangshengdie",
+          "category": "属性专属",
+          "cassette_type": "空幕卡带",
+          "element": "咒",
+          "icon": "data/resources/encyclopedia/cassettes/zhenhong-shuangshengdie/gold.webp",
+          "description": "真红双生蝶是咒属性专属输出卡带，4件套通过队伍造成咒伤害叠层提升佩戴者攻击力（每层 6%、最多 6 层），且后台可生效，是咒系输出角色的核心套装选择。",
+          "set_effects": [
+            {
+              "pieces": 2,
+              "description": "咒属性伤害 +10%"
+            },
+            {
+              "pieces": 4,
+              "description": "附近敌人受到队伍造成的咒属性伤害时，佩戴者攻击力 +6%，最多叠加 6 层，每层持续 10 秒（后台也生效）"
+            }
+          ],
+          "acquisition": "兔子洞副本（咒系产出关）",
+          "main_affix_pool": [
+            "攻击力（% / 固定值）",
+            "生命值（% / 固定值）",
+            "防御力（% / 固定值）",
+            "暴击率",
+            "暴击伤害",
+            "元素伤害（光/暗/灵/咒/魂/相）",
+            "倾陷强度",
+            "环合强度"
+          ],
+          "sub_affix_pool": [
+            "暴击率",
+            "暴击伤害",
+            "攻击力（%）",
+            "攻击力（固定值）",
+            "生命值（%）",
+            "生命值（固定值）",
+            "防御力（%）",
+            "防御力（固定值）",
+            "元素伤害加成",
+            "全伤害加成",
+            "倾陷强度",
+            "环合强度"
+          ],
+          "quality": [
+            {
+              "tier": "金",
+              "description": "毕业 · 数值上限最高"
+            },
+            {
+              "tier": "金",
+              "description": "约为金色 80%"
+            },
+            {
+              "tier": "蓝",
+              "description": "前期过渡"
+            }
+          ],
+          "structure": {
+            "main_affix_count": 1,
+            "sub_affix_count": 4,
+            "rerollable": null
+          },
+          "recommended_main_affixes": [
+            {
+              "name": "暴击伤害",
+              "priority": 4
+            },
+            {
+              "name": "咒属性异能伤害增强",
+              "priority": 5
+            }
+          ],
+          "recommended_sub_affixes": [
+            {
+              "name": "攻击力百分比",
+              "priority": 3
+            },
+            {
+              "name": "攻击力",
+              "priority": 3
+            },
+            {
+              "name": "暴击率",
+              "priority": 5
+            },
+            {
+              "name": "暴击伤害",
+              "priority": 5
+            },
+            {
+              "name": "通用伤害增强",
+              "priority": 4
+            }
+          ],
+          "terminal": {
+            "id": "terminal",
+            "name": "「卡带」属性",
+            "description": "每装配一个Ⅲ型驱动，使暴击率增加7.5%",
+            "effects": [
+              "暴击率 +7.5%"
+            ],
+            "source_type": "mysqil_page",
+            "layout": {
+              "rows": 7,
+              "columns": 7,
+              "active_slots": [
+                {
+                  "row": 1,
+                  "column": 2
+                },
+                {
+                  "row": 1,
+                  "column": 3
+                },
+                {
+                  "row": 1,
+                  "column": 4
+                },
+                {
+                  "row": 1,
+                  "column": 5
+                },
+                {
+                  "row": 2,
+                  "column": 1
+                },
+                {
+                  "row": 2,
+                  "column": 2
+                },
+                {
+                  "row": 2,
+                  "column": 3
+                },
+                {
+                  "row": 2,
+                  "column": 4
+                },
+                {
+                  "row": 2,
+                  "column": 5
+                },
+                {
+                  "row": 3,
+                  "column": 1
+                },
+                {
+                  "row": 3,
+                  "column": 2
+                },
+                {
+                  "row": 3,
+                  "column": 3
+                },
+                {
+                  "row": 3,
+                  "column": 5
+                },
+                {
+                  "row": 4,
+                  "column": 1
+                },
+                {
+                  "row": 4,
+                  "column": 2
+                },
+                {
+                  "row": 4,
+                  "column": 5
+                },
+                {
+                  "row": 5,
+                  "column": 1
+                },
+                {
+                  "row": 5,
+                  "column": 2
+                },
+                {
+                  "row": 5,
+                  "column": 3
+                },
+                {
+                  "row": 5,
+                  "column": 4
+                }
+              ],
+              "source_type": "mysqil_page"
+            }
+          },
+          "detail_source_url": "https://wiki.mysqil.com/cassettes/zhenhong-shuangshengdie"
+        }
+      }
+    },
+    "dafutier": {
+      "name": "达芙蒂尔",
+      "basic": {
+        "rarity": "S",
+        "element": "暗",
+        "cassette_type": "液态",
+        "role": "副C",
+        "position": "前排",
+        "rating": "T1",
+        "summary": "人狠话不多的保镖小姐——「伊波恩」专职。"
+      },
+      "recommended": {
+        "weapon": {
+          "id": "qihei-qingchunwangxiang",
+          "name": "漆黑青春妄想",
+          "source_url": "https://wiki.mysqil.com/weapons/qihei-qingchunwangxiang",
+          "rating": "S",
+          "asset": "data/resources/characters/dafutier/weapons/qihei-qingchunwangxiang.webp",
+          "description": "漆黑青春妄想是S级液态类弧盘。",
+          "detail_source_url": "https://wiki.mysqil.com/weapons/qihei-qingchunwangxiang"
+        },
+        "cassette": {
+          "id": "diyabolosi",
+          "name": "迪亚波罗斯",
+          "source_url": "https://wiki.mysqil.com/cassettes/diyabolosi",
+          "category": "属性专属",
+          "cassette_type": "空幕卡带",
+          "element": "暗",
+          "icon": "data/resources/characters/dafutier/cassettes/diabolos.webp",
+          "description": "迪亚波罗斯是暗属性专属输出卡带，4件套提供无视暗抗（12%，触发浊燃反应后翻倍至 24%），是暗属性主C（安魂曲）与副C（达芙蒂尔）的核心套装，配合浊燃反应体系效果更佳。",
+          "set_effects": [
+            {
+              "pieces": 2,
+              "description": "暗属性伤害 +10%"
+            },
+            {
+              "pieces": 4,
+              "description": "无视敌人 12% 暗属性抗性。佩戴者触发浊燃反应后，无视效果提升至 24%，持续 20 秒"
+            }
+          ],
+          "acquisition": "",
+          "main_affix_pool": [
+            "攻击力（% / 固定值）",
+            "生命值（% / 固定值）",
+            "防御力（% / 固定值）",
+            "暴击率",
+            "暴击伤害",
+            "元素伤害（光/暗/灵/咒/魂/相）",
+            "倾陷强度",
+            "环合强度"
+          ],
+          "sub_affix_pool": [
+            "暴击率",
+            "暴击伤害",
+            "攻击力（%）",
+            "攻击力（固定值）",
+            "生命值（%）",
+            "生命值（固定值）",
+            "防御力（%）",
+            "防御力（固定值）",
+            "元素伤害加成",
+            "全伤害加成",
+            "倾陷强度",
+            "环合强度"
+          ],
+          "quality": [
+            {
+              "tier": "金",
+              "description": "毕业 · 数值上限最高"
+            },
+            {
+              "tier": "金",
+              "description": "约为金色 80%"
+            },
+            {
+              "tier": "蓝",
+              "description": "前期过渡"
+            }
+          ],
+          "structure": {
+            "main_affix_count": 1,
+            "sub_affix_count": 4,
+            "rerollable": null
+          },
+          "recommended_main_affixes": [
+            {
+              "name": "倾陷强度",
+              "priority": 5
+            }
+          ],
+          "recommended_sub_affixes": [
+            {
+              "name": "攻击力百分比",
+              "priority": 2
+            },
+            {
+              "name": "攻击力",
+              "priority": 1
+            },
+            {
+              "name": "暴击率",
+              "priority": 4
+            },
+            {
+              "name": "暴击伤害",
+              "priority": 4
+            },
+            {
+              "name": "倾陷强度",
+              "priority": 5
+            },
+            {
+              "name": "通用伤害增强",
+              "priority": 3
+            }
+          ],
+          "terminal": {
+            "id": "terminal",
+            "name": "「卡带」属性",
+            "description": "每装配一个Ⅲ型驱动，使暗属性异能伤害增强增加10%",
+            "effects": [
+              "暗属性异能伤害增强 +10%"
+            ],
+            "source_type": "mysqil_page",
+            "layout": {
+              "rows": 7,
+              "columns": 7,
+              "active_slots": [
+                {
+                  "row": 1,
+                  "column": 1
+                },
+                {
+                  "row": 1,
+                  "column": 2
+                },
+                {
+                  "row": 1,
+                  "column": 3
+                },
+                {
+                  "row": 1,
+                  "column": 4
+                },
+                {
+                  "row": 2,
+                  "column": 1
+                },
+                {
+                  "row": 2,
+                  "column": 2
+                },
+                {
+                  "row": 2,
+                  "column": 3
+                },
+                {
+                  "row": 2,
+                  "column": 4
+                },
+                {
+                  "row": 3,
+                  "column": 1
+                },
+                {
+                  "row": 3,
+                  "column": 2
+                },
+                {
+                  "row": 3,
+                  "column": 4
+                },
+                {
+                  "row": 3,
+                  "column": 5
+                },
+                {
+                  "row": 4,
+                  "column": 2
+                },
+                {
+                  "row": 4,
+                  "column": 3
+                },
+                {
+                  "row": 4,
+                  "column": 4
+                },
+                {
+                  "row": 4,
+                  "column": 5
+                },
+                {
+                  "row": 5,
+                  "column": 2
+                },
+                {
+                  "row": 5,
+                  "column": 3
+                },
+                {
+                  "row": 5,
+                  "column": 4
+                },
+                {
+                  "row": 5,
+                  "column": 5
+                }
+              ],
+              "source_type": "mysqil_page"
+            }
+          },
+          "detail_source_url": "https://wiki.mysqil.com/cassettes/diyabolosi"
+        }
+      }
+    },
+    "jiuyuan": {
+      "name": "九原",
+      "basic": {
+        "rarity": "S",
+        "element": "灵",
+        "cassette_type": "固态",
+        "role": "副C",
+        "position": "后排",
+        "rating": "T0.5",
+        "summary": "八面玲珑、不可捉摸的斯特利精英快递员兼「代理店长」。"
+      },
+      "recommended": {
+        "weapon": {
+          "id": "xianshi-biliansuo",
+          "name": "现实避难所",
+          "source_url": "https://wiki.mysqil.com/weapons/xianshi-biliansuo",
+          "rating": "S",
+          "asset": "data/resources/characters/jiuyuan/weapons/xianshi-biliansuo.webp",
+          "description": "现实避难所是S级固态类弧盘。",
+          "detail_source_url": "https://wiki.mysqil.com/weapons/xianshi-biliansuo"
+        },
+        "cassette": {
+          "id": "senlin-yinghuozhixin",
+          "name": "森林萤火之心",
+          "source_url": "https://wiki.mysqil.com/cassettes/senlin-yinghuozhixin",
+          "category": "属性专属",
+          "cassette_type": "空幕卡带",
+          "element": "灵",
+          "icon": "data/resources/characters/jiuyuan/cassettes/fireflies-and-the-forest.webp",
+          "description": "森林萤火之心是灵属性专属输出卡带，4件套通过队伍造成灵伤害叠层提升佩戴者暴击伤害（每层 8%、最多 7 层 = +56%），且后台可生效。是娜娜莉等灵属性主C的毕业套装。",
+          "set_effects": [
+            {
+              "pieces": 2,
+              "description": "灵属性伤害 +10%"
+            },
+            {
+              "pieces": 4,
+              "description": "附近敌人受到队伍造成的灵属性伤害时，佩戴者暴击伤害 +8%，最多叠加 7 层，每层持续 10 秒（后台也生效）"
+            }
+          ],
+          "acquisition": "",
+          "main_affix_pool": [
+            "攻击力（% / 固定值）",
+            "生命值（% / 固定值）",
+            "防御力（% / 固定值）",
+            "暴击率",
+            "暴击伤害",
+            "元素伤害（光/暗/灵/咒/魂/相）",
+            "倾陷强度",
+            "环合强度"
+          ],
+          "sub_affix_pool": [
+            "暴击率",
+            "暴击伤害",
+            "攻击力（%）",
+            "攻击力（固定值）",
+            "生命值（%）",
+            "生命值（固定值）",
+            "防御力（%）",
+            "防御力（固定值）",
+            "元素伤害加成",
+            "全伤害加成",
+            "倾陷强度",
+            "环合强度"
+          ],
+          "quality": [
+            {
+              "tier": "金",
+              "description": "毕业 · 数值上限最高"
+            },
+            {
+              "tier": "金",
+              "description": "约为金色 80%"
+            },
+            {
+              "tier": "蓝",
+              "description": "前期过渡"
+            }
+          ],
+          "structure": {
+            "main_affix_count": 1,
+            "sub_affix_count": 4,
+            "rerollable": null
+          },
+          "recommended_main_affixes": [
+            {
+              "name": "灵属性异能伤害增强",
+              "priority": 5
+            }
+          ],
+          "recommended_sub_affixes": [
+            {
+              "name": "攻击力百分比",
+              "priority": 3
+            },
+            {
+              "name": "攻击力",
+              "priority": 2
+            },
+            {
+              "name": "暴击率",
+              "priority": 5
+            },
+            {
+              "name": "暴击伤害",
+              "priority": 5
+            },
+            {
+              "name": "通用伤害增强",
+              "priority": 4
+            }
+          ],
+          "terminal": {
+            "id": "terminal",
+            "name": "「卡带」属性",
+            "description": "每装配一个Ⅱ型驱动，使暴击率增加6%",
+            "effects": [
+              "暴击率 +6%"
+            ],
+            "source_type": "mysqil_page",
+            "layout": {
+              "rows": 7,
+              "columns": 7,
+              "active_slots": [
+                {
+                  "row": 2,
+                  "column": 1
+                },
+                {
+                  "row": 2,
+                  "column": 2
+                },
+                {
+                  "row": 2,
+                  "column": 3
+                },
+                {
+                  "row": 2,
+                  "column": 4
+                },
+                {
+                  "row": 2,
+                  "column": 5
+                },
+                {
+                  "row": 3,
+                  "column": 1
+                },
+                {
+                  "row": 3,
+                  "column": 2
+                },
+                {
+                  "row": 3,
+                  "column": 3
+                },
+                {
+                  "row": 3,
+                  "column": 4
+                },
+                {
+                  "row": 3,
+                  "column": 5
+                },
+                {
+                  "row": 4,
+                  "column": 1
+                },
+                {
+                  "row": 4,
+                  "column": 2
+                },
+                {
+                  "row": 4,
+                  "column": 3
+                },
+                {
+                  "row": 4,
+                  "column": 4
+                },
+                {
+                  "row": 4,
+                  "column": 5
+                },
+                {
+                  "row": 5,
+                  "column": 1
+                },
+                {
+                  "row": 5,
+                  "column": 2
+                },
+                {
+                  "row": 5,
+                  "column": 3
+                },
+                {
+                  "row": 5,
+                  "column": 4
+                },
+                {
+                  "row": 5,
+                  "column": 5
+                }
+              ],
+              "source_type": "mysqil_page"
+            }
+          },
+          "detail_source_url": "https://wiki.mysqil.com/cassettes/senlin-yinghuozhixin"
+        }
+      }
+    },
+    "heiyu": {
+      "name": "黑羽",
+      "basic": {
+        "rarity": "S",
+        "element": "魂",
+        "cassette_type": "气态",
+        "role": "主C",
+        "position": "前排",
+        "rating": "待确认",
+        "summary": "魔女之家的主人，旁人眼中神秘优雅的魔女小姐。"
+      },
+      "recommended": {
+        "weapon": {
+          "id": "zuiyufa",
+          "name": "罪与罚",
+          "source_url": "https://wiki.mysqil.com/weapons/zuiyufa",
+          "rating": "S",
+          "asset": "data/resources/characters/heiyu/weapons/zuiyufa.webp",
+          "description": "「罪与罚」是S级气态类弧盘，黑羽的专属弧盘。",
+          "detail_source_url": "https://wiki.mysqil.com/weapons/zuiyufa"
+        },
+        "cassette": {
+          "id": "emozhixie-zuzhou",
+          "name": "恶魔之血·诅咒",
+          "source_url": "https://wiki.mysqil.com/cassettes/emozhixie-zuzhou",
+          "category": "属性专属",
+          "cassette_type": "空幕卡带",
+          "element": "魂",
+          "icon": "data/resources/encyclopedia/cassettes/emozhixie-zuzhou/gold.webp",
+          "description": "恶魔之血·诅咒是魂属性反应流输出卡带，4件套基础增伤 18%，攻击受浸染或黯星状态影响的敌人时增伤翻倍至 36%。适合配合浸染/黯星反应体系的魂属性输出角色，需要队友先挂对应状态。 可通过兔子洞副本或材料自选箱获取。",
+          "set_effects": [
+            {
+              "pieces": 2,
+              "description": "魂属性伤害 +10%"
+            },
+            {
+              "pieces": 4,
+              "description": "佩戴者造成的伤害 +18%。攻击处于浸染或黯星状态的敌人时，伤害提升变为 +36%"
+            }
+          ],
+          "acquisition": "兔子洞副本（魂系产出关）/ 材料自选箱",
+          "main_affix_pool": [
+            "攻击力（% / 固定值）",
+            "生命值（% / 固定值）",
+            "防御力（% / 固定值）",
+            "暴击率",
+            "暴击伤害",
+            "元素伤害（光/暗/灵/咒/魂/相）",
+            "倾陷强度",
+            "环合强度"
+          ],
+          "sub_affix_pool": [
+            "暴击率",
+            "暴击伤害",
+            "攻击力（%）",
+            "攻击力（固定值）",
+            "生命值（%）",
+            "生命值（固定值）",
+            "防御力（%）",
+            "防御力（固定值）",
+            "元素伤害加成",
+            "全伤害加成",
+            "倾陷强度",
+            "环合强度"
+          ],
+          "quality": [
+            {
+              "tier": "金",
+              "description": "毕业 · 数值上限最高"
+            },
+            {
+              "tier": "金",
+              "description": "约为金色 80%"
+            },
+            {
+              "tier": "蓝",
+              "description": "前期过渡"
+            }
+          ],
+          "structure": {
+            "main_affix_count": 1,
+            "sub_affix_count": 4,
+            "rerollable": null
+          },
+          "recommended_main_affixes": [
+            {
+              "name": "暴击伤害",
+              "priority": 5
+            },
+            {
+              "name": "魂属性异能伤害增强",
+              "priority": 4
+            }
+          ],
+          "recommended_sub_affixes": [
+            {
+              "name": "攻击力",
+              "priority": 3
+            },
+            {
+              "name": "暴击率",
+              "priority": 5
+            },
+            {
+              "name": "暴击伤害",
+              "priority": 5
+            },
+            {
+              "name": "环合强度",
+              "priority": 2
+            },
+            {
+              "name": "通用伤害增强",
+              "priority": 4
+            }
+          ],
+          "terminal": {
+            "id": "terminal",
+            "name": "「卡带」属性",
+            "description": "每装配一个Ⅲ型驱动，使攻击力百分比增加10%",
+            "effects": [
+              "攻击力百分比 +10%"
+            ],
+            "source_type": "mysqil_page",
+            "layout": {
+              "rows": 7,
+              "columns": 7,
+              "active_slots": [
+                {
+                  "row": 1,
+                  "column": 1
+                },
+                {
+                  "row": 1,
+                  "column": 2
+                },
+                {
+                  "row": 1,
+                  "column": 3
+                },
+                {
+                  "row": 1,
+                  "column": 4
+                },
+                {
+                  "row": 2,
+                  "column": 1
+                },
+                {
+                  "row": 2,
+                  "column": 2
+                },
+                {
+                  "row": 2,
+                  "column": 3
+                },
+                {
+                  "row": 2,
+                  "column": 4
+                },
+                {
+                  "row": 3,
+                  "column": 1
+                },
+                {
+                  "row": 3,
+                  "column": 2
+                },
+                {
+                  "row": 3,
+                  "column": 4
+                },
+                {
+                  "row": 3,
+                  "column": 5
+                },
+                {
+                  "row": 4,
+                  "column": 2
+                },
+                {
+                  "row": 4,
+                  "column": 3
+                },
+                {
+                  "row": 4,
+                  "column": 4
+                },
+                {
+                  "row": 4,
+                  "column": 5
+                },
+                {
+                  "row": 5,
+                  "column": 2
+                },
+                {
+                  "row": 5,
+                  "column": 3
+                },
+                {
+                  "row": 5,
+                  "column": 4
+                },
+                {
+                  "row": 5,
+                  "column": 5
+                }
+              ],
+              "source_type": "mysqil_page"
+            }
+          },
+          "detail_source_url": "https://wiki.mysqil.com/cassettes/emozhixie-zuzhou"
+        }
+      }
+    },
+    "hasuoer": {
+      "name": "哈索尔",
+      "basic": {
+        "rarity": "S",
+        "element": "相",
+        "cassette_type": "等离子",
+        "role": "副C",
+        "position": "前排",
+        "rating": "T1",
+        "summary": "爱好制作任务全时间表并严格执行落地的高效快递员。"
+      },
+      "recommended": {
+        "weapon": {
+          "id": "yanhun-kuangbiao",
+          "name": "焰魂狂飙",
+          "source_url": "https://wiki.mysqil.com/weapons/yanhun-kuangbiao",
+          "rating": "S",
+          "asset": "data/resources/characters/hasuoer/weapons/yanhun-kuangbiao.webp",
+          "description": "焰魂狂飙是S级等离子类弧盘。",
+          "detail_source_url": "https://wiki.mysqil.com/weapons/yanhun-kuangbiao"
+        },
+        "cassette": {
+          "id": "jietou-quanwang",
+          "name": "街头拳王",
+          "source_url": "https://wiki.mysqil.com/cassettes/jietou-quanwang",
+          "category": "属性专属",
+          "cassette_type": "空幕卡带",
+          "element": "相",
+          "icon": "data/resources/characters/hasuoer/cassettes/street-boxer.webp",
+          "description": "街头拳王是相属性专属输出卡带，4件套提供 14% 暴击率，触发盈蓄或浸染反应后额外获得 14% 暴击率（共 28%），能快速拉满暴击。是哈索尔、翳等相属性输出角色的核心套装。",
+          "set_effects": [
+            {
+              "pieces": 2,
+              "description": "相属性伤害 +10%"
+            },
+            {
+              "pieces": 4,
+              "description": "暴击率 +14%。队伍触发盈蓄或浸染反应时，额外获得 14% 暴击率，持续 20 秒"
+            }
+          ],
+          "acquisition": "",
+          "main_affix_pool": [
+            "攻击力（% / 固定值）",
+            "生命值（% / 固定值）",
+            "防御力（% / 固定值）",
+            "暴击率",
+            "暴击伤害",
+            "元素伤害（光/暗/灵/咒/魂/相）",
+            "倾陷强度",
+            "环合强度"
+          ],
+          "sub_affix_pool": [
+            "暴击率",
+            "暴击伤害",
+            "攻击力（%）",
+            "攻击力（固定值）",
+            "生命值（%）",
+            "生命值（固定值）",
+            "防御力（%）",
+            "防御力（固定值）",
+            "元素伤害加成",
+            "全伤害加成",
+            "倾陷强度",
+            "环合强度"
+          ],
+          "quality": [
+            {
+              "tier": "金",
+              "description": "毕业 · 数值上限最高"
+            },
+            {
+              "tier": "金",
+              "description": "约为金色 80%"
+            },
+            {
+              "tier": "蓝",
+              "description": "前期过渡"
+            }
+          ],
+          "structure": {
+            "main_affix_count": 1,
+            "sub_affix_count": 4,
+            "rerollable": null
+          },
+          "recommended_main_affixes": [
+            {
+              "name": "暴击率",
+              "priority": 5
+            },
+            {
+              "name": "暴击伤害",
+              "priority": 5
+            }
+          ],
+          "recommended_sub_affixes": [
+            {
+              "name": "攻击力百分比",
+              "priority": 3
+            },
+            {
+              "name": "攻击力",
+              "priority": 2
+            },
+            {
+              "name": "暴击率",
+              "priority": 5
+            },
+            {
+              "name": "暴击伤害",
+              "priority": 5
+            },
+            {
+              "name": "通用伤害增强",
+              "priority": 4
+            }
+          ],
+          "terminal": {
+            "id": "terminal",
+            "name": "「卡带」属性",
+            "description": "每装配一个Ⅲ型驱动，使攻击力百分比增加10%",
+            "effects": [
+              "攻击力百分比 +10%"
+            ],
+            "source_type": "mysqil_page",
+            "layout": {
+              "rows": 7,
+              "columns": 7,
+              "active_slots": [
+                {
+                  "row": 1,
+                  "column": 1
+                },
+                {
+                  "row": 1,
+                  "column": 2
+                },
+                {
+                  "row": 1,
+                  "column": 3
+                },
+                {
+                  "row": 1,
+                  "column": 4
+                },
+                {
+                  "row": 2,
+                  "column": 1
+                },
+                {
+                  "row": 2,
+                  "column": 2
+                },
+                {
+                  "row": 2,
+                  "column": 3
+                },
+                {
+                  "row": 2,
+                  "column": 4
+                },
+                {
+                  "row": 3,
+                  "column": 1
+                },
+                {
+                  "row": 3,
+                  "column": 2
+                },
+                {
+                  "row": 3,
+                  "column": 4
+                },
+                {
+                  "row": 3,
+                  "column": 5
+                },
+                {
+                  "row": 4,
+                  "column": 2
+                },
+                {
+                  "row": 4,
+                  "column": 3
+                },
+                {
+                  "row": 4,
+                  "column": 4
+                },
+                {
+                  "row": 4,
+                  "column": 5
+                },
+                {
+                  "row": 5,
+                  "column": 2
+                },
+                {
+                  "row": 5,
+                  "column": 3
+                },
+                {
+                  "row": 5,
+                  "column": 4
+                },
+                {
+                  "row": 5,
+                  "column": 5
+                }
+              ],
+              "source_type": "mysqil_page"
+            }
+          },
+          "detail_source_url": "https://wiki.mysqil.com/cassettes/jietou-quanwang"
+        }
+      }
+    },
+    "fadiya": {
+      "name": "法帝娅",
+      "basic": {
+        "rarity": "S",
+        "element": "魂",
+        "cassette_type": "聚合",
+        "role": "生存",
+        "position": "前排",
+        "rating": "T0",
+        "summary": "危险又迷人的E.T.D成员，代表局长令人捉摸不定的择人标准。"
+      },
+      "recommended": {
+        "weapon": {
+          "id": "yonhengyuanwuqv",
+          "name": "永恒圆舞曲",
+          "source_url": "https://wiki.mysqil.com/weapons/yonhengyuanwuqv",
+          "rating": "S",
+          "asset": "data/resources/characters/fadiya/weapons/yonhengyuanwuqv.webp",
+          "description": "永恒圆舞曲是S级聚合类弧盘。",
+          "detail_source_url": "https://wiki.mysqil.com/weapons/yonhengyuanwuqv"
+        },
+        "cassette": {
+          "id": "xiaoxiao-damaoxian",
+          "name": "小小大冒险",
+          "source_url": "https://wiki.mysqil.com/cassettes/xiaoxiao-damaoxian",
+          "category": "通用",
+          "cassette_type": "空幕卡带",
+          "element": "魂",
+          "icon": "data/resources/characters/fadiya/cassettes/tiny-big-adventure.webp",
+          "description": "小小大冒险是生命值堆叠型卡带，4件套通过 HP 降低叠层提升最大生命值（每层 +4%，最多 10 层）。最适合法帝娅——施放必杀技直接获得满层 10 层，配合 2 件套的 +10%，瞬间获得 +50% 生命上限加成，大幅强化其护盾/生存能力。",
+          "set_effects": [
+            {
+              "pieces": 2,
+              "description": "生命值上限 +10%"
+            },
+            {
+              "pieces": 4,
+              "description": "佩戴者 HP 降低时，最大 HP +4%，最多叠加 10 层，每层持续 10 秒。施放必杀技立即获得 10 层"
+            }
+          ],
+          "acquisition": "",
+          "main_affix_pool": [
+            "攻击力（% / 固定值）",
+            "生命值（% / 固定值）",
+            "防御力（% / 固定值）",
+            "暴击率",
+            "暴击伤害",
+            "元素伤害（光/暗/灵/咒/魂/相）",
+            "倾陷强度",
+            "环合强度"
+          ],
+          "sub_affix_pool": [
+            "暴击率",
+            "暴击伤害",
+            "攻击力（%）",
+            "攻击力（固定值）",
+            "生命值（%）",
+            "生命值（固定值）",
+            "防御力（%）",
+            "防御力（固定值）",
+            "元素伤害加成",
+            "全伤害加成",
+            "倾陷强度",
+            "环合强度"
+          ],
+          "quality": [
+            {
+              "tier": "金",
+              "description": "毕业 · 数值上限最高"
+            },
+            {
+              "tier": "金",
+              "description": "约为金色 80%"
+            },
+            {
+              "tier": "蓝",
+              "description": "前期过渡"
+            }
+          ],
+          "structure": {
+            "main_affix_count": 1,
+            "sub_affix_count": 4,
+            "rerollable": null
+          },
+          "recommended_main_affixes": [
+            {
+              "name": "环合强度",
+              "priority": 5
+            }
+          ],
+          "recommended_sub_affixes": [
+            {
+              "name": "生命值",
+              "priority": 4
+            },
+            {
+              "name": "环合强度",
+              "priority": 5
+            },
+            {
+              "name": "倾陷强度",
+              "priority": 5
+            }
+          ],
+          "terminal": {
+            "id": "terminal",
+            "name": "「卡带」属性",
+            "description": "每装配一个Ⅱ型驱动，使生命值百分比增加6%",
+            "effects": [
+              "生命值百分比 +6%"
+            ],
+            "source_type": "mysqil_page",
+            "layout": {
+              "rows": 7,
+              "columns": 7,
+              "active_slots": [
+                {
+                  "row": 1,
+                  "column": 1
+                },
+                {
+                  "row": 1,
+                  "column": 2
+                },
+                {
+                  "row": 1,
+                  "column": 3
+                },
+                {
+                  "row": 1,
+                  "column": 4
+                },
+                {
+                  "row": 2,
+                  "column": 1
+                },
+                {
+                  "row": 2,
+                  "column": 2
+                },
+                {
+                  "row": 2,
+                  "column": 3
+                },
+                {
+                  "row": 2,
+                  "column": 4
+                },
+                {
+                  "row": 3,
+                  "column": 1
+                },
+                {
+                  "row": 3,
+                  "column": 2
+                },
+                {
+                  "row": 3,
+                  "column": 4
+                },
+                {
+                  "row": 3,
+                  "column": 5
+                },
+                {
+                  "row": 4,
+                  "column": 2
+                },
+                {
+                  "row": 4,
+                  "column": 3
+                },
+                {
+                  "row": 4,
+                  "column": 4
+                },
+                {
+                  "row": 4,
+                  "column": 5
+                },
+                {
+                  "row": 5,
+                  "column": 2
+                },
+                {
+                  "row": 5,
+                  "column": 3
+                },
+                {
+                  "row": 5,
+                  "column": 4
+                },
+                {
+                  "row": 5,
+                  "column": 5
+                }
+              ],
+              "source_type": "mysqil_page"
+            }
+          },
+          "detail_source_url": "https://wiki.mysqil.com/cassettes/xiaoxiao-damaoxian"
+        }
+      }
+    },
+    "ling": {
+      "name": "零",
+      "basic": {
+        "rarity": "S",
+        "element": "光",
+        "cassette_type": "固态",
+        "role": "副C",
+        "position": "前排",
+        "rating": "T0.5",
+        "summary": "主角，光属性爆发输出，版本唯一可瞬环合的角色。仅靠E技能即可回满环合值，光属性范围爆发，开荒核心。"
+      },
+      "recommended": {
+        "weapon": {
+          "id": "qingshi-zhiyu",
+          "name": "「倾世之雨」",
+          "source_url": "https://wiki.mysqil.com/weapons/qingshi-zhiyu",
+          "rating": "S",
+          "asset": "data/resources/characters/ling/weapons/qingshi-zhiyu.webp",
+          "description": "「倾世之雨」是S级固态类弧盘，「零」的专属弧盘。 专属效果：「零」装备时可改变武器外观。",
+          "detail_source_url": "https://wiki.mysqil.com/weapons/qingshi-zhiyu"
+        },
+        "cassette": {
+          "id": "shiluo-guangmang",
+          "name": "失落光芒",
+          "source_url": "https://wiki.mysqil.com/cassettes/shiluo-guangmang",
+          "category": "属性专属",
+          "cassette_type": "空幕卡带",
+          "element": "光",
+          "icon": "data/resources/characters/ling/cassettes/lost-radiance.webp",
+          "description": "失落光芒是光属性专属输出卡带，4件套在施放必杀技后提供 25% 无视防御，持续 20 秒，是光系主C（尤其是依赖终结技爆发的小吱）的优质选择，能有效提升爆发期伤害。",
+          "set_effects": [
+            {
+              "pieces": 2,
+              "description": "光属性伤害 +10%"
+            },
+            {
+              "pieces": 4,
+              "description": "佩戴者施放必杀技后，造成的伤害无视 25% 防御力，持续 20 秒（不可叠加）"
+            }
+          ],
+          "acquisition": "",
+          "main_affix_pool": [
+            "攻击力（% / 固定值）",
+            "生命值（% / 固定值）",
+            "防御力（% / 固定值）",
+            "暴击率",
+            "暴击伤害",
+            "元素伤害（光/暗/灵/咒/魂/相）",
+            "倾陷强度",
+            "环合强度"
+          ],
+          "sub_affix_pool": [
+            "暴击率",
+            "暴击伤害",
+            "攻击力（%）",
+            "攻击力（固定值）",
+            "生命值（%）",
+            "生命值（固定值）",
+            "防御力（%）",
+            "防御力（固定值）",
+            "元素伤害加成",
+            "全伤害加成",
+            "倾陷强度",
+            "环合强度"
+          ],
+          "quality": [
+            {
+              "tier": "金",
+              "description": "毕业 · 数值上限最高"
+            },
+            {
+              "tier": "金",
+              "description": "约为金色 80%"
+            },
+            {
+              "tier": "蓝",
+              "description": "前期过渡"
+            }
+          ],
+          "structure": {
+            "main_affix_count": 1,
+            "sub_affix_count": 4,
+            "rerollable": null
+          },
+          "recommended_main_affixes": [
+            {
+              "name": "环合强度",
+              "priority": 5
+            }
+          ],
+          "recommended_sub_affixes": [
+            {
+              "name": "攻击力百分比",
+              "priority": 3
+            },
+            {
+              "name": "攻击力",
+              "priority": 2
+            },
+            {
+              "name": "暴击率",
+              "priority": 4
+            },
+            {
+              "name": "暴击伤害",
+              "priority": 4
+            },
+            {
+              "name": "环合强度",
+              "priority": 5
+            },
+            {
+              "name": "通用伤害增强",
+              "priority": 3
+            }
+          ],
+          "terminal": {
+            "id": "terminal",
+            "name": "「卡带」属性",
+            "description": "每装配一个Ⅲ型驱动，使攻击力百分比增加10%",
+            "effects": [
+              "攻击力百分比 +10%"
+            ],
+            "source_type": "mysqil_page",
+            "layout": {
+              "rows": 7,
+              "columns": 7,
+              "active_slots": [
+                {
+                  "row": 1,
+                  "column": 1
+                },
+                {
+                  "row": 1,
+                  "column": 2
+                },
+                {
+                  "row": 1,
+                  "column": 3
+                },
+                {
+                  "row": 1,
+                  "column": 4
+                },
+                {
+                  "row": 2,
+                  "column": 1
+                },
+                {
+                  "row": 2,
+                  "column": 2
+                },
+                {
+                  "row": 2,
+                  "column": 3
+                },
+                {
+                  "row": 2,
+                  "column": 4
+                },
+                {
+                  "row": 3,
+                  "column": 1
+                },
+                {
+                  "row": 3,
+                  "column": 2
+                },
+                {
+                  "row": 3,
+                  "column": 4
+                },
+                {
+                  "row": 3,
+                  "column": 5
+                },
+                {
+                  "row": 4,
+                  "column": 2
+                },
+                {
+                  "row": 4,
+                  "column": 3
+                },
+                {
+                  "row": 4,
+                  "column": 4
+                },
+                {
+                  "row": 4,
+                  "column": 5
+                },
+                {
+                  "row": 5,
+                  "column": 2
+                },
+                {
+                  "row": 5,
+                  "column": 3
+                },
+                {
+                  "row": 5,
+                  "column": 4
+                },
+                {
+                  "row": 5,
+                  "column": 5
+                }
+              ],
+              "source_type": "mysqil_page"
+            }
+          },
+          "detail_source_url": "https://wiki.mysqil.com/cassettes/shiluo-guangmang"
+        }
+      }
+    },
+    "xiaozhi": {
+      "name": "小吱",
+      "basic": {
+        "rarity": "S",
+        "element": "光",
+        "cassette_type": "气态",
+        "role": "主C",
+        "position": "中排",
+        "rating": "T1",
+        "summary": "虽然看起来有些胆小却是粉爪银行最靠谱的经理。"
+      },
+      "recommended": {
+        "weapon": {
+          "id": "sikaomiao",
+          "name": "思考喵",
+          "source_url": "https://wiki.mysqil.com/weapons/sikaomiao",
+          "rating": "S",
+          "asset": "data/resources/characters/xiaozhi/weapons/sikaomiao.webp",
+          "description": "思考喵是S级气态类弧盘。",
+          "detail_source_url": "https://wiki.mysqil.com/weapons/sikaomiao"
+        },
+        "cassette": {
+          "id": "shiluo-guangmang",
+          "name": "失落光芒",
+          "source_url": "https://wiki.mysqil.com/cassettes/shiluo-guangmang",
+          "category": "属性专属",
+          "cassette_type": "空幕卡带",
+          "element": "光",
+          "icon": "data/resources/characters/xiaozhi/cassettes/lost-radiance.webp",
+          "description": "失落光芒是光属性专属输出卡带，4件套在施放必杀技后提供 25% 无视防御，持续 20 秒，是光系主C（尤其是依赖终结技爆发的小吱）的优质选择，能有效提升爆发期伤害。",
+          "set_effects": [
+            {
+              "pieces": 2,
+              "description": "光属性伤害 +10%"
+            },
+            {
+              "pieces": 4,
+              "description": "佩戴者施放必杀技后，造成的伤害无视 25% 防御力，持续 20 秒（不可叠加）"
+            }
+          ],
+          "acquisition": "",
+          "main_affix_pool": [
+            "攻击力（% / 固定值）",
+            "生命值（% / 固定值）",
+            "防御力（% / 固定值）",
+            "暴击率",
+            "暴击伤害",
+            "元素伤害（光/暗/灵/咒/魂/相）",
+            "倾陷强度",
+            "环合强度"
+          ],
+          "sub_affix_pool": [
+            "暴击率",
+            "暴击伤害",
+            "攻击力（%）",
+            "攻击力（固定值）",
+            "生命值（%）",
+            "生命值（固定值）",
+            "防御力（%）",
+            "防御力（固定值）",
+            "元素伤害加成",
+            "全伤害加成",
+            "倾陷强度",
+            "环合强度"
+          ],
+          "quality": [
+            {
+              "tier": "金",
+              "description": "毕业 · 数值上限最高"
+            },
+            {
+              "tier": "金",
+              "description": "约为金色 80%"
+            },
+            {
+              "tier": "蓝",
+              "description": "前期过渡"
+            }
+          ],
+          "structure": {
+            "main_affix_count": 1,
+            "sub_affix_count": 4,
+            "rerollable": null
+          },
+          "recommended_main_affixes": [
+            {
+              "name": "暴击率",
+              "priority": 5
+            },
+            {
+              "name": "暴击伤害",
+              "priority": 4
+            }
+          ],
+          "recommended_sub_affixes": [
+            {
+              "name": "攻击力",
+              "priority": 3
+            },
+            {
+              "name": "暴击率",
+              "priority": 4
+            },
+            {
+              "name": "暴击伤害",
+              "priority": 5
+            },
+            {
+              "name": "通用伤害增强",
+              "priority": 5
+            }
+          ],
+          "terminal": {
+            "id": "terminal",
+            "name": "「卡带」属性",
+            "description": "每装配一个Ⅲ型驱动，使光属性异能伤害增强增加10%",
+            "effects": [
+              "光属性异能伤害增强 +10%"
+            ],
+            "source_type": "mysqil_page",
+            "layout": {
+              "rows": 7,
+              "columns": 7,
+              "active_slots": [
+                {
+                  "row": 1,
+                  "column": 2
+                },
+                {
+                  "row": 1,
+                  "column": 3
+                },
+                {
+                  "row": 1,
+                  "column": 4
+                },
+                {
+                  "row": 1,
+                  "column": 5
+                },
+                {
+                  "row": 2,
+                  "column": 1
+                },
+                {
+                  "row": 2,
+                  "column": 2
+                },
+                {
+                  "row": 2,
+                  "column": 3
+                },
+                {
+                  "row": 2,
+                  "column": 4
+                },
+                {
+                  "row": 2,
+                  "column": 5
+                },
+                {
+                  "row": 3,
+                  "column": 1
+                },
+                {
+                  "row": 3,
+                  "column": 2
+                },
+                {
+                  "row": 3,
+                  "column": 3
+                },
+                {
+                  "row": 3,
+                  "column": 5
+                },
+                {
+                  "row": 4,
+                  "column": 1
+                },
+                {
+                  "row": 4,
+                  "column": 2
+                },
+                {
+                  "row": 4,
+                  "column": 5
+                },
+                {
+                  "row": 5,
+                  "column": 1
+                },
+                {
+                  "row": 5,
+                  "column": 2
+                },
+                {
+                  "row": 5,
+                  "column": 3
+                },
+                {
+                  "row": 5,
+                  "column": 4
+                }
+              ],
+              "source_type": "mysqil_page"
+            }
+          },
+          "detail_source_url": "https://wiki.mysqil.com/cassettes/shiluo-guangmang"
+        }
+      }
+    },
+    "zaowu": {
+      "name": "早雾",
+      "basic": {
+        "rarity": "S",
+        "element": "咒",
+        "cassette_type": "气态",
+        "role": "辅助",
+        "position": "后排",
+        "rating": "T0.5",
+        "summary": "看起来不太好惹实际也不太好惹的伊波恩一霸。"
+      },
+      "recommended": {
+        "weapon": {
+          "id": "haogougouzousifang",
+          "name": "好狗狗走四方",
+          "source_url": "https://wiki.mysqil.com/weapons/haogougouzousifang",
+          "rating": "S",
+          "asset": "data/resources/characters/zaowu/weapons/haogougouzousifang.webp",
+          "description": "好狗狗走四方是S级气态类弧盘。",
+          "detail_source_url": "https://wiki.mysqil.com/weapons/haogougouzousifang"
+        },
+        "cassette": {
+          "id": "yinsu-lancìwei",
+          "name": "音速蓝刺猬",
+          "source_url": "https://wiki.mysqil.com/cassettes/yinsu-lanc%C3%ACwei",
+          "category": "通用",
+          "cassette_type": "空幕卡带",
+          "element": "咒",
+          "icon": "data/resources/characters/zaowu/cassettes/speedy-hedgehog.webp",
+          "description": "音速蓝刺猬是通用辅助/增伤卡带，2件套提升充能效率（加速必杀技回能），4件套在佩戴者释放必杀技后为全队提供 15% 攻击力加成。是辅助/增伤位的优质通用选择。",
+          "set_effects": [
+            {
+              "pieces": 2,
+              "description": "充能效率 +12%"
+            },
+            {
+              "pieces": 4,
+              "description": "佩戴者施放必杀技后，全队攻击力 +15%，持续 20 秒（不可叠加）"
+            }
+          ],
+          "acquisition": "",
+          "main_affix_pool": [
+            "攻击力（% / 固定值）",
+            "生命值（% / 固定值）",
+            "防御力（% / 固定值）",
+            "暴击率",
+            "暴击伤害",
+            "元素伤害（光/暗/灵/咒/魂/相）",
+            "倾陷强度",
+            "环合强度"
+          ],
+          "sub_affix_pool": [
+            "暴击率",
+            "暴击伤害",
+            "攻击力（%）",
+            "攻击力（固定值）",
+            "生命值（%）",
+            "生命值（固定值）",
+            "防御力（%）",
+            "防御力（固定值）",
+            "元素伤害加成",
+            "全伤害加成",
+            "倾陷强度",
+            "环合强度"
+          ],
+          "quality": [
+            {
+              "tier": "金",
+              "description": "毕业 · 数值上限最高"
+            },
+            {
+              "tier": "金",
+              "description": "约为金色 80%"
+            },
+            {
+              "tier": "蓝",
+              "description": "前期过渡"
+            }
+          ],
+          "structure": {
+            "main_affix_count": 1,
+            "sub_affix_count": 4,
+            "rerollable": null
+          },
+          "recommended_main_affixes": [
+            {
+              "name": "环合强度",
+              "priority": 5
+            }
+          ],
+          "recommended_sub_affixes": [
+            {
+              "name": "环合强度",
+              "priority": 5
+            },
+            {
+              "name": "倾陷强度",
+              "priority": 5
+            }
+          ],
+          "terminal": {
+            "id": "terminal",
+            "name": "「卡带」属性",
+            "description": "每装配一个Ⅲ型驱动，使咒属性异能伤害增强增加9%",
+            "effects": [
+              "咒属性异能伤害增强 +9%"
+            ],
+            "source_type": "mysqil_page",
+            "layout": {
+              "rows": 7,
+              "columns": 7,
+              "active_slots": [
+                {
+                  "row": 1,
+                  "column": 1
+                },
+                {
+                  "row": 1,
+                  "column": 2
+                },
+                {
+                  "row": 1,
+                  "column": 4
+                },
+                {
+                  "row": 1,
+                  "column": 5
+                },
+                {
+                  "row": 2,
+                  "column": 1
+                },
+                {
+                  "row": 2,
+                  "column": 2
+                },
+                {
+                  "row": 2,
+                  "column": 3
+                },
+                {
+                  "row": 2,
+                  "column": 4
+                },
+                {
+                  "row": 2,
+                  "column": 5
+                },
+                {
+                  "row": 3,
+                  "column": 1
+                },
+                {
+                  "row": 3,
+                  "column": 2
+                },
+                {
+                  "row": 3,
+                  "column": 3
+                },
+                {
+                  "row": 3,
+                  "column": 4
+                },
+                {
+                  "row": 3,
+                  "column": 5
+                },
+                {
+                  "row": 4,
+                  "column": 2
+                },
+                {
+                  "row": 4,
+                  "column": 3
+                },
+                {
+                  "row": 4,
+                  "column": 4
+                },
+                {
+                  "row": 5,
+                  "column": 2
+                },
+                {
+                  "row": 5,
+                  "column": 3
+                },
+                {
+                  "row": 5,
+                  "column": 4
+                }
+              ],
+              "source_type": "mysqil_page"
+            }
+          },
+          "detail_source_url": "https://wiki.mysqil.com/cassettes/yinsu-lanc%C3%ACwei"
+        }
+      }
+    },
+    "adeler": {
+      "name": "阿德勒",
+      "basic": {
+        "rarity": "A",
+        "element": "咒",
+        "cassette_type": "聚合",
+        "role": "生存",
+        "position": "前排",
+        "rating": "T1",
+        "summary": "令伊波恩众人和街坊邻居感到安心的完美管家。"
+      },
+      "recommended": {
+        "weapon": {
+          "id": "wuwang-san",
+          "name": "勿忘伞",
+          "source_url": "https://wiki.mysqil.com/weapons/wuwang-san",
+          "rating": "A",
+          "asset": "data/resources/characters/adeler/weapons/wuwang-san.webp",
+          "description": "勿忘伞是A级聚合类弧盘。",
+          "detail_source_url": "https://wiki.mysqil.com/weapons/wuwang-san"
+        },
+        "cassette": {
+          "id": "shouwei-wangguo",
+          "name": "守卫王国",
+          "source_url": "https://wiki.mysqil.com/cassettes/shouwei-wangguo",
+          "category": "通用",
+          "cassette_type": "空幕卡带",
+          "element": "咒",
+          "icon": "data/resources/characters/adeler/cassettes/kingdoms-guard.webp",
+          "description": "守卫王国是防御/护盾型通用卡带，2件套提升防御力，4件套强化护盾效果 20%。适合提供护盾的生存辅助角色（如阿德勒），能显著提升护盾的承伤能力，是高难度生存关卡的优质选择。",
+          "set_effects": [
+            {
+              "pieces": 2,
+              "description": "防御力 +15%"
+            },
+            {
+              "pieces": 4,
+              "description": "佩戴者的护盾效果 +20%"
+            }
+          ],
+          "acquisition": "",
+          "main_affix_pool": [
+            "攻击力（% / 固定值）",
+            "生命值（% / 固定值）",
+            "防御力（% / 固定值）",
+            "暴击率",
+            "暴击伤害",
+            "元素伤害（光/暗/灵/咒/魂/相）",
+            "倾陷强度",
+            "环合强度"
+          ],
+          "sub_affix_pool": [
+            "暴击率",
+            "暴击伤害",
+            "攻击力（%）",
+            "攻击力（固定值）",
+            "生命值（%）",
+            "生命值（固定值）",
+            "防御力（%）",
+            "防御力（固定值）",
+            "元素伤害加成",
+            "全伤害加成",
+            "倾陷强度",
+            "环合强度"
+          ],
+          "quality": [
+            {
+              "tier": "金",
+              "description": "毕业 · 数值上限最高"
+            },
+            {
+              "tier": "金",
+              "description": "约为金色 80%"
+            },
+            {
+              "tier": "蓝",
+              "description": "前期过渡"
+            }
+          ],
+          "structure": {
+            "main_affix_count": 1,
+            "sub_affix_count": 4,
+            "rerollable": null
+          },
+          "recommended_main_affixes": [
+            {
+              "name": "防御力百分比",
+              "priority": 5
+            }
+          ],
+          "recommended_sub_affixes": [
+            {
+              "name": "防御力百分比",
+              "priority": 5
+            },
+            {
+              "name": "防御力",
+              "priority": 5
+            }
+          ],
+          "terminal": {
+            "id": "terminal",
+            "name": "「卡带」属性",
+            "description": "每装配一个Ⅲ型驱动，使防御力百分比增加12%",
+            "effects": [
+              "防御力百分比 +12%"
+            ],
+            "source_type": "mysqil_page",
+            "layout": {
+              "rows": 7,
+              "columns": 7,
+              "active_slots": [
+                {
+                  "row": 1,
+                  "column": 1
+                },
+                {
+                  "row": 1,
+                  "column": 2
+                },
+                {
+                  "row": 1,
+                  "column": 4
+                },
+                {
+                  "row": 1,
+                  "column": 5
+                },
+                {
+                  "row": 2,
+                  "column": 1
+                },
+                {
+                  "row": 2,
+                  "column": 2
+                },
+                {
+                  "row": 2,
+                  "column": 3
+                },
+                {
+                  "row": 2,
+                  "column": 4
+                },
+                {
+                  "row": 2,
+                  "column": 5
+                },
+                {
+                  "row": 3,
+                  "column": 1
+                },
+                {
+                  "row": 3,
+                  "column": 2
+                },
+                {
+                  "row": 3,
+                  "column": 3
+                },
+                {
+                  "row": 3,
+                  "column": 4
+                },
+                {
+                  "row": 3,
+                  "column": 5
+                },
+                {
+                  "row": 4,
+                  "column": 2
+                },
+                {
+                  "row": 4,
+                  "column": 3
+                },
+                {
+                  "row": 4,
+                  "column": 4
+                },
+                {
+                  "row": 5,
+                  "column": 2
+                },
+                {
+                  "row": 5,
+                  "column": 3
+                },
+                {
+                  "row": 5,
+                  "column": 4
+                }
+              ],
+              "source_type": "mysqil_page"
+            }
+          },
+          "detail_source_url": "https://wiki.mysqil.com/cassettes/shouwei-wangguo"
+        }
+      }
+    },
+    "edjia": {
+      "name": "埃德嘉",
+      "basic": {
+        "rarity": "A",
+        "element": "光",
+        "cassette_type": "液态",
+        "role": "辅助",
+        "position": "后排",
+        "rating": "T3",
+        "summary": "头脑灵活，看似是个小孩。实际也是个小孩。"
+      },
+      "recommended": {
+        "weapon": {
+          "id": "niuquzhichengde-huhuan",
+          "name": "扭曲之城的呼唤",
+          "source_url": "https://wiki.mysqil.com/weapons/niuquzhichengde-huhuan",
+          "rating": "A",
+          "asset": "data/resources/characters/edjia/weapons/niuquzhichengde-huhuan.webp",
+          "description": "扭曲之城的呼唤是A级液态类弧盘。",
+          "detail_source_url": "https://wiki.mysqil.com/weapons/niuquzhichengde-huhuan"
+        },
+        "cassette": {
+          "id": "yinsu-lancìwei",
+          "name": "音速蓝刺猬",
+          "source_url": "https://wiki.mysqil.com/cassettes/yinsu-lanc%C3%ACwei",
+          "category": "泛用功能",
+          "cassette_type": "空幕卡带",
+          "element": "",
+          "icon": "data/resources/encyclopedia/cassettes/yinsu-lancìwei/gold.webp",
+          "description": "音速蓝刺猬是通用辅助/增伤卡带，2件套提升充能效率（加速必杀技回能），4件套在佩戴者释放必杀技后为全队提供 15% 攻击力加成。是辅助/增伤位的优质通用选择。",
+          "set_effects": [
+            {
+              "pieces": 2,
+              "description": "充能效率 +12%"
+            },
+            {
+              "pieces": 4,
+              "description": "佩戴者施放必杀技后，全队攻击力 +15%，持续 20 秒（不可叠加）"
+            }
+          ],
+          "acquisition": "兔子洞副本",
+          "main_affix_pool": [
+            "攻击力（% / 固定值）",
+            "生命值（% / 固定值）",
+            "防御力（% / 固定值）",
+            "暴击率",
+            "暴击伤害",
+            "元素伤害（光/暗/灵/咒/魂/相）",
+            "倾陷强度",
+            "环合强度"
+          ],
+          "sub_affix_pool": [
+            "暴击率",
+            "暴击伤害",
+            "攻击力（%）",
+            "攻击力（固定值）",
+            "生命值（%）",
+            "生命值（固定值）",
+            "防御力（%）",
+            "防御力（固定值）",
+            "元素伤害加成",
+            "全伤害加成",
+            "倾陷强度",
+            "环合强度"
+          ],
+          "quality": [
+            {
+              "tier": "金",
+              "description": "毕业 · 数值上限最高"
+            },
+            {
+              "tier": "金",
+              "description": "约为金色 80%"
+            },
+            {
+              "tier": "蓝",
+              "description": "前期过渡"
+            }
+          ],
+          "structure": {
+            "main_affix_count": 1,
+            "sub_affix_count": 4,
+            "rerollable": null
+          },
+          "recommended_main_affixes": [
+            {
+              "name": "环合强度",
+              "priority": 5
+            }
+          ],
+          "recommended_sub_affixes": [
+            {
+              "name": "生命值百分比",
+              "priority": 4
+            },
+            {
+              "name": "生命值",
+              "priority": 4
+            },
+            {
+              "name": "环合强度",
+              "priority": 5
+            }
+          ],
+          "terminal": {
+            "id": "terminal",
+            "name": "「卡带」属性",
+            "description": "每装配一个Ⅲ型驱动，使攻击力百分比增加10%",
+            "effects": [
+              "攻击力百分比 +10%"
+            ],
+            "source_type": "mysqil_page",
+            "layout": {
+              "rows": 7,
+              "columns": 7,
+              "active_slots": [
+                {
+                  "row": 1,
+                  "column": 1
+                },
+                {
+                  "row": 1,
+                  "column": 2
+                },
+                {
+                  "row": 1,
+                  "column": 4
+                },
+                {
+                  "row": 1,
+                  "column": 5
+                },
+                {
+                  "row": 2,
+                  "column": 1
+                },
+                {
+                  "row": 2,
+                  "column": 2
+                },
+                {
+                  "row": 2,
+                  "column": 3
+                },
+                {
+                  "row": 2,
+                  "column": 4
+                },
+                {
+                  "row": 2,
+                  "column": 5
+                },
+                {
+                  "row": 3,
+                  "column": 1
+                },
+                {
+                  "row": 3,
+                  "column": 2
+                },
+                {
+                  "row": 3,
+                  "column": 3
+                },
+                {
+                  "row": 3,
+                  "column": 4
+                },
+                {
+                  "row": 3,
+                  "column": 5
+                },
+                {
+                  "row": 4,
+                  "column": 2
+                },
+                {
+                  "row": 4,
+                  "column": 3
+                },
+                {
+                  "row": 4,
+                  "column": 4
+                },
+                {
+                  "row": 5,
+                  "column": 2
+                },
+                {
+                  "row": 5,
+                  "column": 3
+                },
+                {
+                  "row": 5,
+                  "column": 4
+                }
+              ],
+              "source_type": "mysqil_page"
+            }
+          },
+          "detail_source_url": "https://wiki.mysqil.com/cassettes/yinsu-lanc%C3%ACwei"
+        }
+      }
+    },
+    "bohe": {
+      "name": "薄荷",
+      "basic": {
+        "rarity": "A",
+        "element": "灵",
+        "cassette_type": "液态",
+        "role": "主C",
+        "position": "前排",
+        "rating": "T2",
+        "summary": "如果能有评定，应该会是收容组内「被异象骗最多次」的人。"
+      },
+      "recommended": {
+        "weapon": {
+          "id": "jisuzhimian",
+          "name": "极速之绵",
+          "rating": "S",
+          "asset": "data/resources/encyclopedia/weapons/jisuzhimian/jisuzhimian.webp"
+        },
+        "cassette": {
+          "id": "senlin-yinghuozhixin",
+          "name": "森林萤火之心",
+          "source_url": "https://wiki.mysqil.com/cassettes/senlin-yinghuozhixin",
+          "category": "属性专属",
+          "cassette_type": "空幕卡带",
+          "element": "灵",
+          "icon": "data/resources/characters/bohe/cassettes/fireflies-and-the-forest.webp",
+          "description": "森林萤火之心是灵属性专属输出卡带，4件套通过队伍造成灵伤害叠层提升佩戴者暴击伤害（每层 8%、最多 7 层 = +56%），且后台可生效。是娜娜莉等灵属性主C的毕业套装。",
+          "set_effects": [
+            {
+              "pieces": 2,
+              "description": "灵属性伤害 +10%"
+            },
+            {
+              "pieces": 4,
+              "description": "附近敌人受到队伍造成的灵属性伤害时，佩戴者暴击伤害 +8%，最多叠加 7 层，每层持续 10 秒（后台也生效）"
+            }
+          ],
+          "acquisition": "",
+          "main_affix_pool": [
+            "攻击力（% / 固定值）",
+            "生命值（% / 固定值）",
+            "防御力（% / 固定值）",
+            "暴击率",
+            "暴击伤害",
+            "元素伤害（光/暗/灵/咒/魂/相）",
+            "倾陷强度",
+            "环合强度"
+          ],
+          "sub_affix_pool": [
+            "暴击率",
+            "暴击伤害",
+            "攻击力（%）",
+            "攻击力（固定值）",
+            "生命值（%）",
+            "生命值（固定值）",
+            "防御力（%）",
+            "防御力（固定值）",
+            "元素伤害加成",
+            "全伤害加成",
+            "倾陷强度",
+            "环合强度"
+          ],
+          "quality": [
+            {
+              "tier": "金",
+              "description": "毕业 · 数值上限最高"
+            },
+            {
+              "tier": "金",
+              "description": "约为金色 80%"
+            },
+            {
+              "tier": "蓝",
+              "description": "前期过渡"
+            }
+          ],
+          "structure": {
+            "main_affix_count": 1,
+            "sub_affix_count": 4,
+            "rerollable": null
+          },
+          "recommended_main_affixes": [
+            {
+              "name": "暴击率",
+              "priority": 5
+            },
+            {
+              "name": "暴击伤害",
+              "priority": 5
+            }
+          ],
+          "recommended_sub_affixes": [
+            {
+              "name": "攻击力百分比",
+              "priority": 3
+            },
+            {
+              "name": "攻击力",
+              "priority": 2
+            },
+            {
+              "name": "暴击率",
+              "priority": 5
+            },
+            {
+              "name": "暴击伤害",
+              "priority": 5
+            },
+            {
+              "name": "通用伤害增强",
+              "priority": 4
+            }
+          ],
+          "terminal": {
+            "id": "terminal",
+            "name": "「卡带」属性",
+            "description": "每装配一个Ⅲ型驱动，使暴击率增加7.5%",
+            "effects": [
+              "暴击率 +7.5%"
+            ],
+            "source_type": "mysqil_page",
+            "layout": {
+              "rows": 7,
+              "columns": 7,
+              "active_slots": [
+                {
+                  "row": 1,
+                  "column": 2
+                },
+                {
+                  "row": 1,
+                  "column": 3
+                },
+                {
+                  "row": 1,
+                  "column": 4
+                },
+                {
+                  "row": 1,
+                  "column": 5
+                },
+                {
+                  "row": 2,
+                  "column": 1
+                },
+                {
+                  "row": 2,
+                  "column": 2
+                },
+                {
+                  "row": 2,
+                  "column": 3
+                },
+                {
+                  "row": 2,
+                  "column": 4
+                },
+                {
+                  "row": 2,
+                  "column": 5
+                },
+                {
+                  "row": 3,
+                  "column": 1
+                },
+                {
+                  "row": 3,
+                  "column": 2
+                },
+                {
+                  "row": 3,
+                  "column": 3
+                },
+                {
+                  "row": 3,
+                  "column": 5
+                },
+                {
+                  "row": 4,
+                  "column": 1
+                },
+                {
+                  "row": 4,
+                  "column": 2
+                },
+                {
+                  "row": 4,
+                  "column": 5
+                },
+                {
+                  "row": 5,
+                  "column": 1
+                },
+                {
+                  "row": 5,
+                  "column": 2
+                },
+                {
+                  "row": 5,
+                  "column": 3
+                },
+                {
+                  "row": 5,
+                  "column": 4
+                }
+              ],
+              "source_type": "mysqil_page"
+            }
+          },
+          "detail_source_url": "https://wiki.mysqil.com/cassettes/senlin-yinghuozhixin"
+        }
+      }
+    },
+    "haiyue": {
+      "name": "海月",
+      "basic": {
+        "rarity": "A",
+        "element": "魂",
+        "cassette_type": "等离子",
+        "role": "主C",
+        "position": "中排",
+        "rating": "T3",
+        "summary": "认识海月后才知道的海特洛市冷知识其一：驾驶水母上路不算违章。"
+      },
+      "recommended": {
+        "weapon": {
+          "id": "yinhe-zanliu",
+          "name": "「银河暂留」",
+          "source_url": "https://wiki.mysqil.com/weapons/yinhe-zanliu",
+          "rating": "S",
+          "asset": "data/resources/characters/haiyue/weapons/yinhe-zanliu.webp",
+          "description": "「银河暂留」是S级等离子类弧盘。",
+          "detail_source_url": "https://wiki.mysqil.com/weapons/yinhe-zanliu"
+        },
+        "cassette": {
+          "id": "emozhixie-zuzhou",
+          "name": "恶魔之血·诅咒",
+          "source_url": "https://wiki.mysqil.com/cassettes/emozhixie-zuzhou",
+          "category": "通用",
+          "cassette_type": "空幕卡带",
+          "element": "魂",
+          "icon": "data/resources/characters/haiyue/cassettes/devils-blood-curse.webp",
+          "description": "恶魔之血·诅咒是魂属性反应流输出卡带，4件套基础增伤 18%，攻击受浸染或黯星状态影响的敌人时增伤翻倍至 36%。适合配合浸染/黯星反应体系的魂属性输出角色，需要队友先挂对应状态。 可通过兔子洞副本或材料自选箱获取。",
+          "set_effects": [
+            {
+              "pieces": 2,
+              "description": "魂属性伤害 +10%"
+            },
+            {
+              "pieces": 4,
+              "description": "佩戴者造成的伤害 +18%。攻击处于浸染或黯星状态的敌人时，伤害提升变为 +36%"
+            }
+          ],
+          "acquisition": "",
+          "main_affix_pool": [
+            "攻击力（% / 固定值）",
+            "生命值（% / 固定值）",
+            "防御力（% / 固定值）",
+            "暴击率",
+            "暴击伤害",
+            "元素伤害（光/暗/灵/咒/魂/相）",
+            "倾陷强度",
+            "环合强度"
+          ],
+          "sub_affix_pool": [
+            "暴击率",
+            "暴击伤害",
+            "攻击力（%）",
+            "攻击力（固定值）",
+            "生命值（%）",
+            "生命值（固定值）",
+            "防御力（%）",
+            "防御力（固定值）",
+            "元素伤害加成",
+            "全伤害加成",
+            "倾陷强度",
+            "环合强度"
+          ],
+          "quality": [
+            {
+              "tier": "金",
+              "description": "毕业 · 数值上限最高"
+            },
+            {
+              "tier": "金",
+              "description": "约为金色 80%"
+            },
+            {
+              "tier": "蓝",
+              "description": "前期过渡"
+            }
+          ],
+          "structure": {
+            "main_affix_count": 1,
+            "sub_affix_count": 4,
+            "rerollable": null
+          },
+          "recommended_main_affixes": [
+            {
+              "name": "暴击率",
+              "priority": 5
+            },
+            {
+              "name": "暴击伤害",
+              "priority": 5
+            }
+          ],
+          "recommended_sub_affixes": [
+            {
+              "name": "攻击力百分比",
+              "priority": 3
+            },
+            {
+              "name": "攻击力",
+              "priority": 2
+            },
+            {
+              "name": "暴击率",
+              "priority": 5
+            },
+            {
+              "name": "暴击伤害",
+              "priority": 5
+            },
+            {
+              "name": "通用伤害增强",
+              "priority": 4
+            }
+          ],
+          "terminal": {
+            "id": "terminal",
+            "name": "「卡带」属性",
+            "description": "每装配一个Ⅲ型驱动，使攻击力百分比增加10%",
+            "effects": [
+              "攻击力百分比 +10%"
+            ],
+            "source_type": "mysqil_page",
+            "layout": {
+              "rows": 7,
+              "columns": 7,
+              "active_slots": [
+                {
+                  "row": 1,
+                  "column": 1
+                },
+                {
+                  "row": 1,
+                  "column": 2
+                },
+                {
+                  "row": 1,
+                  "column": 3
+                },
+                {
+                  "row": 1,
+                  "column": 4
+                },
+                {
+                  "row": 2,
+                  "column": 1
+                },
+                {
+                  "row": 2,
+                  "column": 2
+                },
+                {
+                  "row": 2,
+                  "column": 3
+                },
+                {
+                  "row": 2,
+                  "column": 4
+                },
+                {
+                  "row": 3,
+                  "column": 1
+                },
+                {
+                  "row": 3,
+                  "column": 2
+                },
+                {
+                  "row": 3,
+                  "column": 4
+                },
+                {
+                  "row": 3,
+                  "column": 5
+                },
+                {
+                  "row": 4,
+                  "column": 2
+                },
+                {
+                  "row": 4,
+                  "column": 3
+                },
+                {
+                  "row": 4,
+                  "column": 4
+                },
+                {
+                  "row": 4,
+                  "column": 5
+                },
+                {
+                  "row": 5,
+                  "column": 2
+                },
+                {
+                  "row": 5,
+                  "column": 3
+                },
+                {
+                  "row": 5,
+                  "column": 4
+                },
+                {
+                  "row": 5,
+                  "column": 5
+                }
+              ],
+              "source_type": "mysqil_page"
+            }
+          },
+          "detail_source_url": "https://wiki.mysqil.com/cassettes/emozhixie-zuzhou"
+        }
+      }
+    },
+    "haniya": {
+      "name": "哈尼娅",
+      "basic": {
+        "rarity": "A",
+        "element": "魂",
+        "cassette_type": "固态",
+        "role": "辅助",
+        "position": "后排",
+        "rating": "T1",
+        "summary": "梦想是成为拯救世界的美少女高中生！"
+      },
+      "recommended": {
+        "weapon": {
+          "id": "yinquanquanchang",
+          "name": "引爆全场",
+          "source_url": "https://wiki.mysqil.com/weapons/yinquanquanchang",
+          "rating": "S",
+          "asset": "data/resources/characters/haniya/weapons/yinquanquanchang.webp",
+          "description": "引爆全场是S级固态类弧盘。",
+          "detail_source_url": "https://wiki.mysqil.com/weapons/yinquanquanchang"
+        },
+        "cassette": {
+          "id": "yinsu-lancìwei",
+          "name": "音速蓝刺猬",
+          "source_url": "https://wiki.mysqil.com/cassettes/yinsu-lanc%C3%ACwei",
+          "category": "通用",
+          "cassette_type": "空幕卡带",
+          "element": "魂",
+          "icon": "data/resources/characters/haniya/cassettes/speedy-hedgehog.webp",
+          "description": "音速蓝刺猬是通用辅助/增伤卡带，2件套提升充能效率（加速必杀技回能），4件套在佩戴者释放必杀技后为全队提供 15% 攻击力加成。是辅助/增伤位的优质通用选择。",
+          "set_effects": [
+            {
+              "pieces": 2,
+              "description": "充能效率 +12%"
+            },
+            {
+              "pieces": 4,
+              "description": "佩戴者施放必杀技后，全队攻击力 +15%，持续 20 秒（不可叠加）"
+            }
+          ],
+          "acquisition": "",
+          "main_affix_pool": [
+            "攻击力（% / 固定值）",
+            "生命值（% / 固定值）",
+            "防御力（% / 固定值）",
+            "暴击率",
+            "暴击伤害",
+            "元素伤害（光/暗/灵/咒/魂/相）",
+            "倾陷强度",
+            "环合强度"
+          ],
+          "sub_affix_pool": [
+            "暴击率",
+            "暴击伤害",
+            "攻击力（%）",
+            "攻击力（固定值）",
+            "生命值（%）",
+            "生命值（固定值）",
+            "防御力（%）",
+            "防御力（固定值）",
+            "元素伤害加成",
+            "全伤害加成",
+            "倾陷强度",
+            "环合强度"
+          ],
+          "quality": [
+            {
+              "tier": "金",
+              "description": "毕业 · 数值上限最高"
+            },
+            {
+              "tier": "金",
+              "description": "约为金色 80%"
+            },
+            {
+              "tier": "蓝",
+              "description": "前期过渡"
+            }
+          ],
+          "structure": {
+            "main_affix_count": 1,
+            "sub_affix_count": 4,
+            "rerollable": null
+          },
+          "recommended_main_affixes": [
+            {
+              "name": "环合强度",
+              "priority": 5
+            }
+          ],
+          "recommended_sub_affixes": [
+            {
+              "name": "环合强度",
+              "priority": 5
+            }
+          ],
+          "terminal": {
+            "id": "terminal",
+            "name": "「卡带」属性",
+            "description": "每装配一个Ⅲ型驱动，使攻击力百分比增加10%",
+            "effects": [
+              "攻击力百分比 +10%"
+            ],
+            "source_type": "mysqil_page",
+            "layout": {
+              "rows": 7,
+              "columns": 7,
+              "active_slots": [
+                {
+                  "row": 1,
+                  "column": 1
+                },
+                {
+                  "row": 1,
+                  "column": 2
+                },
+                {
+                  "row": 1,
+                  "column": 4
+                },
+                {
+                  "row": 1,
+                  "column": 5
+                },
+                {
+                  "row": 2,
+                  "column": 1
+                },
+                {
+                  "row": 2,
+                  "column": 2
+                },
+                {
+                  "row": 2,
+                  "column": 3
+                },
+                {
+                  "row": 2,
+                  "column": 4
+                },
+                {
+                  "row": 2,
+                  "column": 5
+                },
+                {
+                  "row": 3,
+                  "column": 1
+                },
+                {
+                  "row": 3,
+                  "column": 2
+                },
+                {
+                  "row": 3,
+                  "column": 3
+                },
+                {
+                  "row": 3,
+                  "column": 4
+                },
+                {
+                  "row": 3,
+                  "column": 5
+                },
+                {
+                  "row": 4,
+                  "column": 2
+                },
+                {
+                  "row": 4,
+                  "column": 3
+                },
+                {
+                  "row": 4,
+                  "column": 4
+                },
+                {
+                  "row": 5,
+                  "column": 2
+                },
+                {
+                  "row": 5,
+                  "column": 3
+                },
+                {
+                  "row": 5,
+                  "column": 4
+                }
+              ],
+              "source_type": "mysqil_page"
+            }
+          },
+          "detail_source_url": "https://wiki.mysqil.com/cassettes/yinsu-lanc%C3%ACwei"
+        }
+      }
+    },
+    "yi": {
+      "name": "翳",
+      "basic": {
+        "rarity": "A",
+        "element": "相",
+        "cassette_type": "气态",
+        "role": "副C",
+        "position": "前排",
+        "rating": "T2",
+        "summary": "常被认为是E.T.D四队队长的副队长。"
+      },
+      "recommended": {
+        "weapon": {
+          "id": "haogougouzousifang",
+          "name": "好狗狗走四方",
+          "source_url": "https://wiki.mysqil.com/weapons/haogougouzousifang",
+          "rating": "S",
+          "asset": "data/resources/characters/yi/weapons/haogougouzousifang.webp",
+          "description": "好狗狗走四方是S级气态类弧盘。",
+          "detail_source_url": "https://wiki.mysqil.com/weapons/haogougouzousifang"
+        },
+        "cassette": {
+          "id": "yinsu-lancìwei",
+          "name": "音速蓝刺猬",
+          "source_url": "https://wiki.mysqil.com/cassettes/yinsu-lanc%C3%ACwei",
+          "category": "通用",
+          "cassette_type": "空幕卡带",
+          "element": "相",
+          "icon": "data/resources/characters/yi/cassettes/speedy-hedgehog.webp",
+          "description": "音速蓝刺猬是通用辅助/增伤卡带，2件套提升充能效率（加速必杀技回能），4件套在佩戴者释放必杀技后为全队提供 15% 攻击力加成。是辅助/增伤位的优质通用选择。",
+          "set_effects": [
+            {
+              "pieces": 2,
+              "description": "充能效率 +12%"
+            },
+            {
+              "pieces": 4,
+              "description": "佩戴者施放必杀技后，全队攻击力 +15%，持续 20 秒（不可叠加）"
+            }
+          ],
+          "acquisition": "",
+          "main_affix_pool": [
+            "攻击力（% / 固定值）",
+            "生命值（% / 固定值）",
+            "防御力（% / 固定值）",
+            "暴击率",
+            "暴击伤害",
+            "元素伤害（光/暗/灵/咒/魂/相）",
+            "倾陷强度",
+            "环合强度"
+          ],
+          "sub_affix_pool": [
+            "暴击率",
+            "暴击伤害",
+            "攻击力（%）",
+            "攻击力（固定值）",
+            "生命值（%）",
+            "生命值（固定值）",
+            "防御力（%）",
+            "防御力（固定值）",
+            "元素伤害加成",
+            "全伤害加成",
+            "倾陷强度",
+            "环合强度"
+          ],
+          "quality": [
+            {
+              "tier": "金",
+              "description": "毕业 · 数值上限最高"
+            },
+            {
+              "tier": "金",
+              "description": "约为金色 80%"
+            },
+            {
+              "tier": "蓝",
+              "description": "前期过渡"
+            }
+          ],
+          "structure": {
+            "main_affix_count": 1,
+            "sub_affix_count": 4,
+            "rerollable": null
+          },
+          "recommended_main_affixes": [
+            {
+              "name": "环合强度",
+              "priority": 5
+            }
+          ],
+          "recommended_sub_affixes": [
+            {
+              "name": "暴击率",
+              "priority": 4
+            },
+            {
+              "name": "暴击伤害",
+              "priority": 4
+            },
+            {
+              "name": "环合强度",
+              "priority": 5
+            },
+            {
+              "name": "通用伤害增强",
+              "priority": 4
+            }
+          ],
+          "terminal": {
+            "id": "terminal",
+            "name": "「卡带」属性",
+            "description": "每装配一个Ⅲ型驱动，使攻击力百分比增加10%",
+            "effects": [
+              "攻击力百分比 +10%"
+            ],
+            "source_type": "mysqil_page",
+            "layout": {
+              "rows": 7,
+              "columns": 7,
+              "active_slots": [
+                {
+                  "row": 1,
+                  "column": 2
+                },
+                {
+                  "row": 1,
+                  "column": 3
+                },
+                {
+                  "row": 1,
+                  "column": 4
+                },
+                {
+                  "row": 1,
+                  "column": 5
+                },
+                {
+                  "row": 2,
+                  "column": 1
+                },
+                {
+                  "row": 2,
+                  "column": 2
+                },
+                {
+                  "row": 2,
+                  "column": 3
+                },
+                {
+                  "row": 2,
+                  "column": 4
+                },
+                {
+                  "row": 2,
+                  "column": 5
+                },
+                {
+                  "row": 3,
+                  "column": 1
+                },
+                {
+                  "row": 3,
+                  "column": 2
+                },
+                {
+                  "row": 3,
+                  "column": 3
+                },
+                {
+                  "row": 3,
+                  "column": 5
+                },
+                {
+                  "row": 4,
+                  "column": 1
+                },
+                {
+                  "row": 4,
+                  "column": 2
+                },
+                {
+                  "row": 4,
+                  "column": 5
+                },
+                {
+                  "row": 5,
+                  "column": 1
+                },
+                {
+                  "row": 5,
+                  "column": 2
+                },
+                {
+                  "row": 5,
+                  "column": 3
+                },
+                {
+                  "row": 5,
+                  "column": 4
+                }
+              ],
+              "source_type": "mysqil_page"
+            }
+          },
+          "detail_source_url": "https://wiki.mysqil.com/cassettes/yinsu-lanc%C3%ACwei"
+        }
+      }
+    },
+    "mingyin": {
+      "name": "明音凛",
+      "basic": {
+        "rarity": "S",
+        "element": "相",
+        "cassette_type": "液态",
+        "role": "主C",
+        "position": "前排",
+        "rating": "T0",
+        "summary": "「猫头音！！！！」的主唱，曾与海月、铃羽共同组成「平行线」。"
+      },
+      "recommended": {
+        "weapon": {
+          "id": "yuededuizhidian",
+          "name": "月的对跖点",
+          "source_url": "https://wiki.mysqil.com/weapons/yuededuizhidian",
+          "rating": "S",
+          "asset": "data/resources/characters/mingyin/weapons/yuededuizhidian.webp",
+          "description": "「月的对跖点」是S级液态类弧盘，明音凛的专属弧盘。",
+          "detail_source_url": "https://wiki.mysqil.com/weapons/yuededuizhidian"
+        },
+        "cassette": null
+      }
+    },
+    "kaesi": {
+      "name": "卡厄斯",
+      "basic": {
+        "rarity": "S",
+        "element": "相",
+        "cassette_type": "聚合",
+        "role": "主C",
+        "position": "前排",
+        "rating": "T0",
+        "summary": "E.T.D六队现任队员，你最正直可靠的朋友之一。"
+      },
+      "recommended": {
+        "weapon": {
+          "id": "zhongrenzhuixunzhiwu",
+          "name": "众人追寻之物",
+          "source_url": "https://wiki.mysqil.com/weapons/zhongrenzhuixunzhiwu",
+          "rating": "S",
+          "asset": "data/resources/characters/kaesi/weapons/zhongrenzhuixunzhiwu.webp",
+          "description": "众人追寻之物是S级聚合类弧盘，卡厄斯的专属弧盘。 专属效果：卡厄斯装备时可改变武器外观。",
+          "detail_source_url": "https://wiki.mysqil.com/weapons/zhongrenzhuixunzhiwu"
+        },
+        "cassette": {
+          "id": "jietou-quanwang",
+          "name": "街头拳王",
+          "source_url": "https://wiki.mysqil.com/cassettes/jietou-quanwang",
+          "category": "属性专属",
+          "cassette_type": "空幕卡带",
+          "element": "相",
+          "icon": "data/resources/characters/kaesi/cassettes/street-boxer.webp",
+          "description": "街头拳王是相属性专属输出卡带，4件套提供 14% 暴击率，触发盈蓄或浸染反应后额外获得 14% 暴击率（共 28%），能快速拉满暴击。是哈索尔、翳等相属性输出角色的核心套装。",
+          "set_effects": [
+            {
+              "pieces": 2,
+              "description": "相属性伤害 +10%"
+            },
+            {
+              "pieces": 4,
+              "description": "暴击率 +14%。队伍触发盈蓄或浸染反应时，额外获得 14% 暴击率，持续 20 秒"
+            }
+          ],
+          "acquisition": "",
+          "main_affix_pool": [
+            "攻击力（% / 固定值）",
+            "生命值（% / 固定值）",
+            "防御力（% / 固定值）",
+            "暴击率",
+            "暴击伤害",
+            "元素伤害（光/暗/灵/咒/魂/相）",
+            "倾陷强度",
+            "环合强度"
+          ],
+          "sub_affix_pool": [
+            "暴击率",
+            "暴击伤害",
+            "攻击力（%）",
+            "攻击力（固定值）",
+            "生命值（%）",
+            "生命值（固定值）",
+            "防御力（%）",
+            "防御力（固定值）",
+            "元素伤害加成",
+            "全伤害加成",
+            "倾陷强度",
+            "环合强度"
+          ],
+          "quality": [
+            {
+              "tier": "金",
+              "description": "毕业 · 数值上限最高"
+            },
+            {
+              "tier": "金",
+              "description": "约为金色 80%"
+            },
+            {
+              "tier": "蓝",
+              "description": "前期过渡"
+            }
+          ],
+          "structure": {
+            "main_affix_count": 1,
+            "sub_affix_count": 4,
+            "rerollable": null
+          },
+          "recommended_main_affixes": [
+            {
+              "name": "攻击力百分比",
+              "priority": 4
+            },
+            {
+              "name": "暴击伤害",
+              "priority": 4
+            },
+            {
+              "name": "相属性异能伤害增强",
+              "priority": 5
+            }
+          ],
+          "recommended_sub_affixes": [
+            {
+              "name": "攻击力",
+              "priority": 4
+            },
+            {
+              "name": "暴击率",
+              "priority": 5
+            },
+            {
+              "name": "暴击伤害",
+              "priority": 4
+            },
+            {
+              "name": "通用伤害增强",
+              "priority": 5
+            }
+          ],
+          "terminal": {
+            "id": "terminal",
+            "name": "「卡带」属性",
+            "description": "每装配一个Ⅲ型驱动，使暴击伤害增加16%",
+            "effects": [
+              "暴击伤害 +16%"
+            ],
+            "source_type": "mysqil_page",
+            "layout": {
+              "rows": 7,
+              "columns": 7,
+              "active_slots": [
+                {
+                  "row": 1,
+                  "column": 2
+                },
+                {
+                  "row": 1,
+                  "column": 3
+                },
+                {
+                  "row": 1,
+                  "column": 4
+                },
+                {
+                  "row": 1,
+                  "column": 5
+                },
+                {
+                  "row": 2,
+                  "column": 1
+                },
+                {
+                  "row": 2,
+                  "column": 2
+                },
+                {
+                  "row": 2,
+                  "column": 3
+                },
+                {
+                  "row": 2,
+                  "column": 4
+                },
+                {
+                  "row": 2,
+                  "column": 5
+                },
+                {
+                  "row": 3,
+                  "column": 1
+                },
+                {
+                  "row": 3,
+                  "column": 2
+                },
+                {
+                  "row": 3,
+                  "column": 3
+                },
+                {
+                  "row": 3,
+                  "column": 5
+                },
+                {
+                  "row": 4,
+                  "column": 1
+                },
+                {
+                  "row": 4,
+                  "column": 2
+                },
+                {
+                  "row": 4,
+                  "column": 5
+                },
+                {
+                  "row": 5,
+                  "column": 1
+                },
+                {
+                  "row": 5,
+                  "column": 2
+                },
+                {
+                  "row": 5,
+                  "column": 3
+                },
+                {
+                  "row": 5,
+                  "column": 4
+                }
+              ],
+              "source_type": "mysqil_page"
+            }
+          },
+          "detail_source_url": "https://wiki.mysqil.com/cassettes/jietou-quanwang"
+        }
+      }
+    },
+    "lingke": {
+      "name": "灵可",
+      "basic": {
+        "rarity": "S",
+        "element": "灵",
+        "cassette_type": "等离子",
+        "role": "副C",
+        "position": "后排",
+        "rating": "待确认",
+        "summary": "能倾听万物的「电波」的少女，简称为电波系少女。"
+      },
+      "recommended": {
+        "weapon": {
+          "id": "yuanxingzhezhisheng",
+          "name": "远行者之声",
+          "source_url": "https://wiki.mysqil.com/weapons/yuanxingzhezhisheng",
+          "rating": "S",
+          "asset": "data/resources/characters/lingke/weapons/yuanxingzhezhisheng.webp",
+          "description": "远行者之声是S级等离子类弧盘，灵可的专属弧盘。 专属效果：灵可装备时可改变武器外观。",
+          "detail_source_url": "https://wiki.mysqil.com/weapons/yuanxingzhezhisheng"
+        },
+        "cassette": {
+          "id": "senlin-yinghuozhixin",
+          "name": "森林萤火之心",
+          "source_url": "https://wiki.mysqil.com/cassettes/senlin-yinghuozhixin",
+          "category": "属性专属",
+          "cassette_type": "空幕卡带",
+          "element": "灵",
+          "icon": "data/resources/encyclopedia/cassettes/senlin-yinghuozhixin/gold.webp",
+          "description": "森林萤火之心是灵属性专属输出卡带，4件套通过队伍造成灵伤害叠层提升佩戴者暴击伤害（每层 8%、最多 7 层 = +56%），且后台可生效。是娜娜莉等灵属性主C的毕业套装。",
+          "set_effects": [
+            {
+              "pieces": 2,
+              "description": "灵属性伤害 +10%"
+            },
+            {
+              "pieces": 4,
+              "description": "附近敌人受到队伍造成的灵属性伤害时，佩戴者暴击伤害 +8%，最多叠加 7 层，每层持续 10 秒（后台也生效）"
+            }
+          ],
+          "acquisition": "兔子洞副本（灵系产出关）",
+          "main_affix_pool": [
+            "攻击力（% / 固定值）",
+            "生命值（% / 固定值）",
+            "防御力（% / 固定值）",
+            "暴击率",
+            "暴击伤害",
+            "元素伤害（光/暗/灵/咒/魂/相）",
+            "倾陷强度",
+            "环合强度"
+          ],
+          "sub_affix_pool": [
+            "暴击率",
+            "暴击伤害",
+            "攻击力（%）",
+            "攻击力（固定值）",
+            "生命值（%）",
+            "生命值（固定值）",
+            "防御力（%）",
+            "防御力（固定值）",
+            "元素伤害加成",
+            "全伤害加成",
+            "倾陷强度",
+            "环合强度"
+          ],
+          "quality": [
+            {
+              "tier": "金",
+              "description": "毕业 · 数值上限最高"
+            },
+            {
+              "tier": "金",
+              "description": "约为金色 80%"
+            },
+            {
+              "tier": "蓝",
+              "description": "前期过渡"
+            }
+          ],
+          "structure": {
+            "main_affix_count": 1,
+            "sub_affix_count": 4,
+            "rerollable": null
+          },
+          "recommended_main_affixes": [
+            {
+              "name": "暴击伤害",
+              "priority": 5
+            },
+            {
+              "name": "灵属性异能伤害增强",
+              "priority": 5
+            }
+          ],
+          "recommended_sub_affixes": [
+            {
+              "name": "攻击力",
+              "priority": 2
+            },
+            {
+              "name": "暴击率",
+              "priority": 5
+            },
+            {
+              "name": "暴击伤害",
+              "priority": 3
+            },
+            {
+              "name": "环合强度",
+              "priority": 2
+            },
+            {
+              "name": "通用伤害增强",
+              "priority": 4
+            }
+          ],
+          "terminal": {
+            "id": "terminal",
+            "name": "「卡带」属性",
+            "description": "每装配一个Ⅲ型驱动，使暴击率增加7.5%",
+            "effects": [
+              "暴击率 +7.5%"
+            ],
+            "source_type": "mysqil_page",
+            "layout": {
+              "rows": 7,
+              "columns": 7,
+              "active_slots": [
+                {
+                  "row": 1,
+                  "column": 2
+                },
+                {
+                  "row": 1,
+                  "column": 3
+                },
+                {
+                  "row": 1,
+                  "column": 4
+                },
+                {
+                  "row": 1,
+                  "column": 5
+                },
+                {
+                  "row": 2,
+                  "column": 1
+                },
+                {
+                  "row": 2,
+                  "column": 2
+                },
+                {
+                  "row": 2,
+                  "column": 3
+                },
+                {
+                  "row": 2,
+                  "column": 4
+                },
+                {
+                  "row": 2,
+                  "column": 5
+                },
+                {
+                  "row": 3,
+                  "column": 1
+                },
+                {
+                  "row": 3,
+                  "column": 2
+                },
+                {
+                  "row": 3,
+                  "column": 3
+                },
+                {
+                  "row": 3,
+                  "column": 5
+                },
+                {
+                  "row": 4,
+                  "column": 1
+                },
+                {
+                  "row": 4,
+                  "column": 2
+                },
+                {
+                  "row": 4,
+                  "column": 5
+                },
+                {
+                  "row": 5,
+                  "column": 1
+                },
+                {
+                  "row": 5,
+                  "column": 2
+                },
+                {
+                  "row": 5,
+                  "column": 3
+                },
+                {
+                  "row": 5,
+                  "column": 4
+                }
+              ],
+              "source_type": "mysqil_page"
+            }
+          },
+          "detail_source_url": "https://wiki.mysqil.com/cassettes/senlin-yinghuozhixin"
+        }
       }
     }
   }
