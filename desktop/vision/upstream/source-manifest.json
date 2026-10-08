@@ -1,0 +1,202 @@
+{
+  "src.features.drive_assembly.assembly_ocr": {
+    "source_sha256": "203c1468714d8dc132c11d2b02cbe6beaaaf6e1d606793d591a9394942e95e56",
+    "changes": "namespace rewrite; Keke resource/catalog/logging adapters",
+    "adapted_sha256": "a4d9f3996c9e37b8da0aae8cb689157802850820a3a02ccd958e4abdb9347776"
+  },
+  "src.scanner.ocr_engine": {
+    "source_sha256": "6cc530d284fffb193b5dce1624c609fcf4de7a9a92735f8376e3ea77a2a2a986",
+    "changes": "namespace rewrite; Keke resource/catalog/logging adapters",
+    "adapted_sha256": "0010d8a3aa80187b6bd7053ae88bc017c1541974b1d493615e92fc09b05c8b92"
+  },
+  "src.integrations.ocr_model_resources": {
+    "source_sha256": "58eec1ca92b26b6ccc1164f0b401d8455abfefff7f17dbd15c61634e059628d0",
+    "changes": "namespace rewrite; Keke resource/catalog/logging adapters",
+    "adapted_sha256": "0ba4884d85c4a90291919cb3ea219e30129981e3f053867a30a577a78fd88fff"
+  },
+  "src.utils.exceptions": {
+    "source_sha256": "b5f9be9976153ee9391c34c4b8344bfba4c0bb11cd3fb9c917312a698089e789",
+    "changes": "namespace rewrite; Keke resource/catalog/logging adapters",
+    "adapted_sha256": "bab2ebdb92e38b0af0fc6523f69544d24ea08444418a2e726366ebcb9e5ce5b3"
+  },
+  "src.features.drive_assembly.input_backends": {
+    "source_sha256": "c3f574ef2007181363c576fb0bce10b28e59293187aba5e9a65e32147efca96f",
+    "changes": "namespace rewrite; Keke resource/catalog/logging adapters",
+    "adapted_sha256": "1030e3467e55eb790538de941e1ef903ae287b65f18c48ed23c2039179cbd680"
+  },
+  "src.features.drive_assembly.randomization": {
+    "source_sha256": "f00f6f578f11643fb9d46f79bc88d07a633123cf348f258b3ac82f86f381d075",
+    "changes": "namespace rewrite; Keke resource/catalog/logging adapters",
+    "adapted_sha256": "41d418f8c9eefb369a1a925a1ddb97461be897b920923534f9ea4c5e1b20ca42"
+  },
+  "src.integrations.operation_guard": {
+    "source_sha256": "3c1e118591222e8f5cba378f17bd52c8c7e5e142651e007da52d740e4d211499",
+    "changes": "namespace rewrite; Keke resource/catalog/logging adapters",
+    "adapted_sha256": "656cc7fb1fa359219d62a79e6b3931df162b500b928e013aebae3866c485afa8"
+  },
+  "src.features.drive_assembly.role_recognition": {
+    "source_sha256": "44dde3becd5cd091edc876d660bd04924bb4c222e913111485090bad1d1db0cb",
+    "changes": "namespace rewrite; Keke resource/catalog/logging adapters",
+    "adapted_sha256": "fb49c7fee1fb1e385a4e00f57402b9adccf2ad82b41c1612556236e115c9f38e"
+  },
+  "src.features.drive_assembly.role_navigation_mapping": {
+    "source_sha256": "59fbbbb67ebf2e03c4e5cd0bcc73e0f9c9326f17978236849a6236c568351764",
+    "changes": "namespace rewrite; Keke resource/catalog/logging adapters",
+    "adapted_sha256": "6783510b435334563885f2b2575f52dec59217ccd4ed2aca14ceaad23f879e4c"
+  },
+  "src.features.drive_assembly.role_flow_helpers": {
+    "source_sha256": "d974e4636f645b021ce85750cd844a2eb1f4c853d7db4d8f1faafad419169f55",
+    "changes": "namespace rewrite; Keke resource/catalog/logging adapters",
+    "adapted_sha256": "8ccaaba9e4b3dce1ee6dbe8aa03ce32d173832d693f63500095d5f46f49ca9ba"
+  },
+  "src.features.drive_assembly.role_contracts": {
+    "source_sha256": "a9640a88029dc28a29634341bd71dabac25446e362f2d9ec733ec6a162810a12",
+    "changes": "namespace rewrite; Keke resource/catalog/logging adapters",
+    "adapted_sha256": "a794c56cdddddb0bc11dad69e03720d94fec427585f990307bd5d950870ee7be"
+  },
+  "src.scanner.window_capture": {
+    "source_sha256": "c0f31f9877f7b360ecd7277438fd24858794048295e990f211f17e1a913ae350",
+    "changes": "namespace rewrite; Keke resource/catalog/logging adapters",
+    "adapted_sha256": "1c17acbbfae19ddbe4f0dee2c14da4fd9ffd4903cbfc19fefa60a60256b6c386"
+  },
+  "src.utils.name_resolver": {
+    "source_sha256": "0ff14c48ced427efab6f35e279d3f876bfc9d6094fc129a0d010ba8a12fcb646",
+    "changes": "namespace rewrite; Keke resource/catalog/logging adapters",
+    "adapted_sha256": "21c214aee4d1f0ec9db051c91a282423b55abee7fcc2f816d374f0d3768b8579"
+  },
+  "src.utils.image_io": {
+    "source_sha256": "8f30c93294831808105649a931a80746358b715ae0d9edc881fe0694bd3350ef",
+    "changes": "namespace rewrite; Keke resource/catalog/logging adapters",
+    "adapted_sha256": "e330581b5574567dc24011d0a6fae26ed2e8cb08d46d7c53ac44c8c13d8210b4"
+  },
+  "src.integrations.vision.mouse_inventory_scan": {
+    "source_sha256": "8d52698d4ea21e3584d7ec642cc3f7469e9137db4b226a8ae6167a743fe48d53",
+    "changes": "namespace rewrite; Keke resource/catalog/logging adapters",
+    "adapted_sha256": "6708a85b3e86384833f6c3aac4f4ab56d7bead2ab9556ca619ea8513145d919e"
+  },
+  "src.integrations.vision.equipment_state_detection": {
+    "source_sha256": "d0d3c3207befc024344ea168c92046e0a9a70b25c29a58eb39db2f1a3ea3b906",
+    "changes": "namespace rewrite; Keke resource/catalog/logging adapters",
+    "adapted_sha256": "fbcc9932c3515f5b7fdeb87779311ea48752c7cbb54adebacd42c50191f68cdd"
+  },
+  "src.integrations.vision.mouse_state_sync": {
+    "source_sha256": "fc455d225cdd92bc4385ee289ecafbb269e9f9ca0c4f134a7af884e507e9aba3",
+    "changes": "namespace rewrite; Keke resource/catalog/logging adapters",
+    "adapted_sha256": "aafc361d63eb65d9d78a9651e9c2b4166d98d8d17739327cff0afda19acf9a23"
+  },
+  "src.utils.perf": {
+    "source_sha256": "b29a4db6081763fe31e46aa500226dc1e17bc90f78eb806c8de73f9c7c24415e",
+    "changes": "namespace rewrite; Keke resource/catalog/logging adapters",
+    "adapted_sha256": "a3cf80101721716d9afb69b412460e2c2746962f82a6184669d51d1c0e68bbae"
+  },
+  "src.integrations.vision.mouse_scan_telemetry": {
+    "source_sha256": "adddc58fb92acbc785c23ea98e9ef5f15c3a96bb09e44ba1d343fbffd5a77d76",
+    "changes": "namespace rewrite; Keke resource/catalog/logging adapters",
+    "adapted_sha256": "3928ada179e592c20186819f426eda55461b159318aa412be3b6fe9b108474a4"
+  },
+  "src.integrations.vision.mouse_scan_capture": {
+    "source_sha256": "8d7320797aa172e4d69a8c58af4d30d39f3c017afef0a17e8ac5807213234f4d",
+    "changes": "namespace rewrite; Keke resource/catalog/logging adapters",
+    "adapted_sha256": "8f1cb685048a3edb4a0b2d49d1765c4713e6effc7ce343b76a28820487d97df6"
+  },
+  "src.integrations.vision.mouse_scan_grid": {
+    "source_sha256": "b60e59367ba17ef0d8b6aceb69aafdc5f4f9a2c061484c9a1cb741e6b5c1d3c0",
+    "changes": "namespace rewrite; Keke resource/catalog/logging adapters",
+    "adapted_sha256": "c38effea982c8128a6fc2872a6f1d57d2f4ea42150690372e6056446c9f53a96"
+  },
+  "src.integrations.vision.mouse_scan_input": {
+    "source_sha256": "0f37831680b2bcb58878c0926e9ae306293658cdf98a16760a1bc73bc302dc7b",
+    "changes": "namespace rewrite; Keke resource/catalog/logging adapters",
+    "adapted_sha256": "d0a7308f68b2a017e744fa12f22a2064f762db71006695136536b560f38e23f0"
+  },
+  "src.scanner.gamepad_controller": {
+    "source_sha256": "56d2a095374887227bb64bb89ac82e1f576d7647ac90bf958936fccc2dc3ac68",
+    "changes": "namespace rewrite; Keke resource/catalog/logging adapters",
+    "adapted_sha256": "ab8a99bb5831e399067baffb3e33b88322ab3507032286c65643e5e522681546"
+  },
+  "src.scanner.drone_scanner": {
+    "source_sha256": "efda808b02a57a802fb9f82c2c9f1107b11e981219eebcf6f539731c3b7d4efa",
+    "changes": "namespace rewrite; Keke resource/catalog/logging adapters",
+    "adapted_sha256": "1998135161607eebc64b47bdfe04f50cdb8c98083796e7adb2382056a6b637d2"
+  },
+  "src.scanner.batch_processor": {
+    "source_sha256": "c3546da8aee627fb568e3748505af1429bdcd3935959538baa17ba2e09dc1f0e",
+    "changes": "namespace rewrite; Keke resource/catalog/logging adapters",
+    "adapted_sha256": "8f07f263237b2ea8cf1661fada392124770836f27a291b56468182a3b0e76787"
+  },
+  "src.integrations.vision.uid": {
+    "source_sha256": "8772f4be954e8df4e9202d40ef1772a09d976237b652e26aec57dd79c633cd5d",
+    "changes": "namespace rewrite; Keke resource/catalog/logging adapters",
+    "adapted_sha256": "eb36fe186d19c798f7505cc03e4aa399d9e11e8f4a195153e2f8bbefa109cf48"
+  },
+  "src.integrations.vision.screenshot_parser": {
+    "source_sha256": "3760a1f7564e703585de63c5a83319fa938d11ee6f893c4d755a03aae1b6f904",
+    "changes": "namespace rewrite; Keke resource/catalog/logging adapters",
+    "adapted_sha256": "c8862540a2f0adc16d1b8ebfb335aaed7292496d88d80b494a2127f8b382d2ae"
+  },
+  "src.integrations.vision.identification_parser": {
+    "source_sha256": "ae8afb891a72fc979d8e3e47e6c7db8bc56c7910a1d185dd78d0f5561f87da7b",
+    "changes": "namespace rewrite; Keke resource/catalog/logging adapters",
+    "adapted_sha256": "6d4d33290e9e2061744463eb8c1a0e51f9103ec0e05dfce3f308ccb946d9dc1d"
+  },
+  "src.integrations.vision.equipment_classifier": {
+    "source_sha256": "631ab6d4820f1ca8280ecb2998555381cbae97624966b5c5051fd50dc2b26a2c",
+    "changes": "namespace rewrite; Keke resource/catalog/logging adapters",
+    "adapted_sha256": "024d15132d82b9d4c695299a9aa6b667e3d64b147bf0edd974eabb655f055ab9"
+  },
+  "src.scanner.config": {
+    "source_sha256": "408f6a5bafa9e2604bd66120f97d85535f5077858f5d270120651f2bc9473742",
+    "changes": "namespace rewrite; Keke resource/catalog/logging adapters",
+    "adapted_sha256": "93a0f818ae20f557e615b03a8baa40722b88ddf98b852c3e38bde8611af193f1"
+  },
+  "src.integrations.vision.duplicate_filter": {
+    "source_sha256": "4657ac1433c4674fc3965d998083b2aa8ce4ea6e50fcad3728bd628b378dbda9",
+    "changes": "namespace rewrite; Keke resource/catalog/logging adapters",
+    "adapted_sha256": "a6599fc57a7201f76a0d63fd3a0b04ee7c53ed2e7314c80b6e6f2bfbe5c48f59"
+  },
+  "src.scanner.parser": {
+    "source_sha256": "a46ccd9619947000e8570f4479477d4f06727d2c5896d8463eff574709a81e94",
+    "changes": "namespace rewrite; Keke resource/catalog/logging adapters",
+    "adapted_sha256": "d9cb37f571b703787173721ff16d1ff386be5e3a9f8a5b00c3e92188902b4d2f"
+  },
+  "src.models.equipment": {
+    "source_sha256": "68e82eb2d0663e16a10d4805aab1375aff44001965d90b69dfbd71d38a5dc2c5",
+    "changes": "namespace rewrite; Keke resource/catalog/logging adapters",
+    "adapted_sha256": "407206fd39fd6f0496d8f18d5f9c36207f93a6360a86742eaf5beb9ea08441e7"
+  },
+  "src.domain.stat_catalog": {
+    "source_sha256": "0923cde7db7291a8d675fdc47eeef11d2545beaab6f2a7a17603600e41e802ae",
+    "changes": "namespace rewrite; Keke resource/catalog/logging adapters",
+    "adapted_sha256": "7073e735f208237b5be208792ca3c86270daa909ae33d229228cf7eceacbdb33"
+  },
+  "src.storage.json_store": {
+    "source_sha256": "62a7b247c095f2a3c83fc800622cc8539b851e5d09fc9479f0403a3fdc4ec7fd",
+    "changes": "namespace rewrite; Keke resource/catalog/logging adapters",
+    "adapted_sha256": "edd928431cfe14fe467924377fe6f3f964ecd351df2d4f5b97842f889ee29cb4"
+  },
+  "src.scanner.shape_recognizer": {
+    "source_sha256": "3ca26700bbea153d0322f78732f5f5770f160f1bdaf41dadee751429f715fcf2",
+    "changes": "namespace rewrite; Keke resource/catalog/logging adapters",
+    "adapted_sha256": "4a7d8c13fb9dff6318109aa54b16489955d064a7ef261946ae1454e07158530e"
+  },
+  "src.integrations.bundled_resources": {
+    "changes": "Keke compatibility shim or adapted upstream module",
+    "adapted_sha256": "be224052d0a9bc44a63893a798d3c506c7366779719c1bb6a5af45d86e9a9d5e"
+  },
+  "src.services.sqlite_allocation_inventory": {
+    "changes": "Keke compatibility shim or adapted upstream module",
+    "adapted_sha256": "29105faa561a12f0f7594dce72cd39c7dfb9d9d59e41a4626124d8169af887c0"
+  },
+  "src.utils.logger": {
+    "changes": "Keke compatibility shim or adapted upstream module",
+    "adapted_sha256": "5240f6954a0531084a5853bc2fa41f1f402e06241213a493d5172c8f21560d4c"
+  },
+  "src.storage.sqlite.static_game_data_dao": {
+    "changes": "Keke compatibility shim or adapted upstream module",
+    "adapted_sha256": "04bbae7fe287ed04beac17ac237907b716bbb11972c97a444cc81e0c1bd8c67f"
+  },
+  "src.integrations.vision.mouse_scan_runtime": {
+    "changes": "Keke compatibility shim or adapted upstream module",
+    "adapted_sha256": "8f2fcd1687bd13646e403bcf168b275a3a0a7ed498e052fa01647ff68544558a"
+  }
+}

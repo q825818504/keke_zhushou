@@ -10,9 +10,10 @@ import threading
 import time
 import traceback
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
-from urllib.parse import unquote, urlsplit
+from urllib.parse import unquote, urlsplit, parse_qs
 import mimetypes
 import hashlib
+import secrets
 import webview
 
 APP_DATA = Path(os.environ.get("LOCALAPPDATA", Path.home())) / "KekeAssistant"
@@ -54,7 +55,8 @@ def local_workspace():
     return None
 
 
-def public_server(root: Path, port: int, workspace=None):
+def public_server(root: Path, port: int, workspace=None, inventory=None, vision=None):
+    inventory_token = secrets.token_urlsafe(32)
     manifest = json.loads((root / "public-manifest.json").read_text(encoding="utf-8"))
     allowed = set(manifest["files"]) | {"public-manifest.json"}
     knowledge_files = {name for name in allowed if name.startswith("data/knowledge/") and name.endswith(".js")}
@@ -92,6 +94,16 @@ def public_server(root: Path, port: int, workspace=None):
         def log_message(self, *args):
             pass
 
+        def inventory_json(self, value, code=200):
+            payload = json.dumps(value, ensure_ascii=False).encode('utf-8')
+            self.send_response(code)
+            self.send_header('Content-Type', 'application/json; charset=utf-8')
+            self.send_header('Cache-Control', 'no-store')
+            self.send_header('X-Content-Type-Options', 'nosniff')
+            self.send_header('Content-Length', str(len(payload)))
+            self.end_headers()
+            self.wfile.write(payload)
+
         def do_GET(self):
             if self.headers.get("Host") != "127.0.0.1:" + str(self.server.server_port):
                 self.send_error(403)
@@ -99,6 +111,35 @@ def public_server(root: Path, port: int, workspace=None):
             relative = unquote(urlsplit(self.path).path).lstrip("/") or "index.html"
             if ".." in Path(relative).parts or "\\" in relative:
                 self.send_error(404)
+                return
+            if relative == 'inventory/status' and inventory:
+                self.inventory_json({**inventory.status(), 'token':inventory_token})
+                return
+            if relative == 'inventory/snapshot' and inventory:
+                account = parse_qs(urlsplit(self.path).query).get('account', [inventory.config['account']])[0]
+                if not account or len(account)>80:
+                    self.inventory_json({'error':'账号标签无效'}, 400)
+                    return
+                try:
+                    self.inventory_json(inventory.view(account,parse_qs(urlsplit(self.path).query).get('source',['auto'])[0]))
+                except (OSError, ValueError):
+                    self.inventory_json({'error':'本机快照读取失败，请保留文件检查'}, 500)
+                return
+            if relative.startswith('vision/') and vision:
+                params=parse_qs(urlsplit(self.path).query)
+                account=params.get('account',['默认账号'])[0]
+                try:
+                    if relative=='vision/status':self.inventory_json({**vision.status(),'token':inventory_token})
+                    elif relative=='vision/history':self.inventory_json(vision.history(account))
+                    elif relative=='vision/batch':self.inventory_json(vision.load(account,params.get('id',[''])[0]))
+                    elif relative=='vision/image':
+                        source=vision.image(account,params.get('id',[''])[0],params.get('name',[''])[0])
+                        payload=source.read_bytes();self.send_response(200)
+                        self.send_header('Content-Type','image/png');self.send_header('Content-Length',str(len(payload)))
+                        self.send_header('Cache-Control','no-store');self.send_header('X-Content-Type-Options','nosniff')
+                        self.end_headers();self.wfile.write(payload)
+                    else:self.send_error(404)
+                except (ValueError,OSError):self.inventory_json({'error':'视觉批次或图片读取失败'},400)
                 return
             if relative == "local-data-version":
                 payload = json.dumps({"version": version()}).encode()
@@ -118,9 +159,55 @@ def public_server(root: Path, port: int, workspace=None):
             self.wfile.write(payload)
 
         def do_POST(self):
-            self.send_error(405)
+            expected_host = '127.0.0.1:' + str(self.server.server_port)
+            if (self.headers.get('Host') != expected_host or self.headers.get('Origin') != 'http://' + expected_host
+                or self.headers.get('X-Keke-Inventory') != inventory_token):
+                self.send_error(403)
+                return
+            path = urlsplit(self.path).path
+            if vision and path in ('/vision/start','/vision/cancel','/vision/stop-capture','/vision/open-folder','/vision/correct'):
+                try:
+                    length=int(self.headers.get('Content-Length','0'))
+                    if not 0<length<=96*1024*1024 or self.headers.get('Content-Type')!='application/json':raise ValueError('请求格式或大小无效')
+                    body=json.loads(self.rfile.read(length))
+                    if not isinstance(body,dict):raise ValueError('请求格式无效')
+                    if path=='/vision/cancel':result=vision.cancel()
+                    elif path=='/vision/stop-capture':result=vision.stop_capture()
+                    elif path=='/vision/open-folder':result=vision.open_folder(body.get('account'),body.get('id'))
+                    elif path=='/vision/correct':result=vision.correct(body.get('account'),body.get('id'),body.get('index'),body.get('record'))
+                    else:result=vision.start(body.get('mode'),body.get('account'),body.get('count'),body.get('files'),body.get('id'))
+                    self.inventory_json(result)
+                except (ValueError,OSError) as error:self.inventory_json({'error':str(error)},400)
+                return
+            if not inventory or path not in ('/inventory/start','/inventory/cancel','/inventory/delete','/inventory/components/check','/inventory/components/deploy','/inventory/components/remove'):
+                self.send_error(404)
+                return
+            try:
+                length = int(self.headers.get('Content-Length','0'))
+                if not 0 <= length <= 4096 or self.headers.get('Content-Type') != 'application/json':
+                    raise ValueError('请求格式无效')
+                body = json.loads(self.rfile.read(length))
+                if not isinstance(body,dict):
+                    raise ValueError('请求格式无效')
+                if path=='/inventory/delete':
+                    result=inventory.delete(body.get('account'),body.get('source'))
+                elif '/components/' in path:
+                    if not inventory.components:raise ValueError('此版本尚未内置原生组件')
+                    if inventory.status()['job']['running']:raise ValueError('同步期间不能修改组件')
+                    action=path.rsplit('/',1)[1]
+                    method={'check':inventory.components.inspect,'deploy':inventory.components.deploy,'remove':inventory.components.remove}[action]
+                    result=method(body.get('game_directory'))
+                else:
+                    result = inventory.cancel() if path.endswith('/cancel') else inventory.start(account=body.get('account'))
+                self.inventory_json(result)
+            except (ValueError, OSError) as error:
+                self.inventory_json({'error':str(error)}, 400)
 
-    return ThreadingHTTPServer(("127.0.0.1", port), ReadOnlyHandler)
+
+    server = ThreadingHTTPServer(("127.0.0.1", port), ReadOnlyHandler)
+    server.vision = vision
+    server.inventory = inventory
+    return server
 
 
 def launch_window(title, mode, server, api=None, report=None, screenshot=None, smoke_js=None, smoke_action=None):
@@ -141,12 +228,6 @@ def launch_window(title, mode, server, api=None, report=None, screenshot=None, s
             return ctypes.windll.user32.MessageBoxW(None, "编辑有未保存的修改，仍要关闭吗？", title, 0x24) == 6
         window.events.closing += allow_close
     webview.settings["ALLOW_DOWNLOADS"] = True
-    from webview.menu import Menu, MenuAction
-    about_text = ("可可助手 · Windows 桌面版 0.1\n\n"
-                  "资料来源：环世全鉴，Matsuzaka Yuki\nCC BY-NC-SA 4.0\n\n"
-                  "优先读取本机管理资料；未连接本机资料库时使用内置资料。在线更新尚未配置。")
-    menu = [Menu("可可助手", [MenuAction("关于可可助手", lambda: message("关于可可助手", about_text))])]
-
     def smoke():
         result = {"ok": False, "mode": mode}
         try:
@@ -184,8 +265,12 @@ def launch_window(title, mode, server, api=None, report=None, screenshot=None, s
 
     try:
         webview.start(smoke if report else None, gui="edgechromium", private_mode=bool(report),
-                      storage_path=str(profile), menu=menu)
+                      storage_path=str(profile))
     finally:
+        if getattr(server,"vision",None):
+            server.vision.close()
+        if getattr(server, "inventory", None):
+            server.inventory.close()
         server.shutdown()
         server.server_close()
 

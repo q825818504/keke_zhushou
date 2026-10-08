@@ -27,8 +27,12 @@ def build(target, dist=None):
     directory.mkdir(parents=True, exist_ok=True)
     icon = make_icon(directory)
     if target == "user":
+        from native.components import ComponentManager
+        manager=ComponentManager(ROOT/'build/native-build-check')
+        manager.component_root()
         public = prepare_public()
-        data = [str(public) + ";public"]
+        data = [str(public) + ";public", str(ROOT / "desktop/inventory/component-identity.json") + ";inventory", str(ROOT / "desktop/vision/resources") + ";vision/resources", str(ROOT / "desktop/vision/upstream/LICENSE") + ";vision/upstream", str(ROOT / "desktop/vision/upstream/NOTICE.md") + ";vision/upstream", str(ROOT / "desktop/vision/upstream/source-manifest.json") + ";vision/upstream"]
+        data += [str(ROOT / 'build/native-components') + ';native-components', str(ROOT / 'desktop/native/component-identity.json') + ';native', str(ROOT / 'desktop/native/NOTICE.md') + ';native']
         name = "KekeAssistant"
     else:
         data = [str(ROOT / "desktop/desktop.css") + ";desktop", str(ROOT / "desktop/desktop.js") + ";desktop"]
@@ -37,6 +41,8 @@ def build(target, dist=None):
             "--name", name, "--icon", str(icon), "--paths", str(ROOT / "scripts"),
             "--distpath", str(dist), "--workpath", str(directory / "pyinstaller"),
             "--specpath", str(directory), "--exclude-module", "pytest"]
+    if target=="user":
+        args += ["--collect-all","rapidocr_onnxruntime","--collect-all","onnxruntime","--collect-all","vgamepad"]
     for asset in data:
         args += ["--add-data", asset]
     args += [str(ROOT / ("desktop/" + target + "_entry.py"))]

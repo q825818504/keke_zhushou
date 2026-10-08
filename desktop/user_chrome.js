@@ -32,7 +32,7 @@ window.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('focus', check);
 });
 document.addEventListener('keydown', event => {
-  if (!event.ctrlKey || !/^[1-5]$/.test(event.key) || /INPUT|TEXTAREA|SELECT/.test(event.target.tagName)) return;
+  if (!event.ctrlKey || !/^[1-7]$/.test(event.key) || /INPUT|TEXTAREA|SELECT/.test(event.target.tagName)) return;
   event.preventDefault();
-  showUserRoute(['team','characters','arc-drives','cassettes','drive-blocks'][Number(event.key)-1]);
+  showUserRoute(['team','characters','arc-drives','cassettes','drive-blocks','inventory','vision'][Number(event.key)-1]);
 });

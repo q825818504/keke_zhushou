@@ -1,0 +1,42 @@
+const {chromium}=require('../desktop/node_modules/playwright');
+const {spawn}=require('node:child_process');const path=require('node:path');const assert=require('node:assert/strict');
+const root=path.resolve(__dirname,'..');
+(async()=>{
+ const server=spawn(path.join(root,'.venv-desktop/Scripts/python.exe'),['scripts/check_vision_browser_server.py'],{cwd:root,windowsHide:true});let browser,page;
+ try{
+  const port=await new Promise((resolve,reject)=>{let text='';server.stdout.on('data',p=>{text+=p;if(text.includes('\n'))try{resolve(JSON.parse(text.split('\n')[0]).port)}catch(e){reject(e)}});server.stderr.on('data',p=>process.stderr.write(p));server.on('exit',c=>reject(Error('fixture exited '+c)))});
+  browser=await chromium.launch({channel:'chrome',headless:true});page=await browser.newPage({viewport:{width:1380,height:900}});const errors=[];page.on('pageerror',e=>errors.push(e.message));
+  await page.goto('http://127.0.0.1:'+port);await page.waitForLoadState('networkidle');await page.locator('[data-user-route="vision"]').click();
+  assert.equal(await page.locator('#visionMode option').count(),5);
+  assert.equal(await page.locator('#readComponents').count(),1);
+  await page.locator('#visionMode').selectOption('offline');
+  await page.waitForFunction(()=>document.querySelector('#userVisionRoute h2')?.textContent==='截图识别 / 文件夹导入' && document.querySelector('#userVisionRoute').textContent.includes('已识别 2 件'));
+  assert(await page.getByLabel('本批次截图文件夹').inputValue());
+  assert.equal(await page.getByRole('button',{name:'打开截图文件夹'}).count(),1);
+  assert.equal(await page.getByRole('button',{name:'重试失败图片'}).count(),1);
+  assert.equal(await page.locator('#visionMode option').count(),5);assert.equal(await page.locator('#userVisionRoute script').count(),0);
+  assert.equal(await page.locator('#userVisionRoute .inventory-records').count(),0);
+  await page.locator('#userVisionRoute .inventory-metadata > summary').click();await page.locator('#userVisionRoute .inventory-metadata details').first().locator('summary').click();
+  await page.waitForFunction(()=>document.querySelector('.vision-evidence')?.naturalWidth>0);
+  const download=page.waitForEvent('download');await page.getByRole('button',{name:'导出识别批次'}).click();assert.equal((await download).suggestedFilename(),'可可助手视觉识别批次.json');
+  await page.getByRole('button',{name:'查看背包结果',exact:true}).click();
+  await page.waitForFunction(()=>document.querySelector('#userInventoryRoute .inventory-summary strong')?.textContent==='2');
+  const first=page.locator('#userInventoryRoute .inventory-records > details').first();await first.locator('summary').click();
+  const record=JSON.parse(await first.locator('textarea').inputValue());record.name='修正后的驱动';await first.locator('textarea').fill(JSON.stringify(record));await first.getByRole('button',{name:'保存修正'}).click();
+  await page.waitForFunction(()=>document.querySelector('#userInventoryRoute').textContent.includes('修正后的驱动'));
+  await page.getByRole('button',{name:'查看扫描诊断 / 重试'}).click();
+  await page.waitForFunction(()=>document.querySelector('#userVisionRoute')?.textContent.includes('已识别 2 件'));
+  await page.locator('#userVisionRoute details.inventory-browser > summary').click();
+  await page.locator('#visionAccount').fill('B');await page.getByRole('button',{name:'查看此账号历史'}).click();await page.waitForFunction(()=>document.querySelector('#userVisionRoute').textContent.includes('暂无历史批次'));
+  assert.equal(await page.locator('#userVisionRoute .inventory-records > details').count(),0);
+  await page.locator('#visionMode').selectOption('mouse');assert.equal(await page.locator('#visionCount').count(),1);
+  await page.locator('#visionMode').selectOption('new');assert.equal(await page.locator('#visionCount').isDisabled(),true);
+  await page.locator('#visionMode').selectOption('gamepad');assert((await page.locator('#userVisionRoute').textContent()).includes('虚拟手柄驱动'));
+  await page.locator('#visionMode').selectOption('offline');
+  const image=require('node:fs').readFileSync(path.join(root,'build/vision-upload-fixture.png'));
+  await page.locator('#visionFiles').setInputFiles({name:'fixture.png',mimeType:'image/png',buffer:image});await page.getByRole('button',{name:'开始识别 / 扫描'}).click();
+  await page.waitForFunction(()=>document.querySelector('#userVisionRoute').textContent.includes('已识别 1 件'));
+  await page.screenshot({path:path.join(root,'build/vision-ui-qa.png'),fullPage:true});assert.deepEqual(errors,[]);
+  console.log('Vision UI passed: method switching, OCR controls outside backpack, screenshot upload, history/account isolation, image evidence, escaped text, backpack correction and export.');
+ }catch(error){if(page)console.log('vision-debug',await page.evaluate(async()=>({text:document.querySelector('#userVisionRoute')?.textContent,mode:document.querySelector('#visionMode')?.value,status:await (await fetch('/vision/status')).json()})));throw error;}finally{if(browser)await browser.close();server.kill();}
+})().catch(e=>{console.error(e);process.exitCode=1});

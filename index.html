@@ -71,6 +71,8 @@
             <button class="user-primary-nav-item pressable" type="button" data-user-route="team"><span>自动配队</span><span class="user-nav-badge">主功能</span></button>
             <button class="user-primary-nav-item pressable" type="button" data-user-route="arc-drives">弧盘</button>
             <button class="user-primary-nav-item pressable" type="button" data-user-route="cassettes">空幕</button><button class="user-primary-nav-item pressable" type="button" data-user-route="drive-blocks">驱动块</button>
+            <button class="user-primary-nav-item pressable" type="button" data-user-route="vision">读取数据</button>
+            <button class="user-primary-nav-item pressable" type="button" data-user-route="inventory">背包数据</button>
           </nav>
           <button class="user-topbar-link user-admin-link pressable" type="button" id="userAdminButton"><span class="admin-link-mark">⌘</span>管理端</button>
         </div>      </header>
@@ -108,6 +110,8 @@
         <section class="user-route-panel" id="userTeamRoute" data-user-route-panel="team" hidden aria-labelledby="userTeamTitle"></section>
         <section class="user-route-panel" id="userArcDriveRoute" data-user-route-panel="arc-drives" hidden aria-labelledby="userArcDriveTitle"></section>
         <section class="user-route-panel" id="userSkyCurtainRoute" data-user-route-panel="cassettes" hidden aria-labelledby="userSkyCurtainTitle"></section><section class="user-route-panel" id="userDriverBlockRoute" data-user-route-panel="drive-blocks" hidden aria-labelledby="userDriverBlockTitle"></section>
+        <section class="user-route-panel" id="userVisionRoute" data-user-route-panel="vision" hidden aria-label="读取数据"></section>
+        <section class="user-route-panel" id="userInventoryRoute" data-user-route-panel="inventory" hidden aria-label="背包数据"></section>
         <footer class="user-footer"><span>可可助手 · 为每一次选择保留证据</span></footer>
       </section>
       <div id="roleManagementView" hidden>
@@ -334,6 +338,8 @@
   <script src="drive_layout_solver.js"></script>
   <script src="terminal_puzzle.js"></script>
   <script src="terminal_editor.js"></script>
+  <script src="inventory_sync.js"></script>
+  <script src="vision_scan.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

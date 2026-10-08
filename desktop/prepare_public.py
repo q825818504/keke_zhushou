@@ -51,11 +51,13 @@ def prepare_public() -> Path:
         'if (override?.terminal_puzzle) recommended.terminal_puzzle = JSON.parse(JSON.stringify(override.terminal_puzzle));'
         'return { ...original, recommended }; } };', encoding="utf-8")
     subprocess.run(["node", str(ROOT / "desktop/compile_user.cjs"), str(OUTPUT / "app.js")], check=True)
+    (OUTPUT / "inventory_sync.js").write_bytes((ROOT / "inventory_sync.js").read_bytes())
+    (OUTPUT / "vision_scan.js").write_bytes((ROOT / "vision_scan.js").read_bytes())
     nav = '<nav id="userPrimaryNav" aria-label="功能导航">'
-    for route, label in [("team", "自动配队"), ("characters", "角色"), ("arc-drives", "弧盘"), ("cassettes", "空幕"), ("drive-blocks", "驱动块")]:
+    for route, label in [("team", "自动配队"), ("characters", "角色"), ("arc-drives", "弧盘"), ("cassettes", "空幕"), ("drive-blocks", "驱动块"), ("inventory", "背包数据"), ("vision", "读取数据")]:
         nav += '<button class="user-primary-nav-item" type="button" data-user-route="' + route + '">' + label + '</button>'
     nav += "</nav>"
-    scripts = "".join('<script src="' + path + '"></script>' for path in bundles + ["recommendations.js", "drive_layout_solver.js", "terminal_puzzle.js", "app.js"])
+    scripts = "".join('<script src="' + path + '"></script>' for path in bundles + ["recommendations.js", "drive_layout_solver.js", "terminal_puzzle.js", "inventory_sync.js", "vision_scan.js", "app.js"])
     html = (
         '<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">'
         '<meta name="viewport" content="width=device-width,initial-scale=1">'
@@ -65,7 +67,7 @@ def prepare_public() -> Path:
         '<aside class="desktop-sidebar"><div class="desktop-brand"><span class="desktop-app-mark">✦</span>'
         '<div><strong>可可助手</strong><small>你的配队与养成助手</small></div></div>'
         '<p class="desktop-nav-label">功能</p>' + nav +
-        '<div class="desktop-sidebar-foot">Windows 桌面版 · 0.1<br>Ctrl + 1–5 快速切换</div></aside>'
+        '<div class="desktop-sidebar-foot">Windows 桌面版 · 0.1<br>Ctrl + 1–7 快速切换</div></aside>'
         '<main class="main-content"><header class="topbar"><div class="breadcrumb"><span>可可助手</span>'
         '<strong id="activeBreadcrumb">自动配队</strong></div></header>' +
         str(view) + '</main></div>' + str(toast) + scripts + '</body></html>'

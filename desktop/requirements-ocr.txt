@@ -1,0 +1,13 @@
+# Build with Python 3.12 (RapidOCR 1.4.4 supports <3.13).
+-r requirements.txt
+rapidocr-onnxruntime==1.4.4
+opencv-python==5.0.0.93
+numpy==2.5.3
+onnxruntime==1.30.0
+mss==10.2.0
+pyautogui==0.9.54
+keyboard==0.13.5
+pydantic==2.13.5
+loguru==0.7.3
+pypinyin==0.55.0
+vgamepad==0.1.0

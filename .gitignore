@@ -4,3 +4,8 @@ build/
 dist/
 __pycache__/
 *.pyc
+
+.venv-ocr/
+
+# Generated OCR weights; restore with scripts/prepare_vision_models.py
+desktop/vision/resources/models/*.onnx
