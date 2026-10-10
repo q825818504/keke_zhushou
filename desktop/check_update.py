@@ -13,6 +13,8 @@ from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 import update_protocol as protocol
 from update_client import startup_check, refresh_config
 from release_publish import signed, audit_files
+from release_publish import configure, API
+import requests
 from build_release import candidate_version
 from public_config import export_config, validated_config
 import installer_entry
@@ -108,6 +110,25 @@ class UpdateTests(unittest.TestCase):
         with patch.object(installer_entry,'fetch_envelope',return_value={'kind':'app','platform':'windows-x64','version':'1.1','package':{}}),patch('prerequisites.ensure'),patch.object(installer_entry,'download_package',side_effect=ValueError('corrupt package')):
             with self.assertRaises(ValueError):installer_entry.install(root,'key',lambda _:None)
         self.assertEqual(json.loads((root/'active-version.json').read_text())['version'],'1.0')
+    def test_gitee_owner_without_permissions_can_save(self):
+        repo={'full_name':protocol.REPOSITORY}
+        def response(value,status=200):
+            from unittest.mock import Mock
+            return Mock(status_code=status,json=lambda:value)
+        with patch('release_publish.requests.get',side_effect=[response(repo),response([repo])]) as get,patch('release_publish.read_secrets',return_value={'private_key':'test-existing'}),patch('release_publish.save_secrets') as save:
+            self.assertTrue(configure('test-token-not-a-real-secret')['configured'])
+            self.assertEqual(save.call_args.args[0]['private_key'],'test-existing')
+            self.assertEqual(get.call_args.kwargs['params']['type'],'owner')
+    def test_gitee_invalid_token_and_wrong_owner_not_saved(self):
+        from unittest.mock import Mock
+        for responses,expected in (([Mock(status_code=401)],'无效'),([Mock(status_code=200,json=lambda:{'full_name':protocol.REPOSITORY}),Mock(status_code=200,json=lambda:[])],'所有者')):
+            with patch('release_publish.requests.get',side_effect=responses),patch('release_publish.save_secrets') as save:
+                with self.assertRaisesRegex(RuntimeError,expected):configure('test-token-not-a-real-secret')
+                save.assert_not_called()
+    def test_gitee_network_error_has_clear_message_and_does_not_save(self):
+        with patch('release_publish.requests.get',side_effect=requests.Timeout('test timeout')),patch('release_publish.save_secrets') as save:
+            with self.assertRaisesRegex(RuntimeError,'连接Gitee失败'):configure('test-token-not-a-real-secret')
+            save.assert_not_called()
 
 
 if __name__=='__main__':unittest.main(verbosity=2)

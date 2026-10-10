@@ -20,13 +20,37 @@ REMOTE=f'https://gitee.com/{REPOSITORY}.git'
 def configure(token):
     if not isinstance(token,str) or not 10<=len(token.strip())<=512 or any(c.isspace() for c in token.strip()):
         raise ValueError('请输入Gitee个人访问令牌，仅保存在这台电脑')
-    response=requests.get(API,headers={'Authorization':'Bearer '+token.strip()},timeout=25)
-    if response.status_code!=200: raise RuntimeError('Gitee授权检查失败：HTTP '+str(response.status_code))
-    permissions=response.json().get('permissions',{})
-    if not permissions.get('push',permissions.get('admin',False)):
-        raise RuntimeError('当前令牌没有指定发布仓库的写入权限')
+    token=token.strip()
+    def get(url,**kwargs):
+        try:
+            response=requests.get(url,headers={'Authorization':'Bearer '+token},timeout=(8,15),**kwargs)
+        except requests.RequestException:
+            raise RuntimeError('连接Gitee失败，令牌未保存。请检查网络后重试。') from None
+        if response.status_code==401:
+            raise RuntimeError('Gitee令牌无效或已过期，令牌未保存。请重新生成私人令牌。')
+        if response.status_code==403:
+            raise RuntimeError('Gitee拒绝授权，令牌未保存。请确认勾选了 projects 权限。')
+        if response.status_code!=200:
+            raise RuntimeError('Gitee授权检查失败，令牌未保存：HTTP '+str(response.status_code))
+        try:return response.json()
+        except ValueError:raise RuntimeError('Gitee返回的内容无效，令牌未保存。请稍后重试。') from None
+    repository=get(API)
+    if not isinstance(repository,dict) or repository.get('full_name','').casefold()!=REPOSITORY.casefold():
+        raise RuntimeError('Gitee返回的发布仓库不匹配，令牌未保存。')
+    permissions=repository.get('permissions') or {}
+    writable=permissions.get('push') or permissions.get('admin')
+    if not writable:
+        # Gitee may omit GitHub-style permissions. Authenticated owner-only listing
+        # proves ownership and projects scope without requiring user_info access.
+        for page in range(1,11):
+            owned=get('https://gitee.com/api/v5/user/repos',params={'type':'owner','per_page':100,'page':page})
+            if not isinstance(owned,list):raise RuntimeError('Gitee仓库授权响应无效，令牌未保存。')
+            writable=any(isinstance(repo,dict) and repo.get('full_name','').casefold()==REPOSITORY.casefold() for repo in owned)
+            if writable or len(owned)<100:break
+    if not writable:
+        raise RuntimeError('当前令牌不属于发布仓库的所有者或没有写入权限，令牌未保存。')
     values=read_secrets(); values['gitee_token']=token.strip(); save_secrets(values)
-    return {'ok':True,'message':'Gitee发布凭据已通过本机加密保存'}
+    return {'ok':True,'configured':True,'message':'发布令牌已保存，Gitee仓库权限验证通过。尚未上传发行文件。'}
 
 
 class Gitee:
