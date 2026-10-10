@@ -43,6 +43,9 @@ def prepare_public(app_version='1.0') -> Path:
     (OUTPUT / "styles.css").write_bytes((ROOT / "styles.css").read_bytes())
     (OUTPUT / "desktop.css").write_bytes((ROOT / "desktop/desktop.css").read_bytes())
     (OUTPUT / "desktop.js").write_bytes((ROOT / "desktop/user_chrome.js").read_bytes())
+    shutil.copyfile(ROOT/'desktop/assets/mint-avatar.png',OUTPUT/'mint-avatar.png')
+    notes=ROOT/'desktop/releases/user'/('v'+app_version+'.md')
+    (OUTPUT/'release-notes.json').write_text(json.dumps({'version':app_version,'notes':notes.read_text(encoding='utf-8') if notes.exists() else '当前版本暂无升级说明。'},ensure_ascii=False),encoding='utf-8')
     (OUTPUT / "recommendations.js").write_text(
         'window.CharacterRecommendations = { createKnowledge(original) {'
         'const recommended = JSON.parse(JSON.stringify(original.recommended || {}));'
@@ -64,10 +67,10 @@ def prepare_public(app_version='1.0') -> Path:
         '<title>可可助手</title><link rel="stylesheet" href="styles.css">'
         '<link rel="stylesheet" href="desktop.css"><script src="desktop.js"></script></head>'
         '<body class="desktop-mode user-mode"><div class="app-shell">'
-        '<aside class="desktop-sidebar"><div class="desktop-brand"><span class="desktop-app-mark">✦</span>'
+        '<aside class="desktop-sidebar"><div class="desktop-brand"><img class="desktop-app-mark" src="mint-avatar.png" alt="薄荷">'
         '<div><strong>可可助手</strong><small>你的配队与养成助手</small></div></div>'
         '<p class="desktop-nav-label">功能</p>' + nav +
-        f'<div class="desktop-sidebar-foot">Windows 桌面版 · v{app_version}<br>Ctrl + 1–7 快速切换<br><button id="diagnosticsButton" type="button">诊断日志</button></div></aside>'
+        f'<div class="desktop-sidebar-foot">Windows 桌面版 · v{app_version}<br>Ctrl + 1–7 快速切换<br><button id="releaseNotesButton" type="button">更新内容</button><button id="diagnosticsButton" type="button">诊断日志</button></div></aside>'
         '<main class="main-content"><header class="topbar"><div class="breadcrumb"><span>可可助手</span>'
         '<strong id="activeBreadcrumb">自动配队</strong></div></header>' +
         str(view) + '</main></div>' + str(toast) + scripts + '</body></html>'

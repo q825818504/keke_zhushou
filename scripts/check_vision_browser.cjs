@@ -6,7 +6,12 @@ const root=path.resolve(__dirname,'..');
  try{
   const port=await new Promise((resolve,reject)=>{let text='';server.stdout.on('data',p=>{text+=p;if(text.includes('\n'))try{resolve(JSON.parse(text.split('\n')[0]).port)}catch(e){reject(e)}});server.stderr.on('data',p=>process.stderr.write(p));server.on('exit',c=>reject(Error('fixture exited '+c)))});
   browser=await chromium.launch({channel:'chrome',headless:true});page=await browser.newPage({viewport:{width:1380,height:900}});const errors=[];page.on('pageerror',e=>errors.push(e.message));
-  await page.goto('http://127.0.0.1:'+port);await page.waitForLoadState('networkidle');await page.locator('[data-user-route="vision"]').click();
+  await page.goto('http://127.0.0.1:'+port);await page.locator('.desktop-sidebar nav svg').first().waitFor();
+  if(await page.evaluate(async()=> (await (await fetch('/release/status')).json()).show)) {
+    await page.locator('#releaseNotesDialog').waitFor({state:'visible'});
+    await page.locator('#releaseNotesDialog button').click();await page.locator('#releaseNotesDialog').waitFor({state:'hidden'});
+  }
+  await page.locator('[data-user-route="vision"]').click();
   assert.equal(await page.locator('#visionMode option').count(),5);
   assert.equal(await page.locator('#readComponents').count(),1);
   await page.locator('#visionMode').selectOption('offline');

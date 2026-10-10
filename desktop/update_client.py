@@ -40,6 +40,12 @@ def refresh_config(app_data, public_key, fallback, progress, fetch=fetch_envelop
             else:
                 os.replace(staging,candidate)
             atomic_json(pointer,{'directory':name,'revision':manifest['revision']})
+            archive.unlink(missing_ok=True)
+            if staging.exists():
+                import shutil
+                shutil.rmtree(staging)
+        from release_lifecycle import cleanup_config
+        cleanup_config(root,candidate)
         return candidate, None
     except Exception as error:
         selected=current or Path(fallback)
@@ -71,13 +77,13 @@ def check_window(operation, title='可可助手 · 启动检查'):
     import tkinter as tk
     from tkinter import ttk
     events=queue.Queue(); result={}; running=False
-    window=tk.Tk(); window.title(title); window.geometry('560x270'); window.resizable(False,False)
-    window.configure(bg='#f7f7fa')
-    tk.Label(window,text='可可助手',font=('Microsoft YaHei UI',21,'bold'),bg='#f7f7fa').pack(pady=(24,12))
-    label=tk.Label(window,text='准备检查…',wraplength=500,font=('Microsoft YaHei UI',11),bg='#f7f7fa',fg='#34465f')
+    window=tk.Tk(); window.title(title); window.geometry('600x340'); window.resizable(False,False)
+    from window_brand import apply,BG
+    apply(window)
+    label=tk.Label(window,text='准备检查…',wraplength=530,font=('Microsoft YaHei UI',11),bg=BG,fg='#34465f')
     label.pack(padx=25,pady=10)
     spinner=ttk.Progressbar(window,mode='indeterminate',length=450); spinner.pack(pady=10)
-    actions=tk.Frame(window,bg='#f7f7fa'); actions.pack(pady=12)
+    actions=tk.Frame(window,bg=BG); actions.pack(pady=12)
     def start():
         nonlocal running
         if running: return

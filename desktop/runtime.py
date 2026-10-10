@@ -58,6 +58,7 @@ def local_workspace():
 
 def public_server(root: Path, port: int, workspace=None, inventory=None, vision=None, configuration=None, startup_warning=None):
     inventory_token = secrets.token_urlsafe(32)
+    release_ready=False
     manifest = json.loads((root / "public-manifest.json").read_text(encoding="utf-8"))
     allowed = set(manifest["files"]) | {"public-manifest.json"}
     knowledge_files = {name for name in allowed if name.startswith("data/knowledge/") and name.endswith(".js")}
@@ -117,6 +118,9 @@ def public_server(root: Path, port: int, workspace=None, inventory=None, vision=
                 self.send_error(403)
                 return
             relative = unquote(urlsplit(self.path).path).lstrip("/") or "index.html"
+            if relative=='release/status':
+                from release_lifecycle import release_status
+                self.inventory_json(release_status(root,APP_DATA));return
             if relative=='diagnostics/recent':
                 self.inventory_json(diagnostics.recent()); return
             if ".." in Path(relative).parts or "\\" in relative:
@@ -178,6 +182,7 @@ def public_server(root: Path, port: int, workspace=None, inventory=None, vision=
             self.wfile.write(payload)
 
         def do_POST(self):
+            nonlocal release_ready
             expected_host = '127.0.0.1:' + str(self.server.server_port)
             if (self.headers.get('Host') != expected_host or self.headers.get('Origin') != 'http://' + expected_host
                 or self.headers.get('X-Keke-Inventory') != inventory_token):
@@ -200,6 +205,16 @@ def public_server(root: Path, port: int, workspace=None, inventory=None, vision=
                 except Exception:
                     diagnostics.failure('诊断操作失败');self.inventory_json({'error':'诊断操作失败，请查看本地日志'},500)
                 return
+            if path in ('/release/ready','/release/acknowledge'):
+                from release_lifecycle import cleanup_versions,acknowledge
+                length=int(self.headers.get('Content-Length','0'))
+                if not 0<=length<=4096:self.send_error(400);return
+                self.rfile.read(length)
+                if path.endswith('acknowledge'):acknowledge(root,APP_DATA)
+                elif not release_ready:
+                    release_ready=True
+                    threading.Thread(target=cleanup_versions,args=(sys.executable,getattr(sys,'frozen',False)),daemon=True,name='release-cleanup').start()
+                self.inventory_json({'ok':True});return
             diagnostics.event('功能请求',path=path)
             path = urlsplit(self.path).path
             if vision and path in ('/vision/start','/vision/cancel','/vision/stop-capture','/vision/open-folder','/vision/correct'):
@@ -304,7 +319,7 @@ def launch_window(title, mode, server, api=None, report=None, screenshot=None, s
 
     try:
         webview.start(smoke if report else None, gui="edgechromium", private_mode=bool(report),
-                      storage_path=str(profile))
+                      storage_path=str(profile),icon=str(BUNDLE/'assets/mint-avatar.ico') if (BUNDLE/'assets/mint-avatar.ico').is_file() else None)
     finally:
         if getattr(server,"vision",None):
             server.vision.close()

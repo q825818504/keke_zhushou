@@ -57,10 +57,13 @@ def shortcut(root, desktop=False):
     ctypes.windll.shell32.SHGetFolderPathW(None,0 if desktop else 0x2,None,0,buffer)
     if not buffer.value:raise OSError('无法获取快捷方式目录')
     target=Path(buffer.value)/'可可助手.lnk'
-    script="$ErrorActionPreference='Stop'; $w=New-Object -ComObject WScript.Shell; $s=$w.CreateShortcut($args[0]); $s.TargetPath=$args[1]; $s.WorkingDirectory=$args[2]; $s.Save()"
+    script="$ErrorActionPreference='Stop'; $w=New-Object -ComObject WScript.Shell; $s=$w.CreateShortcut($args[0]); $s.TargetPath=$args[1]; $s.WorkingDirectory=$args[2]; $s.IconLocation=$args[3]; $s.Save()"
     command=root/'create-shortcut.ps1';command.write_text(script,encoding='utf-8-sig')
     environment=dict(os.environ);environment.pop('PSModulePath',None)
-    try:subprocess.run(['powershell.exe','-NoProfile','-NonInteractive','-ExecutionPolicy','Bypass','-File',str(command),str(target),str(root/'KekeAssistant.exe'),str(root)],env=environment,check=True,creationflags=subprocess.CREATE_NO_WINDOW)
+    selected=json.loads((root/'active-version.json').read_text(encoding='utf-8'))['directory']
+    icon=(root/selected/'KekeAssistantApp.exe').resolve()
+    if not icon.is_relative_to((root/'app').resolve()):raise ValueError('快捷方式图标路径无效')
+    try:subprocess.run(['powershell.exe','-NoProfile','-NonInteractive','-ExecutionPolicy','Bypass','-File',str(command),str(target),str(root/'KekeAssistant.exe'),str(root),str(icon)+',0'],env=environment,check=True,creationflags=subprocess.CREATE_NO_WINDOW)
     finally:command.unlink(missing_ok=True)
 
 

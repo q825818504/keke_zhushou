@@ -73,7 +73,10 @@ def prepare(root=ROOT, config_only=False):
         notes_file=root/'desktop/releases'/('v'+app_version+'.md')
         if not notes_file.is_file() or len(notes_file.read_text(encoding='utf-8').strip())<40:
             raise ValueError('发行前必须记录升级内容：'+str(notes_file))
-        notes=notes_file.read_text(encoding='utf-8').strip()
+        user_notes=root/'desktop/releases/user'/('v'+app_version+'.md')
+        if not user_notes.is_file() or len(user_notes.read_text(encoding='utf-8').strip())<40:
+            raise ValueError('发行前必须提供独立用户升级说明：'+str(user_notes))
+        notes=user_notes.read_text(encoding='utf-8').strip()
     signing_identity(root/'desktop/update-trust.json')
     output=root/'dist/windows/releases'/('config' if config_only else 'v'+app_version)
     output.mkdir(parents=True,exist_ok=True)
@@ -87,11 +90,14 @@ def prepare(root=ROOT, config_only=False):
     if not config_only:
         manifest['release_notes']=notes
         from build import build
+        from build import make_icon
+        icon=make_icon(root/'build/desktop')
         manifest['prerequisites']=prepare_prerequisites(root,output)
         installer=output/f'KokoAssistantSetup-v{app_version}.exe'
         subprocess.run([sys.executable,'-m','PyInstaller','--noconfirm','--clean','--onefile','--windowed',
                         '--name',installer.stem,'--distpath',str(output),'--workpath',str(root/'build/installer'),
                         '--specpath',str(root/'build/installer'),'--paths',str(root/'desktop'),
+                        '--icon',str(icon),'--add-data',str(root/'desktop/assets')+';assets',
                         '--add-data',str(root/'desktop/update-trust.json')+';.',str(root/'desktop/installer_entry.py')],check=True)
         checksum=digest(installer)
         published_installer=installer.with_name(installer.stem+'-'+checksum[:12]+'.exe')

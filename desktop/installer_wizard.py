@@ -14,14 +14,13 @@ def wizard(default,public_key,install_operation=None):
     operation=install_operation or install
     window=tk.Tk();window.title('可可助手 · 安装向导')
     scale=max(1,window.winfo_fpixels('1i')/96)
-    window.geometry(f'{int(640*scale)}x{int(440*scale)}');window.resizable(False,False)
-    window.configure(bg='#f7f7fa')
-    style=ttk.Style();style.theme_use('vista')
-    style.configure('TButton',padding=(14,7));style.configure('TLabel',background='#f7f7fa',font=('Microsoft YaHei UI',10))
-    style.configure('TCheckbutton',background='#f7f7fa',font=('Microsoft YaHei UI',10))
-    title=ttk.Label(window,text='安装可可助手',font=('Microsoft YaHei UI',22,'bold'));title.pack(anchor='w',padx=32,pady=(28,12))
-    content=tk.Frame(window,bg='#f7f7fa');content.pack(fill='both',expand=True,padx=32)
-    actions=tk.Frame(window,bg='#f7f7fa');actions.pack(fill='x',padx=32,pady=22)
+    window.geometry(f'{int(700*scale)}x{int(550*scale)}');window.resizable(False,False)
+    from window_brand import apply,BG
+    apply(window)
+    steps=ttk.Label(window,text='安装位置  →  下载与安装  →  完成',foreground='#53596e');steps.pack(anchor='w',padx=32,pady=(18,0))
+    title=ttk.Label(window,text='安装可可助手',font=('Microsoft YaHei UI',21,'bold'));title.pack(anchor='w',padx=32,pady=(16,8))
+    content=tk.Frame(window,bg=BG);content.pack(fill='both',expand=True,padx=32)
+    actions=tk.Frame(window,bg=BG);actions.pack(fill='x',padx=32,pady=22)
     events=queue.Queue();running=False;root=None
     path=tk.StringVar(value=str(default));desktop=tk.BooleanVar(value=True);run=tk.BooleanVar(value=True)
     def clear():
@@ -33,10 +32,10 @@ def wizard(default,public_key,install_operation=None):
         window.destroy()
     window.protocol('WM_DELETE_WINDOW',close)
     def location():
-        clear();title.configure(text='选择安装位置')
+        clear();title.configure(text='选择安装位置');steps.configure(text='安装位置  →  下载与安装  →  完成')
         ttk.Label(content,text='为当前 Windows 用户安装。点击“开始安装”后才会联网下载。').pack(anchor='w',pady=8)
         ttk.Label(content,text='安装文件夹').pack(anchor='w',pady=(20,8))
-        row=tk.Frame(content,bg='#f7f7fa');row.pack(fill='x')
+        row=tk.Frame(content,bg=BG);row.pack(fill='x')
         ttk.Entry(row,textvariable=path).pack(side='left',fill='x',expand=True)
         def browse():
             selected=filedialog.askdirectory(parent=window,initialdir=str(Path(path.get()).parent),mustexist=False)
@@ -51,7 +50,7 @@ def wizard(default,public_key,install_operation=None):
             root=validate_destination(path.get());root.mkdir(parents=True,exist_ok=True)
             probe=root/'.write-test';probe.write_bytes(b'');probe.unlink()
         except (ValueError,OSError) as error:messagebox.showerror('无法安装到此位置',str(error)+'\n请选择可写的专用安装文件夹。',parent=window);return
-        running=True;clear();title.configure(text='正在安装')
+        running=True;clear();title.configure(text='正在下载并安装');steps.configure(text='安装位置  →  下载与安装（进行中）  →  完成')
         ttk.Label(content,text='安装位置：'+str(root),wraplength=570).pack(anchor='w',pady=12)
         status=ttk.Label(content,text='准备下载…',wraplength=570);status.pack(anchor='w',pady=16)
         progress=ttk.Progressbar(content,mode='indeterminate');progress.pack(fill='x',pady=12);progress.start(15)
@@ -75,7 +74,7 @@ def wizard(default,public_key,install_operation=None):
             window.after(100,poll)
         window.after(100,poll)
     def complete():
-        clear();title.configure(text='安装完成')
+        clear();title.configure(text='安装完成，可以开始使用');steps.configure(text='安装位置  →  下载与安装  →  完成')
         ttk.Label(content,text='可可助手已安装到：\n'+str(root),wraplength=570).pack(anchor='w',pady=18)
         ttk.Checkbutton(content,text='创建桌面快捷方式',variable=desktop).pack(anchor='w',pady=10)
         ttk.Checkbutton(content,text='立即运行可可助手',variable=run).pack(anchor='w',pady=10)

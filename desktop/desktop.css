@@ -1,5 +1,5 @@
 /* Desktop chrome: quiet materials, clear hierarchy, Windows-native title bar. */
-:root { --desktop-sidebar: 216px; --desktop-accent: #6b5df3; }
+:root { --desktop-sidebar: 226px; --desktop-accent: #5947ce; --desktop-ink:#242536; --desktop-muted:#53596e; --desktop-line:#e1e3ec; }
 html, body.desktop-mode { height: 100%; overflow: hidden; }
 body.desktop-mode { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif; background: #f7f7fa; }
 .desktop-mode .app-shell { height: 100%; min-height: 0; }
@@ -8,19 +8,16 @@ body.desktop-mode { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", 
 .desktop-mode .sidebar::before { display: none; }
 .desktop-sidebar { flex-direction: column; }
 .desktop-brand { display: flex; align-items: center; gap: 11px; margin: 0 6px 30px; }
-.desktop-app-mark { display: grid; place-items: center; flex: 0 0 38px; height: 38px; background: linear-gradient(145deg,#8b7aff,#6252dc); color: white; font-size: 24px; border-radius: 12px; box-shadow: 0 3px 8px #6a5df330; }
+.desktop-app-mark { display: block; flex: 0 0 48px; width:48px; height:48px; object-fit:contain; border-radius:12px; }
 .desktop-brand strong { display: block; color: #24242b; font-size: 17px; letter-spacing: -.025em; }
-.desktop-brand small { display: block; color: #85858f; font-size: 11px; margin-top: 3px; }
+.desktop-brand small { display: block; color: #53596e; font-size: 11px; margin-top: 5px; }
 .desktop-nav-label { margin: 14px 10px 9px; color: #8b8b95; font-size: 11px; font-weight: 600; }
 .desktop-sidebar #userPrimaryNav { display: flex; flex-direction: column; padding: 0; border-radius: 0; background: none; box-shadow: none; gap: 4px; }
 .desktop-sidebar .user-primary-nav-item { display: flex; justify-content: flex-start; gap: 10px; width: 100%; min-height: 40px; padding: 10px 12px; text-align: left; color: #51515c; background: none; border-radius: 9px; font-size: 13px; box-shadow: none; }
-.desktop-sidebar .user-primary-nav-item.is-active { color: #fff; background: var(--desktop-accent); box-shadow: 0 3px 9px #6b5df326; }
-.desktop-sidebar .user-primary-nav-item::before { content: "◇"; font-size: 17px; width: 20px; text-align: center; }
-.desktop-sidebar [data-user-route="team"]::before { content: "✦"; }
-.desktop-sidebar [data-user-route="characters"]::before { content: "◉"; }
-.desktop-sidebar [data-user-route="arc-drives"]::before { content: "◎"; }
-.desktop-sidebar [data-user-route="cassettes"]::before { content: "▣"; }
-.desktop-sidebar [data-user-route="drive-blocks"]::before { content: "▦"; }
+.desktop-sidebar .user-primary-nav-item.is-active { color:#4533ad; background:#e5e1fa; font-weight:600; box-shadow:none; }
+.desktop-sidebar .user-primary-nav-item svg { width:20px; height:20px; flex:none; stroke:currentColor; stroke-width:1.6; fill:none; stroke-linecap:round; stroke-linejoin:round; }
+.desktop-sidebar .user-primary-nav-item:hover { background:#e7e8f0; }
+.desktop-sidebar .user-primary-nav-item.is-active:hover { background:#ddd7f7; }
 .desktop-sidebar .user-nav-badge { display: none; }
 .desktop-sidebar .desktop-nav-label { margin-top: 0; }
 .desktop-sidebar-foot { margin-top: auto; padding: 20px 10px 0; color: #888892; font-size: 11px; line-height: 1.8; }
@@ -59,10 +56,61 @@ body.desktop-mode { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", 
 @media (max-width: 1120px) { :root { --desktop-sidebar: 190px; } .desktop-mode .workspace-grid { grid-template-columns: minmax(0,1fr); } .desktop-mode .preview-column { display: none; } }
 @media (prefers-reduced-motion: reduce) { .desktop-mode * { scroll-behavior: auto !important; } }
 @media (prefers-reduced-transparency: reduce) { .desktop-mode .topbar { backdrop-filter: none; background: #f7f7fa; } }
-#diagnosticsButton { margin-top:12px; color:#6554dc; background:none; border:0; padding:0; cursor:pointer; }
+#diagnosticsButton, #releaseNotesButton { display:block; margin-top:10px; color:#5142b7; background:none; border:0; padding:3px 0; cursor:pointer; font-size:12px; text-align:left; }
 #diagnosticsDialog { width:min(850px,85vw); max-height:82vh; padding:28px; border:1px solid #e2def4; border-radius:20px; color:#27324a; background:#fafafe; }
 #diagnosticsDialog::backdrop { background:rgba(30,26,50,.3); }
 #diagnosticsDialog p { line-height:1.6; }
 #diagnosticsDialog pre { padding:16px; background:#f0eef8; border-radius:12px; white-space:pre-wrap; overflow-wrap:anywhere; max-height:45vh; overflow:auto; font-size:12px; }
 .diagnostics-actions { display:flex; gap:12px; }
 .diagnostics-actions button { padding:9px 14px; border:1px solid #dad5ef; border-radius:9px; background:white; cursor:pointer; }
+
+/* v1.2: one scale for dense Windows workspaces and all collection states. */
+.desktop-mode { color:var(--desktop-ink); }
+.desktop-mode .user-eyebrow, .desktop-mode .inventory-eyebrow { display:none; }
+.desktop-mode .desktop-nav-label, .desktop-mode .desktop-sidebar-foot { color:var(--desktop-muted); }
+.desktop-mode .topbar { background:#f7f8fb; backdrop-filter:none; }
+.desktop-mode .main-content { scrollbar-color:#bbb8ce #f7f8fb; scrollbar-width:thin; }
+.desktop-mode ::selection { color:#34216f; background:#ded7fa; }
+.desktop-mode input, .desktop-mode textarea { caret-color:var(--desktop-accent); }
+.desktop-mode button, .desktop-mode input, .desktop-mode select, .desktop-mode textarea { transition:border-color 120ms ease-out,background-color 120ms ease-out; }
+.desktop-mode :is(button,input,select,textarea,summary,a):focus-visible { outline:2px solid var(--desktop-accent); outline-offset:3px; }
+.desktop-mode button:disabled { opacity:.55; cursor:not-allowed; filter:none; }
+.desktop-mode .primary-button { background:var(--desktop-accent); color:white; box-shadow:0 3px 8px #382d7914; border-radius:10px; min-height:40px; }
+.desktop-mode .primary-button:hover:not(:disabled) { background:#4936b8; }
+.desktop-mode .ghost-button { color:#5142b7; min-height:36px; border-radius:9px; }
+.desktop-mode .ghost-button:hover:not(:disabled) { background:#eeeafa; }
+.desktop-mode .inventory-heading { margin:28px 0 24px; }
+.desktop-mode .inventory-heading h1 { margin:0 0 8px; }
+.desktop-mode .inventory-heading p, .desktop-mode .inventory-connect p, .desktop-mode .inventory-hint,
+.desktop-mode .inventory-summary small, .desktop-mode .inventory-settings label,
+.desktop-mode .inventory-browser-head label, .desktop-mode .inventory-metadata { color:var(--desktop-muted); }
+.desktop-mode .inventory-connect, .desktop-mode .inventory-browser { border-color:var(--desktop-line); border-radius:16px; padding:26px; }
+.desktop-mode .inventory-connect h2, .desktop-mode .inventory-browser h2 { font-size:20px; line-height:1.4; }
+.desktop-mode .inventory-settings { margin:22px 0 16px; gap:20px; }
+.desktop-mode .inventory-settings input, .desktop-mode .inventory-settings select, .desktop-mode .vision-storage-path,
+.desktop-mode .inventory-browser-head input { background:#fff; border-color:#c9ccda; min-height:42px; }
+.desktop-mode .inventory-actions { gap:12px; align-items:center; margin-top:18px; }
+.desktop-mode .inventory-status { line-height:1.6; max-width:75ch; box-shadow:none; }
+.desktop-mode .inventory-component-files { background:#f5f5fa; border-radius:10px; }
+.desktop-mode .inventory-summary { gap:14px; }
+.desktop-mode .inventory-summary strong { font-variant-numeric:tabular-nums; }
+.desktop-mode .inventory-record > summary { min-height:48px; }
+.desktop-mode .inventory-empty { padding:36px 20px; color:var(--desktop-muted); }
+.desktop-mode .user-route-intro > div > .user-section-kicker,
+.desktop-mode .user-team-builder-head .user-section-kicker { display:none; }
+.desktop-mode .user-team-roster-grid { grid-template-columns:repeat(auto-fit,minmax(215px,1fr)); gap:10px; }
+.desktop-mode .user-team-builder, .desktop-mode .user-team-result { border-radius:16px; box-shadow:none; }
+.desktop-mode .user-team-builder-head p, .desktop-mode .user-team-roster-name small,
+.desktop-mode .user-route-intro p { color:var(--desktop-muted); }
+#releaseNotesDialog { width:min(560px,85vw); padding:28px; border:1px solid var(--desktop-line); border-radius:18px; max-height:85vh; overflow:auto; color:var(--desktop-ink); box-shadow:0 18px 60px #24253630; }
+#releaseNotesDialog::backdrop { background:#24253666; }
+.release-heading { display:flex; align-items:center; gap:16px; }
+.release-heading img { width:64px; height:64px; border-radius:14px; }
+.release-heading h2 { font-size:24px; margin:0 0 4px; }
+.release-version { color:var(--desktop-muted); margin:0; }
+.release-copy h3 { font-size:16px; margin:24px 0 10px; }
+.release-copy p { color:var(--desktop-muted); font-size:14px; line-height:1.75; margin:6px 0; }
+#releaseNotesDialog > button { display:block; margin:24px 0 0 auto; padding:11px 24px; color:white; background:var(--desktop-accent); border:0; border-radius:10px; cursor:pointer; }
+#releaseNotesDialog [role=status] { color:#a43b43; }
+@media (max-width:900px) { :root { --desktop-sidebar:180px; } .desktop-mode .inventory-summary { grid-template-columns:repeat(3,minmax(0,1fr)); } .desktop-mode .inventory-settings { grid-template-columns:1fr; } .desktop-mode .main-content { padding-left:22px; padding-right:22px; } }
+@media (prefers-reduced-motion:reduce) { .desktop-mode * { transition:none!important; } }

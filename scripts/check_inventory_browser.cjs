@@ -12,7 +12,11 @@ const root=path.resolve(__dirname,'..');
   page=await browser.newPage({viewport:{width:1380,height:900}});const errors=[];
   page.on('pageerror',error=>errors.push(error.message));
   await page.addInitScript(()=>{const original=window.fetch;window.__inventoryRequests=[];window.fetch=(url,options)=>{if(String(url).startsWith('/inventory/'))window.__inventoryRequests.push({url:String(url),body:options?.body});return original(url,options);};});
-  await page.goto('http://127.0.0.1:'+port);await page.waitForLoadState('networkidle');
+  await page.goto('http://127.0.0.1:'+port);await page.locator('.desktop-sidebar nav svg').first().waitFor();
+  if(await page.evaluate(async()=> (await (await fetch('/release/status')).json()).show)) {
+    await page.locator('#releaseNotesDialog').waitFor({state:'visible'});
+    await page.locator('#releaseNotesDialog button').click();await page.locator('#releaseNotesDialog').waitFor({state:'hidden'});
+  }
   await page.locator('[data-user-route="inventory"]').click();
   await page.waitForFunction(()=>document.querySelector('#userInventoryRoute').textContent.includes('65'));
   assert.equal(await page.locator('#userInventoryRoute .inventory-summary').count(),5);
@@ -83,7 +87,7 @@ const root=path.resolve(__dirname,'..');
   await page.locator('#userInventoryRoute .inventory-summary[data-inventory-kind="equipment"][data-inventory-filter=""]').click();
   await page.locator('.main-content').evaluate(node=>node.scrollTop=0);
   await page.screenshot({path:path.join(root,'build/inventory-qa.png')});
-  await page.reload();await page.waitForLoadState('networkidle');await page.locator('[data-user-route="inventory"]').click();
+  await page.reload();await page.locator('.desktop-sidebar nav svg').first().waitFor();await page.locator('[data-user-route="inventory"]').click();
   await page.waitForFunction(()=>document.querySelector('#userInventoryRoute .inventory-record')!==null);
   assert.equal(await page.locator('#userInventoryRoute .inventory-summary').count(),5);
   await page.locator('#inventorySource').selectOption('ocr:'+'2'.repeat(24));

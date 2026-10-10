@@ -4,18 +4,14 @@ import json
 from pathlib import Path
 import subprocess
 import sys
-from PIL import Image, ImageDraw
 from prepare_public import prepare_public, ROOT
 
 
 def make_icon(directory):
-    image = Image.new("RGBA", (256, 256))
-    draw = ImageDraw.Draw(image)
-    draw.rounded_rectangle((4, 4, 252, 252), radius=60, fill="#7263ef")
-    for x, height in [(67, 58), (112, 114), (157, 82)]:
-        draw.rounded_rectangle((x, 190-height, x+28, 190), radius=12, fill="white")
-    icon = directory / "keke.ico"
-    image.save(icon, sizes=[(16,16),(32,32),(48,48),(64,64),(128,128),(256,256)])
+    import shutil
+    directory.mkdir(parents=True,exist_ok=True)
+    icon=directory/'keke.ico'
+    shutil.copyfile(ROOT/'desktop/assets/mint-avatar.ico',icon)
     return icon
 
 
@@ -33,6 +29,7 @@ def build(target, dist=None, layout='onefile', app_version='1.0'):
         public = prepare_public(app_version)
         data = [str(public) + ";public", str(ROOT / "desktop/inventory/component-identity.json") + ";inventory", str(ROOT / "desktop/vision/resources") + ";vision/resources", str(ROOT / "desktop/vision/upstream/LICENSE") + ";vision/upstream", str(ROOT / "desktop/vision/upstream/NOTICE.md") + ";vision/upstream", str(ROOT / "desktop/vision/upstream/source-manifest.json") + ";vision/upstream"]
         data += [str(ROOT / 'build/native-components') + ';native-components', str(ROOT / 'desktop/native/component-identity.json') + ';native', str(ROOT / 'desktop/native/NOTICE.md') + ';native']
+        data += [str(ROOT/'desktop/assets')+';assets']
         name = "KekeAssistant"
         if layout=='directory':
             trust=json.loads((ROOT/'desktop/update-trust.json').read_text())
