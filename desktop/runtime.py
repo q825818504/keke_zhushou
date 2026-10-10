@@ -55,7 +55,7 @@ def local_workspace():
     return None
 
 
-def public_server(root: Path, port: int, workspace=None, inventory=None, vision=None):
+def public_server(root: Path, port: int, workspace=None, inventory=None, vision=None, configuration=None, startup_warning=None):
     inventory_token = secrets.token_urlsafe(32)
     manifest = json.loads((root / "public-manifest.json").read_text(encoding="utf-8"))
     allowed = set(manifest["files"]) | {"public-manifest.json"}
@@ -65,13 +65,13 @@ def public_server(root: Path, port: int, workspace=None, inventory=None, vision=
         return workspace() if callable(workspace) else workspace
 
     def source_for(relative):
-        local = data_root()
-        image = relative.startswith("data/resources/") and Path(relative).suffix.lower() in {".png", ".jpg", ".jpeg", ".webp", ".svg", ".gif"}
+        local = configuration or data_root()
+        image = relative.startswith('data/' if configuration else 'data/resources/') and Path(relative).suffix.lower() in {".png", ".jpg", ".jpeg", ".webp", ".svg", ".gif"}
         if relative not in allowed and not image:
             return None
         if local and (relative in knowledge_files or image):
             source = (local / relative).resolve()
-            boundary = local / ("data/resources" if image else "data/knowledge")
+            boundary = local / ('data' if configuration else "data/resources" if image else "data/knowledge")
             if source.is_relative_to(boundary.resolve()) and source.is_file():
                 return source
         return root / relative if relative in allowed else None
@@ -141,7 +141,12 @@ def public_server(root: Path, port: int, workspace=None, inventory=None, vision=
                     else:self.send_error(404)
                 except (ValueError,OSError):self.inventory_json({'error':'视觉批次或图片读取失败'},400)
                 return
-            if relative == "local-data-version":
+            if relative == 'public-config.js' and (root/'config.json').is_file():
+                from update_protocol import load_config
+                bindings=load_config(configuration or root)['bindings']
+                payload=('\n'.join('window['+json.dumps(key)+']=JSON.parse('+json.dumps(json.dumps(value,ensure_ascii=True))+');' for key,value in bindings.items())).encode('utf-8')
+                mime='application/javascript'
+            elif relative == "local-data-version":
                 payload = json.dumps({"version": version()}).encode()
                 mime = "application/json"
             else:
@@ -150,6 +155,10 @@ def public_server(root: Path, port: int, workspace=None, inventory=None, vision=
                     self.send_error(404)
                     return
                 payload = source.read_bytes()
+                if relative=='index.html' and startup_warning:
+                    import html
+                    notice='<div class="inventory-status" data-tone="warning" role="status">'+html.escape(startup_warning)+'</div>'
+                    payload=payload.decode('utf-8').replace('</header>','</header>'+notice,1).encode('utf-8')
                 mime = mimetypes.guess_type(relative)[0] or "application/octet-stream"
             self.send_response(200)
             self.send_header("Content-Type", mime + ("; charset=utf-8" if mime.startswith("text/") else ""))

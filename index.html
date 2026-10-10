@@ -319,6 +319,12 @@
       <div class="repo-sync-actions"><button type="button" class="outline-button" id="repoCheckButton">检查 GitHub</button><button type="button" class="outline-button" id="repoPullButton" hidden>拉取更新</button></div>
       <label class="repo-commit-label" id="repoCommitLabel">提交说明<input id="repoCommitMessage" maxlength="120" value="更新可可助手资料"></label>
       <button type="button" class="primary-button" id="repoSyncNowButton" hidden>提交并推送资料</button>
+      <section class="release-publish-settings">
+        <h3>Gitee · 用户配置发布</h3>
+        <p id="releasePublishStatus" class="inventory-status" data-tone="info" role="status" aria-live="polite">仅发布公共配置和发行产物。</p>
+        <label>本机发布令牌<input id="releaseToken" type="password" autocomplete="off" placeholder="只在此电脑加密保存，不会进入安装包"></label>
+        <div class="inventory-actions"><button class="outline-button" id="releaseCredentialsButton" type="button">保存发布凭据</button><button class="primary-button" id="releaseConfigButton" type="button">同步并发布公共配置</button></div>
+      </section>
       <div class="repo-legacy-tools"><button type="button" class="ghost-button" id="repoExportLocalButton">导出本浏览器维护数据</button><label class="ghost-button repo-import-label" id="repoImportLabel" hidden>导入旧浏览器备份<input type="file" id="repoImportFile" accept=".json,application/json"></label></div>
       <small>状态列表显示整个工作区；提交按钮只纳入公共知识资料、维护者编辑和摆放图，不会同步持有角色、共鸣等个人设置或其他文件。GitHub 凭据由本机 Git 管理。</small>
     </div>

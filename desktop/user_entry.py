@@ -41,6 +41,14 @@ SMOKE = """(() => {
 
 
 def main():
+    root = BUNDLE / 'public' if (BUNDLE/'public').exists() else Path(__file__).resolve().parents[1]/'build/desktop/public'
+    configuration=None; startup_warning=None
+    if (BUNDLE/'release-info.json').is_file():
+        if not single_instance('可可助手','user'): return
+        from update_client import gate
+        result=gate(json.loads((BUNDLE/'release-info.json').read_text(encoding='utf-8')),root,APP_DATA)
+        if result is None: return
+        configuration=result['config']; startup_warning=result['warning']
     parser = argparse.ArgumentParser()
     parser.add_argument("--smoke-report")
     parser.add_argument("--screenshot")
@@ -68,14 +76,14 @@ def main():
         except Exception:result={'ok':False,'error':traceback.format_exc()}
         Path(args.vision_self_test).write_text(json.dumps(result,ensure_ascii=False,indent=2),encoding='utf-8')
         return
-    if not args.smoke_report and not single_instance("可可助手", "user"):
+    if not (BUNDLE/'release-info.json').is_file() and not args.smoke_report and not single_instance("可可助手", "user"):
         return
     root = BUNDLE / "public" if (BUNDLE / "public").exists() else Path(__file__).resolve().parents[1] / "build/desktop/public"
     vision = VisionService(APP_DATA / "vision-scans")
     components = ComponentManager(APP_DATA / "native-components")
     inventory = InventoryService(APP_DATA / "player-inventory", components=components, vision=vision)
-    server = public_server(root, 0 if args.smoke_report else 8767, workspace=local_workspace,
-                           inventory=inventory, vision=vision)
+    server = public_server(root, 0 if args.smoke_report else 8767, workspace=local_workspace if configuration is None else None,
+                           inventory=inventory, vision=vision,configuration=configuration,startup_warning=startup_warning)
     launch_window("可可助手", "user", server, report=args.smoke_report, screenshot=args.screenshot, smoke_js=SMOKE)
 
 

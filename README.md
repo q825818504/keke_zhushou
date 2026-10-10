@@ -1,6 +1,6 @@
 # 可可助手 · 角色资料与养成指南
 
-Windows 桌面版：双击 dist/windows/KekeAssistant.exe 使用用户端；双击 dist/windows/KekeAssistantAdmin.exe 管理资料。顶栏「保存」统一保存角色基础资料与推荐配置。用户版优先只读本机管理资料库，保存后自动检测刷新；没有本机资料库时读取内置资料。两者均使用独立应用窗口，用户包不含管理入口或写入接口。桌面构建、项目选择、旧数据迁移和维护说明见 [desktop/README.md](desktop/README.md)。公共在线更新尚未配置。
+Windows 桌面版：用户端采用联网安装器，管理端保持独立 EXE。GitHub 维护源码和配置；Gitee 专门发布签名版本清单、公共配置及安装下载内容，不镜像源码。每次启动必须在线确认程序版本，有新版则先更新；配置更新失败可使用完整本地配置。构建、发布和当前验收状态见 [desktop/RELEASE.md](desktop/RELEASE.md)。顶栏「保存」统一保存角色基础资料与推荐配置。桌面项目选择、旧数据迁移和维护说明见 [desktop/README.md](desktop/README.md)。
 
 下面的静态页面启动方式用于开发与旧浏览器数据迁移，日常桌面使用无需运行 PowerShell 脚本。
 

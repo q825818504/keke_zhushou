@@ -19,7 +19,7 @@ def make_icon(directory):
     return icon
 
 
-def build(target, dist=None):
+def build(target, dist=None, layout='onefile', app_version='1.0'):
     dist = Path(dist or ROOT / "dist/windows").resolve()
     if not dist.is_relative_to((ROOT / "dist").resolve()):
         raise ValueError("Desktop output must stay within this project's dist directory")
@@ -30,29 +30,37 @@ def build(target, dist=None):
         from native.components import ComponentManager
         manager=ComponentManager(ROOT/'build/native-build-check')
         manager.component_root()
-        public = prepare_public()
+        public = prepare_public(app_version)
         data = [str(public) + ";public", str(ROOT / "desktop/inventory/component-identity.json") + ";inventory", str(ROOT / "desktop/vision/resources") + ";vision/resources", str(ROOT / "desktop/vision/upstream/LICENSE") + ";vision/upstream", str(ROOT / "desktop/vision/upstream/NOTICE.md") + ";vision/upstream", str(ROOT / "desktop/vision/upstream/source-manifest.json") + ";vision/upstream"]
         data += [str(ROOT / 'build/native-components') + ';native-components', str(ROOT / 'desktop/native/component-identity.json') + ';native', str(ROOT / 'desktop/native/NOTICE.md') + ';native']
         name = "KekeAssistant"
+        if layout=='directory':
+            trust=json.loads((ROOT/'desktop/update-trust.json').read_text())
+            (directory/'release-info.json').write_text(json.dumps({'version':app_version,'public_key':trust['public_key']}),encoding='utf-8')
+            data += [str(directory/'release-info.json')+';.']
+            name='KekeAssistantApp'
     else:
         data = [str(ROOT / "desktop/desktop.css") + ";desktop", str(ROOT / "desktop/desktop.js") + ";desktop"]
         name = "KekeAssistantAdmin"
-    args = [sys.executable, "-m", "PyInstaller", "--noconfirm", "--clean", "--onefile", "--windowed",
+    args = [sys.executable, "-m", "PyInstaller", "--noconfirm", "--clean", '--onedir' if layout=='directory' else '--onefile', "--windowed",
             "--name", name, "--icon", str(icon), "--paths", str(ROOT / "scripts"),
             "--distpath", str(dist), "--workpath", str(directory / "pyinstaller"),
             "--specpath", str(directory), "--exclude-module", "pytest"]
     if target=="user":
-        args += ["--collect-all","rapidocr_onnxruntime","--collect-all","onnxruntime","--collect-all","vgamepad"]
+        for package in ['rapidocr_onnxruntime','onnxruntime','vgamepad']:
+            args += ['--collect-data',package,'--collect-binaries',package,'--collect-submodules',package]
     for asset in data:
         args += ["--add-data", asset]
     args += [str(ROOT / ("desktop/" + target + "_entry.py"))]
     subprocess.run(args, check=True)
     exe = dist / (name + ".exe")
+    if layout=='directory': exe=dist/name/(name+'.exe')
     if target == "user":
         from PyInstaller.archive.readers import CArchiveReader
         archive = CArchiveReader(str(exe))
         modules = archive.open_embedded_archive("PYZ.pyz").toc
-        forbidden = {"admin_server", "admin_entry", "build_character_overrides_bundle", "build_team_templates_bundle"}
+        forbidden = {"admin_server", "admin_entry", "build_character_overrides_bundle", "build_team_templates_bundle",
+                     'release_publish','release_credentials','build_release'}
         if forbidden.intersection(modules):
             raise RuntimeError("Admin Python module entered user EXE")
         if any("admin_bridge" in entry or "team_manager" in entry or ".git/" in entry for entry in archive.toc):

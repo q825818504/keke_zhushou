@@ -242,6 +242,23 @@ window.KekeAdminBridge = (() => {
       const message = document.querySelector("#repoCommitMessage")?.value.trim() || "更新可可助手资料";
       return jsonRequest("/api/git/sync", { message });
     }));
+    document.querySelector('#releaseCredentialsButton')?.addEventListener('click',()=>runAction(null,async()=>{
+      const field=document.querySelector('#releaseToken');
+      try{return await jsonRequest('/api/release/credentials',{token:field.value});}
+      finally{field.value='';}
+    }));
+    document.querySelector('#releaseConfigButton')?.addEventListener('click',()=>runAction(null,async()=>{
+      await jsonRequest('/api/git/sync',{message:'发布可可助手公共配置'});
+      return jsonRequest('/api/release/config',{});
+    }));
+    document.querySelector('#repoSyncButton')?.addEventListener('click',async()=>{
+      const target=document.querySelector('#releasePublishStatus');
+      try{
+        const status=await request('/api/release/status');
+        target.textContent=(status.configured?'发布凭据已配置':'尚未配置本机发布凭据')+' · 程序 '+(status.version?'v'+status.version:'尚未正式发行')+' · 配置 r'+status.config_revision;
+        target.dataset.tone=status.configured?'success':'warning';
+      }catch(error){target.textContent=error.message;target.dataset.tone='error';}
+    });
     document.querySelector("#repoExportLocalButton")?.addEventListener("click", async () => {
       const summary = document.querySelector("#repoSyncSummary");
       try {

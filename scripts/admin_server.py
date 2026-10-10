@@ -47,6 +47,8 @@ GIT_PATHS = {
 sys.path.insert(0, str(ROOT / "scripts"))
 from build_character_overrides_bundle import render_bundle as render_character_bundle  # noqa: E402
 from build_team_templates_bundle import render_bundle as render_team_bundle  # noqa: E402
+sys.path.insert(0,str(ROOT/'desktop'))
+import release_publish
 
 
 def _read_json(path: Path, default: dict) -> dict:
@@ -414,6 +416,14 @@ class Handler(BaseHTTPRequestHandler):
             self._respond_error(error)
             return
         parsed = urlsplit(self.path)
+        if parsed.path == '/api/release/status':
+            try:
+                values=release_publish.read_secrets()
+                state=_read_json(ROOT/'desktop/release-state.json',{'last_published':None,'config_revision':0})
+                self._json({'ok':True,'configured':bool(values.get('gitee_token')),'version':state['last_published'],'config_revision':state['config_revision']})
+            except Exception:
+                self._json({'ok':True,'configured':False,'error':'本机发布凭据不可用'})
+            return
         if parsed.path == "/api/ping":
             self._json({"ok": True, "service": "keke-admin", "version": 2, "capabilities": ["character-save"]})
             return
@@ -457,6 +467,27 @@ class Handler(BaseHTTPRequestHandler):
         try:
             self._check_local_request()
             parsed = urlsplit(self.path)
+            if parsed.path == '/api/release/credentials':
+                self._json(release_publish.configure(self._body_json().get('token')))
+                return
+            if parsed.path == '/api/release/config':
+                if _run_git(['remote','get-url','origin']).stdout.strip()!='https://github.com/q825818504/keke_zhushou.git':
+                    raise RuntimeError('公共配置只能从指定GitHub维护仓库发布')
+                fetched=_run_git(['fetch','origin'],timeout=90)
+                if fetched.returncode: raise RuntimeError(_git_error(fetched))
+                state=_git_status()
+                if state.get('ahead') or state.get('behind'):
+                    raise RuntimeError('请先将维护资料同步到GitHub，再发布公共配置')
+                for diff in (['diff','--name-only'],['diff','--cached','--name-only']):
+                    dirty=_run_git([*diff,'--','data/knowledge','data/resources'])
+                    if dirty.stdout.strip(): raise RuntimeError('请先保存并同步维护资料到GitHub')
+                from build_release import prepare
+                output=prepare(ROOT,config_only=True)
+                if output is None:
+                    self._json({'ok':True,'message':'公共配置与上次发行一致，无需重复发布'})
+                    return
+                self._json(release_publish.publish(ROOT,output))
+                return
             if parsed.path == "/api/teams":
                 body = self._body_json()
                 overrides = _validate_team_overrides(body.get("overrides"))
@@ -669,6 +700,9 @@ class Handler(BaseHTTPRequestHandler):
                 raise RuntimeError(_git_error(added))
         staged_after = _run_git(["diff", "--cached", "--quiet"])
         if staged_after.returncode == 0:
+            if state['ahead'] and not state['behind']:
+                pushed=_run_git(['push','origin',f"HEAD:refs/heads/{state['branch']}"],timeout=120)
+                if pushed.returncode: raise RuntimeError(_git_error(pushed))
             self._json({"ok": True, "message": "没有待提交的管理资料。", "git": _git_status()})
             return
         committed = _run_git(["commit", "-m", message.strip()], timeout=60)

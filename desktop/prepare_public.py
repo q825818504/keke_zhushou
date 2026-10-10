@@ -12,7 +12,7 @@ ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = ROOT / "build" / "desktop" / "public"
 
 
-def prepare_public() -> Path:
+def prepare_public(app_version='1.0') -> Path:
     if not OUTPUT.resolve().is_relative_to((ROOT / "build/desktop").resolve()):
         raise RuntimeError("Generated public output escaped build/desktop")
     OUTPUT.mkdir(parents=True, exist_ok=True)
@@ -34,10 +34,10 @@ def prepare_public() -> Path:
     view.select_one(".user-footer").decompose()
     toast = soup.select_one("#toast")
     bundles = [tag["src"] for tag in soup.select("script[src]") if tag["src"].startswith("data/knowledge/")]
-    for relative in bundles:
-        target = OUTPUT / relative
-        target.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copy2(ROOT / relative, target)
+    from public_config import export_config
+    export_config(ROOT, OUTPUT)
+    bundles=['public-config.js']
+    (OUTPUT/'public-config.js').write_text('// Public JSON bindings are served by the local runtime.\n',encoding='utf-8')
     (OUTPUT / "drive_layout_solver.js").write_bytes((ROOT / "drive_layout_solver.js").read_bytes())
     (OUTPUT / "terminal_puzzle.js").write_bytes((ROOT / "terminal_puzzle.js").read_bytes())
     (OUTPUT / "styles.css").write_bytes((ROOT / "styles.css").read_bytes())
@@ -67,7 +67,7 @@ def prepare_public() -> Path:
         '<aside class="desktop-sidebar"><div class="desktop-brand"><span class="desktop-app-mark">✦</span>'
         '<div><strong>可可助手</strong><small>你的配队与养成助手</small></div></div>'
         '<p class="desktop-nav-label">功能</p>' + nav +
-        '<div class="desktop-sidebar-foot">Windows 桌面版 · 0.1<br>Ctrl + 1–7 快速切换</div></aside>'
+        f'<div class="desktop-sidebar-foot">Windows 桌面版 · v{app_version}<br>Ctrl + 1–7 快速切换</div></aside>'
         '<main class="main-content"><header class="topbar"><div class="breadcrumb"><span>可可助手</span>'
         '<strong id="activeBreadcrumb">自动配队</strong></div></header>' +
         str(view) + '</main></div>' + str(toast) + scripts + '</body></html>'
@@ -89,10 +89,10 @@ def prepare_public() -> Path:
     if missing:
         raise RuntimeError("Public asset references are missing: " + json.dumps(missing[:15], ensure_ascii=False))
     (OUTPUT / "ABOUT.txt").write_text(
-        "可可助手 Windows 桌面版 0.1\n"
+        f"可可助手 Windows 桌面版 v{app_version}\n"
         "图鉴与异能环合资料：环世全鉴 https://wiki.mysqil.com/ 作者 Matsuzaka Yuki。\n"
         "按 CC BY-NC-SA 4.0 使用、整理及共享：https://creativecommons.org/licenses/by-nc-sa/4.0/\n"
-        "本地界面和资料整理保留来源，首版资料随应用发布，尚未配置在线资料更新地址。\n",
+        "公共配置由Gitee发布服务更新，下载失败可使用完整本地配置。\n",
         encoding="utf-8")
     files = {str(file.relative_to(OUTPUT)).replace("\\", "/"): hashlib.sha256(file.read_bytes()).hexdigest()
              for file in OUTPUT.rglob("*") if file.is_file()}
@@ -104,7 +104,7 @@ def prepare_public() -> Path:
     page = BeautifulSoup(html, "html.parser")
     if page.select("#userAdminButton, #roleManagementView, #guideManagerView, #repoSyncDialog"):
         raise RuntimeError("Admin DOM entered public release")
-    manifest = {"schema": 1, "version": "0.1.0", "built_at": datetime.now(timezone.utc).isoformat(), "files": files}
+    manifest = {"schema": 1, "version": app_version, "built_at": datetime.now(timezone.utc).isoformat(), "files": files}
     (OUTPUT / "public-manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
     print("Public release: " + str(len(files)) + " files; " + str(len(references)) + " referenced images.")
     return OUTPUT
