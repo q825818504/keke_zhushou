@@ -30,5 +30,9 @@
 | Gitee匿名版本接口/附件下载未验证 | 后续真实发布前验证；不得内置仓库写入令牌到用户端。 |
 
 ## Resources
+- 2026-10-11真实联调：Gitee Raw会302跳转到raw.giteeusercontent.com；已通过HTTPS匿名签名清单验证并加入精确下载域名白名单。
+- Gitee仓库响应可能不含permissions字段；通过具有projects权限的私人令牌请求/user/repos?type=owner验证指定仓库所有权，实际令牌保存成功。
+- 已恢复先前配置发行r1的本地记录，并匿名下载公共配置，25角色、815引用图片哈希全部通过。
+- 大附件multipart写入使用连接阶段超时，20秒不够；上传单独使用300秒并复用已核验附件。
 - https://help.gitee.com/questions/Gitee%E4%BA%A7%E5%93%81%E9%85%8D%E9%A2%9D%E8%AF%B4%E6%98%8E （本次已打开并核实）
 - desktop/build.py、desktop/prepare_public.py、desktop/runtime.py、desktop/user_entry.py、desktop/admin_entry.py。

@@ -56,13 +56,16 @@ def configure(token):
 class Gitee:
     def __init__(self,token): self.headers={'Authorization':'Bearer '+token,'Accept':'application/json'}
     def request(self,method,path,**kwargs):
-        response=requests.request(method,API+path,headers=self.headers,timeout=(20,300),**kwargs)
+        timeout=kwargs.pop('timeout',(20,300))
+        response=requests.request(method,API+path,headers=self.headers,timeout=timeout,**kwargs)
         if response.status_code not in (200,201):
             raise RuntimeError('Gitee发布操作失败：HTTP '+str(response.status_code))
         return response.json()
     def upload(self,release_id,path):
         with path.open('rb') as stream:
-            result=self.request('POST',f'/releases/{release_id}/attach_files',files={'file':(path.name,stream,'application/octet-stream')})
+            # urllib3 uses the connect timeout during a non-streaming multipart write.
+            # Large release parts need a longer write deadline than a metadata request.
+            result=self.request('POST',f'/releases/{release_id}/attach_files',timeout=(300,300),files={'file':(path.name,stream,'application/octet-stream')})
         if isinstance(result,list): result=result[0]
         url=result.get('browser_download_url') or result.get('download_url') or result.get('url')
         if not url: raise RuntimeError('Gitee未返回可用的附件下载地址')
@@ -91,7 +94,7 @@ def git(workspace,*args,token=None):
     if token:
         env.update(GIT_CONFIG_COUNT='1',GIT_CONFIG_KEY_0='http.https://gitee.com/.extraheader',
                    GIT_CONFIG_VALUE_0='Authorization: Basic '+base64.b64encode(('oauth2:'+token).encode()).decode())
-    result=subprocess.run(['git','-c','safe.directory='+str(workspace),*args],cwd=workspace,env=env,capture_output=True,text=True,encoding='utf-8',errors='replace',timeout=300)
+    result=subprocess.run(['git','-c','safe.directory='+Path(workspace).resolve().as_posix(),*args],cwd=workspace,env=env,capture_output=True,text=True,encoding='utf-8',errors='replace',timeout=300)
     if result.returncode:
         error=result.stderr[-500:]
         if token:

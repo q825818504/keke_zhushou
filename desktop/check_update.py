@@ -13,7 +13,7 @@ from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 import update_protocol as protocol
 from update_client import startup_check, refresh_config
 from release_publish import signed, audit_files
-from release_publish import configure, API
+from release_publish import configure, API, Gitee, git
 import requests
 from build_release import candidate_version
 from public_config import export_config, validated_config
@@ -102,6 +102,7 @@ class UpdateTests(unittest.TestCase):
         package={'parts':[{'name':'app.py','size':source.stat().st_size,'sha256':protocol.digest(source)}]}
         with self.assertRaises(ValueError):audit_files(self.root,{'config_package':package})
     def test_download_host_restrictions(self):
+        self.assertEqual(protocol.checked_url('https://raw.giteeusercontent.com/Alime17/file'),'https://raw.giteeusercontent.com/Alime17/file')
         for url in ('http://gitee.com/a','https://evil.example/a','https://gitee.com.evil.example/a','https://user:password@gitee.com/a'):
             with self.assertRaises(ValueError):protocol.checked_url(url)
     def test_failed_install_preserves_active_version(self):
@@ -129,6 +130,20 @@ class UpdateTests(unittest.TestCase):
         with patch('release_publish.requests.get',side_effect=requests.Timeout('test timeout')),patch('release_publish.save_secrets') as save:
             with self.assertRaisesRegex(RuntimeError,'连接Gitee失败'):configure('test-token-not-a-real-secret')
             save.assert_not_called()
+    def test_large_attachment_uses_upload_timeout(self):
+        from unittest.mock import Mock
+        path=self.root/'test.part';path.write_bytes(b'test')
+        response=Mock(status_code=201,json=lambda:{'browser_download_url':'https://gitee.com/example/download'})
+        with patch('release_publish.requests.request',return_value=response) as request:
+            Gitee('test-token-not-a-real-secret').upload(1,path)
+            self.assertEqual(request.call_args.kwargs['timeout'],(300,300))
+    def test_git_safe_directory_uses_normalized_absolute_path(self):
+        from unittest.mock import Mock
+        result=Mock(returncode=0,stdout='ok',stderr='')
+        with patch('release_publish.subprocess.run',return_value=result) as run:
+            git(self.root,'status')
+            command=run.call_args.args[0]
+            self.assertIn('safe.directory='+self.root.resolve().as_posix(),command)
 
 
 if __name__=='__main__':unittest.main(verbosity=2)

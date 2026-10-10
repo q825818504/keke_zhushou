@@ -15,7 +15,7 @@ from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PublicKey
 PRODUCT = 'koko-assistant'
 REPOSITORY = 'Alime17/koko-assistant-update'
 CHANNEL = f'https://gitee.com/{REPOSITORY}/raw/main/channels/'
-HOSTS = {'gitee.com', 'foruda.gitee.com', 'api.gitee.com'}
+HOSTS = {'gitee.com', 'foruda.gitee.com', 'api.gitee.com', 'raw.giteeusercontent.com'}
 BINDINGS = {'characterKnowledge', 'characterOverrides', 'arcDriveKnowledge', 'skyCurtainKnowledge',
             'driverBlockKnowledge', 'teamTemplateKnowledge', 'teamGuideOverrides', 'esperCycleKnowledge'}
 

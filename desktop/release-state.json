@@ -1,5 +1,6 @@
 {
   "schema": 1,
-  "last_published": null,
-  "config_revision": 0
+  "last_published": "1.0",
+  "config_revision": 2,
+  "config_hash": "b67e0fdac1567abd7693c143ea07a12987cf3bba59742dfd3849e8938be86a0d"
 }

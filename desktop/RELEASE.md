@@ -41,8 +41,12 @@ Gitee：`https://gitee.com/Alime17/koko-assistant-update.git`，只维护 `READM
 
 ## 当前验收状态（2026-10-11）
 
-已通过 12 项更新故障路径测试和用户界面功能检查；v1.0 安装器及用户目录包、管理端 EXE 已构建。安装器约 15 MiB，首批下载产物约 444 MiB。
+已通过17项更新/发布故障路径测试和令牌保存界面测试；最终管理端EXE与正式用户端界面验收均通过。v1.0安装器约15 MiB，首批下载产物约444 MiB。
 
-Gitee 尚待本机发布凭据配置与真实匿名下载验收，不能把当前安装器视为已上线可分发版本。第二台干净 Windows 安装、真实 r1→r2 配置更新和 v1.0→v1.1 强制升级仍需实际发行后验收。程序未配置 Windows 代码签名；清单签名保证更新来源，不能替代 Windows 发行证书。
+Gitee首版v1.0已上线，9个下载附件全部经过不携带令牌的完整下载和SHA256校验。当前配置r2；已真实验证匿名签名清单、配置/815图片加载，以及正式打包用户端通过在线门禁并正常显示功能。仓库只包含README、channels与metadata JSON；发行附件包含安装器、程序、公共配置、微软运行库。
+
+可分发联网安装器为 `dist/windows/final/KokoAssistantSetup-v1.0.exe`；线上下载入口：[Gitee发行版](https://gitee.com/Alime17/koko-assistant-update/releases)。管理端仍为 `dist/windows/admin/KekeAssistantAdmin.exe`。
+
+第二台干净Windows从安装器首次安装、真实v1.0→v1.1强制升级仍待跨电脑实机验收；本次没有提前发行v1.1。程序未配置Windows代码签名；清单签名保证更新来源，不能替代Windows发行证书。
 
 微软运行环境说明：[WebView2 分发](https://learn.microsoft.com/en-us/microsoft-edge/webview2/concepts/distribution)、[VC++ 运行库](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist)。
