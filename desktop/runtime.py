@@ -15,6 +15,7 @@ import mimetypes
 import hashlib
 import secrets
 import webview
+import diagnostics
 
 APP_DATA = Path(os.environ.get("LOCALAPPDATA", Path.home())) / "KekeAssistant"
 BUNDLE = Path(getattr(sys, "_MEIPASS", Path(__file__).resolve().parents[1]))
@@ -91,6 +92,13 @@ def public_server(root: Path, port: int, workspace=None, inventory=None, vision=
         return digest.hexdigest()
 
     class ReadOnlyHandler(BaseHTTPRequestHandler):
+        def handle_one_request(self):
+            try: super().handle_one_request()
+            except (ConnectionError, BrokenPipeError): pass
+            except Exception:
+                diagnostics.failure('本地功能请求失败')
+                try: self.inventory_json({'error':'功能执行失败，请查看诊断日志'},500)
+                except OSError: pass
         def log_message(self, *args):
             pass
 
@@ -109,6 +117,8 @@ def public_server(root: Path, port: int, workspace=None, inventory=None, vision=
                 self.send_error(403)
                 return
             relative = unquote(urlsplit(self.path).path).lstrip("/") or "index.html"
+            if relative=='diagnostics/recent':
+                self.inventory_json(diagnostics.recent()); return
             if ".." in Path(relative).parts or "\\" in relative:
                 self.send_error(404)
                 return
@@ -173,6 +183,24 @@ def public_server(root: Path, port: int, workspace=None, inventory=None, vision=
                 or self.headers.get('X-Keke-Inventory') != inventory_token):
                 self.send_error(403)
                 return
+            path=urlsplit(self.path).path
+            if path.startswith('/diagnostics/'):
+                try:
+                    length=int(self.headers.get('Content-Length','0'))
+                    if not 0<=length<=4096:raise ValueError('请求太大')
+                    body=json.loads(self.rfile.read(length) or '{}')
+                    if path=='/diagnostics/export':
+                        file=diagnostics.export();os.startfile(str(file.parent))
+                        self.inventory_json({'file':str(file)})
+                    elif path=='/diagnostics/refresh':
+                        diagnostics.refresh_windows_events();self.inventory_json(diagnostics.recent())
+                    elif path=='/diagnostics/client-error':
+                        diagnostics.event('界面错误',detail=str(body.get('message',''))[:2000]);self.inventory_json({'ok':True})
+                    else:self.send_error(404)
+                except Exception:
+                    diagnostics.failure('诊断操作失败');self.inventory_json({'error':'诊断操作失败，请查看本地日志'},500)
+                return
+            diagnostics.event('功能请求',path=path)
             path = urlsplit(self.path).path
             if vision and path in ('/vision/start','/vision/cancel','/vision/stop-capture','/vision/open-folder','/vision/correct'):
                 try:
@@ -186,7 +214,8 @@ def public_server(root: Path, port: int, workspace=None, inventory=None, vision=
                     elif path=='/vision/correct':result=vision.correct(body.get('account'),body.get('id'),body.get('index'),body.get('record'))
                     else:result=vision.start(body.get('mode'),body.get('account'),body.get('count'),body.get('files'),body.get('id'))
                     self.inventory_json(result)
-                except (ValueError,OSError) as error:self.inventory_json({'error':str(error)},400)
+                except (ValueError,OSError) as error:
+                    diagnostics.failure('识别扫描请求失败');self.inventory_json({'error':str(error)},400)
                 return
             if not inventory or path not in ('/inventory/start','/inventory/cancel','/inventory/delete','/inventory/components/check','/inventory/components/deploy','/inventory/components/remove'):
                 self.send_error(404)
@@ -210,6 +239,7 @@ def public_server(root: Path, port: int, workspace=None, inventory=None, vision=
                     result = inventory.cancel() if path.endswith('/cancel') else inventory.start(account=body.get('account'))
                 self.inventory_json(result)
             except (ValueError, OSError) as error:
+                diagnostics.failure('原生读取或组件操作失败')
                 self.inventory_json({'error':str(error)}, 400)
 
 
@@ -285,9 +315,12 @@ def launch_window(title, mode, server, api=None, report=None, screenshot=None, s
 
 
 def guarded(main):
+    mode='startup' if '--startup-check' in sys.argv else ('admin' if 'admin' in Path(sys.argv[0]).name.lower() else 'user')
+    diagnostics.initialize(mode)
     try:
         main()
     except Exception as error:
+        diagnostics.failure('助手未处理异常')
         APP_DATA.mkdir(parents=True, exist_ok=True)
         (APP_DATA / "desktop-error.log").write_text(traceback.format_exc(), encoding="utf-8")
         detail = str(error)

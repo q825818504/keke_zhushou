@@ -14,6 +14,7 @@ from pathlib import Path
 from datetime import datetime,timezone
 from concurrent.futures import CancelledError
 from PIL import Image
+import diagnostics
 
 MODES=('offline','mouse','new','gamepad','retry')
 
@@ -224,14 +225,16 @@ class VisionService:
                             from .engine import VisionEngine
                             self.engine=VisionEngine(base/'parser')
                     try:result=self.engine.parse(path)
-                    except Exception as error:result={'records':[],'error':str(error),'lines':[]}
+                    except Exception as error:
+                        diagnostics.failure('截图识别失败');result={'records':[],'error':str(error),'lines':[]}
                     result={**result,'file':path.name}
                     for index,row in enumerate(result.get('records',[])):
                         row['instance_id']=f"vision:{batch['id']}:{path.stem}:{index}"
                         row['image']=path.name
                     with self.lock:
                         existing[path.name]=result;update_progress()
-            except Exception as error:worker_errors.append(error)
+            except Exception as error:
+                diagnostics.failure('OCR工作线程失败');worker_errors.append(error)
 
         consumer=threading.Thread(target=recognize,name='vision-ocr',daemon=True)
         consumer.start()
@@ -251,6 +254,7 @@ class VisionService:
                         if captured!=batch['expected']:raise ValueError('采集未覆盖预期数量，保留部分截图')
                     self.check_capture();batch['capture_complete']=True
                 except Exception as error:
+                    diagnostics.failure('截图采集停止或失败')
                     batch['capture_complete']=False;batch['capture_error']=str(error)
                     batch['capture_stopped']=self.capture_stop.is_set()
                     if self.stop.is_set():raise
@@ -264,7 +268,8 @@ class VisionService:
                     self.scanner=None
             self._collect_images(base)
             for path in sorted((base/'images').glob('*.png')):enqueue(path)
-        except Exception as error:problem=error
+        except Exception as error:
+            diagnostics.failure('扫描批次失败');problem=error
         finally:
             # Drain saved work on acquisition failure; cancellation skips queued
             # OCR while preserving pending evidence. Never let the next job race

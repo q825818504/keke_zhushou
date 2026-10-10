@@ -84,7 +84,9 @@ def check_window(operation, title='可可助手 · 启动检查'):
         running=True; button.configure(state='disabled'); spinner.start(15)
         def work():
             try: events.put(('done',operation(lambda message: events.put(('progress',message)))))
-            except Exception as error: events.put(('error',str(error)))
+            except Exception as error:
+                import diagnostics
+                diagnostics.failure('启动检查或更新失败');events.put(('error',str(error)))
         threading.Thread(target=work,daemon=True).start()
     button=ttk.Button(actions,text='重试',command=start); button.pack(side='left',padx=10)
     ttk.Button(actions,text='退出',command=window.destroy).pack(side='left',padx=10)
@@ -105,12 +107,25 @@ def check_window(operation, title='可可助手 · 启动检查'):
 
 
 def gate(info, public_root, app_data):
-    result=check_window(lambda progress: startup_check(info['version'],app_data,info['public_key'],public_root,progress))
+    # Tcl interpreters must never survive into WebView2's HTTP/OCR threads.
+    # Tk callback cycles can otherwise be collected on a different thread and
+    # abort the whole process (Tcl_AsyncDelete). The UI belongs to a short-lived child.
+    report=Path(app_data)/('startup-'+secrets.token_hex(12)+'.json')
+    command=[sys.executable]
+    if not getattr(sys,'frozen',False): command.append(str(Path(__file__).with_name('user_entry.py')))
+    command += ['--startup-check',str(report)]
+    try:
+        completed=subprocess.run(command,creationflags=getattr(subprocess,'CREATE_NO_WINDOW',0))
+        if completed.returncode: raise RuntimeError('启动检查异常退出，请在诊断日志中查看详情')
+        result=json.loads(report.read_text(encoding='utf-8')) if report.exists() else None
+        if result and 'config' in result:
+            result['config']=Path(result['config']); validated_config(result['config'])
+    finally: report.unlink(missing_ok=True)
     if result is None: return None
     if 'update' in result:
         install_root=Path(sys.executable).resolve().parents[2]
         helper=Path(getattr(sys,'_MEIPASS',install_root))/'update-helper.exe'
         if not helper.is_file(): raise RuntimeError('联网更新入口缺失，请重新运行安装器')
-        subprocess.Popen([str(helper),'--update','--wait-pid',str(os.getpid())],creationflags=getattr(subprocess,'CREATE_NO_WINDOW',0))
+        subprocess.Popen([str(helper),'--update','--install-root',str(install_root),'--wait-pid',str(os.getpid())],creationflags=getattr(subprocess,'CREATE_NO_WINDOW',0))
         return None
     return result

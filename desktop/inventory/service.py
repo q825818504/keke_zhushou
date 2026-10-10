@@ -5,6 +5,7 @@ import json
 import os
 import secrets
 import threading
+import diagnostics
 from .adapters import create_adapter, SessionChanged
 from .contract import SCHEMA_VERSION, DOMAIN_NAMES, migrate_document, validate_domain
 
@@ -115,6 +116,7 @@ class InventoryService:
             self.job = {'running':True,'message':'连接游戏采集组件…','domains':{},'account':account.strip()}
             self.thread = threading.Thread(target=self._run,args=(adapter,account.strip()),daemon=True)
             self.thread.start()
+            diagnostics.event('原生读取开始')
         return self.status()
 
     def check(self):
@@ -165,12 +167,14 @@ class InventoryService:
                 except (Cancelled,SessionChanged):
                     raise
                 except Exception as error:
+                    diagnostics.failure('原生类别读取失败：'+kind)
                     with self.lock:
                         self.job['domains'][kind] = {'state':'error','error':str(error)}
             with self.lock:
                 successes = sum(v['state']=='saved' for v in self.job['domains'].values())
                 self.job['message'] = f'已保存{successes}类数据；未成功的类别保留上次快照'
         except Exception as error:
+            diagnostics.failure('原生读取任务结束异常')
             with self.lock:
                 self.job['message'] = str(error)
         finally:
@@ -181,6 +185,7 @@ class InventoryService:
             with self.lock:
                 self.active_adapter = None
                 self.job['running'] = False
+            diagnostics.event('原生读取结束',domains={k:v['state'] for k,v in self.job['domains'].items()})
 
     def close(self):
         self.cancel()

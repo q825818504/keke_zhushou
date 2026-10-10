@@ -16,8 +16,9 @@ def capture_pid():
     if os.name != 'nt':
         raise RuntimeError('游戏同步仅支持Windows桌面版')
     script = "@(Get-Process HTGame -ErrorAction SilentlyContinue | ForEach-Object { @{pid=$_.Id;created=$_.StartTime.ToFileTime()} }) | ConvertTo-Json -Compress"
-    result = subprocess.run(['powershell.exe','-NoProfile','-NonInteractive','-Command',script],
-        capture_output=True, text=True, timeout=5, creationflags=subprocess.CREATE_NO_WINDOW)
+    environment=dict(os.environ);environment.pop('PSModulePath',None)
+    result = subprocess.run(['powershell.exe','-NoProfile','-NonInteractive','-Command',"[Console]::OutputEncoding=[Text.UTF8Encoding]::new(); "+script],
+        env=environment,capture_output=True, encoding='utf-8', timeout=5, creationflags=subprocess.CREATE_NO_WINDOW)
     if result.returncode:
         raise RuntimeError('无法核对游戏进程')
     values = json.loads(result.stdout or '[]')

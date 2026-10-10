@@ -20,7 +20,11 @@ def present(name):
         try:
             with winreg.OpenKey(hive,path,0,winreg.KEY_READ|winreg.KEY_WOW64_64KEY) as key:
                 result=winreg.QueryValueEx(key,value)[0]
-                if result and result!='0.0.0.0': return True
+                if result and result!='0.0.0.0':
+                    if name=='vcredist':
+                        system=Path(os.environ.get('SystemRoot','C:/Windows'))/'System32'
+                        if not all((system/n).is_file() for n in ('vcruntime140.dll','vcruntime140_1.dll','msvcp140.dll')):continue
+                    return True
         except OSError: pass
     return False
 

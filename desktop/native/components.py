@@ -29,7 +29,8 @@ def atomic_json(path, data):
 def game_processes():
     if os.name != 'nt': return []
     command = "@(Get-Process HTGame -ErrorAction SilentlyContinue | ForEach-Object { @{pid=$_.Id;path=$_.Path} }) | ConvertTo-Json -Compress"
-    result = subprocess.run(['powershell.exe','-NoProfile','-NonInteractive','-Command',command],capture_output=True,text=True,timeout=6,creationflags=subprocess.CREATE_NO_WINDOW)
+    environment=dict(os.environ);environment.pop('PSModulePath',None)
+    result = subprocess.run(['powershell.exe','-NoProfile','-NonInteractive','-Command',"[Console]::OutputEncoding=[Text.UTF8Encoding]::new(); "+command],env=environment,capture_output=True,encoding='utf-8',timeout=6,creationflags=subprocess.CREATE_NO_WINDOW)
     if result.returncode: raise ValueError('无法检查游戏进程，请以管理员身份运行助手后重试')
     values = json.loads(result.stdout or '[]')
     values=[values] if isinstance(values,dict) else values

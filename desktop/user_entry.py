@@ -1,6 +1,7 @@
 """Public client: only a read-only asset server and desktop window."""
 import argparse
 import json
+import sys
 from pathlib import Path
 from inventory.service import InventoryService
 from vision.service import VisionService
@@ -43,8 +44,23 @@ SMOKE = """(() => {
 def main():
     root = BUNDLE / 'public' if (BUNDLE/'public').exists() else Path(__file__).resolve().parents[1]/'build/desktop/public'
     configuration=None; startup_warning=None
+    if '--startup-check' in sys.argv:
+        from update_client import check_window, startup_check
+        from update_protocol import atomic_json
+        info=json.loads((BUNDLE/'release-info.json').read_text(encoding='utf-8'))
+        report=Path(sys.argv[sys.argv.index('--startup-check')+1]).resolve()
+        if report.parent!=APP_DATA.resolve() or not report.name.startswith('startup-'):
+            raise ValueError('启动检查返回路径无效')
+        result=check_window(lambda progress: startup_check(info['version'],APP_DATA,info['public_key'],root,progress))
+        if result is not None:
+            if 'config' in result: result['config']=str(result['config'])
+            atomic_json(report,result)
+        return
     if (BUNDLE/'release-info.json').is_file():
+        import diagnostics
+        diagnostics.event('正式程序版本',version=json.loads((BUNDLE/'release-info.json').read_text(encoding='utf-8'))['version'])
         if not single_instance('可可助手','user'): return
+        diagnostics.begin_session()
         from update_client import gate
         result=gate(json.loads((BUNDLE/'release-info.json').read_text(encoding='utf-8')),root,APP_DATA)
         if result is None: return

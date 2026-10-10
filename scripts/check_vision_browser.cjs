@@ -2,7 +2,7 @@ const {chromium}=require('../desktop/node_modules/playwright');
 const {spawn}=require('node:child_process');const path=require('node:path');const assert=require('node:assert/strict');
 const root=path.resolve(__dirname,'..');
 (async()=>{
- const server=spawn(path.join(root,'.venv-desktop/Scripts/python.exe'),['scripts/check_vision_browser_server.py'],{cwd:root,windowsHide:true});let browser,page;
+ const server=spawn(path.join(root,'.venv-ocr/Scripts/python.exe'),['scripts/check_vision_browser_server.py'],{cwd:root,windowsHide:true});let browser,page;
  try{
   const port=await new Promise((resolve,reject)=>{let text='';server.stdout.on('data',p=>{text+=p;if(text.includes('\n'))try{resolve(JSON.parse(text.split('\n')[0]).port)}catch(e){reject(e)}});server.stderr.on('data',p=>process.stderr.write(p));server.on('exit',c=>reject(Error('fixture exited '+c)))});
   browser=await chromium.launch({channel:'chrome',headless:true});page=await browser.newPage({viewport:{width:1380,height:900}});const errors=[];page.on('pageerror',e=>errors.push(e.message));
@@ -36,6 +36,11 @@ const root=path.resolve(__dirname,'..');
   const image=require('node:fs').readFileSync(path.join(root,'build/vision-upload-fixture.png'));
   await page.locator('#visionFiles').setInputFiles({name:'fixture.png',mimeType:'image/png',buffer:image});await page.getByRole('button',{name:'开始识别 / 扫描'}).click();
   await page.waitForFunction(()=>document.querySelector('#userVisionRoute').textContent.includes('已识别 1 件'));
+  await page.locator('#diagnosticsButton').click();
+  await page.locator('#diagnosticsDialog').waitFor({state:'visible'});
+  await page.locator('#diagnosticsDialog [data-action="refresh"]').click();
+  await page.waitForFunction(()=>document.querySelector('#diagnosticsDialog pre')?.textContent.includes('tcl86t.dll'));
+  await page.locator('#diagnosticsDialog [data-action="close"]').click();
   await page.screenshot({path:path.join(root,'build/vision-ui-qa.png'),fullPage:true});assert.deepEqual(errors,[]);
   console.log('Vision UI passed: method switching, OCR controls outside backpack, screenshot upload, history/account isolation, image evidence, escaped text, backpack correction and export.');
  }catch(error){if(page)console.log('vision-debug',await page.evaluate(async()=>({text:document.querySelector('#userVisionRoute')?.textContent,mode:document.querySelector('#visionMode')?.value,status:await (await fetch('/vision/status')).json()})));throw error;}finally{if(browser)await browser.close();server.kill();}

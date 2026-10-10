@@ -5,6 +5,7 @@ import subprocess
 import threading
 import time
 from collections import deque
+import diagnostics
 
 class Core:
     def __init__(self, executable, pid, data_dir=None):
@@ -51,6 +52,9 @@ class Core:
     def _drain(self):
         for line in self.process.stderr:
             self.stderr_tail.append(line.strip()[:500])
+        code=self.process.poll()
+        diagnostics.event('采集组件输出流关闭',exit_code=code)
+        if code not in (None,0):diagnostics.event('采集组件异常退出',exit_code=code,detail=' / '.join(self.stderr_tail))
 
     def call(self, method, params, check=lambda: None, timeout=15):
         check()

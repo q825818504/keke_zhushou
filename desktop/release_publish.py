@@ -129,6 +129,8 @@ def publish(root,output):
         values=read_secrets(); token=values.get('gitee_token')
         if not token: raise RuntimeError('请先设置本机Gitee发布凭据')
         artifacts=json.loads((output/'release-artifacts.json').read_text(encoding='utf-8'))
+        if 'app_package' in artifacts and len(str(artifacts.get('release_notes','')).strip())<40:
+            raise ValueError('程序发行缺少升级说明，请重新构建包含版本说明的发行包')
         files=audit_files(output,artifacts); key=signing_identity(root/'desktop/update-trust.json')
         store=root/'build/gitee-publish'; store.parent.mkdir(parents=True,exist_ok=True)
         if not (store/'.git').exists():
@@ -177,7 +179,7 @@ def publish(root,output):
         releases=api.request('GET','/releases',params={'per_page':100})
         release=next((r for r in releases if r['tag_name']==tag),None)
         if release is None:
-            release=api.request('POST','/releases',json={'tag_name':tag,'target_commitish':'main','name':'可可助手 '+tag,'body':'官方程序与公共配置发行产物。','prerelease':False})
+            release=api.request('POST','/releases',json={'tag_name':tag,'target_commitish':'main','name':'可可助手 '+tag,'body':artifacts.get('release_notes') or '公共配置更新。','prerelease':False})
         # Existing valid attachments are reused on retries; never update latest before anonymous checks pass.
         detail=api.request('GET',f'/releases/{release["id"]}')
         raw_assets=detail.get('assets',[])
@@ -206,6 +208,7 @@ def publish(root,output):
         atomic_json(store/f'metadata/config/r{config["revision"]}.json',signed(config,key))
         if 'app_package' in artifacts:
             app={**base,'kind':'app','platform':'windows-x64','version':artifacts['version'],
+                 'release_notes':artifacts.get('release_notes',''),
                  'package':package(artifacts['app_package']),'installer':{**artifacts['installer'],'url':urls[artifacts['installer']['name']]},
                  'prerequisites':{name:package(meta) for name,meta in artifacts.get('prerequisites',{}).items()}}
             atomic_json(store/'channels/app-latest.json',signed(app,key))

@@ -4,7 +4,7 @@ const path=require('node:path');
 const assert=require('node:assert/strict');
 const root=path.resolve(__dirname,'..');
 (async()=>{
- const server=spawn(path.join(root,'.venv-desktop/Scripts/python.exe'),[path.join(root,'scripts/check_inventory_browser_server.py')],{cwd:root,windowsHide:true});
+ const server=spawn(path.join(root,'.venv-ocr/Scripts/python.exe'),[path.join(root,'scripts/check_inventory_browser_server.py')],{cwd:root,windowsHide:true});
  let browser,page;
  try {
   const port=await new Promise((resolve,reject)=>{let text='';server.stdout.on('data',part=>{text+=part.toString();if(text.includes('\n'))try{resolve(JSON.parse(text.split('\n')[0]).port)}catch(e){reject(e)}});server.stderr.on('data',part=>process.stderr.write(part));server.on('exit',code=>reject(Error('Fixture exited '+code)));});

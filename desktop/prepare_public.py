@@ -67,7 +67,7 @@ def prepare_public(app_version='1.0') -> Path:
         '<aside class="desktop-sidebar"><div class="desktop-brand"><span class="desktop-app-mark">✦</span>'
         '<div><strong>可可助手</strong><small>你的配队与养成助手</small></div></div>'
         '<p class="desktop-nav-label">功能</p>' + nav +
-        f'<div class="desktop-sidebar-foot">Windows 桌面版 · v{app_version}<br>Ctrl + 1–7 快速切换</div></aside>'
+        f'<div class="desktop-sidebar-foot">Windows 桌面版 · v{app_version}<br>Ctrl + 1–7 快速切换<br><button id="diagnosticsButton" type="button">诊断日志</button></div></aside>'
         '<main class="main-content"><header class="topbar"><div class="breadcrumb"><span>可可助手</span>'
         '<strong id="activeBreadcrumb">自动配队</strong></div></header>' +
         str(view) + '</main></div>' + str(toast) + scripts + '</body></html>'

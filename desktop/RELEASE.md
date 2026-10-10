@@ -17,6 +17,8 @@ Gitee：`https://gitee.com/Alime17/koko-assistant-update.git`，只维护 `READM
 
 在维护工作副本中安装 `desktop/requirements.txt` 以及现有 OCR 构建依赖，执行：
 
+每次程序发行先创建 `desktop/releases/v<候选版本>.md`（例如 `v1.1.md`）。构建与发布均拒绝缺失升级说明的程序包；说明会写入签名版本清单和 Gitee 发行页。配置独立发行不需要增加程序版本。
+
 ```powershell
 .venv-ocr/Scripts/python.exe desktop/check_update.py
 .venv-ocr/Scripts/python.exe desktop/build_release.py
@@ -45,8 +47,24 @@ Gitee：`https://gitee.com/Alime17/koko-assistant-update.git`，只维护 `READM
 
 Gitee首版v1.0已上线，9个下载附件全部经过不携带令牌的完整下载和SHA256校验。当前配置r2；已真实验证匿名签名清单、配置/815图片加载，以及正式打包用户端通过在线门禁并正常显示功能。仓库只包含README、channels与metadata JSON；发行附件包含安装器、程序、公共配置、微软运行库。
 
-可分发联网安装器为 `dist/windows/final/KokoAssistantSetup-v1.0.exe`；线上下载入口：[Gitee发行版](https://gitee.com/Alime17/koko-assistant-update/releases)。管理端仍为 `dist/windows/admin/KekeAssistantAdmin.exe`。
+当前可分发联网安装器为 `dist/windows/final/KokoAssistantSetup-v1.1.exe`；线上下载入口：[Gitee发行版](https://gitee.com/Alime17/koko-assistant-update/releases)。管理端仍为 `dist/windows/admin/KekeAssistantAdmin.exe`。
 
-第二台干净Windows从安装器首次安装、真实v1.0→v1.1强制升级仍待跨电脑实机验收；本次没有提前发行v1.1。程序未配置Windows代码签名；清单签名保证更新来源，不能替代Windows发行证书。
+程序未配置Windows代码签名；清单签名保证更新来源，不能替代Windows发行证书。
+
+## v1.1 修复与兼容范围
+
+安装向导先选择专用安装目录，点击开始才下载；最后选择桌面快捷方式和运行。启动器、更新器、卸载器支持该目录，卸载保留用户数据。安装盘要求至少2 GB可用空间。Win10/11 x64，推荐 Win10 22H2；没有32位或ARM原生发行包。WebView2和VC++运行库缺失时准备对应微软运行组件；旧VC++安装记录不能代替实际必需DLL检查。
+
+启动检查使用独立进程，主WebView2/HTTP/OCR进程不创建Tk窗口。根因回归准确复现 `Tcl_AsyncDelete: async handler deleted by the wrong thread`，避免Tk解释器被后台线程回收导致硬崩溃。
+
+侧边底部“诊断日志”可查询近7日Windows确认的助手、原生Core及HTGame崩溃、近期功能错误，并导出诊断ZIP。滚动日志每份2 MiB、最多保留5份；硬异常日志另存。位置：`%LOCALAPPDATA%/KekeAssistant/logs`。导出只允许日志和系统摘要，不包含背包JSON/截图/发布凭据；常见令牌、用户名路径和UID脱敏。普通退出不冒充游戏崩溃；系统记录不可用或没有记录也不能证明没有发生故障。
+
+本机实际系统为Win10 22H2（19045）。已真实验证五类原生数据读取、冻结包OCR/原生Core、WebView2全部页面、安装向导交互以及51项回归。Win11仍需另一台机器实际验收。
 
 微软运行环境说明：[WebView2 分发](https://learn.microsoft.com/en-us/microsoft-edge/webview2/concepts/distribution)、[VC++ 运行库](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist)。
+
+2026-10-11：v1.1及公共配置r3正式上线；9个发行附件完成匿名完整下载和哈希核对。程序升级说明已写入Gitee发行页和签名版本清单。配置内容与r2一致、附件复用。
+
+正式v1.1冻结包已通过线上门禁/公共配置、全部页面、OCR、Core及真实游戏五类原生读取API验收；诊断接口返回日志。测试数据位于项目build隔离目录，不覆盖用户背包。
+
+本机原安装v1.0入口已真实触发强制升级并切换到app/1.1；原有3份背包/视觉目录文件逐一哈希比对未变。原安装已更新到v1.1。Win11、另一台干净电脑完整安装和下一次自定义目录升级仍需跨机验收；自定义目录逻辑已通过回归测试。

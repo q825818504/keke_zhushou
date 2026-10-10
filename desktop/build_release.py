@@ -68,6 +68,12 @@ def prepare_prerequisites(root,output):
 def prepare(root=ROOT, config_only=False):
     root=Path(root).resolve(); state=json.loads((root/'desktop/release-state.json').read_text(encoding='utf-8'))
     app_version=candidate_version(state)
+    notes=None
+    if not config_only:
+        notes_file=root/'desktop/releases'/('v'+app_version+'.md')
+        if not notes_file.is_file() or len(notes_file.read_text(encoding='utf-8').strip())<40:
+            raise ValueError('发行前必须记录升级内容：'+str(notes_file))
+        notes=notes_file.read_text(encoding='utf-8').strip()
     signing_identity(root/'desktop/update-trust.json')
     output=root/'dist/windows/releases'/('config' if config_only else 'v'+app_version)
     output.mkdir(parents=True,exist_ok=True)
@@ -79,6 +85,7 @@ def prepare(root=ROOT, config_only=False):
     manifest={'schema':1,'config_hash':digest(archive),'config_package':split_archive(archive,output),
               'config_revision':state['config_revision']+1,'version':app_version}
     if not config_only:
+        manifest['release_notes']=notes
         from build import build
         manifest['prerequisites']=prepare_prerequisites(root,output)
         installer=output/f'KokoAssistantSetup-v{app_version}.exe'
