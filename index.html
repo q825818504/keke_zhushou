@@ -310,11 +310,11 @@
       </section>
     </main>
   </div>
-  <div class="toast" id="toast" role="status" aria-live="polite"><span class="toast-mark">✓</span><span id="toastText">草稿已保存</span></div>
+  <div class="toast" id="toast" role="status" aria-live="polite"><span class="toast-mark" aria-hidden="true"></span><span id="toastText">草稿已保存</span></div>
   <dialog id="repoSyncDialog" class="repo-sync-dialog" aria-labelledby="repoSyncTitle">
     <div class="repo-sync-shell">
       <header><span class="user-section-kicker">本地资料库</span><h2 id="repoSyncTitle">资料与 GitHub</h2><button type="button" class="repo-sync-close" data-repo-close aria-label="关闭">×</button></header>
-      <p id="repoSyncSummary" role="status">正在连接本地管理服务…</p>
+      <p id="repoSyncSummary" role="status" aria-live="polite" aria-atomic="true" data-tone="working">正在连接本地管理服务…</p>
       <section id="repoGitDetails" hidden><pre id="repoGitChanges"></pre><p id="repoReloadNote" hidden>远端资料已拉取，请刷新页面后查看最新内容。</p></section>
       <div class="repo-sync-actions"><button type="button" class="outline-button" id="repoCheckButton">检查 GitHub</button><button type="button" class="outline-button" id="repoPullButton" hidden>拉取更新</button></div>
       <label class="repo-commit-label" id="repoCommitLabel">提交说明<input id="repoCommitMessage" maxlength="120" value="更新可可助手资料"></label>

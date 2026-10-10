@@ -3,7 +3,9 @@ window.KekeInventory = (() => {
   const labels = {equipment:'装备库存',characters:'角色养成',items:'全部物品与材料',team:'当前队伍',environment:'当前环境'};
   const modeLabels={mouse:'鼠标全量',gamepad:'手柄全量',new:'NEW增量',offline:'截图导入'};
   const escape = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const stateTone=text=>/失败|错误|无法|冲突|\berror\b|\bexception\b/i.test(String(text||''))?'error':/读取中|处理中|连接中/.test(String(text||''))?'working':/尚未|未发现|缺少|部分/.test(String(text||''))?'warning':/已保存|成功|匹配|完整/.test(String(text||''))?'success':'info';
   let deletePending = null;
+  const updateNotice=(node,text)=>{node.dataset.tone=stateTone(text);node.innerHTML='<span class="inventory-status-icon" aria-hidden="true"></span>'+escape(text);};
   let selectedSource = 'auto', pendingAccount = null, accountDraft = null, ocrBatch = null;
   let viewedAccount = '', status = null, snapshot = {domains:{}}, active = 'equipment', equipmentFilter = '', page = 0, query = '', busy = false, timer = null, message = '';
   const panel = () => document.querySelector('#userInventoryRoute');
@@ -61,13 +63,14 @@ window.KekeInventory = (() => {
     root.innerHTML = `<div class="inventory-heading"><div><span class="inventory-eyebrow">本机账号资料</span><h1>背包数据</h1><p>查看背包总量、驱动块、卡带、装备占用和已同步角色。</p></div><button class="ghost-button" data-inventory="export" ${Object.keys(snapshot.inventory || {}).length ? '' : 'disabled'}>导出账号数据</button></div>
       <section class="inventory-connect"><h2>已保存的背包</h2>
       <div class="inventory-settings"><label>已保存的数据<select id="inventorySource">${[{id:'auto',label:'自动选择 · 优先原生库存'},...(snapshot.sources || [])].map(source=>`<option value="${escape(source.id)}">${escape(source.id.startsWith('ocr:')?'OCR · '+(modeLabels[source.mode] || source.label.replace('OCR · ','')):source.label)}${source.saved_at?' · '+escape(new Date(source.saved_at).toLocaleString()):''}${source.id!=='auto'?(source.complete?' · 列表完整':' · 部分观测'):''}</option>`).join('')}</select><button class="ghost-button" data-inventory="delete" ${!snapshot.sources?.some(item=>item.id===snapshot.selected_source) || running || status?.vision_job?.running ? 'disabled' : ''}>${deletePending===snapshot.selected_source?'确认删除（含该来源保存文件）':'删除选中数据'}</button></label><label>本机账号标签<input id="inventoryAccount" value="${escape(accountDraft ?? account)}" maxlength="80"></label></div>
-      <div class="inventory-actions"><button class="ghost-button" data-inventory="load" ${!status?'disabled':''}>查看此账号</button><button class="primary-button" data-inventory="read">读取新数据</button>${ocrBatch?'<button class="ghost-button" data-inventory="diagnostics">查看扫描诊断 / 重试</button>':''}<span role="status">${escape(message || '原生库存与扫描结果按账号保存，可切换查看。')}</span></div>
+      <div class="inventory-actions"><button class="ghost-button" data-inventory="load" ${!status?'disabled':''}>查看此账号</button><button class="primary-button" data-inventory="read">读取新数据</button>${ocrBatch?'<button class="ghost-button" data-inventory="diagnostics">查看扫描诊断 / 重试</button>':''}<span class="inventory-status" data-tone="${message?stateTone(message):'info'}" role="status" aria-live="polite" aria-atomic="true"><span class="inventory-status-icon" aria-hidden="true"></span>${escape(message || '原生库存与扫描结果按账号保存，可切换查看。')}</span></div>
       <p class="inventory-hint">同一标签的 DLL 原生读取更新上次原生快照；截图与扫描每次独立保存，不覆盖旧批次。增量、离线和中断扫描显示已识别数量。未观察到的装备状态保持未知；角色、材料、队伍和环境显示各自保存的快照。</p></section>
       <div class="inventory-summaries">${summaries.map(item => {
         const data = snapshot.inventory?.[item.kind], job = status?.job?.domains?.[item.kind];
         const state = (data?.source?.adapter==='ocr-scan-v1'?'OCR · ':'') + (job?.state==='error' ? job.error : job?.state==='reading' ? '正在读取' : data ? '已保存 · ' + new Date(data.saved_at).toLocaleString() : '尚无数据');
         const selected = active===item.kind && equipmentFilter===item.filter;
-        return `<button class="inventory-summary ${selected?'is-active':''}" data-inventory-kind="${item.kind}" data-inventory-filter="${item.filter}" aria-pressed="${selected}"><span>${item.label}</span><strong>${data ? item.count : '—'}</strong><small>${escape(state)}</small></button>`;
+        const tone=job?.state==='error'?'error':job?.state==='reading'?'working':data?'success':'info';
+        return `<button class="inventory-summary ${selected?'is-active':''}" data-inventory-kind="${item.kind}" data-inventory-filter="${item.filter}" aria-pressed="${selected}"><span>${item.label}</span><strong>${data ? item.count : '—'}</strong><small class="inventory-summary-state" data-tone="${tone}">${escape(state)}</small></button>`;
       }).join('')}</div>
       <details class="inventory-other-data"><summary>其他同步数据</summary><div class="inventory-actions">${['items','team','environment'].map(kind=>`<button class="ghost-button" data-inventory-kind="${kind}">${labels[kind]}</button>`).join('')}</div></details>
       <section class="inventory-browser"><div class="inventory-browser-head"><h2>${detailTitle}</h2><label>搜索字段 <input id="inventorySearch" type="search" value="${escape(query)}" placeholder="名称、ID、属性…"></label></div>
@@ -113,7 +116,7 @@ window.KekeInventory = (() => {
           await refresh(account);return;
         }
       } catch(error) {
-        const target = root.querySelector('[role="status"]'); if (target) target.textContent=error.message;
+        const target = root.querySelector('[role="status"]'); if (target) { updateNotice(target,error.message); }
         button.disabled=false;
       }
     };

@@ -147,8 +147,18 @@ const userRouteLabels = { characters: "角色", team: "自动配队", "arc-drive
 const userTeamElementRing = ["光", "灵", "咒", "暗", "魂", "相"];
 const userTeamReactionRules = (window.esperCycleKnowledge?.cycles || []).map(cycle => ({ name: cycle.name, attrs: cycle.attributes.map(attribute => attribute.name) }));
 
+function feedbackTone(message) {
+  const value = String(message || "");
+  if (/失败|错误|无法|未能|异常/.test(value)) return "error";
+  if (/待保存|尚未写入|仅保存在|仅在当前|来源待核验|草稿未保存|待补充|未配置/.test(value)) return "warning";
+  if (/已保存|已写入|已审核|已汇总|重置成功|处理完成|成功/.test(value)) return "success";
+  if (/正在|连接中|处理中|检查中/.test(value)) return "working";
+  return "info";
+}
+
 function notify(message) {
   toastText.textContent = message;
+  toast.dataset.tone = feedbackTone(message);
   toast.classList.add("is-visible");
   window.clearTimeout(toastTimer);
   toastTimer = window.setTimeout(() => toast.classList.remove("is-visible"), 2200);
@@ -156,7 +166,12 @@ function notify(message) {
 
 function setText(selector, text) {
   const element = $(selector);
-  if (element) element.textContent = text;
+  if (element) {
+    element.textContent = text;
+    if (["#recommendationStatus", "#draftLabel", ".updated-time", "#analysisState"].includes(selector)) {
+      element.dataset.tone = feedbackTone(text);
+    }
+  }
 }
 
 function escapeHtml(value) {
@@ -231,7 +246,7 @@ function renderRecommendationControls(knowledge) {
     if (selected && !items.some(item => item.id === selected.id)) items.unshift(selected);
     return `<label class="field"><span>${title}</span><select data-recommendation-kind="${kind}" aria-label="${title}">${selected ? "" : '<option value="" selected disabled>请选择</option>'}${items.map(item => `<option value="${escapeHtml(item.id)}"${selected?.id === item.id ? " selected" : ""}>${escapeHtml(item.name)}${item.id === defaults?.id ? "（默认）" : ""}</option>`).join("")}</select></label>`;
   };
-  root.innerHTML = select("weapon", "修改推荐弧盘", arcDriveCatalog) + select("cassette", "修改推荐卡带", skyCurtainCatalog) + '<div class="recommendation-actions"><button type="button" class="outline-button pressable" data-save-recommendation>保存推荐</button><button type="button" class="text-button pressable" data-reset-recommendation>恢复默认</button><span id="recommendationStatus" role="status">当前配置</span></div>';
+  root.innerHTML = select("weapon", "修改推荐弧盘", arcDriveCatalog) + select("cassette", "修改推荐卡带", skyCurtainCatalog) + '<div class="recommendation-actions"><button type="button" class="outline-button pressable" data-save-recommendation>保存推荐</button><button type="button" class="text-button pressable" data-reset-recommendation>恢复默认</button><span id="recommendationStatus" role="status" aria-live="polite" data-tone="info">当前配置</span></div>';
   if (root.dataset.bound) return;
   root.dataset.bound = "true";
   root.addEventListener("change", event => {

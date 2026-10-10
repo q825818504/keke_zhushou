@@ -2,8 +2,21 @@
 window.KekeVision = (() => {
   const esc=value=>String(value ?? '').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const methods={native:'DLL 原生读取',offline:'截图识别 / 文件夹导入',mouse:'鼠标全量扫描',new:'NEW 增量扫描',gamepad:'手柄全量扫描'};
+  const stateTone=text=>{
+    const value=String(text||'');
+    if(/失败0(?:张|个)|未发现新增|本批次未保存/.test(value))return 'success';
+    if(/失败|错误|无法|冲突|不完整|\berror\b|\bexception\b/i.test(value))return 'error';
+    if(/正在|连接中|读取中|识别中|准备OCR|检测中/.test(value))return 'working';
+    if(/尚未|未发现|未运行|未部署|缺少|请退出|请通过|需要/.test(value))return 'warning';
+    if(/成功|已保存|已准备|匹配|通过|已发现|已移除|完成/.test(value))return 'success';
+    return 'info';
+  };
+  const statusNotice=(text,tone=stateTone(text))=>`<span class="inventory-status" data-tone="${tone}" role="status" aria-live="polite" aria-atomic="true"><span class="inventory-status-icon" aria-hidden="true"></span>${esc(text)}</span>`;
+  const updateNotice=(node,text)=>{node.dataset.tone=stateTone(text);node.innerHTML='<span class="inventory-status-icon" aria-hidden="true"></span>'+esc(text);};
+  const stateBadge=(text,tone=stateTone(text))=>`<span class="inventory-state" data-tone="${tone}"><span aria-hidden="true"></span>${esc(text)}</span>`;
   let status=null,nativeStatus=null,batch=null,account='默认账号',accountPinned=false,mode='native',timer=null,history=[],message='',busy=false,page=0;
   let directoryDraft=null,countDraft='',selectedFiles=[],selectedFileInputs={},requestedBatch=null;
+  let componentFilesOpen=false;
   const root=()=>document.querySelector('#userVisionRoute');
   async function request(path,body){
     const response=await fetch(path,body?{method:'POST',headers:{'Content-Type':'application/json','X-Keke-Inventory':status?.token || nativeStatus?.token || ''},body:JSON.stringify(body)}:{cache:'no-store'});
@@ -33,11 +46,11 @@ window.KekeVision = (() => {
   function nativePane(){
     const running=!!nativeStatus?.job.running,c=nativeStatus?.components;
     return `<section class="inventory-connect"><h2>DLL 原生读取</h2><p>读取装备、角色养成、物品材料、当前队伍与环境，结果保存到背包数据。</p>
-      <div class="inventory-actions"><button class="primary-button" data-native="start" ${running || !nativeStatus?'disabled':''}>${running?'读取中…':'读取所有数据'}</button>${running?'<button class="ghost-button" data-native="cancel">取消读取</button>':''}<span role="status">${esc(message || nativeStatus?.job.message || '正在连接桌面服务…')}</span></div>
+      <div class="inventory-actions"><button class="primary-button" data-native="start" ${running || !nativeStatus?'disabled':''}>${running?'读取中…':'读取所有数据'}</button>${running?'<button class="ghost-button" data-native="cancel">取消读取</button>':''}${statusNotice(message || nativeStatus?.job.message || '正在连接桌面服务…')}</div>
       <div id="readComponents" class="inventory-component-setup"><h3>环境检测与组件部署</h3><p>首次使用：退出游戏 → 检测环境 → 部署组件 → 通过原游戏启动器启动并登录 → 读取数据。</p>
       <label>游戏程序目录（HTGame.exe所在文件夹）<input class="vision-storage-path" id="readGameDirectory" value="${esc(directoryDraft ?? c?.game_directory)}" placeholder="可从正在运行的游戏自动检测" ${running?'disabled':''}></label>
-      <div class="inventory-actions"><button class="ghost-button" data-native="check" ${running || !nativeStatus?'disabled':''}>检测环境</button><button class="ghost-button" data-native="deploy" ${running || !nativeStatus?'disabled':''}>一键部署组件</button><button class="ghost-button" data-native="remove" ${running || !nativeStatus?'disabled':''}>移除助手部署的组件</button></div><p>${esc(c?.message || '检测后显示组件与游戏连接情况。')}</p>
-      ${c?.files?`<p>内置组件：${c.bundle_ready?'校验通过':'不完整'} · 游戏部署：${c.deployment_ready?'文件匹配':'尚未完整匹配'} · 游戏进程：${c.game_running?'运行中':'未运行'} · 原生端点：${c.endpoint_present?'已发现':'未发现'}</p><details class="inventory-metadata"><summary>组件文件核对明细</summary><pre>${esc(c.files.map(row=>row.file+' · '+({current:'匹配',missing:'未部署',conflict:'不同文件，保留'}[row.state])).join('\n'))}</pre></details>${c.issues?.length?'<p>'+esc(c.issues.join('；'))+'</p>':''}`:''}
+      <div class="inventory-actions"><button class="ghost-button" data-native="check" ${running || !nativeStatus?'disabled':''}>检测环境</button><button class="ghost-button" data-native="deploy" ${running || !nativeStatus?'disabled':''}>一键部署组件</button><button class="ghost-button" data-native="remove" ${running || !nativeStatus?'disabled':''}>移除助手部署的组件</button></div>${statusNotice(c?.message || '检测后显示组件与游戏连接情况。',c?stateTone(c.message):'info')}
+      ${c?.files?`<div class="inventory-state-list" aria-label="组件环境状态">${stateBadge('内置组件 · '+(c.bundle_ready?'校验通过':'不完整'),c.bundle_ready?'success':'error')}${stateBadge('游戏部署 · '+(c.deployment_ready?'文件匹配':'尚未完整匹配'),c.deployment_ready?'success':'warning')}${stateBadge('游戏进程 · '+(c.game_running?'运行中':'未运行'),c.game_running?'success':'info')}${stateBadge('原生端点 · '+(c.endpoint_present?'已发现':'未发现'),c.endpoint_present?'success':'warning')}${(c.runtime_libraries||[]).map(row=>stateBadge('VC++ · '+row.file+(row.present?' 已安装':' 缺少'),row.present?'success':'error')).join('')}</div><details id="componentFileAudit" class="inventory-metadata" ${componentFilesOpen?'open':''}><summary>组件文件核对明细</summary><ul class="inventory-component-files">${c.files.map(row=>`<li><span>${esc(row.file)}</span>${stateBadge(({current:'匹配',missing:'未部署',conflict:'不同文件，保留'}[row.state]||row.state),row.state==='current'?'success':row.state==='missing'?'warning':'warning')}</li>`).join('')}</ul></details>${c.issues?.length?statusNotice(c.issues.join('；')):''}`:''}
       <p>运行组件已内置。检测缺少 VC++ x64 运行库时，可安装 <a href="https://aka.ms/vc14/vc_redist.x64.exe" target="_blank" rel="noopener">Microsoft官方运行库</a> 后重新检测。</p></div></section>`;
   }
   function visionPane(){
@@ -47,11 +60,11 @@ window.KekeVision = (() => {
     return `<section class="inventory-connect"><h2>${methods[mode]}</h2>
       ${mode==='offline'?`<div class="inventory-actions"><label>截图 <input id="visionFiles" type="file" accept="image/*" multiple ${running?'disabled':''}></label><label>截图文件夹 <input id="visionFolder" type="file" accept="image/*" webkitdirectory multiple ${running?'disabled':''}></label></div><p id="readFileCount">已选择 ${selectedFiles.length} 张图片</p>`:`<div class="inventory-settings"><label>当前筛选列表的装备数量<input id="visionCount" type="number" min="1" max="2000" value="${esc(countDraft)}" placeholder="全量扫描需填写；NEW无需填写" ${running || mode==='new'?'disabled':''}></label></div><p>打开游戏装备背包。开始后请在3秒内切回游戏。F8停止采集，已截图继续识别；鼠标移到屏幕左上角也可停止鼠标采集。${mode==='gamepad'?'手柄方式需要本机已有虚拟手柄驱动。':''}</p>`}
       <p>每次扫描独立保存截图。识别结果自动进入背包数据，未显示的状态保持未知。</p>
-      <div class="inventory-actions"><button class="primary-button" data-vision="start" ${running || !status?'disabled':''}>${running?'处理中…':'开始识别 / 扫描'}</button>${running?`${status.job.capture_running?`<button class="ghost-button" data-vision="stop-capture" ${status.job.capture_stopping?'disabled':''}>停止采集（F8）</button>`:''}<button class="ghost-button" data-vision="cancel">停止全部</button>`:''}<span role="status">${esc(message || status?.job.message || '正在检查桌面服务…')}</span></div><p>${status?.job.processed || 0} / ${status?.job.total || 0} 张</p></section>
-      <section class="inventory-browser"><div class="inventory-browser-head"><h2>已识别 ${records.length} 件 · ${failures.length} 张识别失败${pending.length?` · ${pending.length} 张待识别`:''}</h2><button class="ghost-button" data-vision="retry" ${running || !batch || !images.some(x=>x.error)?'disabled':''}>${pending.length?'继续识别 / 重试':'重试失败图片'}</button></div>
+      <div class="inventory-actions"><button class="primary-button" data-vision="start" ${running || !status?'disabled':''}>${running?'处理中…':'开始识别 / 扫描'}</button>${running?`${status.job.capture_running?`<button class="ghost-button" data-vision="stop-capture" ${status.job.capture_stopping?'disabled':''}>停止采集（F8）</button>`:''}<button class="ghost-button" data-vision="cancel">停止全部</button>`:''}${statusNotice(message || status?.job.message || '正在检查桌面服务…')}</div><p class="inventory-progress-label">已处理 ${status?.job.processed || 0} / ${status?.job.total || 0} 张</p>${running?`<progress class="inventory-progress" value="${status?.job.processed||0}" max="${Math.max(1,status?.job.total||1)}" aria-label="扫描处理进度"></progress>`:''}</section>
+      <section class="inventory-browser"><div class="inventory-browser-head"><h2>扫描结果</h2><button class="ghost-button" data-vision="retry" ${running || !batch || !images.some(x=>x.error)?'disabled':''}>${pending.length?'继续识别 / 重试':'重试失败图片'}</button></div><div class="inventory-state-list inventory-result-states">${stateBadge('已识别 '+records.length+' 件',records.length?'success':'info')}${failures.length?stateBadge(failures.length+' 张识别失败','error'):stateBadge('没有识别失败','success')}${pending.length?stateBadge(pending.length+' 张待识别','warning'):''}</div>
       <div class="inventory-actions"><button class="ghost-button" data-vision="backpack" ${batch?'':'disabled'}>查看背包结果</button><button class="ghost-button" data-vision="export" ${batch?'':'disabled'}>导出识别批次</button></div>
-      ${batch?`<p class="inventory-hint">${esc(batch.account)} · ${esc(batch.saved_at)} · ${batch.complete?'当前列表采集与识别完成':'离线、增量或部分批次'}</p>${batch.storage?`<label class="inventory-hint">本批次截图文件夹<input class="vision-storage-path" aria-label="本批次截图文件夹" readonly value="${esc(batch.storage.images_directory)}"></label><button class="ghost-button" data-vision="open-folder" ${status?.job.capture_running?'disabled':''}>打开截图文件夹</button>`:''}${batch.capture_error?`<p>采集未完成：${esc(batch.capture_error)}。已保存图片可继续识别。</p>`:''}`:''}
-      <details class="inventory-metadata"><summary>图片、原文与识别诊断（${images.length}张）</summary>${images.slice(page*50,(page+1)*50).map(image=>`<details class="inventory-record"><summary>${esc(image.file)} · ${esc(image.error || '已识别')}${image.role?.role_name?' · 角色 '+esc(image.role.role_name):''}</summary><img class="vision-evidence" loading="lazy" alt="本机识别原图" src="/vision/image?account=${encodeURIComponent(batch.account)}&id=${batch.id}&name=${encodeURIComponent(image.file)}"><pre>${esc(JSON.stringify({role:image.role,state_candidate:image.state_candidate,lines:image.lines,error:image.error},null,2))}</pre></details>`).join('')}</details>
+      ${batch?`<p class="inventory-hint">${esc(batch.account)} · ${esc(batch.saved_at)} · ${stateBadge(batch.complete?'当前列表采集与识别完成':'部分观测；未识别内容保持未知',batch.complete?'success':'warning')}</p>${batch.storage?`<label class="inventory-hint">本批次截图文件夹<input class="vision-storage-path" aria-label="本批次截图文件夹" readonly value="${esc(batch.storage.images_directory)}"></label><button class="ghost-button" data-vision="open-folder" ${status?.job.capture_running?'disabled':''}>打开截图文件夹</button>`:''}${batch.capture_error?statusNotice('采集未完成：'+batch.capture_error+'。已保存图片可继续识别。','warning'):''}`:''}
+      <details class="inventory-metadata"><summary>图片、原文与识别诊断（${images.length}张）</summary>${images.slice(page*50,(page+1)*50).map(image=>`<details class="inventory-record"><summary>${esc(image.file)} · ${stateBadge(image.pending?'等待处理':image.error || '已识别',image.pending?'warning':image.error?'error':'success')}${image.role?.role_name?' · 角色 '+esc(image.role.role_name):''}</summary><img class="vision-evidence" loading="lazy" alt="本机识别原图" src="/vision/image?account=${encodeURIComponent(batch.account)}&id=${batch.id}&name=${encodeURIComponent(image.file)}"><pre>${esc(JSON.stringify({role:image.role,state_candidate:image.state_candidate,lines:image.lines,error:image.error},null,2))}</pre></details>`).join('')}</details>
       <div class="inventory-pagination"><button class="ghost-button" data-vision="previous" ${page===0?'disabled':''}>上一页</button><span>${page+1} / ${pages} · 每页50张</span><button class="ghost-button" data-vision="next" ${page+1>=pages?'disabled':''}>下一页</button></div></section>
       <details class="inventory-browser"><summary>历史扫描与失败图片重试</summary><div class="inventory-actions"><button class="ghost-button" data-vision="history" ${running?'disabled':''}>查看此账号历史</button>${history.map(item=>`<button class="ghost-button" data-vision="load" data-id="${item.id}">${esc(item.saved_at)} · ${esc(methods[item.mode] || item.mode)}</button>`).join('') || '<p>暂无历史批次</p>'}</div></details>`;
   }
@@ -62,6 +75,8 @@ window.KekeVision = (() => {
       <section class="inventory-connect"><div class="inventory-settings"><label>采集方式<select id="visionMode" ${running?'disabled':''}>${Object.entries(methods).map(([key,label])=>`<option value="${key}">${label}</option>`).join('')}</select></label><label>本机账号标签<input id="visionAccount" maxlength="80" value="${esc(account)}" ${running?'disabled':''}></label></div><p>切换游戏账号时请更换标签。</p></section>
       ${mode==='native'?nativePane():visionPane()}`;
     panel.querySelector('#visionMode').value=mode;
+    panel.querySelector('#componentFileAudit')?.addEventListener('toggle',event=>{componentFilesOpen=event.currentTarget.open;});
+    for(const notice of panel.querySelectorAll('.inventory-status[role="status"]'))notice.dataset.tone=notice.dataset.tone||'info';
     panel.querySelector('#visionMode').onchange=event=>{mode=event.target.value;message='';paint();refresh();};
     panel.querySelector('#visionAccount').oninput=event=>{account=event.target.value;accountPinned=true;};
     if(panel.querySelector('#readGameDirectory'))panel.querySelector('#readGameDirectory').oninput=event=>{directoryDraft=event.target.value;};
@@ -78,7 +93,7 @@ window.KekeVision = (() => {
           }else{
             nativeStatus=await request('/inventory/'+action,action==='cancel'?{}:{account:account.trim()});message='';paint();refresh();
           }
-        }catch(error){message=error.message;const target=panel.querySelector('[role="status"]');if(target)target.textContent=message;nativeButton.disabled=false;}
+        }catch(error){message=error.message;const target=panel.querySelector('[role="status"]');if(target){updateNotice(target,message);}nativeButton.disabled=false;}
         return;
       }
       const button=event.target.closest('[data-vision]');if(!button)return;
@@ -102,7 +117,7 @@ window.KekeVision = (() => {
           payload.files=await Promise.all(selectedFiles.map(file=>new Promise((resolve,reject)=>{const reader=new FileReader();reader.onerror=reject;reader.onload=()=>resolve({data:String(reader.result).split(',')[1]});reader.readAsDataURL(file);})));
         }
         page=0;status={...await api('start',payload),token:status.token};batch=status.batch;message='';paint();await refresh();
-      }catch(error){message=error.message;const target=panel.querySelector('[role="status"]');if(target)target.textContent=message;button.disabled=false;}
+      }catch(error){message=error.message;const target=panel.querySelector('[role="status"]');if(target){updateNotice(target,message);}button.disabled=false;}
     };
   }
   window.addEventListener('keke-source-deleted',event=>{

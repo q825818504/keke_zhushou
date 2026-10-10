@@ -4,6 +4,14 @@ window.KekeAdminBridge = (() => {
   const isLoopback = pageLocation?.protocol === "http:" && pageLocation.hostname === "127.0.0.1";
   let connected = false;
   let canSaveCharacter = false;
+  function setSyncStatus(summary, text) {
+    summary.textContent = text;
+    const value = String(text || "");
+    summary.dataset.tone = /失败|错误|不可用|无法/.test(value) ? "error"
+      : /正在|连接中|处理中|检查中/.test(value) ? "working"
+        : /尚未|未配置|有 .*改动|领先/.test(value) ? "warning"
+          : /完成|已同步|干净/.test(value) ? "success" : "info";
+  }
   const ready = (async () => {
     if (!isLoopback) return false;
     try {
@@ -165,15 +173,15 @@ window.KekeAdminBridge = (() => {
     commitLabel.hidden = !connectedHere;
     detail.hidden = !connectedHere;
     if (!connectedHere) {
-      summary.textContent = "当前是浏览器本地模式。管理修改只保存在此浏览器，尚未写入项目或同步 GitHub。启动本地管理端后可直接写回；可先导出旧数据备份。";
+      setSyncStatus(summary, "当前是浏览器本地模式。管理修改只保存在此浏览器，尚未写入项目或同步 GitHub。启动本地管理端后可直接写回；可先导出旧数据备份。");
       return;
     }
-    summary.textContent = "正在读取 GitHub 同步状态…";
+    setSyncStatus(summary, "正在读取 GitHub 同步状态…");
     try {
       const result = await getStatus();
       const git = result.git || {};
       if (!git.available && git.error) {
-        summary.textContent = `本地写回服务已连接，但 Git 同步不可用：${git.error}`;
+        setSyncStatus(summary, `本地写回服务已连接，但 Git 同步不可用：${git.error}`);
         detail.hidden = true;
         pull.disabled = sync.disabled = checkButton.disabled = true;
         return;
@@ -184,12 +192,12 @@ window.KekeAdminBridge = (() => {
       if (git.ahead) pieces.push(`本地领先 ${git.ahead}`);
       if (git.behind) pieces.push(`GitHub 有 ${git.behind} 个新提交`);
       pieces.push(git.dirty ? `工作区有 ${git.changes?.length || ""} 项改动` : "工作区干净");
-      summary.textContent = git.remoteConfigured ? pieces.join(" · ") : `${pieces.join(" · ")} · 未配置 origin`;
+      setSyncStatus(summary, git.remoteConfigured ? pieces.join(" · ") : `${pieces.join(" · ")} · 未配置 origin`);
       const list = document.querySelector("#repoGitChanges");
       if (list) list.textContent = (git.changes || []).slice(0, 12).join("\n") || "没有本地文件改动";
       return git;
     } catch (error) {
-      summary.textContent = error.message;
+      setSyncStatus(summary, error.message);
       detail.hidden = true;
       return null;
     }
@@ -200,17 +208,17 @@ window.KekeAdminBridge = (() => {
     const buttons = [...document.querySelectorAll("#repoSyncDialog button")];
     buttons.forEach(item => { item.disabled = true; });
     try {
-      summary.textContent = "正在处理…";
+      setSyncStatus(summary, "正在处理…");
       const result = await action();
-      summary.textContent = result.message || "操作完成。";
+      setSyncStatus(summary, result.message || "操作完成。");
       await showStatus();
-      if (result.message) summary.textContent = result.message;
+      if (result.message) setSyncStatus(summary, result.message);
       if (button?.id === "repoPullButton" && result.ok) {
         const reloadNote = document.querySelector("#repoReloadNote");
         if (reloadNote) reloadNote.hidden = false;
       }
     } catch (error) {
-      summary.textContent = error.message;
+      setSyncStatus(summary, error.message);
     } finally {
       buttons.forEach(item => { item.disabled = false; });
     }
