@@ -19,3 +19,5 @@ Gitee v1.2 和公共配置 r4 发布成功，9 个必需下载文件完成匿名
 实装完成：active-version 已为 app/1.2，app 目录只剩 1.2；public-config 只剩 r4-b67e0fdac1567abd。原有 3 份玩家背包/扫描文件哈希一致，用户说明版本为1.2且等待明确确认。新 launcher 已随成功启动刷新。日志明确记录清理1.0和1.1，未发生启动/清理错误。证据 build/v1-2-installed-upgrade.json。
 
 最终交付：dist/windows/final/KokoAssistantSetup-v1.2.exe；dist/windows/admin/KekeAssistantAdmin.exe。GitHub 将包含源码、薄荷资产和两份升级记录；Gitee tracked 文件仅 README、channels 与 metadata JSON，未上传开发源码。
+
+图标显示补充：用户反馈安装根目录 EXE 在 Explorer 中仍显示旧图标。验证实际安装入口和官方安装器 SHA256 均为 c1e4911b151c...，6档 PE 图标逐档与薄荷 ICO 相同。发送 Windows 外壳 UPDATEITEM + ASSOCCHANGED 刷新通知，保留现有程序文件及版本1.2。补充两份升级说明并同步发行记录；不将缓存显示误判为二进制漏打包。
