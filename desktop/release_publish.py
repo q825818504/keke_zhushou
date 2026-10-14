@@ -13,6 +13,21 @@ from release_credentials import read_secrets, save_secrets, signing_identity
 from update_protocol import PRODUCT, REPOSITORY, atomic_json, checked_url, digest, open_url
 
 LOCK=threading.Lock()
+
+def initialize_notes(store,root):
+    from update_protocol import version
+    notes=Path(store)/'notes';notes.mkdir(exist_ok=True)
+    index=notes/'index.json'
+    names=set(json.loads(index.read_text(encoding='utf-8'))['versions']) if index.exists() else set()
+    for source in (Path(root)/'desktop/releases/user').glob('v*.md'):
+        name=source.stem[1:];version(name)
+        target=notes/source.name
+        if not target.exists():target.write_text(source.read_text(encoding='utf-8'),encoding='utf-8')
+        names.add(name)
+    for name in names:
+        version(name)
+        if not (notes/('v'+name+'.md')).is_file():raise ValueError('云端索引缺少对应说明：'+name)
+    atomic_json(index,{'schema':1,'versions':sorted(names,key=version,reverse=True)})
 API=f'https://gitee.com/api/v5/repos/{REPOSITORY}'
 REMOTE=f'https://gitee.com/{REPOSITORY}.git'
 
@@ -171,10 +186,12 @@ def publish(root,output):
             if not remote_config or artifacts['config_revision']!=remote_config['revision'] or artifacts['config_package']['sha256']!=remote_config['package']['sha256']:raise RuntimeError('补丁必须复用当前公共配置')
         if remote_config and artifacts['config_revision']<=remote_config['revision'] and not patch_release:
             raise RuntimeError('配置发行编号已使用，请同步发行记录后重新准备')
-        (store/'README.md').write_text('# 可可助手更新服务\n\n只发布安装器、程序更新包、公共配置和签名清单；源码维护在GitHub。\n',encoding='utf-8')
+        (store/'README.md').write_text('# 可可助手更新服务\n\n只发布安装器、程序更新包、公共配置、签名清单和用户更新说明；源码维护在GitHub。\n\n## 编辑用户更新说明\n\n在 notes/v<版本>.md 页面点击“编辑”，保存到 main 分支。用户下次启动会获取最新说明，无需重新打包程序或改变版本号。notes/index.json 列出可查看的历史版本，新版首次发布自动补充；已有云端说明不会被发布程序覆盖。\n\n启动提示显示本次版本；侧栏“更新内容”可以查看历次版本。说明下载失败时使用本地缓存或内置说明。程序版本与配置清单仍按签名验证。\n',encoding='utf-8')
         tracked=git(store,'ls-files').splitlines()
-        if any(not (p=='README.md' or (p.startswith(('channels/','metadata/')) and Path(p).suffix=='.json') or (p.startswith('licenses/') and Path(p).suffix in {'.txt','.md'})) for p in tracked):
+        import re
+        if any(not (p=='README.md' or p=='notes/index.json' or re.fullmatch(r'notes/v[0-9]+\.[0-9]+(?:\.[0-9]+)?\.md',p) or (p.startswith(('channels/','metadata/')) and Path(p).suffix=='.json') or (p.startswith('licenses/') and Path(p).suffix in {'.txt','.md'})) for p in tracked):
             raise RuntimeError('Gitee发布仓库包含白名单之外的文件，请人工核对')
+        initialize_notes(store,root)
         if not refs:
             git(store,'add','README.md'); git(store,'-c','user.name=Koko Assistant Publisher','-c','user.email=release@koko.local','commit','-m','Initialize release-only repository')
             git(store,'push','origin','main',token=token)
@@ -220,7 +237,7 @@ def publish(root,output):
             atomic_json(store/'channels/app-latest.json',signed(app,key))
             atomic_json(store/f'metadata/app/v{app["version"]}.json',signed(app,key))
             if app.get('revision',0):atomic_json(store/f'metadata/app/v{app["version"]}-r{app["revision"]}.json',signed(app,key))
-        git(store,'add','--','README.md','channels','metadata')
+        git(store,'add','--','README.md','channels','metadata','notes')
         if git(store,'diff','--cached','--name-only'):
             git(store,'-c','user.name=Koko Assistant Publisher','-c','user.email=release@koko.local','commit','-m','Publish '+tag)
         git(store,'push','origin','main',token=token)

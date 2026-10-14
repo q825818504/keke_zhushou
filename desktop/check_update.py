@@ -22,6 +22,7 @@ import installer_entry
 
 class UpdateTests(unittest.TestCase):
     def setUp(self):
+        notes=patch('cloud_notes.refresh',return_value=False);notes.start();self.addCleanup(notes.stop)
         self.temporary=tempfile.TemporaryDirectory(dir=Path(__file__).resolve().parents[1]/'build')
         self.root=Path(self.temporary.name)
         self.config=self.root/'bundled'

@@ -73,6 +73,9 @@ def startup_check(current_version, app_data, public_key, fallback, progress, fet
     if local>remote or (local==remote and current_revision>revision):
         raise ValueError('本机程序版本不属于当前正式发行，请重新安装官方最新版')
     folder,warning=refresh_config(app_data,public_key,fallback,progress,fetch)
+    progress('正在刷新云端更新说明…')
+    from cloud_notes import refresh
+    refresh(app_data,current_version)
     return {'config':folder,'warning':warning}
 
 

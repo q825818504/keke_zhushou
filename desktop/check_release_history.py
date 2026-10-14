@@ -7,6 +7,7 @@ from release_lifecycle import release_status,acknowledge
 
 class Tests(unittest.TestCase):
     def setUp(self):
+        notes=patch('cloud_notes.refresh',return_value=False);notes.start();self.addCleanup(notes.stop)
         self.tmp=tempfile.TemporaryDirectory(dir=Path(__file__).resolve().parents[1]/'build');self.root=Path(self.tmp.name)
     def tearDown(self):self.tmp.cleanup()
     def test_history_and_acknowledgement_revision(self):

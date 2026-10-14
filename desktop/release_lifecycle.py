@@ -75,6 +75,11 @@ def release_status(public_root, app_data):
     except (OSError,ValueError):seen_revision=0
     try:history=json.loads((Path(public_root)/'release-history.json').read_text(encoding='utf-8'))
     except (OSError,ValueError):history=[{'version':notes['version'],'notes':notes['notes']}]
+    from cloud_notes import cached
+    cloud=cached(app_data,notes['version'])
+    if cloud:
+        history=cloud
+        notes['notes']=next(row['notes'] for row in cloud if row['version']==notes['version'])
     return {**notes,'history':history,'show':seen!=notes['version'] or seen_revision!=notes.get('revision',0)}
 
 def acknowledge(public_root, app_data):
