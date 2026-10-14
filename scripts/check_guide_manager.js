@@ -9,7 +9,7 @@ const sandbox = { window: {}, localStorage: { getItem: key => storage.get(key) |
 sandbox.window.dispatchEvent = () => {};
 vm.createContext(sandbox);
 for (const [, file] of html.matchAll(/<script\s+src="([^"]+)"/g)) {
-  if (file !== "app.js" && file !== "team_manager.js") vm.runInContext(fs.readFileSync(path.join(root, file), "utf8"), sandbox);
+  if (file.startsWith('data/knowledge/') || ['character_recommendations.js','reactions.js'].includes(file)) vm.runInContext(fs.readFileSync(path.join(root, file), "utf8"), sandbox);
 }
 const manager = fs.readFileSync(path.join(root, "team_manager.js"), "utf8");
 const storeCode = manager.slice(0, manager.indexOf("let guideDraft"));
@@ -17,6 +17,7 @@ vm.runInContext(storeCode, sandbox);
 const store = sandbox.window.teamGuideStore;
 const original = JSON.stringify(sandbox.window.teamTemplateKnowledge);
 const seed = store.all()[0];
+const seedCount=store.all().length;
 const edited = JSON.parse(JSON.stringify(seed));
 edited.source_archetype = "编辑后的阵容";
 edited.editorial.notes = "出场顺序与养成要求";
@@ -25,14 +26,14 @@ assert.equal(store.all().find(t => t.id === seed.id).source_archetype, edited.so
 assert.equal(JSON.stringify(sandbox.window.teamTemplateKnowledge), original, "source snapshots stay untouched");
 const custom = { ...edited, id: "local-test", source_visibility: "local_editor" };
 store.save(custom);
-assert.equal(store.all().length, 28);
+assert.equal(store.all().length, seedCount+1);
 vm.runInContext(storeCode, sandbox);
-assert.equal(sandbox.window.teamGuideStore.all().length, 28, "reload restores persisted edits");
+assert.equal(sandbox.window.teamGuideStore.all().length, seedCount+1, "reload restores persisted edits");
 const current = sandbox.window.teamGuideStore;
 current.remove(custom.id);
-assert.equal(current.all().length, 27);
+assert.equal(current.all().length, seedCount);
 current.save(custom);
-assert.equal(current.all().length, 28, "undo restores deleted record");
+assert.equal(current.all().length, seedCount+1, "undo restores deleted record");
 assert.throws(() => current.save({ ...custom, member_character_ids: [seed.member_character_ids[0], seed.member_character_ids[0], seed.member_character_ids[1], seed.member_character_ids[2]] }));
 assert.throws(() => current.import({ teams: [custom, custom] }));
 const before = JSON.stringify(current.export());

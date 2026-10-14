@@ -2036,9 +2036,9 @@ function userTeamCreateCandidate(coreName, memberNames, options = {}) {
     coreName,
     memberNames: orderedNames,
     missing: Math.max(0, 4 - orderedNames.length),
-    candidateKind: options.sourceRecord ? "source" : "rule",
-    sourceRecord: options.sourceRecord || null,
-    id: options.sourceRecord?.id || "rule-" + userTeamCandidateKey(orderedNames)
+    candidateKind: "source",
+    sourceRecord: options.sourceRecord,
+    id: options.sourceRecord.id
   };
 }
 
@@ -2053,7 +2053,7 @@ function userTeamBuildPlans(coreName, blockedNames = new Set(), limit = 3) {
       const orderedNames = (team.member_character_ids || []).map((id) => userTeamNameById[id]);
       return { team, orderedNames };
     })
-    .filter(({ orderedNames }) => orderedNames.length === 4 && orderedNames.includes(coreName) && orderedNames.every((name) => name && available.includes(name)))
+    .filter(({ orderedNames }) => orderedNames.length === 4 && new Set(orderedNames).size === 4 && orderedNames.includes(coreName) && orderedNames.every((name) => name && available.includes(name)))
     .sort((first, second) => (first.team.source_order || 0) - (second.team.source_order || 0));
   templates.forEach(({ team, orderedNames }) => {
     const candidate = userTeamCreateCandidate(coreName, orderedNames, { sourceRecord: team, orderedNames });
@@ -2065,27 +2065,6 @@ function userTeamBuildPlans(coreName, blockedNames = new Set(), limit = 3) {
     }
   });
 
-  const pool = available.filter((name) => name !== coreName);
-  const rulePlans = [];
-  if (pool.length < 3) {
-    rulePlans.push(userTeamCreateCandidate(coreName, [coreName, ...pool]));
-  } else {
-    for (let first = 0; first < pool.length - 2; first += 1) {
-      for (let second = first + 1; second < pool.length - 1; second += 1) {
-        for (let third = second + 1; third < pool.length; third += 1) {
-          rulePlans.push(userTeamCreateCandidate(coreName, [coreName, pool[first], pool[second], pool[third]]));
-        }
-      }
-    }
-  }
-  rulePlans.sort((first, second) => second.score - first.score || first.id.localeCompare(second.id));
-  rulePlans.forEach((candidate) => {
-    const key = userTeamCandidateKey(candidate.memberNames);
-    if (!seen.has(key) && plans.length < limit) {
-      plans.push(candidate);
-      seen.add(key);
-    }
-  });
   return plans.slice(0, limit);
 }
 
@@ -2095,7 +2074,6 @@ function userTeamRecommendPlans(lockedCoreName = "", blockedNames = new Set(), l
   const cores = userTeamRankedMainCNames(available);
   const candidates = cores.flatMap((name) => userTeamBuildPlans(name, blockedNames, limit));
   candidates.sort((first, second) => first.missing - second.missing
-    || Number(second.candidateKind === "source") - Number(first.candidateKind === "source")
     || (second.score + userTeamTierScore(characterData[second.coreName])) - (first.score + userTeamTierScore(characterData[first.coreName]))
     || cores.indexOf(first.coreName) - cores.indexOf(second.coreName)
     || first.id.localeCompare(second.id));
@@ -2125,10 +2103,9 @@ function userTeamRosterCard(name, data) {
   const pinIndex = userTeamPinnedCoreNames.indexOf(name);
   const canPin = userTeamCanPin(name);
   const expanded = userTeamExpandedInvestmentNames.has(name) || pinIndex >= 0;
-  const sourceCount = (window.teamGuideStore ? window.teamGuideStore.all() : (teamTemplateKnowledge.teams || [])).filter((team) => team.source_core_character_id === data.id).length;
   const pinLabel = pinIndex === 0 ? "1队主C" : pinIndex === 1 ? "2队主C" : "锁定主C";
   return '<article class="user-team-roster-card' + (selected ? " is-selected" : "") + (pinIndex >= 0 ? " is-core-choice" : "") + '">' +
-    '<div class="user-team-roster-row"><button class="user-team-roster-toggle" type="button" data-user-team-roster="' + escapeHtml(name) + '" aria-pressed="' + String(selected) + '"><span class="user-team-roster-avatar">' + (data.icon ? '<img src="' + escapeHtml(data.icon) + '" alt="">' : escapeHtml(name.slice(0, 1))) + '</span><span class="user-team-roster-name"><b>' + escapeHtml(name) + '</b><small>' + escapeHtml(userTeamRoleLabel(data) + " · " + (data.element || "属性待补充")) + (sourceCount ? " · " + sourceCount + " 套适配阵容" : "") + '</small></span><i aria-hidden="true">' + (selected ? "✓" : "+") + '</i></button><div class="user-team-roster-tools">' +
+    '<div class="user-team-roster-row"><button class="user-team-roster-toggle" type="button" data-user-team-roster="' + escapeHtml(name) + '" aria-pressed="' + String(selected) + '"><span class="user-team-roster-avatar">' + (data.icon ? '<img src="' + escapeHtml(data.icon) + '" alt="">' : escapeHtml(name.slice(0, 1))) + '</span><span class="user-team-roster-name"><b>' + escapeHtml(name) + '</b><small>' + escapeHtml(userTeamRoleLabel(data) + " · " + (data.element || "属性待补充")) + '</small></span><i aria-hidden="true">' + (selected ? "✓" : "+") + '</i></button><div class="user-team-roster-tools">' +
     (canPin ? '<button class="user-team-pin' + (pinIndex >= 0 ? " is-pinned" : "") + '" type="button" data-user-team-pin="' + escapeHtml(name) + '" aria-pressed="' + String(pinIndex >= 0) + '"' + (!selected ? " disabled" : "") + '>' + (pinIndex >= 0 ? pinLabel : "锁定主C") + '</button>' : "") +
     (selected && pinIndex < 0 ? '<button class="user-team-investment-toggle" type="button" data-user-team-investment-toggle="' + escapeHtml(name) + '" aria-expanded="' + String(expanded) + '">' + (expanded ? "收起养成" : "养成") + '</button>' : "") +
     '</div></div>' + (selected && expanded ? userTeamInvestmentMarkup(name) : "") + '</article>';
@@ -2148,7 +2125,7 @@ function userTeamReasonMarkup(plan) {
 function userTeamCandidatePickerMarkup(plans, selectedIndex, teamIndex) {
   return '<div class="user-team-candidates" role="group" aria-label="第' + (teamIndex + 1) + '队候选方案">' + plans.map((plan, index) => {
     const selected = selectedIndex === index;
-    const origin = plan.candidateKind === "source" ? "攻略阵容" : "本地规则候选";
+    const origin = "维护阵容";
     const archetype = plan.sourceRecord?.source_archetype || (plan.profile.reactions[0] ? plan.profile.reactions[0] + "反应" : "定位组合");
     return '<button class="user-team-candidate' + (selected ? " is-active" : "") + '" type="button" data-user-team-candidate="' + teamIndex + ':' + index + '" aria-pressed="' + String(selected) + '"><span>' + escapeHtml("方案 " + (index + 1)) + '</span><b>' + escapeHtml(plan.coreName + " · " + archetype) + '</b><small>' + escapeHtml(origin) + '</small></button>';
   }).join("") + '</div>';
@@ -2156,7 +2133,7 @@ function userTeamCandidatePickerMarkup(plans, selectedIndex, teamIndex) {
 
 function userTeamResultSection(title, teamIndex, plans, selectedIndex) {
   if (!plans.length) {
-    return '<section class="user-team-result user-team-result-empty"><div class="user-section-heading"><div><span class="user-section-kicker">' + escapeHtml(title) + '</span><h2>剩余角色暂时无法组成第二队</h2><p>纳入更多主C及队友后，助手会从未被第一队占用的角色中推荐。</p></div><span class="user-result-pill">待选择</span></div></section>';
+    return '<section class="user-team-result user-team-result-empty"><div class="user-section-heading"><div><span class="user-section-kicker">' + escapeHtml(title) + '</span><h2>剩余角色暂时无法组成第二队</h2><p>剩余持有角色没有匹配到完整的维护阵容。可补充持有角色，或等待管理端更新阵容。</p></div><span class="user-result-pill">待选择</span></div></section>';
   }
   const safeIndex = Math.min(Math.max(0, selectedIndex), plans.length - 1);
   const plan = plans[safeIndex];
@@ -2168,10 +2145,8 @@ function userTeamResultSection(title, teamIndex, plans, selectedIndex) {
   }).join("");
   const missingMarkup = plan.missing ? '<div class="user-team-missing"><b>还差 ' + plan.missing + ' 位角色</b><span>目前有 ' + plan.memberNames.length + ' 位可用角色，纳入更多未被另一队占用的角色后可补齐。</span></div>' : "";
   const sourceRecord = plan.sourceRecord;
-  const sourceMarkup = sourceRecord
-    ? '<div class="user-team-source-note"><span>阵容说明</span><b>' + escapeHtml(sourceRecord.source_archetype || "攻略阵容") + '</b>' + (sourceRecord.editorial?.notes ? '<p>' + escapeHtml(sourceRecord.editorial.notes) + '</p>' : '') + '</div>'
-    : '<div class="user-team-source-note is-local"><span>候选说明</span><b>角色规则推荐</b><small>按角色定位、属性环合和养成信息排序。</small></div>';
-  return '<section class="user-team-result"><div class="user-section-heading"><div><span class="user-section-kicker">' + escapeHtml(title) + '</span><h2>' + escapeHtml(plan.coreName) + ' 的方案</h2><p>先看多个方案，再选中一套；另一队会自动避开这里的四名角色。</p></div><span class="user-result-pill">' + (plan.missing ? "队伍未满" : plan.candidateKind === "source" ? "攻略阵容" : "本地规则候选") + '</span></div>' + userTeamCandidatePickerMarkup(plans, safeIndex, teamIndex) + '<div class="user-team-grid">' + memberMarkup + '</div>' + missingMarkup + userTeamReasonMarkup(plan) + sourceMarkup + '</section>';
+  const sourceMarkup = '<div class="user-team-source-note"><span>阵容说明</span><b>' + escapeHtml(sourceRecord.source_archetype || "维护阵容") + '</b>' + (sourceRecord.editorial?.notes ? '<p>' + escapeHtml(sourceRecord.editorial.notes) + '</p>' : '') + '</div>';
+  return '<section class="user-team-result"><div class="user-section-heading"><div><span class="user-section-kicker">' + escapeHtml(title) + '</span><h2>' + escapeHtml(plan.coreName) + ' 的方案</h2><p>先看多个方案，再选中一套；另一队会自动避开这里的四名角色。</p></div><span class="user-result-pill">' + "维护阵容" + '</span></div>' + userTeamCandidatePickerMarkup(plans, safeIndex, teamIndex) + '<div class="user-team-grid">' + memberMarkup + '</div>' + missingMarkup + userTeamReasonMarkup(plan) + sourceMarkup + '</section>';
 }
 
 function renderUserTeamRoute() {
@@ -2198,7 +2173,7 @@ function renderUserTeamRoute() {
     const firstBlocked = new Set(userTeamPinnedCoreNames.slice(1));
     const firstPlans = userTeamRecommendPlans(userTeamPinnedCoreNames[0], firstBlocked, 3);
     if (!firstPlans.length) {
-      resultMarkup = '<section class="user-team-result user-team-result-empty"><div class="user-section-heading"><div><span class="user-section-kicker">02 · 候选结果</span><h2>无法生成第一队</h2><p>当前角色池没有可用的主C候选；请纳入主C角色及队友后生成。</p></div><span class="user-result-pill">缺少主C</span></div></section>';
+      resultMarkup = '<section class="user-team-result user-team-result-empty"><div class="user-section-heading"><div><span class="user-section-kicker">02 · 候选结果</span><h2>无法生成第一队</h2><p>当前持有角色没有匹配到完整的维护阵容。可补充持有角色，或调整锁定主C。</p></div><span class="user-result-pill">暂无匹配</span></div></section>';
     } else {
       const selectedFirstIndex = Math.min(userTeamSelectedCandidateIndexes[0] || 0, firstPlans.length - 1);
       const firstPlan = firstPlans[selectedFirstIndex];
@@ -2214,7 +2189,7 @@ function renderUserTeamRoute() {
   }
   target.innerHTML = '<div class="user-route-intro"><div><span class="user-section-kicker">角色池 · 多方案 · 双队去重</span><h1 id="userTeamTitle">自动配队 1.0</h1><p>勾选你的角色，助手会一起推荐主C与队友；有明确偏好时可手动锁定，再从剩余角色规划第二队。</p></div><div class="user-route-status"><i></i><span>' + escapeHtml(rosterStatus) + '</span></div></div>' +
     '<section class="user-surface user-team-builder"><div class="user-team-builder-head"><div><span class="user-section-kicker">01 · 角色池</span><h2>先告诉助手你有哪些角色。</h2><p>首次使用从空角色池开始；持有状态、共鸣和专属弧盘只保存在当前浏览器。</p></div><div class="user-team-roster-actions"><button class="user-secondary-action pressable" type="button" data-user-team-roster-action="all">全部纳入</button><button class="user-secondary-action pressable" type="button" data-user-team-roster-action="clear">清空角色池</button></div></div><div class="user-team-roster-grid">' + rosterCards + '</div></section>' +
-    '<section class="user-surface user-team-builder user-team-controls-surface"><div class="user-team-controls"><div class="user-team-core-locks"><span>主C偏好（可选）</span><div class="user-team-pin-slots">' + pinnedMarkup + '</div></div><div class="user-route-control"><span>生成队伍数</span><div class="user-route-segments" role="group" aria-label="生成队伍数">' + teamCountOptions + '</div></div><button class="user-primary-action pressable" type="button" data-user-team-generate>生成候选</button></div><div class="user-team-rule-note"><span class="user-section-kicker">候选依据</span><p>优先按持有角色筛选攻略阵容；不足时再补充规则候选。未锁定时自动推荐主C；最多可锁定两位，分别用于第一队和第二队，成员不会跨队重复。共鸣和专属弧盘只用于方案排序，不等同伤害模拟。</p></div></section>' + resultMarkup;
+    '<section class="user-surface user-team-builder user-team-controls-surface"><div class="user-team-controls"><div class="user-team-core-locks"><span>主C偏好（可选）</span><div class="user-team-pin-slots">' + pinnedMarkup + '</div></div><div class="user-route-control"><span>生成队伍数</span><div class="user-route-segments" role="group" aria-label="生成队伍数">' + teamCountOptions + '</div></div><button class="user-primary-action pressable" type="button" data-user-team-generate>生成候选</button></div><div class="user-team-rule-note"><span class="user-section-kicker">候选依据</span><p>仅从管理端维护的完整阵容中，按持有角色筛选。未锁定时自动推荐主C；最多可锁定两位，分别用于第一队和第二队，成员不会跨队重复。共鸣和专属弧盘只用于方案排序，不等同伤害模拟。</p></div></section>' + resultMarkup;
 }
 function renderUserArcDriveRoute() {
   const target = $("#userArcDriveRoute");

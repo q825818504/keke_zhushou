@@ -108,7 +108,7 @@ class UpdateTests(unittest.TestCase):
     def test_failed_install_preserves_active_version(self):
         root=self.root/'install'
         protocol.atomic_json(root/'active-version.json',{'directory':'app/1.0','version':'1.0'})
-        with patch.object(installer_entry,'fetch_envelope',return_value={'kind':'app','platform':'windows-x64','version':'1.1','package':{}}),patch('prerequisites.ensure'),patch.object(installer_entry,'download_package',side_effect=ValueError('corrupt package')):
+        with patch.object(installer_entry,'fetch_envelope',return_value={'kind':'app','platform':'windows-x64','version':'1.1','package':{'size':1024,'expanded_size':4096}}),patch('prerequisites.present',return_value=True),patch('prerequisites.ensure'),patch.object(installer_entry,'download_package',side_effect=ValueError('corrupt package')):
             with self.assertRaises(ValueError):installer_entry.install(root,'key',lambda _:None)
         self.assertEqual(json.loads((root/'active-version.json').read_text())['version'],'1.0')
     def test_gitee_owner_without_permissions_can_save(self):

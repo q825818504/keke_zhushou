@@ -108,6 +108,8 @@ def prepare(root=ROOT, config_only=False):
         shutil.copyfile(published_installer,output/'program/KekeAssistantApp/_internal/update-helper.exe')
         archive=output/'program.zip'; archive_tree(output/'program/KekeAssistantApp',archive)
         manifest['app_package']=split_archive(archive,output)
+        with zipfile.ZipFile(archive) as package:
+            manifest['app_package']['expanded_size']=sum(item.file_size for item in package.infolist())
     atomic_json(output/'release-artifacts.json',manifest)
     print('Prepared release artifacts: '+str(output))
     return output

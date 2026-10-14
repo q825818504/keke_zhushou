@@ -44,9 +44,6 @@ def validate_destination(value):
     if root in [p.resolve() for p in protected]:raise ValueError('请选择专用子文件夹，例如 D:\\Apps\\KekeAssistant')
     if root.exists() and (not root.is_dir() or (any(root.iterdir()) and not recognized_install(root))):
         raise ValueError('此目录已有其他文件，请选择空文件夹或已有的可可助手安装目录')
-    ancestor=root
-    while not ancestor.exists():ancestor=ancestor.parent
-    if shutil.disk_usage(ancestor).free<2*1024**3:raise ValueError('安装盘需要至少2 GB可用空间')
     return root
 
 
@@ -81,12 +78,20 @@ def wait_process(pid):
         kernel.CloseHandle.argtypes=[ctypes.c_void_p]; kernel.CloseHandle(handle)
 
 
-def install(root, public_key, progress):
-    root=Path(root).resolve()
+def install_manifest(public_key):
     manifest=fetch_envelope(CHANNEL+'app-latest.json',public_key)
     if manifest.get('kind')!='app' or manifest.get('platform')!='windows-x64':
         raise ValueError('安装清单产品或平台不匹配')
     version(manifest['version'])
+    return manifest
+
+def install(root, public_key, progress):
+    root=Path(root).resolve()
+    manifest=install_manifest(public_key)
+    from install_space import require
+    space=require(root,manifest)
+    progress('空间检查通过，程序文件约 '+str(round(space['expanded']/1024**2))+' MiB')
+    root.mkdir(parents=True,exist_ok=True)
     if os.name=='nt':
         from prerequisites import ensure
         ensure(manifest,root,progress)

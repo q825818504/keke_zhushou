@@ -104,7 +104,7 @@ class RegressionTests(unittest.TestCase):
             original(window,*args)
         def fake_install(root,key,progress):calls.append(root);progress('测试安装完成');return root
         with patch.object(tk.Tk,'mainloop',mainloop),patch.object(installer,'launch') as launch,patch.object(installer,'shortcut') as shortcut:
-            installer_wizard.wizard(self.root/'KekeAssistant','test-key',fake_install)
+            installer_wizard.wizard(self.root/'KekeAssistant','test-key',fake_install,lambda _: {'package':{'size':1024,'expanded_size':4096}})
             launch.assert_not_called();shortcut.assert_not_called()
         self.assertEqual(len(calls),1)
         if errors:raise errors[0]

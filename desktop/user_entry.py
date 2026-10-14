@@ -17,8 +17,8 @@ SMOKE = """(() => {
  userTeamOwnedNames = new Set(Object.keys(characterData));
  const first = userTeamRecommendPlans()[0];
  const second = first && userTeamRecommendPlans("", new Set(first.memberNames))[0];
- checks.pairing = !!first && first.memberNames.length === 4 && !!second && second.memberNames.length === 4 &&
-   !first.memberNames.some(name => second.memberNames.includes(name));
+ checks.pairing = !!first && first.sourceRecord && first.memberNames.length === 4 &&
+   (!second || (second.sourceRecord && second.memberNames.length === 4 && !first.memberNames.some(name => second.memberNames.includes(name))));
  checks.templates = teamTemplateKnowledge.teams.length >= 27;
  userTeamOwnedNames = savedOwned;
  for (const route of ['characters','arc-drives','cassettes','drive-blocks','inventory','vision']) {
