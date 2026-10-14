@@ -51,7 +51,7 @@ def main():
         report=Path(sys.argv[sys.argv.index('--startup-check')+1]).resolve()
         if report.parent!=APP_DATA.resolve() or not report.name.startswith('startup-'):
             raise ValueError('启动检查返回路径无效')
-        result=check_window(lambda progress: startup_check(info['version'],APP_DATA,info['public_key'],root,progress))
+        result=check_window(lambda progress: startup_check(info['version'],APP_DATA,info['public_key'],root,progress,current_revision=info.get('revision',0)))
         if result is not None:
             if 'config' in result: result['config']=str(result['config'])
             atomic_json(report,result)

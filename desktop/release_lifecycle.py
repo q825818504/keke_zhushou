@@ -71,8 +71,12 @@ def release_status(public_root, app_data):
     except (OSError,ValueError):return {'version':None,'notes':'','show':False}
     try:seen=json.loads((Path(app_data)/'release-seen.json').read_text(encoding='utf-8'))['version']
     except (OSError,ValueError,KeyError):seen=None
-    return {**notes,'show':seen!=notes['version']}
+    try:seen_revision=json.loads((Path(app_data)/'release-seen.json').read_text(encoding='utf-8')).get('revision',0)
+    except (OSError,ValueError):seen_revision=0
+    try:history=json.loads((Path(public_root)/'release-history.json').read_text(encoding='utf-8'))
+    except (OSError,ValueError):history=[{'version':notes['version'],'notes':notes['notes']}]
+    return {**notes,'history':history,'show':seen!=notes['version'] or seen_revision!=notes.get('revision',0)}
 
 def acknowledge(public_root, app_data):
     notes=release_status(public_root,app_data)
-    if notes['version']:atomic_json(Path(app_data)/'release-seen.json',{'version':notes['version']})
+    if notes['version']:atomic_json(Path(app_data)/'release-seen.json',{'version':notes['version'],'revision':notes.get('revision',0)})

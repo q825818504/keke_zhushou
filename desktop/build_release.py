@@ -65,9 +65,11 @@ def prepare_prerequisites(root,output):
     return result
 
 
-def prepare(root=ROOT, config_only=False):
+def prepare(root=ROOT, config_only=False,patch_release=False):
     root=Path(root).resolve(); state=json.loads((root/'desktop/release-state.json').read_text(encoding='utf-8'))
-    app_version=candidate_version(state)
+    app_version=state['last_published'] if patch_release else candidate_version(state)
+    if patch_release and (config_only or not app_version):raise ValueError('补丁发行需要已有正式版本')
+    app_revision=state.get('app_revision',0)+1 if patch_release else 0
     notes=None
     if not config_only:
         notes_file=root/'desktop/releases'/('v'+app_version+'.md')
@@ -78,7 +80,7 @@ def prepare(root=ROOT, config_only=False):
             raise ValueError('发行前必须提供独立用户升级说明：'+str(user_notes))
         notes=user_notes.read_text(encoding='utf-8').strip()
     signing_identity(root/'desktop/update-trust.json')
-    output=root/'dist/windows/releases'/('config' if config_only else 'v'+app_version)
+    output=root/'dist/windows/releases'/('config' if config_only else 'v'+app_version+(f'-r{app_revision}' if patch_release else ''))
     output.mkdir(parents=True,exist_ok=True)
     # Versioned output is retained on retry; the generated config directory is reset by publishing separately.
     config_output=output/'config'; config=export_config(root,config_output)
@@ -86,7 +88,8 @@ def prepare(root=ROOT, config_only=False):
     if config_only and state.get('config_hash')==digest(archive):
         return None
     manifest={'schema':1,'config_hash':digest(archive),'config_package':split_archive(archive,output),
-              'config_revision':state['config_revision']+1,'version':app_version}
+              'config_revision':state['config_revision'] if patch_release else state['config_revision']+1,'version':app_version,'app_revision':app_revision,'patch_release':patch_release}
+    if patch_release and manifest['config_hash']!=state.get('config_hash'):raise ValueError('同版本补丁不得隐式修改公共配置，请先单独发布配置')
     if not config_only:
         manifest['release_notes']=notes
         from build import build
@@ -103,7 +106,7 @@ def prepare(root=ROOT, config_only=False):
         published_installer=installer.with_name(installer.stem+'-'+checksum[:12]+'.exe')
         installer.replace(published_installer)
         manifest['installer']={'name':published_installer.name,'size':published_installer.stat().st_size,'sha256':checksum}
-        build('user',output/'program',layout='directory',app_version=app_version)
+        build('user',output/'program',layout='directory',app_version=app_version,app_revision=app_revision)
         import shutil
         shutil.copyfile(published_installer,output/'program/KekeAssistantApp/_internal/update-helper.exe')
         archive=output/'program.zip'; archive_tree(output/'program/KekeAssistantApp',archive)
@@ -116,5 +119,5 @@ def prepare(root=ROOT, config_only=False):
 
 
 if __name__=='__main__':
-    parser=argparse.ArgumentParser(); parser.add_argument('--config-only',action='store_true')
-    prepare(config_only=parser.parse_args().config_only)
+    parser=argparse.ArgumentParser(); parser.add_argument('--config-only',action='store_true');parser.add_argument('--patch',action='store_true')
+    args=parser.parse_args();prepare(config_only=args.config_only,patch_release=args.patch)

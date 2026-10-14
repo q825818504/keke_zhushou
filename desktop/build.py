@@ -15,7 +15,7 @@ def make_icon(directory):
     return icon
 
 
-def build(target, dist=None, layout='onefile', app_version='1.0'):
+def build(target, dist=None, layout='onefile', app_version='1.0',app_revision=0):
     dist = Path(dist or ROOT / "dist/windows").resolve()
     if not dist.is_relative_to((ROOT / "dist").resolve()):
         raise ValueError("Desktop output must stay within this project's dist directory")
@@ -26,14 +26,14 @@ def build(target, dist=None, layout='onefile', app_version='1.0'):
         from native.components import ComponentManager
         manager=ComponentManager(ROOT/'build/native-build-check')
         manager.component_root()
-        public = prepare_public(app_version)
+        public = prepare_public(app_version,app_revision)
         data = [str(public) + ";public", str(ROOT / "desktop/inventory/component-identity.json") + ";inventory", str(ROOT / "desktop/vision/resources") + ";vision/resources", str(ROOT / "desktop/vision/upstream/LICENSE") + ";vision/upstream", str(ROOT / "desktop/vision/upstream/NOTICE.md") + ";vision/upstream", str(ROOT / "desktop/vision/upstream/source-manifest.json") + ";vision/upstream"]
         data += [str(ROOT / 'build/native-components') + ';native-components', str(ROOT / 'desktop/native/component-identity.json') + ';native', str(ROOT / 'desktop/native/NOTICE.md') + ';native']
         data += [str(ROOT/'desktop/assets')+';assets']
         name = "KekeAssistant"
         if layout=='directory':
             trust=json.loads((ROOT/'desktop/update-trust.json').read_text())
-            (directory/'release-info.json').write_text(json.dumps({'version':app_version,'public_key':trust['public_key']}),encoding='utf-8')
+            (directory/'release-info.json').write_text(json.dumps({'version':app_version,'revision':app_revision,'public_key':trust['public_key']}),encoding='utf-8')
             data += [str(directory/'release-info.json')+';.']
             name='KekeAssistantApp'
     else:

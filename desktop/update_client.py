@@ -53,19 +53,24 @@ def refresh_config(app_data, public_key, fallback, progress, fetch=fetch_envelop
         return selected, '配置更新未完成，使用本地配置。'+str(error)
 
 
-def startup_check(current_version, app_data, public_key, fallback, progress, fetch=fetch_envelope):
+def startup_check(current_version, app_data, public_key, fallback, progress, fetch=fetch_envelope,current_revision=0):
     progress('正在检查程序版本…')
     manifest=fetch(CHANNEL+'app-latest.json',public_key)
     if manifest.get('kind')!='app' or manifest.get('platform')!='windows-x64':
         raise ValueError('程序更新清单不匹配')
     remote=version(manifest.get('version')); local=version(current_version)
+    revision=manifest.get('revision',0)
+    if type(revision) is not int or revision<0:raise ValueError('发行修订号无效')
     ledger=Path(app_data)/'highest-version.json'
     if ledger.exists() and remote<version(json.loads(ledger.read_text())['version']):
         raise ValueError('拒绝回退到已发现版本之前的程序')
-    atomic_json(ledger,{'version':manifest['version']})
-    if local<remote:
+    if ledger.exists():
+        highest=json.loads(ledger.read_text())
+        if remote==version(highest['version']) and revision<highest.get('revision',0):raise ValueError('拒绝回退到旧的发行修订')
+    atomic_json(ledger,{'version':manifest['version'],'revision':revision})
+    if local<remote or (local==remote and current_revision<revision):
         return {'update':manifest}
-    if local>remote:
+    if local>remote or (local==remote and current_revision>revision):
         raise ValueError('本机程序版本不属于当前正式发行，请重新安装官方最新版')
     folder,warning=refresh_config(app_data,public_key,fallback,progress,fetch)
     return {'config':folder,'warning':warning}

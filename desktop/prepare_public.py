@@ -12,7 +12,7 @@ ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = ROOT / "build" / "desktop" / "public"
 
 
-def prepare_public(app_version='1.0') -> Path:
+def prepare_public(app_version='1.0',app_revision=0) -> Path:
     if not OUTPUT.resolve().is_relative_to((ROOT / "build/desktop").resolve()):
         raise RuntimeError("Generated public output escaped build/desktop")
     OUTPUT.mkdir(parents=True, exist_ok=True)
@@ -45,7 +45,14 @@ def prepare_public(app_version='1.0') -> Path:
     (OUTPUT / "desktop.js").write_bytes((ROOT / "desktop/user_chrome.js").read_bytes())
     shutil.copyfile(ROOT/'desktop/assets/mint-avatar.png',OUTPUT/'mint-avatar.png')
     notes=ROOT/'desktop/releases/user'/('v'+app_version+'.md')
-    (OUTPUT/'release-notes.json').write_text(json.dumps({'version':app_version,'notes':notes.read_text(encoding='utf-8') if notes.exists() else '当前版本暂无升级说明。'},ensure_ascii=False),encoding='utf-8')
+    history=[]
+    from update_protocol import version
+    for file in (ROOT/'desktop/releases/user').glob('v*.md'):
+        name=file.stem[1:]
+        if version(name)<=version(app_version):history.append({'version':name,'notes':file.read_text(encoding='utf-8')})
+    history.sort(key=lambda row:version(row['version']),reverse=True)
+    (OUTPUT/'release-history.json').write_text(json.dumps(history,ensure_ascii=False),encoding='utf-8')
+    (OUTPUT/'release-notes.json').write_text(json.dumps({'version':app_version,'revision':app_revision,'notes':notes.read_text(encoding='utf-8') if notes.exists() else '当前版本暂无升级说明。'},ensure_ascii=False),encoding='utf-8')
     (OUTPUT / "recommendations.js").write_text(
         'window.CharacterRecommendations = { createKnowledge(original) {'
         'const recommended = JSON.parse(JSON.stringify(original.recommended || {}));'

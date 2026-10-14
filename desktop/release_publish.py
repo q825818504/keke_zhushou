@@ -154,18 +154,22 @@ def publish(root,output):
                     else:remote_config=remote
         already=bool(remote_config and remote_config['revision']==artifacts['config_revision'] and remote_config['package']['sha256']==artifacts['config_package']['sha256'])
         if 'app_package' in artifacts:
-            already=already and bool(remote_app and remote_app['version']==artifacts['version'] and remote_app['package']['sha256']==artifacts['app_package']['sha256'])
+            already=already and bool(remote_app and remote_app['version']==artifacts['version'] and remote_app.get('revision',0)==artifacts.get('app_revision',0) and remote_app['package']['sha256']==artifacts['app_package']['sha256'])
         if already:
             for name,expected in (('config',remote_config),('app',remote_app)):
                 if expected:
                     actual=fetch_envelope(CHANNEL+name+'-latest.json',public_key)
                     if actual['package']['sha256']!=expected['package']['sha256']:raise RuntimeError('线上清单尚未可用，请重试')
-            if 'app_package' in artifacts:state['last_published']=artifacts['version']
+            if 'app_package' in artifacts:state['last_published']=artifacts['version'];state['app_revision']=artifacts.get('app_revision',0)
             state['config_revision']=artifacts['config_revision'];state['config_hash']=artifacts['config_package']['sha256'];atomic_json(root/'desktop/release-state.json',state)
             return {'ok':True,'message':'已确认先前完成的发行，恢复本地发行记录'}
         if remote_app and state['last_published']!=remote_app['version']:
             raise RuntimeError('远端正式版本已变化，请先同步发行记录')
-        if remote_config and artifacts['config_revision']<=remote_config['revision']:
+        patch_release=artifacts.get('patch_release',False)
+        if patch_release:
+            if not remote_app or artifacts['version']!=remote_app['version'] or artifacts.get('app_revision',0)<=remote_app.get('revision',0):raise RuntimeError('补丁版本或修订号不匹配')
+            if not remote_config or artifacts['config_revision']!=remote_config['revision'] or artifacts['config_package']['sha256']!=remote_config['package']['sha256']:raise RuntimeError('补丁必须复用当前公共配置')
+        if remote_config and artifacts['config_revision']<=remote_config['revision'] and not patch_release:
             raise RuntimeError('配置发行编号已使用，请同步发行记录后重新准备')
         (store/'README.md').write_text('# 可可助手更新服务\n\n只发布安装器、程序更新包、公共配置和签名清单；源码维护在GitHub。\n',encoding='utf-8')
         tracked=git(store,'ls-files').splitlines()
@@ -180,6 +184,8 @@ def publish(root,output):
         release=next((r for r in releases if r['tag_name']==tag),None)
         if release is None:
             release=api.request('POST','/releases',json={'tag_name':tag,'target_commitish':'main','name':'可可助手 '+tag,'body':artifacts.get('release_notes') or '公共配置更新。','prerelease':False})
+        elif patch_release:
+            api.request('PATCH',f'/releases/{release["id"]}',json={'tag_name':tag,'name':release['name'],'body':artifacts['release_notes'],'prerelease':False})
         # Existing valid attachments are reused on retries; never update latest before anonymous checks pass.
         detail=api.request('GET',f'/releases/{release["id"]}')
         raw_assets=detail.get('assets',[])
@@ -207,12 +213,13 @@ def publish(root,output):
         atomic_json(store/'channels/config-latest.json',signed(config,key))
         atomic_json(store/f'metadata/config/r{config["revision"]}.json',signed(config,key))
         if 'app_package' in artifacts:
-            app={**base,'kind':'app','platform':'windows-x64','version':artifacts['version'],
+            app={**base,'kind':'app','platform':'windows-x64','version':artifacts['version'],'revision':artifacts.get('app_revision',0),
                  'release_notes':artifacts.get('release_notes',''),
                  'package':package(artifacts['app_package']),'installer':{**artifacts['installer'],'url':urls[artifacts['installer']['name']]},
                  'prerequisites':{name:package(meta) for name,meta in artifacts.get('prerequisites',{}).items()}}
             atomic_json(store/'channels/app-latest.json',signed(app,key))
             atomic_json(store/f'metadata/app/v{app["version"]}.json',signed(app,key))
+            if app.get('revision',0):atomic_json(store/f'metadata/app/v{app["version"]}-r{app["revision"]}.json',signed(app,key))
         git(store,'add','--','README.md','channels','metadata')
         if git(store,'diff','--cached','--name-only'):
             git(store,'-c','user.name=Koko Assistant Publisher','-c','user.email=release@koko.local','commit','-m','Publish '+tag)
@@ -224,7 +231,7 @@ def publish(root,output):
         configuration=fetch_envelope(CHANNEL+'config-latest.json',base64.b64encode(key.public_key().public_bytes_raw()).decode())
         if configuration['revision']!=config['revision'] or configuration['package']['sha256']!=artifacts['config_package']['sha256']:
             raise RuntimeError('远端配置清单验证失败，发行记录未更新')
-        if 'app_package' in artifacts: state['last_published']=artifacts['version']
+        if 'app_package' in artifacts: state['last_published']=artifacts['version'];state['app_revision']=artifacts.get('app_revision',0)
         state['config_revision']=config['revision'];state['config_hash']=artifacts['config_package']['sha256']; atomic_json(root/'desktop/release-state.json',state)
         return {'ok':True,'message':'已发布 '+tag+'，所有下载内容已通过匿名校验'}
     finally: LOCK.release()

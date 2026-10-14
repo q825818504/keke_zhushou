@@ -102,7 +102,7 @@ def install(root, public_key, progress):
     progress('正在解压并校验安装内容…')
     safe_extract(archive,staging)
     info=json.loads((staging/'_internal/release-info.json').read_text())
-    if info['version']!=manifest['version'] or info['public_key']!=public_key or not (staging/'KekeAssistantApp.exe').is_file():
+    if info['version']!=manifest['version'] or info.get('revision',0)!=manifest.get('revision',0) or info['public_key']!=public_key or not (staging/'KekeAssistantApp.exe').is_file():
         raise ValueError('安装内容版本或发行身份不一致')
     validated_config(staging/'_internal/public')
     if folder.exists():
@@ -112,7 +112,7 @@ def install(root, public_key, progress):
     launcher=root/'KekeAssistant.exe'
     if not launcher.exists(): shutil.copyfile(sys.executable,launcher)
     atomic_json(root/'installation.json',{'product':'koko-assistant','root':str(root)})
-    atomic_json(root/'active-version.json',{'directory':str(folder.relative_to(root)).replace('\\','/'),'version':manifest['version']})
+    atomic_json(root/'active-version.json',{'directory':str(folder.relative_to(root)).replace('\\','/'),'version':manifest['version'],'revision':manifest.get('revision',0)})
     archive.unlink(missing_ok=True)
     if os.name=='nt':
         import winreg

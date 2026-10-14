@@ -35,23 +35,36 @@ window.addEventListener('DOMContentLoaded', () => {
     let dialog=document.querySelector('#releaseNotesDialog');
     if(!dialog){
       dialog=document.createElement('dialog');dialog.id='releaseNotesDialog';
-      dialog.innerHTML='<div class="release-heading"><img src="mint-avatar.png" alt="薄荷"><div><h2>更新内容</h2><p class="release-version"></p></div></div><div class="release-copy"></div><p role="status"></p><button type="button">开始使用</button>';
+      dialog.innerHTML='<div class="release-heading"><img src="mint-avatar.png" alt="薄荷"><div><h2>本次更新内容</h2><p class="release-version"></p></div></div><label class="release-history-control" hidden>查看版本<select aria-label="查看更新版本"></select></label><div class="release-copy"></div><p role="status"></p><button type="button">开始使用</button>';
       document.body.append(dialog);
       dialog.querySelector('button').addEventListener('click',async()=>{
         const button=dialog.querySelector('button');button.disabled=true;
-        try{await releaseRequest('acknowledge');dialog.close();}
+        try{if(dialog.dataset.automatic==='true')await releaseRequest('acknowledge');dialog.close();}
         catch(error){dialog.querySelector('[role=status]').textContent=error.message;}
         finally{button.disabled=false;}
       });
       dialog.addEventListener('cancel',event=>{event.preventDefault();dialog.querySelector('button').click();});
     }
-    dialog.querySelector('.release-version').textContent='已更新至 v'+data.version;
-    const copy=dialog.querySelector('.release-copy');copy.replaceChildren();
-    for(const line of data.notes.split('\n')){
-      if(!line.trim() || line.startsWith('# '))continue;
-      const element=document.createElement(line.startsWith('## ')?'h3':'p');
-      element.textContent=line.replace(/^## |^- /,'');copy.append(element);
+    dialog.dataset.automatic=String(!force);
+    dialog.querySelector('h2').textContent=force?'历次更新内容':'本次更新内容';
+    dialog.querySelector('button').textContent=force?'关闭':'开始使用';
+    dialog.querySelector('[role=status]').textContent='';
+    dialog.querySelector('.release-history-control').hidden=!force;
+    const history=force && data.history?.length?data.history:[data];
+    const selector=dialog.querySelector('select');selector.replaceChildren();
+    for(const entry of history){const option=document.createElement('option');option.value=entry.version;option.textContent='v'+entry.version;selector.append(option);}
+    selector.value=data.version;
+    function render(entry){
+      dialog.querySelector('.release-version').textContent=force?'v'+entry.version+' 更新说明':'已更新至 v'+data.version;
+      const copy=dialog.querySelector('.release-copy');copy.replaceChildren();
+      for(const line of entry.notes.split('\n')){
+        if(!line.trim() || line.startsWith('# '))continue;
+        const element=document.createElement(line.startsWith('## ')?'h3':'p');
+        element.textContent=line.replace(/^## |^- /,'');copy.append(element);
+      }
     }
+    selector.onchange=()=>render(history.find(entry=>entry.version===selector.value) || data);
+    render(data);
     if(!dialog.open)dialog.showModal();
   }
   document.querySelector('#releaseNotesButton')?.addEventListener('click',()=>showRelease(true).catch(()=>{}));
