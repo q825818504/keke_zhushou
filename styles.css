@@ -1430,9 +1430,21 @@ body.user-mode .breadcrumb span::after { content: "可可助手"; font-size: 13p
 .guide-library { margin-top:1.2rem; }
 .guide-library-tools { max-width:65%; }
 .guide-library-tools select { width:auto; }
+.guide-bulk-tools, .guide-bulk-selection { display:flex; align-items:center; gap:.6rem; }
+.guide-bulk-tools { justify-content:space-between; flex-wrap:wrap; margin-top:1rem; padding:.75rem .85rem; background:#faf9fd; border:1px solid #eeedf4; border-radius:12px; }
+.guide-bulk-selection { flex-wrap:wrap; }
+.guide-bulk-selection > span { color:#50477a; font-size:.82rem; font-weight:700; }
+.guide-bulk-selection > small { color:#85818f; font-size:.72rem; }
+.guide-bulk-tools .ghost-button { padding:.45rem .6rem; font-size:.78rem; }
+.guide-bulk-delete { padding:.55rem .8rem; color:#fff; background:#b44650; border:0; border-radius:9px; cursor:pointer; font-size:.8rem; font-weight:650; }
+.guide-bulk-delete:hover:not(:disabled) { background:#963640; }
+.guide-bulk-delete:disabled { color:#8b8791; background:#e8e7eb; cursor:not-allowed; }
 .guide-list { display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:1rem; margin-top:1.2rem; }
 .guide-saved-card { border:1px solid #e8e6ef; border-radius:16px; overflow:hidden; }
 .guide-saved-card.is-active { border-color:#9b8ade; }
+.guide-saved-card.is-bulk-selected { border-color:#a44650; box-shadow:0 0 0 1px #a4465020; }
+.guide-card-select { display:flex; align-items:center; gap:.4rem; padding:.7rem 1rem 0; color:#77717f; font-size:.72rem; cursor:pointer; }
+.guide-card-select input { accent-color:#6955d7; }
 .guide-saved-open { display:grid; gap:.6rem; background:#fff; border:0; width:100%; text-align:left; padding:1rem; cursor:pointer; }
 .guide-saved-open small, .guide-saved-open > span { color:#827b8d; font-size:.75rem; }
 .guide-saved-avatars { display:flex; gap:.5rem; }
@@ -1470,7 +1482,7 @@ body.user-mode .breadcrumb span::after { content: "可可助手"; font-size: 13p
 .guide-duplicate-actions { position:sticky; bottom:0; display:flex; justify-content:flex-end; gap:.65rem; padding:1rem 0 0; background:rgba(255,255,255,.97); border-top:1px solid #eeeef3; }
 #guideDuplicateError:empty { display:none; }
 @media(max-width:1050px) { .guide-workspace { grid-template-columns:1fr; } .guide-roster { grid-template-columns:repeat(auto-fill,minmax(90px,1fr)); max-height:240px; } }
-@media(max-width:640px) { .guide-manager { padding:1rem; } .guide-board { grid-template-columns:repeat(2,minmax(0,1fr)); } .guide-editor,.guide-roster-panel,.guide-library { padding:1rem; } .guide-library .guide-section-head,.guide-library-tools,.guide-save-bar { flex-wrap:wrap; } .guide-library-tools { max-width:100%; width:100%; } .guide-manager input,.guide-manager textarea,.guide-manager select { font-size:16px!important; } }
+@media(max-width:640px) { .guide-manager { padding:1rem; } .guide-board { grid-template-columns:repeat(2,minmax(0,1fr)); } .guide-editor,.guide-roster-panel,.guide-library { padding:1rem; } .guide-library .guide-section-head,.guide-library-tools,.guide-save-bar { flex-wrap:wrap; } .guide-library-tools { max-width:100%; width:100%; } .guide-bulk-tools { align-items:flex-start; } .guide-bulk-selection { width:100%; } .guide-bulk-delete { width:100%; } .guide-manager input,.guide-manager textarea,.guide-manager select { font-size:16px!important; } }
 @media(max-width:640px) { .guide-duplicate-dialog { width:calc(100vw - 1rem); max-height:92vh; border-radius:20px; } .guide-duplicate-pair { grid-template-columns:minmax(0,1fr); } .guide-duplicate-vs { width:30px; height:30px; transform:rotate(90deg); } .guide-duplicate-actions { display:grid; grid-template-columns:1fr 1fr; } .guide-duplicate-actions button { justify-content:center; } }
 
 .guide-manager .ghost-button { display:inline-flex; }

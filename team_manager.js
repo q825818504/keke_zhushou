@@ -48,6 +48,23 @@
       if (!all().some(t => t.id === id)) throw Error("阵容不存在");
       commit(edits, [...new Set([...removed, id])]);
     },
+    removeMany(ids) {
+      const uniqueIds = [...new Set(ids)];
+      const records = all();
+      if (!uniqueIds.length || uniqueIds.some(id => !records.some(team => team.id === id))) throw Error("所选阵容已变化，请刷新后重试");
+      commit(edits, [...new Set([...removed, ...uniqueIds])]);
+      return uniqueIds.length;
+    },
+    restoreMany(teams) {
+      if (!Array.isArray(teams) || !teams.length) throw Error("没有可撤销的阵容");
+      const restored = teams.map(team => copy(validate(copy(team))));
+      const ids = new Set(restored.map(team => team.id));
+      if (ids.size !== restored.length) throw Error("撤销列表包含重复阵容");
+      const nextEdits = { ...edits };
+      restored.forEach(team => { nextEdits[team.id] = team; });
+      commit(nextEdits, removed.filter(id => !ids.has(id)));
+      return restored.length;
+    },
     overrides() { return { schema_version: "1.0.0", edits: copy(edits), removed: [...removed] }; },
     hasLegacyEdits() { return hasLegacyEdits; },
     clearLegacy() { localStorage.removeItem(key); hasLegacyEdits = false; },
@@ -71,6 +88,7 @@ let guideSearch = "";
 let guideFilter = "all";
 let guideRosterSearch = "";
 let guideUndo = null;
+let guideSelected = new Set();
 let guidePendingDuplicateDraft = null;
 
 function guideBlank() {
@@ -188,16 +206,28 @@ function renderGuideRoster() {
 }
 function renderGuideList() {
   const records = window.teamGuideStore.all();
+  const recordIds = new Set(records.map(team => team.id));
+  guideSelected = new Set([...guideSelected].filter(id => recordIds.has(id)));
   const visible = records.filter(t => (guideFilter === "all" || (guideFilter === "active" ? t.editorial?.active !== false : t.editorial?.active === false)) &&
     [t.source_archetype, ...t.member_character_ids.map(id => guideCharacter(id)?.name || ""), t.editorial?.notes].join(" ").toLowerCase().includes(guideSearch.toLowerCase()));
   $("#guideListCount").textContent = visible.length + " / " + records.length + " 套";
-  $("#guideList").innerHTML = visible.map(t => '<article class="guide-saved-card' + (t.id === guideDraft?.id ? " is-active" : "") + '"><button type="button" class="guide-saved-open" data-guide-edit="' + escapeHtml(t.id) + '"><div class="guide-saved-avatars">' + t.member_character_ids.map(id => '<span>' + guideAvatar(id) + '</span>').join("") + '</div><b>' + escapeHtml(t.source_archetype) + '</b><small>' + escapeHtml(t.member_character_ids.map(id => guideCharacter(id)?.name || id).join(" · ")) + '</small><span>' + (t.editorial?.active === false ? "已停用" : "已纳入攻略") + '</span></button><div class="guide-card-tools"><button type="button" data-guide-copy="' + escapeHtml(t.id) + '">复制</button><button type="button" data-guide-toggle="' + escapeHtml(t.id) + '">' + (t.editorial?.active === false ? "启用" : "停用") + '</button><button type="button" data-guide-delete="' + escapeHtml(t.id) + '">删除</button></div></article>').join("") || '<p class="guide-empty">暂无匹配阵容。创建一套，或调整筛选。</p>';
+  $("#guideList").innerHTML = visible.map(t => '<article class="guide-saved-card' + (t.id === guideDraft?.id ? " is-active" : "") + (guideSelected.has(t.id) ? " is-bulk-selected" : "") + '"><label class="guide-card-select"><input type="checkbox" data-guide-select-id="' + escapeHtml(t.id) + '" aria-label="选择阵容 ' + escapeHtml(t.source_archetype) + '"' + (guideSelected.has(t.id) ? " checked" : "") + '><span>选择</span></label><button type="button" class="guide-saved-open" data-guide-edit="' + escapeHtml(t.id) + '"><div class="guide-saved-avatars">' + t.member_character_ids.map(id => '<span>' + guideAvatar(id) + '</span>').join("") + '</div><b>' + escapeHtml(t.source_archetype) + '</b><small>' + escapeHtml(t.member_character_ids.map(id => guideCharacter(id)?.name || id).join(" · ")) + '</small><span>' + (t.editorial?.active === false ? "已停用" : "已纳入攻略") + '</span></button><div class="guide-card-tools"><button type="button" data-guide-copy="' + escapeHtml(t.id) + '">复制</button><button type="button" data-guide-toggle="' + escapeHtml(t.id) + '">' + (t.editorial?.active === false ? "启用" : "停用") + '</button><button type="button" data-guide-delete="' + escapeHtml(t.id) + '">删除</button></div></article>').join("") || '<p class="guide-empty">暂无匹配阵容。创建一套，或调整筛选。</p>';
+  updateGuideBulkControls();
+}
+function updateGuideBulkControls() {
+  const count = $("#guideSelectedCount");
+  const remove = $("[data-guide-delete-selected]");
+  if (count) count.textContent = "已选 " + guideSelected.size + " 套";
+  if (remove) {
+    remove.disabled = guideSelected.size === 0;
+    remove.textContent = guideSelected.size ? "删除所选（" + guideSelected.size + "）" : "删除所选";
+  }
 }
 function renderGuideManager() {
   const root = $("#guideManagerView");
   root.innerHTML = '<div class="guide-heading"><div><span class="user-section-kicker">阵容工作台</span><h1>攻略阵容</h1><p>把角色拖到队伍里，让你的攻略成为配队依据。</p></div><div class="guide-actions"><button type="button" class="ghost-button" data-guide-export>导出阵容</button><label class="ghost-button guide-import">导入 JSON<input id="guideImport" type="file" accept=".json,application/json"></label><button type="button" class="primary-button" data-guide-new>＋ 新建阵容</button></div></div>' +
     '<div class="guide-workspace"><section class="guide-editor user-surface"><div class="guide-section-head"><h2>阵容编辑</h2><span id="guideDraftStatus" role="status"></span></div><p class="guide-help">拖入角色填充四个位置；拖动队内角色可交换位置。也可先点击位置，再点击角色。</p><div class="guide-board" id="guideBoard"></div><form id="guideForm"><label>阵容名称<input name="title" maxlength="80" required placeholder="例如：真红 · 盈蓄队" value="' + escapeHtml(guideDraft.source_archetype) + '"></label><label>攻略说明<textarea name="notes" maxlength="3000" rows="4" placeholder="适用场景、出场顺序、关键养成要求…">' + escapeHtml(guideDraft.editorial?.notes || "") + '</textarea></label><label class="guide-active-label"><input type="checkbox" name="active"' + (guideDraft.editorial?.active !== false ? " checked" : "") + '>启用后纳入用户端攻略阵容</label><div class="guide-save-bar"><small id="guideStorageStatus">保存后写入项目资料；可在顶栏同步 GitHub。</small><button class="primary-button" type="submit">保存阵容</button></div><p id="guideError" class="guide-error" role="alert"></p></form></section><aside class="guide-roster-panel user-surface"><div class="guide-section-head"><h2>角色库</h2><span>' + Object.keys(characterData).length + ' 位</span></div><input class="guide-search" id="guideRosterSearch" type="search" placeholder="搜索角色" value="' + escapeHtml(guideRosterSearch) + '" aria-label="搜索角色"><div class="guide-roster" id="guideRoster"></div></aside></div>' +
-    '<section class="guide-library user-surface"><div class="guide-section-head"><div><h2>已有攻略阵容</h2><span id="guideListCount"></span></div><div class="guide-library-tools"><input class="guide-search" id="guideSearch" type="search" placeholder="搜索名称、角色或攻略" aria-label="搜索阵容" value="' + escapeHtml(guideSearch) + '"><select id="guideFilter" aria-label="筛选阵容状态"><option value="all">全部状态</option><option value="active">已启用</option><option value="inactive">已停用</option></select><button type="button" data-guide-undo' + (!guideUndo ? " hidden" : "") + '>撤销删除</button></div></div><div class="guide-list" id="guideList"></div></section>' +
+    '<section class="guide-library user-surface"><div class="guide-section-head"><div><h2>已有攻略阵容</h2><span id="guideListCount"></span></div><div class="guide-library-tools"><input class="guide-search" id="guideSearch" type="search" placeholder="搜索名称、角色或攻略" aria-label="搜索阵容" value="' + escapeHtml(guideSearch) + '"><select id="guideFilter" aria-label="筛选阵容状态"><option value="all">全部状态</option><option value="active">已启用</option><option value="inactive">已停用</option></select><button type="button" data-guide-undo' + (!guideUndo ? " hidden" : "") + '>撤销删除</button></div></div><div class="guide-bulk-tools"><div class="guide-bulk-selection"><span id="guideSelectedCount" role="status">已选 0 套</span><button type="button" class="ghost-button" data-guide-select-visible>全选当前结果</button><button type="button" class="ghost-button" data-guide-clear-selection>清空选择</button><small>切换搜索或筛选时，已选阵容会保留。</small></div><button type="button" class="guide-bulk-delete" data-guide-delete-selected disabled>删除所选</button></div><div class="guide-list" id="guideList"></div></section>' +
     '<dialog id="guideDuplicateDialog" class="guide-duplicate-dialog" aria-labelledby="guideDuplicateTitle" aria-describedby="guideDuplicateDescription"><div class="guide-duplicate-shell"><header class="guide-duplicate-header"><span class="user-section-kicker">保存前核对</span><h2 id="guideDuplicateTitle">已有重复阵容</h2><p id="guideDuplicateDescription"></p></header><div class="guide-duplicate-comparisons" id="guideDuplicateComparisons"></div><p id="guideDuplicateError" class="guide-error" role="alert"></p><footer class="guide-duplicate-actions"><button type="button" class="ghost-button" data-guide-duplicate-cancel>返回修改</button><button type="button" class="primary-button" data-guide-duplicate-save>仍要保存</button></footer></div></dialog>';
   $("#guideFilter").value = guideFilter;
   const storageStatus = $("#guideStorageStatus");
@@ -224,6 +254,7 @@ function guidePlace(id, slot) {
 function bindGuideManager() {
   const root = $("#guideManagerView");
   root.addEventListener("input", event => {
+    if (event.target.matches("[data-guide-select-id]")) return;
     if (event.target.id === "guideRosterSearch") { guideRosterSearch = event.target.value.trim(); renderGuideRoster(); return; }
     if (event.target.id === "guideSearch") { guideSearch = event.target.value.trim(); renderGuideList(); return; }
     if (event.target.name === "title") guideDraft.source_archetype = event.target.value;
@@ -233,6 +264,13 @@ function bindGuideManager() {
     renderGuideBoard();
   });
   root.addEventListener("change", async event => {
+    if (event.target.matches("[data-guide-select-id]")) {
+      const id = event.target.dataset.guideSelectId;
+      if (event.target.checked) guideSelected.add(id); else guideSelected.delete(id);
+      event.target.closest(".guide-saved-card")?.classList.toggle("is-bulk-selected", event.target.checked);
+      updateGuideBulkControls();
+      return;
+    }
     if (event.target.id === "guideFilter") { guideFilter = event.target.value; renderGuideList(); }
     if (event.target.id === "guideImport") {
       const file = event.target.files?.[0];
@@ -292,6 +330,30 @@ function bindGuideManager() {
         return;
       }
       if ("guideNew" in d) { if (guideCanLeave()) guidePick(null); }
+      if ("guideSelectVisible" in d) {
+        $$("#guideList [data-guide-select-id]").forEach(input => guideSelected.add(input.dataset.guideSelectId));
+        renderGuideList();
+      }
+      if ("guideClearSelection" in d) { guideSelected.clear(); renderGuideList(); }
+      if ("guideDeleteSelected" in d) {
+        const selectedIds = [...guideSelected];
+        const selectedRecords = window.teamGuideStore.all().filter(record => guideSelected.has(record.id));
+        if (!selectedRecords.length) { guideSelected.clear(); renderGuideList(); return; }
+        const visibleIds = new Set($$("#guideList [data-guide-select-id]").map(input => input.dataset.guideSelectId));
+        const hiddenCount = selectedIds.filter(id => !visibleIds.has(id)).length;
+        const hiddenNote = hiddenCount ? "其中 " + hiddenCount + " 套不在当前搜索或筛选结果中。" : "";
+        if (!window.confirm("确定删除所选的 " + selectedRecords.length + " 套阵容吗？" + hiddenNote + "删除后可使用“撤销删除”恢复。")) return;
+        const draftWillBeDeleted = selectedRecords.some(record => record.id === guideDraft?.id);
+        if (draftWillBeDeleted && !guideCanLeave()) return;
+        window.teamGuideStore.removeMany(selectedRecords.map(record => record.id));
+        localChange = true;
+        guideUndo = selectedRecords;
+        guideSelected.clear();
+        const connected = window.KekeAdminBridge ? await window.KekeAdminBridge.ready : false;
+        if (connected) await window.KekeAdminBridge.persistTeamOverrides();
+        if (draftWillBeDeleted) guidePick(null); else renderGuideManager();
+        notify(connected ? "已删除 " + selectedRecords.length + " 套阵容并写入项目，可撤销" : "已从当前浏览器删除 " + selectedRecords.length + " 套阵容，可撤销；尚未写入项目");
+      }
       if ("guideSlot" in d) { guideSlot = Number(d.guideSlot); renderGuideBoard(); }
       if ("guideAdd" in d) guidePlace(d.guideAdd, guideSlot);
       if ("guideCore" in d) { guideDraft.source_core_character_id = guideDraft.member_character_ids[Number(d.guideCore)]; guideDirty = true; renderGuideBoard(); }
@@ -326,16 +388,18 @@ function bindGuideManager() {
         localChange = true;
         const connected = window.KekeAdminBridge ? await window.KekeAdminBridge.ready : false;
         if (connected) await window.KekeAdminBridge.persistTeamOverrides();
-        guideUndo = record;
+        guideUndo = [record];
+        guideSelected.delete(record.id);
         if (record.id === guideDraft.id) guidePick(null); else renderGuideManager();
         notify(connected ? "阵容已从用户攻略中移除，可撤销" : "阵容已从当前浏览器中移除，可撤销；尚未写入项目");
       }
       if ("guideUndo" in d && guideUndo) {
-        window.teamGuideStore.save(guideUndo);
+        const recordsToRestore = Array.isArray(guideUndo) ? guideUndo : [guideUndo];
+        window.teamGuideStore.restoreMany(recordsToRestore);
         localChange = true;
         const connected = window.KekeAdminBridge ? await window.KekeAdminBridge.ready : false;
         if (connected) await window.KekeAdminBridge.persistTeamOverrides();
-        guideUndo = null; renderGuideManager(); notify(connected ? "已恢复并写入项目" : "已在当前浏览器恢复，尚未写入项目");
+        guideUndo = null; renderGuideManager(); notify(connected ? "已恢复 " + recordsToRestore.length + " 套阵容并写入项目" : "已在当前浏览器恢复 " + recordsToRestore.length + " 套阵容，尚未写入项目");
       }
       if ("guideExport" in d) {
         const url = URL.createObjectURL(new Blob([JSON.stringify(window.teamGuideStore.export(), null, 2)], { type: "application/json" }));
