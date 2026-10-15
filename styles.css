@@ -1735,3 +1735,13 @@ body:not(.user-mode) .topbar { position:sticky; top:0; z-index:40; background:rg
 #repoReloadNote:not([hidden]) { display:inline-flex;align-items:center;padding:7px 10px;color:#344d77;background:#f1f6fc;border:1px solid #dce7f4;border-radius:9px; }
 
 .live-indicator { padding:5px 9px;color:#245d3c;background:#eff8f2;border:1px solid #d7eddf;border-radius:8px;font-size:10px; }
+
+/* Complete character nodes; long effects stay readable without truncation. */
+.user-constellation-section { margin-block: 20px; }
+.user-constellation-section > h2 { margin: 0 0 16px; font-size: 23px; }
+.user-constellation-list { list-style: none; margin: 0; padding: 0; }
+.user-constellation-list > li { display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 16px; padding: 20px 0; border-top: 1px solid #e2e3e9; }
+.user-constellation-list > li > span { color: #575b68; font-size: 12px; line-height: 1.6; }
+.user-constellation-list h3 { margin: 0 0 8px; color: #1d1d1f; font-size: 16px; }
+.user-constellation-list p { margin: 0; max-width: 75ch; white-space: pre-wrap; overflow-wrap: anywhere; color: #424650; font-size: 14px; line-height: 1.75; }
+@media (max-width: 620px) { .user-tab { min-width: 0; flex: 1; padding-inline: 12px; } .user-constellation-list > li { grid-template-columns: 1fr; gap: 6px; } }
