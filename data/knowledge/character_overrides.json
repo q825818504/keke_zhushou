@@ -3816,7 +3816,203 @@
           "description": "「月的对跖点」是S级液态类弧盘，明音凛的专属弧盘。",
           "detail_source_url": "https://wiki.mysqil.com/weapons/yuededuizhidian"
         },
-        "cassette": null
+        "cassette": {
+          "id": "jietou-quanwang",
+          "name": "街头拳王",
+          "source_url": "https://wiki.mysqil.com/cassettes/jietou-quanwang",
+          "category": "属性专属",
+          "cassette_type": "空幕卡带",
+          "element": "相",
+          "icon": "data/resources/encyclopedia/cassettes/jietou-quanwang/gold.webp",
+          "description": "街头拳王是相属性专属输出卡带，4件套提供 14% 暴击率，触发盈蓄或浸染反应后额外获得 14% 暴击率（共 28%），能快速拉满暴击。是哈索尔、翳等相属性输出角色的核心套装。",
+          "set_effects": [
+            {
+              "pieces": 2,
+              "description": "相属性异能伤害提升10%。"
+            },
+            {
+              "pieces": 4,
+              "description": "暴击率提升14%。己方编队触发「延滞」或「浸染」之后，则暴击率额外提升14%，持续20秒。"
+            }
+          ],
+          "acquisition": "兔子洞副本（相系产出关）",
+          "main_affix_pool": [
+            "攻击力（% / 固定值）",
+            "生命值（% / 固定值）",
+            "防御力（% / 固定值）",
+            "暴击率",
+            "暴击伤害",
+            "元素伤害（光/暗/灵/咒/魂/相）",
+            "倾陷强度",
+            "环合强度"
+          ],
+          "sub_affix_pool": [
+            "暴击率",
+            "暴击伤害",
+            "攻击力（%）",
+            "攻击力（固定值）",
+            "生命值（%）",
+            "生命值（固定值）",
+            "防御力（%）",
+            "防御力（固定值）",
+            "元素伤害加成",
+            "全伤害加成",
+            "倾陷强度",
+            "环合强度"
+          ],
+          "quality": [
+            {
+              "tier": "金",
+              "description": "毕业 · 数值上限最高"
+            },
+            {
+              "tier": "金",
+              "description": "约为金色 80%"
+            },
+            {
+              "tier": "蓝",
+              "description": "前期过渡"
+            }
+          ],
+          "structure": {
+            "main_affix_count": 1,
+            "sub_affix_count": 4,
+            "rerollable": null
+          },
+          "recommended_main_affixes": [
+            {
+              "name": "暴击伤害",
+              "priority": 4
+            },
+            {
+              "name": "相属性异能伤害增强",
+              "priority": 5
+            }
+          ],
+          "recommended_sub_affixes": [
+            {
+              "name": "攻击力百分比",
+              "priority": 3
+            },
+            {
+              "name": "攻击力",
+              "priority": 4
+            },
+            {
+              "name": "暴击率",
+              "priority": 5
+            },
+            {
+              "name": "暴击伤害",
+              "priority": 5
+            },
+            {
+              "name": "环合强度",
+              "priority": 4
+            },
+            {
+              "name": "通用伤害增强",
+              "priority": 4
+            }
+          ],
+          "terminal": {
+            "id": "terminal",
+            "name": "「卡带」属性",
+            "description": "每装配一个Ⅲ型驱动，使攻击力百分比增加10%",
+            "effects": [
+              "攻击力百分比 +10%"
+            ],
+            "source_type": "mysqil_page",
+            "layout": {
+              "rows": 7,
+              "columns": 7,
+              "active_slots": [
+                {
+                  "row": 1,
+                  "column": 1
+                },
+                {
+                  "row": 1,
+                  "column": 2
+                },
+                {
+                  "row": 1,
+                  "column": 3
+                },
+                {
+                  "row": 1,
+                  "column": 4
+                },
+                {
+                  "row": 2,
+                  "column": 1
+                },
+                {
+                  "row": 2,
+                  "column": 2
+                },
+                {
+                  "row": 2,
+                  "column": 3
+                },
+                {
+                  "row": 2,
+                  "column": 4
+                },
+                {
+                  "row": 3,
+                  "column": 1
+                },
+                {
+                  "row": 3,
+                  "column": 2
+                },
+                {
+                  "row": 3,
+                  "column": 4
+                },
+                {
+                  "row": 3,
+                  "column": 5
+                },
+                {
+                  "row": 4,
+                  "column": 2
+                },
+                {
+                  "row": 4,
+                  "column": 3
+                },
+                {
+                  "row": 4,
+                  "column": 4
+                },
+                {
+                  "row": 4,
+                  "column": 5
+                },
+                {
+                  "row": 5,
+                  "column": 2
+                },
+                {
+                  "row": 5,
+                  "column": 3
+                },
+                {
+                  "row": 5,
+                  "column": 4
+                },
+                {
+                  "row": 5,
+                  "column": 5
+                }
+              ],
+              "source_type": "mysqil_page"
+            }
+          },
+          "detail_source_url": "https://wiki.mysqil.com/cassettes/jietou-quanwang"
+        }
       }
     },
     "kaesi": {
