@@ -1739,6 +1739,1019 @@
         "notes": "职责：法帝娅为主要输出：生命倍率心灵输出和黯星生命汲取；安魂曲为分段第二输出；阿德勒、伊洛伊负责反应入口、技能功能或短爆发，实际贡献见强化说明。反应链：分别通过咒/暗入口建立浊燃和暗/魂入口建立黯星，让两个状态在同一目标上同时存在才触发失谐；已倾陷时的追加伤害另判定；其他可建立的链为覆纹、浊燃、黯星，需按各自状态前置与属性受益对象分别判断。强化与功能：法帝娅分摊伤害并有生命上限倍率心灵终结与追击，心灵伤害不默认视为魂属性伤害；法帝娅突破2在黯星结束时汲取生命上限，累计上限及脱战复原条件保留；安魂曲突破2仅在目标已倾陷时的失谐才追加伤害，首次削倾陷不直接算作追加伤害；阿德勒E按防御提供护盾与咒持续伤害；阿德勒突破2施加浊燃附加随机减攻/减抗/倾陷效率之一，不视为每次固定减抗；伊洛伊E提供攻击增益和治疗，突破4治疗额外提供无视防御。轮转：先完成辅助增益与黯星，法帝娅独立完成敌神者及追击，避免途中切人；第二输出安魂曲分配另一窗口，不同时争用前台。条件与取舍：默认零共鸣、不依赖专属弧盘；全库候选未按玩家持有池筛选，建议顺序不是跨角色DPS排名；通过对应角色普攻及技能积累环合值，不冒称拥有零/黑羽的E瞬环合入口；法帝娅反伤与损血阈值取决于实际受击，不故意承伤保证满循环；攻击力辅助主要服务其他攻击倍率角色，不视为提高法帝娅生命倍率心灵伤害；副覆纹可为灵/咒输出提供追加收益，不算成其他属性主C的无条件增伤；反伤条件研究：破灭体验收益依赖敌人攻击与实际伤害分摊，当前没有具体敌人和轮转输入，不作为通用启用推荐。。解锁：法帝娅相关被动按突破2/4解锁；安魂曲相关被动按突破2/4解锁；阿德勒相关被动按突破2/4解锁；伊洛伊相关被动按突破2/4解锁。依据：本次读取的角色技能全文与培养解锁、esper_cycles.json及用户规则；机制候选，未实测DPS。",
         "updated_at": "2026-10-14T20:49:47+08:00"
       }
+    },
+    "keke-gen-nanali-chuangsheng-bohe-jiuyuan-ling-nanali": {
+      "id": "keke-gen-nanali-chuangsheng-bohe-jiuyuan-ling-nanali",
+      "source_core_character_id": "nanali",
+      "member_character_ids": [
+        "nanali",
+        "ling",
+        "bohe",
+        "jiuyuan"
+      ],
+      "source_archetype": "娜娜莉 · 创生新增方案",
+      "source_order": 5,
+      "source_visibility": "local_generated",
+      "editorial": {
+        "status": "unreviewed",
+        "active": true,
+        "tags": [
+          "创生",
+          "新增阵容",
+          "按四人组成去重",
+          "机制候选",
+          "零共鸣基准"
+        ],
+        "notes": "职责与轮转：娜娜莉主驻场，先备花株和增益再开权柄，离场结束权柄；队友只占准备或独立短窗口。反应链：光/灵角色先通过自身普攻、技能积环合值并按可用援护入口生成创生株，花命中产生范围伤害；原生株与复制体分别统计。强化与功能：娜娜莉突破2每株10花、1秒发射；仅娜娜莉自己权柄驻场时才另计其突破4追加；薄荷突破2扩大花命中范围，不等于提高单花伤害或延长株寿命；九原突破2额外增株、原生株上限6，突破4花命中可触发玫约清算。新增理由：相对旧记录sfsx-nanali-01，新增薄荷，替换伊洛伊。薄荷改作短窗口范围功能位，扩大创生花爆炸覆盖；不占娜娜莉主要权柄窗口，不声明提高单目标花伤害。。条件：零共鸣，不依赖专属弧盘，相关被动按培养资料的突破条件解锁；未按持有池筛选，未实测DPS，来源顺序承接旧核心编号，不代表比旧方案更强；零E为100光环合值快速入口；无盈蓄不计零治疗；缺治疗与护盾，需实际装备和闪避保证生存。依据：当前角色技能全文、培养解锁和当前esper_cycles.json；非官方实测排名。",
+        "updated_at": "2026-10-15T21:29:51+08:00"
+      }
+    },
+    "keke-gen-nanali-chuangsheng-bohe-ling-nanali-yiluoyi": {
+      "id": "keke-gen-nanali-chuangsheng-bohe-ling-nanali-yiluoyi",
+      "source_core_character_id": "nanali",
+      "member_character_ids": [
+        "nanali",
+        "ling",
+        "bohe",
+        "yiluoyi"
+      ],
+      "source_archetype": "娜娜莉 · 创生新增方案",
+      "source_order": 6,
+      "source_visibility": "local_generated",
+      "editorial": {
+        "status": "unreviewed",
+        "active": true,
+        "tags": [
+          "创生",
+          "新增阵容",
+          "按四人组成去重",
+          "机制候选",
+          "零共鸣基准"
+        ],
+        "notes": "职责与轮转：娜娜莉主驻场，先备花株和增益再开权柄，离场结束权柄；队友只占准备或独立短窗口。反应链：光/灵角色先通过自身普攻、技能积环合值并按可用援护入口生成创生株，花命中产生范围伤害；原生株与复制体分别统计。强化与功能：娜娜莉突破2每株10花、1秒发射；仅娜娜莉自己权柄驻场时才另计其突破4追加；薄荷突破2扩大花命中范围，不等于提高单花伤害或延长株寿命；伊洛伊E攻击增益与治疗、突破4治疗附加无视防御；伊洛伊突破2在3秒后复制，复制体不占原生株上限、不再复制；20花、0.5秒间隔、单花原伤害37.5%。新增理由：相对旧记录sfsx-nanali-01，新增薄荷，替换九原。薄荷改作短窗口范围功能位，扩大创生花爆炸覆盖；不占娜娜莉主要权柄窗口，不声明提高单目标花伤害。。条件：零共鸣，不依赖专属弧盘，相关被动按培养资料的突破条件解锁；未按持有池筛选，未实测DPS，来源顺序承接旧核心编号，不代表比旧方案更强；零E为100光环合值快速入口；无盈蓄不计零治疗。依据：当前角色技能全文、培养解锁和当前esper_cycles.json；非官方实测排名。",
+        "updated_at": "2026-10-15T21:29:51+08:00"
+      }
+    },
+    "keke-gen-nanali-chuangsheng-edjia-jiuyuan-nanali-yiluoyi": {
+      "id": "keke-gen-nanali-chuangsheng-edjia-jiuyuan-nanali-yiluoyi",
+      "source_core_character_id": "nanali",
+      "member_character_ids": [
+        "nanali",
+        "edjia",
+        "jiuyuan",
+        "yiluoyi"
+      ],
+      "source_archetype": "娜娜莉 · 创生新增方案",
+      "source_order": 7,
+      "source_visibility": "local_generated",
+      "editorial": {
+        "status": "unreviewed",
+        "active": true,
+        "tags": [
+          "创生",
+          "新增阵容",
+          "按四人组成去重",
+          "机制候选",
+          "零共鸣基准"
+        ],
+        "notes": "职责与轮转：娜娜莉主驻场，先备花株和增益再开权柄，离场结束权柄；队友只占准备或独立短窗口。反应链：光/灵角色先通过自身普攻、技能积环合值并按可用援护入口生成创生株，花命中产生范围伤害；原生株与复制体分别统计。强化与功能：娜娜莉突破2每株10花、1秒发射；仅娜娜莉自己权柄驻场时才另计其突破4追加；九原突破2额外增株、原生株上限6，突破4花命中可触发玫约清算；伊洛伊E攻击增益与治疗、突破4治疗附加无视防御；伊洛伊突破2在3秒后复制，复制体不占原生株上限、不再复制；20花、0.5秒间隔、单花原伤害37.5%；埃德嘉持续技能及终结领域提供治疗；本批含埃德嘉的阵容不含相，故不计盈蓄及其供能替代。新增理由：相对旧记录sfsx-nanali-01，新增埃德嘉，替换零。将零留给另一队，以埃德嘉积光环合值并治疗；保留增株与复制。启动慢于零E，不能把光属性相同视作等价启动。。条件：零共鸣，不依赖专属弧盘，相关被动按培养资料的突破条件解锁；未按持有池筛选，未实测DPS，来源顺序承接旧核心编号，不代表比旧方案更强；没有零/黑羽E瞬环合入口，需要正常积累，启动与反应覆盖不能假定等同旧瞬环合队。依据：当前角色技能全文、培养解锁和当前esper_cycles.json；非官方实测排名。",
+        "updated_at": "2026-10-15T21:29:51+08:00"
+      }
+    },
+    "keke-gen-bohe-chuangsheng-bohe-edjia-jiuyuan-yiluoyi": {
+      "id": "keke-gen-bohe-chuangsheng-bohe-edjia-jiuyuan-yiluoyi",
+      "source_core_character_id": "bohe",
+      "member_character_ids": [
+        "bohe",
+        "edjia",
+        "jiuyuan",
+        "yiluoyi"
+      ],
+      "source_archetype": "薄荷 · 创生新增方案",
+      "source_order": 8,
+      "source_visibility": "local_generated",
+      "editorial": {
+        "status": "unreviewed",
+        "active": true,
+        "tags": [
+          "创生",
+          "新增阵容",
+          "按四人组成去重",
+          "机制候选",
+          "零共鸣基准",
+          "A级主C"
+        ],
+        "notes": "职责与轮转：薄荷主驻场使用灵属性范围普攻与终结技，长按分支保留闪避耐力。反应链：光/灵角色先通过自身普攻、技能积环合值并按可用援护入口生成创生株，花命中产生范围伤害；原生株与复制体分别统计。强化与功能：薄荷突破2扩大花命中范围，不等于提高单花伤害或延长株寿命；九原突破2额外增株、原生株上限6，突破4花命中可触发玫约清算；伊洛伊E攻击增益与治疗、突破4治疗附加无视防御；伊洛伊突破2在3秒后复制，复制体不占原生株上限、不再复制；20花、0.5秒间隔、单花原伤害37.5%；埃德嘉持续技能及终结领域提供治疗；本批含埃德嘉的阵容不含相，故不计盈蓄及其供能替代。新增理由：相对旧记录keke-gen-bohe-chuangsheng-bohe-jiuyuan-ling-yiluoyi，新增埃德嘉，替换零。用普通光环合入口和治疗替代零的位置，将零留给另一队；有增株与复制，没有娜娜莉十花强化。。条件：零共鸣，不依赖专属弧盘，相关被动按培养资料的突破条件解锁；未按持有池筛选，未实测DPS，来源顺序承接旧核心编号，不代表比旧方案更强；没有零/黑羽E瞬环合入口，需要正常积累，启动与反应覆盖不能假定等同旧瞬环合队。依据：当前角色技能全文、培养解锁和当前esper_cycles.json；非官方实测排名。",
+        "updated_at": "2026-10-15T21:29:51+08:00"
+      }
+    },
+    "keke-gen-bohe-fuwen-adeler-bohe-lingke-yiluoyi": {
+      "id": "keke-gen-bohe-fuwen-adeler-bohe-lingke-yiluoyi",
+      "source_core_character_id": "bohe",
+      "member_character_ids": [
+        "bohe",
+        "lingke",
+        "adeler",
+        "yiluoyi"
+      ],
+      "source_archetype": "薄荷 · 覆纹新增方案",
+      "source_order": 9,
+      "source_visibility": "local_generated",
+      "editorial": {
+        "status": "unreviewed",
+        "active": true,
+        "tags": [
+          "覆纹",
+          "新增阵容",
+          "按四人组成去重",
+          "机制候选",
+          "零共鸣基准",
+          "A级主C"
+        ],
+        "notes": "职责与轮转：薄荷主驻场使用灵属性范围普攻与终结技，长按分支保留闪避耐力。反应链：咒/灵角色积正常环合值，通过可用援护入口建立覆纹；灵/咒伤害承接追加收益，合击本身不默认直接触发环合。强化与功能：伊洛伊E攻击增益与治疗、突破4治疗附加无视防御；灵可突破4合击按所选角色属性减抗；不默认解锁合击直接环合觉醒；灵可突破2覆纹基础额外追加伤害30%，对覆纹目标的追加攻击伤害提高10%；阿德勒E提供防御倍率护盾及咒持续伤害。新增理由：相对旧记录keke-gen-bohe-fuwen-bohe-lingke-yiluoyi-zaowu，新增阿德勒，替换早雾。阿德勒提供咒入口、护盾和防御倍率持续伤害，灵可强化覆纹，伊洛伊治疗增益；不要求早雾占位。。条件：零共鸣，不依赖专属弧盘，相关被动按培养资料的突破条件解锁；未按持有池筛选，未实测DPS，来源顺序承接旧核心编号，不代表比旧方案更强；没有零/黑羽E瞬环合入口，需要正常积累，启动与反应覆盖不能假定等同旧瞬环合队。依据：当前角色技能全文、培养解锁和当前esper_cycles.json；非官方实测排名。",
+        "updated_at": "2026-10-15T21:29:51+08:00"
+      }
+    },
+    "keke-gen-zhenhong-yingxu-hasuoer-ling-nanali-zhenhong": {
+      "id": "keke-gen-zhenhong-yingxu-hasuoer-ling-nanali-zhenhong",
+      "source_core_character_id": "zhenhong",
+      "member_character_ids": [
+        "zhenhong",
+        "ling",
+        "hasuoer",
+        "nanali"
+      ],
+      "source_archetype": "真红 · 盈蓄新增方案",
+      "source_order": 7,
+      "source_visibility": "local_generated",
+      "editorial": {
+        "status": "unreviewed",
+        "active": true,
+        "tags": [
+          "盈蓄",
+          "新增阵容",
+          "按四人组成去重",
+          "机制候选",
+          "零共鸣基准"
+        ],
+        "notes": "职责与轮转：真红在花命中延滞目标时驻场，升腾之赤期间避免切人；独行追加有1秒冷却。反应链：先以光/灵建立创生，再以光/相建立延滞；花命中同一延滞目标时让主输出驻场获得终结能量，不能仅凭三属性齐全计算收益。强化与功能：娜娜莉突破2每株10花、1秒发射；仅娜娜莉自己权柄驻场时才另计其突破4追加；哈索尔突破2将延滞延至12秒，对延滞目标提供全队10%暴击率；零突破2在盈蓄获得能量时提供生命回复；真红突破2前台盈蓄触发独行伤害与攻击叠层，并给后台等量充能。新增理由：相对旧记录keke-gen-zhenhong-yingxu-hasuoer-ling-yiluoyi-zhenhong，新增娜娜莉，替换伊洛伊。用娜娜莉花数与间隔强化增加可用花命中，不能突破真红独行的1秒冷却；娜娜莉仅短窗口。 没有伊洛伊时主要依赖零盈蓄治疗。。条件：零共鸣，不依赖专属弧盘，相关被动按培养资料的突破条件解锁；未按持有池筛选，未实测DPS，来源顺序承接旧核心编号，不代表比旧方案更强；零E为100光环合值快速入口；无盈蓄不计零治疗；娜娜莉作创生强化及短技能位，不计她全程权柄收益。依据：当前角色技能全文、培养解锁和当前esper_cycles.json；非官方实测排名。",
+        "updated_at": "2026-10-15T21:29:51+08:00"
+      }
+    },
+    "keke-gen-zhenhong-yingxu-bohe-hasuoer-ling-zhenhong": {
+      "id": "keke-gen-zhenhong-yingxu-bohe-hasuoer-ling-zhenhong",
+      "source_core_character_id": "zhenhong",
+      "member_character_ids": [
+        "zhenhong",
+        "ling",
+        "hasuoer",
+        "bohe"
+      ],
+      "source_archetype": "真红 · 盈蓄新增方案",
+      "source_order": 8,
+      "source_visibility": "local_generated",
+      "editorial": {
+        "status": "unreviewed",
+        "active": true,
+        "tags": [
+          "盈蓄",
+          "新增阵容",
+          "按四人组成去重",
+          "机制候选",
+          "零共鸣基准"
+        ],
+        "notes": "职责与轮转：真红在花命中延滞目标时驻场，升腾之赤期间避免切人；独行追加有1秒冷却。反应链：先以光/灵建立创生，再以光/相建立延滞；花命中同一延滞目标时让主输出驻场获得终结能量，不能仅凭三属性齐全计算收益。强化与功能：薄荷突破2扩大花命中范围，不等于提高单花伤害或延长株寿命；哈索尔突破2将延滞延至12秒，对延滞目标提供全队10%暴击率；零突破2在盈蓄获得能量时提供生命回复；真红突破2前台盈蓄触发独行伤害与攻击叠层，并给后台等量充能。新增理由：相对旧记录keke-gen-zhenhong-yingxu-hasuoer-ling-yiluoyi-zhenhong，新增薄荷，替换伊洛伊。用薄荷扩创生花爆炸范围研究群怪覆盖，单体收益不能视为娜娜莉等价；薄荷不争真红主要前台。 没有伊洛伊时主要依赖零盈蓄治疗。。条件：零共鸣，不依赖专属弧盘，相关被动按培养资料的突破条件解锁；未按持有池筛选，未实测DPS，来源顺序承接旧核心编号，不代表比旧方案更强；零E为100光环合值快速入口；无盈蓄不计零治疗。依据：当前角色技能全文、培养解锁和当前esper_cycles.json；非官方实测排名。",
+        "updated_at": "2026-10-15T21:29:51+08:00"
+      }
+    },
+    "keke-gen-zhenhong-yingxu-hasuoer-ling-lingke-zhenhong": {
+      "id": "keke-gen-zhenhong-yingxu-hasuoer-ling-lingke-zhenhong",
+      "source_core_character_id": "zhenhong",
+      "member_character_ids": [
+        "zhenhong",
+        "ling",
+        "hasuoer",
+        "lingke"
+      ],
+      "source_archetype": "真红 · 盈蓄新增方案",
+      "source_order": 9,
+      "source_visibility": "local_generated",
+      "editorial": {
+        "status": "unreviewed",
+        "active": true,
+        "tags": [
+          "盈蓄",
+          "新增阵容",
+          "按四人组成去重",
+          "机制候选",
+          "零共鸣基准"
+        ],
+        "notes": "职责与轮转：真红在花命中延滞目标时驻场，升腾之赤期间避免切人；独行追加有1秒冷却。反应链：先以光/灵建立创生，再以光/相建立延滞；花命中同一延滞目标时让主输出驻场获得终结能量，不能仅凭三属性齐全计算收益。强化与功能：哈索尔突破2将延滞延至12秒，对延滞目标提供全队10%暴击率；零突破2在盈蓄获得能量时提供生命回复；真红突破2前台盈蓄触发独行伤害与攻击叠层，并给后台等量充能；灵可突破4合击按所选角色属性减抗；不默认解锁合击直接环合觉醒。新增理由：相对旧记录keke-gen-zhenhong-yingxu-hasuoer-ling-yiluoyi-zhenhong，新增灵可，替换伊洛伊。灵可提供合击与按角色属性减抗，选择真红作用于光抗；本队无咒，不计灵可覆纹强化。 没有伊洛伊时主要依赖零盈蓄治疗。。条件：零共鸣，不依赖专属弧盘，相关被动按培养资料的突破条件解锁；未按持有池筛选，未实测DPS，来源顺序承接旧核心编号，不代表比旧方案更强；零E为100光环合值快速入口；无盈蓄不计零治疗。依据：当前角色技能全文、培养解锁和当前esper_cycles.json；非官方实测排名。",
+        "updated_at": "2026-10-15T21:29:51+08:00"
+      }
+    },
+    "keke-gen-zhenhong-yingxu-ling-nanali-yi-zhenhong": {
+      "id": "keke-gen-zhenhong-yingxu-ling-nanali-yi-zhenhong",
+      "source_core_character_id": "zhenhong",
+      "member_character_ids": [
+        "zhenhong",
+        "ling",
+        "yi",
+        "nanali"
+      ],
+      "source_archetype": "真红 · 盈蓄新增方案",
+      "source_order": 10,
+      "source_visibility": "local_generated",
+      "editorial": {
+        "status": "unreviewed",
+        "active": true,
+        "tags": [
+          "盈蓄",
+          "新增阵容",
+          "按四人组成去重",
+          "机制候选",
+          "零共鸣基准"
+        ],
+        "notes": "职责与轮转：真红在花命中延滞目标时驻场，升腾之赤期间避免切人；独行追加有1秒冷却。反应链：先以光/灵建立创生，再以光/相建立延滞；花命中同一延滞目标时让主输出驻场获得终结能量，不能仅凭三属性齐全计算收益。强化与功能：娜娜莉突破2每株10花、1秒发射；仅娜娜莉自己权柄驻场时才另计其突破4追加；翳突破2影刺对延滞目标再施加延滞，按命中与时机判断覆盖；零突破2在盈蓄获得能量时提供生命回复；真红突破2前台盈蓄触发独行伤害与攻击叠层，并给后台等量充能。新增理由：相对旧记录sfsx-zhenhong-01，新增娜娜莉，替换伊洛伊。用娜娜莉花数与间隔强化增加可用花命中，不能突破真红独行的1秒冷却；娜娜莉仅短窗口。 没有伊洛伊时主要依赖零盈蓄治疗。。条件：零共鸣，不依赖专属弧盘，相关被动按培养资料的突破条件解锁；未按持有池筛选，未实测DPS，来源顺序承接旧核心编号，不代表比旧方案更强；零E为100光环合值快速入口；无盈蓄不计零治疗；娜娜莉作创生强化及短技能位，不计她全程权柄收益。依据：当前角色技能全文、培养解锁和当前esper_cycles.json；非官方实测排名。",
+        "updated_at": "2026-10-15T21:29:51+08:00"
+      }
+    },
+    "keke-gen-zhenhong-yingxu-bohe-ling-yi-zhenhong": {
+      "id": "keke-gen-zhenhong-yingxu-bohe-ling-yi-zhenhong",
+      "source_core_character_id": "zhenhong",
+      "member_character_ids": [
+        "zhenhong",
+        "ling",
+        "yi",
+        "bohe"
+      ],
+      "source_archetype": "真红 · 盈蓄新增方案",
+      "source_order": 11,
+      "source_visibility": "local_generated",
+      "editorial": {
+        "status": "unreviewed",
+        "active": true,
+        "tags": [
+          "盈蓄",
+          "新增阵容",
+          "按四人组成去重",
+          "机制候选",
+          "零共鸣基准"
+        ],
+        "notes": "职责与轮转：真红在花命中延滞目标时驻场，升腾之赤期间避免切人；独行追加有1秒冷却。反应链：先以光/灵建立创生，再以光/相建立延滞；花命中同一延滞目标时让主输出驻场获得终结能量，不能仅凭三属性齐全计算收益。强化与功能：薄荷突破2扩大花命中范围，不等于提高单花伤害或延长株寿命；翳突破2影刺对延滞目标再施加延滞，按命中与时机判断覆盖；零突破2在盈蓄获得能量时提供生命回复；真红突破2前台盈蓄触发独行伤害与攻击叠层，并给后台等量充能。新增理由：相对旧记录sfsx-zhenhong-01，新增薄荷，替换伊洛伊。用薄荷扩创生花爆炸范围研究群怪覆盖，单体收益不能视为娜娜莉等价；薄荷不争真红主要前台。 没有伊洛伊时主要依赖零盈蓄治疗。。条件：零共鸣，不依赖专属弧盘，相关被动按培养资料的突破条件解锁；未按持有池筛选，未实测DPS，来源顺序承接旧核心编号，不代表比旧方案更强；零E为100光环合值快速入口；无盈蓄不计零治疗。依据：当前角色技能全文、培养解锁和当前esper_cycles.json；非官方实测排名。",
+        "updated_at": "2026-10-15T21:29:51+08:00"
+      }
+    },
+    "keke-gen-zhenhong-yingxu-ling-lingke-yi-zhenhong": {
+      "id": "keke-gen-zhenhong-yingxu-ling-lingke-yi-zhenhong",
+      "source_core_character_id": "zhenhong",
+      "member_character_ids": [
+        "zhenhong",
+        "ling",
+        "yi",
+        "lingke"
+      ],
+      "source_archetype": "真红 · 盈蓄新增方案",
+      "source_order": 12,
+      "source_visibility": "local_generated",
+      "editorial": {
+        "status": "unreviewed",
+        "active": true,
+        "tags": [
+          "盈蓄",
+          "新增阵容",
+          "按四人组成去重",
+          "机制候选",
+          "零共鸣基准"
+        ],
+        "notes": "职责与轮转：真红在花命中延滞目标时驻场，升腾之赤期间避免切人；独行追加有1秒冷却。反应链：先以光/灵建立创生，再以光/相建立延滞；花命中同一延滞目标时让主输出驻场获得终结能量，不能仅凭三属性齐全计算收益。强化与功能：翳突破2影刺对延滞目标再施加延滞，按命中与时机判断覆盖；零突破2在盈蓄获得能量时提供生命回复；真红突破2前台盈蓄触发独行伤害与攻击叠层，并给后台等量充能；灵可突破4合击按所选角色属性减抗；不默认解锁合击直接环合觉醒。新增理由：相对旧记录sfsx-zhenhong-01，新增灵可，替换伊洛伊。灵可提供合击与按角色属性减抗，选择真红作用于光抗；本队无咒，不计灵可覆纹强化。 没有伊洛伊时主要依赖零盈蓄治疗。。条件：零共鸣，不依赖专属弧盘，相关被动按培养资料的突破条件解锁；未按持有池筛选，未实测DPS，来源顺序承接旧核心编号，不代表比旧方案更强；零E为100光环合值快速入口；无盈蓄不计零治疗。依据：当前角色技能全文、培养解锁和当前esper_cycles.json；非官方实测排名。",
+        "updated_at": "2026-10-15T21:29:51+08:00"
+      }
+    },
+    "keke-gen-kaesi-yanzhi-hasuoer-kaesi-ling-lingke": {
+      "id": "keke-gen-kaesi-yanzhi-hasuoer-kaesi-ling-lingke",
+      "source_core_character_id": "kaesi",
+      "member_character_ids": [
+        "kaesi",
+        "ling",
+        "hasuoer",
+        "lingke"
+      ],
+      "source_archetype": "卡厄斯 · 延滞新增方案",
+      "source_order": 5,
+      "source_visibility": "local_generated",
+      "editorial": {
+        "status": "unreviewed",
+        "active": true,
+        "tags": [
+          "延滞",
+          "新增阵容",
+          "按四人组成去重",
+          "机制候选",
+          "零共鸣基准"
+        ],
+        "notes": "职责与轮转：卡厄斯技能挂追缉后使用罪状与恶名往复；延滞应实际解除才能结算，重复施加会重置计时。反应链：光/相入口使目标延滞，先完成输出与辅助窗口，再让延滞实际解除结算；连续刷新会推迟结算。强化与功能：哈索尔突破2将延滞延至12秒，对延滞目标提供全队10%暴击率；卡厄斯突破2在延滞解除时按持续时间结算，不自行换算“上限300%”的最终倍率；零突破2在盈蓄获得能量时提供生命回复；灵可突破4合击按所选角色属性减抗；不默认解锁合击直接环合觉醒。新增理由：相对旧记录keke-gen-kaesi-yanzhi-hasuoer-kaesi-ling-yiluoyi，新增灵可，替换伊洛伊。灵可选择卡厄斯合击以提供相属性减抗，同时补灵入口；保持延滞解除结算，不能为持续盈蓄频繁刷新而无限推迟卡厄斯伤害。。条件：零共鸣，不依赖专属弧盘，相关被动按培养资料的突破条件解锁；未按持有池筛选，未实测DPS，来源顺序承接旧核心编号，不代表比旧方案更强；零E为100光环合值快速入口；无盈蓄不计零治疗。依据：当前角色技能全文、培养解锁和当前esper_cycles.json；非官方实测排名。",
+        "updated_at": "2026-10-15T21:29:51+08:00"
+      }
+    },
+    "keke-gen-kaesi-yanzhi-hasuoer-kaesi-ling-nanali": {
+      "id": "keke-gen-kaesi-yanzhi-hasuoer-kaesi-ling-nanali",
+      "source_core_character_id": "kaesi",
+      "member_character_ids": [
+        "kaesi",
+        "ling",
+        "hasuoer",
+        "nanali"
+      ],
+      "source_archetype": "卡厄斯 · 延滞新增方案",
+      "source_order": 6,
+      "source_visibility": "local_generated",
+      "editorial": {
+        "status": "unreviewed",
+        "active": true,
+        "tags": [
+          "延滞",
+          "新增阵容",
+          "按四人组成去重",
+          "机制候选",
+          "零共鸣基准"
+        ],
+        "notes": "职责与轮转：卡厄斯技能挂追缉后使用罪状与恶名往复；延滞应实际解除才能结算，重复施加会重置计时。反应链：光/相入口使目标延滞，先完成输出与辅助窗口，再让延滞实际解除结算；连续刷新会推迟结算。强化与功能：娜娜莉突破2每株10花、1秒发射；仅娜娜莉自己权柄驻场时才另计其突破4追加；哈索尔突破2将延滞延至12秒，对延滞目标提供全队10%暴击率；卡厄斯突破2在延滞解除时按持续时间结算，不自行换算“上限300%”的最终倍率；零突破2在盈蓄获得能量时提供生命回复。新增理由：相对旧记录keke-gen-kaesi-yanzhi-hasuoer-kaesi-ling-yiluoyi，新增娜娜莉，替换伊洛伊。娜娜莉改作创生强化位，让延滞中花命中提供盈蓄补能；不计娜娜莉全程权柄，与卡厄斯结算频率共同安排。。条件：零共鸣，不依赖专属弧盘，相关被动按培养资料的突破条件解锁；未按持有池筛选，未实测DPS，来源顺序承接旧核心编号，不代表比旧方案更强；零E为100光环合值快速入口；无盈蓄不计零治疗；娜娜莉作创生强化及短技能位，不计她全程权柄收益。依据：当前角色技能全文、培养解锁和当前esper_cycles.json；非官方实测排名。",
+        "updated_at": "2026-10-15T21:29:51+08:00"
+      }
+    },
+    "keke-gen-heiyu-shixie-adeler-anhunqu-heiyu-yiluoyi": {
+      "id": "keke-gen-heiyu-shixie-adeler-anhunqu-heiyu-yiluoyi",
+      "source_core_character_id": "heiyu",
+      "member_character_ids": [
+        "heiyu",
+        "anhunqu",
+        "adeler",
+        "yiluoyi"
+      ],
+      "source_archetype": "黑羽 · 失谐新增方案",
+      "source_order": 5,
+      "source_visibility": "local_generated",
+      "editorial": {
+        "status": "unreviewed",
+        "active": true,
+        "tags": [
+          "失谐",
+          "新增阵容",
+          "按四人组成去重",
+          "机制候选",
+          "零共鸣基准",
+          "双主C:anhunqu"
+        ],
+        "notes": "职责与轮转：黑羽先E挂印记与获得100魂环合值，再安排辅助及分段输出；魔女状态与恶意消耗按自身循环；安魂曲作为分段第二输出，不同时争前台。反应链：先分别用咒/暗入口施加浊燃、暗/魂入口施加黯星，在同一目标上同时维持两种状态才触发失谐；倾陷后追加另判。强化与功能：伊洛伊E攻击增益与治疗、突破4治疗附加无视防御；阿德勒E提供防御倍率护盾及咒持续伤害；阿德勒突破2的浊燃随机减益按结果计，不能保证每次减抗；安魂曲突破2仅在目标已倾陷时触发失谐才有追加伤害；黑羽E为其他队友驻场攻击提供失乐鸟协同，终结技增加全队攻击；黑羽突破2按黯星累计实受伤害追加心灵伤害并再施加一次黯星，排除该次触发援护与状态自身伤害；不递归，不再套伤害增减益，并受自身上限约束。新增理由：相对旧记录keke-gen-heiyu-shixie-anhunqu-heiyu-yiluoyi-zaowu，新增阿德勒，替换早雾。以阿德勒咒持续伤害与护盾替换早雾功能，保留暗魂黯星和浊燃重叠；失去早雾的攻击与持续伤害强化。。条件：零共鸣，不依赖专属弧盘，相关被动按培养资料的突破条件解锁；未按持有池筛选，未实测DPS，来源顺序承接旧核心编号，不代表比旧方案更强；黑羽E提供100魂环合值，其他属性仍需各自入口；可补覆纹，但仅按灵/咒实际伤害计算，不算作其他属性主C的通用增伤。依据：当前角色技能全文、培养解锁和当前esper_cycles.json；非官方实测排名。",
+        "updated_at": "2026-10-15T21:29:51+08:00"
+      }
+    },
+    "keke-gen-heiyu-shixie-adeler-anhunqu-haniya-heiyu": {
+      "id": "keke-gen-heiyu-shixie-adeler-anhunqu-haniya-heiyu",
+      "source_core_character_id": "heiyu",
+      "member_character_ids": [
+        "heiyu",
+        "anhunqu",
+        "adeler",
+        "haniya"
+      ],
+      "source_archetype": "黑羽 · 失谐新增方案",
+      "source_order": 6,
+      "source_visibility": "local_generated",
+      "editorial": {
+        "status": "unreviewed",
+        "active": true,
+        "tags": [
+          "失谐",
+          "新增阵容",
+          "按四人组成去重",
+          "机制候选",
+          "零共鸣基准",
+          "双主C:anhunqu"
+        ],
+        "notes": "职责与轮转：黑羽先E挂印记与获得100魂环合值，再安排辅助及分段输出；魔女状态与恶意消耗按自身循环；安魂曲作为分段第二输出，不同时争前台。反应链：先分别用咒/暗入口施加浊燃、暗/魂入口施加黯星，在同一目标上同时维持两种状态才触发失谐；倾陷后追加另判。强化与功能：阿德勒E提供防御倍率护盾及咒持续伤害；阿德勒突破2的浊燃随机减益按结果计，不能保证每次减抗；安魂曲突破2仅在目标已倾陷时触发失谐才有追加伤害；哈尼娅技能与终结提供攻击增益；哈尼娅突破2在黯星结束时汲取攻击，保留累计上限与脱战复原；黑羽E为其他队友驻场攻击提供失乐鸟协同，终结技增加全队攻击；黑羽突破2按黯星累计实受伤害追加心灵伤害并再施加一次黯星，排除该次触发援护与状态自身伤害；不递归，不再套伤害增减益，并受自身上限约束。新增理由：相对旧记录keke-gen-heiyu-shixie-anhunqu-haniya-heiyu-zaowu，新增阿德勒，替换早雾。阿德勒防御生存与咒入口、哈尼娅攻击和黯星汲取形成偏护盾的双输出方案，释放伊洛伊与早雾。。条件：零共鸣，不依赖专属弧盘，相关被动按培养资料的突破条件解锁；未按持有池筛选，未实测DPS，来源顺序承接旧核心编号，不代表比旧方案更强；黑羽E提供100魂环合值，其他属性仍需各自入口。依据：当前角色技能全文、培养解锁和当前esper_cycles.json；非官方实测排名。",
+        "updated_at": "2026-10-15T21:29:51+08:00"
+      }
+    },
+    "keke-gen-heiyu-shixie-anhunqu-fadiya-heiyu-zaowu": {
+      "id": "keke-gen-heiyu-shixie-anhunqu-fadiya-heiyu-zaowu",
+      "source_core_character_id": "heiyu",
+      "member_character_ids": [
+        "heiyu",
+        "anhunqu",
+        "zaowu",
+        "fadiya"
+      ],
+      "source_archetype": "黑羽 · 失谐新增方案",
+      "source_order": 7,
+      "source_visibility": "local_generated",
+      "editorial": {
+        "status": "unreviewed",
+        "active": true,
+        "tags": [
+          "失谐",
+          "新增阵容",
+          "按四人组成去重",
+          "机制候选",
+          "零共鸣基准",
+          "双主C:anhunqu"
+        ],
+        "notes": "职责与轮转：黑羽先E挂印记与获得100魂环合值，再安排辅助及分段输出；魔女状态与恶意消耗按自身循环；安魂曲作为分段第二输出，不同时争前台。反应链：先分别用咒/暗入口施加浊燃、暗/魂入口施加黯星，在同一目标上同时维持两种状态才触发失谐；倾陷后追加另判。强化与功能：早雾终结技增加其他队友攻击，不包括她自身；早雾突破2按持续伤害状态种类增伤，浊燃层数不是状态种类；安魂曲突破2仅在目标已倾陷时触发失谐才有追加伤害；法帝娅分摊伤害，黯星结束汲取生命上限；生命倍率心灵伤害不等于魂属性异能伤害；黑羽E为其他队友驻场攻击提供失乐鸟协同，终结技增加全队攻击；黑羽突破2按黯星累计实受伤害追加心灵伤害并再施加一次黯星，排除该次触发援护与状态自身伤害；不递归，不再套伤害增减益，并受自身上限约束。新增理由：相对旧记录keke-gen-heiyu-shixie-anhunqu-heiyu-yiluoyi-zaowu，新增法帝娅，替换伊洛伊。用法帝娅分摊和黯星生命上限收益换伊洛伊治疗；不把分摊当成持续治疗，不要求故意受击。。条件：零共鸣，不依赖专属弧盘，相关被动按培养资料的突破条件解锁；未按持有池筛选，未实测DPS，来源顺序承接旧核心编号，不代表比旧方案更强；黑羽E提供100魂环合值，其他属性仍需各自入口；分摊不是独立治疗，不保证受击阈值或故意承伤触发协同。依据：当前角色技能全文、培养解锁和当前esper_cycles.json；非官方实测排名。",
+        "updated_at": "2026-10-15T21:29:51+08:00"
+      }
+    },
+    "keke-gen-canhong-shixie-adeler-anhunqu-canhong-heiyu": {
+      "id": "keke-gen-canhong-shixie-adeler-anhunqu-canhong-heiyu",
+      "source_core_character_id": "canhong",
+      "member_character_ids": [
+        "canhong",
+        "anhunqu",
+        "adeler",
+        "heiyu"
+      ],
+      "source_archetype": "残虹 · 失谐新增方案",
+      "source_order": 10,
+      "source_visibility": "local_generated",
+      "editorial": {
+        "status": "unreviewed",
+        "active": true,
+        "tags": [
+          "失谐",
+          "新增阵容",
+          "按四人组成去重",
+          "机制候选",
+          "零共鸣基准",
+          "双主C:anhunqu"
+        ],
+        "notes": "职责与轮转：残虹积蚀心并完成幻境追加攻击段；切人解除幻境，结束该段再交另一输出；安魂曲作为分段第二输出，不同时争前台。反应链：先分别用咒/暗入口施加浊燃、暗/魂入口施加黯星，在同一目标上同时维持两种状态才触发失谐；倾陷后追加另判。强化与功能：阿德勒E提供防御倍率护盾及咒持续伤害；阿德勒突破2的浊燃随机减益按结果计，不能保证每次减抗；残虹突破2浊燃至多3层，其他持续伤害施加可补浊燃，浊燃自身不递归；安魂曲突破2仅在目标已倾陷时触发失谐才有追加伤害；黑羽E为其他队友驻场攻击提供失乐鸟协同，终结技增加全队攻击；黑羽突破2按黯星累计实受伤害追加心灵伤害并再施加一次黯星，排除该次触发援护与状态自身伤害；不递归，不再套伤害增减益，并受自身上限约束。新增理由：相对旧记录keke-gen-canhong-shixie-anhunqu-canhong-heiyu-zaowu，新增阿德勒，替换早雾。阿德勒护盾与额外咒持续伤害可适配浊燃叠层，随机减益按实际结果；释放早雾位置但失去她的持续伤害强化。。条件：零共鸣，不依赖专属弧盘，相关被动按培养资料的突破条件解锁；未按持有池筛选，未实测DPS，来源顺序承接旧核心编号，不代表比旧方案更强；黑羽E提供100魂环合值，其他属性仍需各自入口。依据：当前角色技能全文、培养解锁和当前esper_cycles.json；非官方实测排名。",
+        "updated_at": "2026-10-15T21:29:51+08:00"
+      }
+    },
+    "keke-gen-canhong-shixie-adeler-anhunqu-canhong-haniya": {
+      "id": "keke-gen-canhong-shixie-adeler-anhunqu-canhong-haniya",
+      "source_core_character_id": "canhong",
+      "member_character_ids": [
+        "canhong",
+        "anhunqu",
+        "adeler",
+        "haniya"
+      ],
+      "source_archetype": "残虹 · 失谐新增方案",
+      "source_order": 11,
+      "source_visibility": "local_generated",
+      "editorial": {
+        "status": "unreviewed",
+        "active": true,
+        "tags": [
+          "失谐",
+          "新增阵容",
+          "按四人组成去重",
+          "机制候选",
+          "零共鸣基准",
+          "双主C:anhunqu"
+        ],
+        "notes": "职责与轮转：残虹积蚀心并完成幻境追加攻击段；切人解除幻境，结束该段再交另一输出；安魂曲作为分段第二输出，不同时争前台。反应链：先分别用咒/暗入口施加浊燃、暗/魂入口施加黯星，在同一目标上同时维持两种状态才触发失谐；倾陷后追加另判。强化与功能：阿德勒E提供防御倍率护盾及咒持续伤害；阿德勒突破2的浊燃随机减益按结果计，不能保证每次减抗；残虹突破2浊燃至多3层，其他持续伤害施加可补浊燃，浊燃自身不递归；安魂曲突破2仅在目标已倾陷时触发失谐才有追加伤害；哈尼娅技能与终结提供攻击增益；哈尼娅突破2在黯星结束时汲取攻击，保留累计上限与脱战复原。新增理由：相对旧记录sfsx-canhong-01，新增阿德勒，替换早雾。阿德勒护盾与额外咒持续伤害可适配浊燃叠层，随机减益按实际结果；释放早雾位置但失去她的持续伤害强化。。条件：零共鸣，不依赖专属弧盘，相关被动按培养资料的突破条件解锁；未按持有池筛选，未实测DPS，来源顺序承接旧核心编号，不代表比旧方案更强；没有零/黑羽E瞬环合入口，需要正常积累，启动与反应覆盖不能假定等同旧瞬环合队。依据：当前角色技能全文、培养解锁和当前esper_cycles.json；非官方实测排名。",
+        "updated_at": "2026-10-15T21:29:51+08:00"
+      }
+    },
+    "keke-gen-canhong-zhuoran-adeler-anhunqu-canhong-yiluoyi": {
+      "id": "keke-gen-canhong-zhuoran-adeler-anhunqu-canhong-yiluoyi",
+      "source_core_character_id": "canhong",
+      "member_character_ids": [
+        "canhong",
+        "anhunqu",
+        "adeler",
+        "yiluoyi"
+      ],
+      "source_archetype": "残虹 · 浊燃新增方案",
+      "source_order": 12,
+      "source_visibility": "local_generated",
+      "editorial": {
+        "status": "unreviewed",
+        "active": true,
+        "tags": [
+          "浊燃",
+          "新增阵容",
+          "按四人组成去重",
+          "机制候选",
+          "零共鸣基准",
+          "双主C:anhunqu"
+        ],
+        "notes": "职责与轮转：残虹积蚀心并完成幻境追加攻击段；切人解除幻境，结束该段再交另一输出；安魂曲作为分段第二输出，不同时争前台。反应链：咒/暗入口建立浊燃，再用各自持续伤害和强化维持覆盖；没有魂就不计算失谐。强化与功能：伊洛伊E攻击增益与治疗、突破4治疗附加无视防御；阿德勒E提供防御倍率护盾及咒持续伤害；阿德勒突破2的浊燃随机减益按结果计，不能保证每次减抗；残虹突破2浊燃至多3层，其他持续伤害施加可补浊燃，浊燃自身不递归。新增理由：相对旧记录keke-gen-canhong-shixie-anhunqu-canhong-heiyu-yiluoyi，新增阿德勒，替换黑羽。阿德勒护盾与额外咒持续伤害可适配浊燃叠层，随机减益按实际结果；释放早雾位置但失去她的持续伤害强化。。条件：零共鸣，不依赖专属弧盘，相关被动按培养资料的突破条件解锁；未按持有池筛选，未实测DPS，来源顺序承接旧核心编号，不代表比旧方案更强；没有零/黑羽E瞬环合入口，需要正常积累，启动与反应覆盖不能假定等同旧瞬环合队；可补覆纹，但仅按灵/咒实际伤害计算，不算作其他属性主C的通用增伤。依据：当前角色技能全文、培养解锁和当前esper_cycles.json；非官方实测排名。",
+        "updated_at": "2026-10-15T21:29:51+08:00"
+      }
+    },
+    "keke-gen-canhong-shixie-adeler-anhunqu-canhong-fadiya": {
+      "id": "keke-gen-canhong-shixie-adeler-anhunqu-canhong-fadiya",
+      "source_core_character_id": "canhong",
+      "member_character_ids": [
+        "canhong",
+        "anhunqu",
+        "adeler",
+        "fadiya"
+      ],
+      "source_archetype": "残虹 · 失谐新增方案",
+      "source_order": 13,
+      "source_visibility": "local_generated",
+      "editorial": {
+        "status": "unreviewed",
+        "active": true,
+        "tags": [
+          "失谐",
+          "新增阵容",
+          "按四人组成去重",
+          "机制候选",
+          "零共鸣基准",
+          "双主C:anhunqu"
+        ],
+        "notes": "职责与轮转：残虹积蚀心并完成幻境追加攻击段；切人解除幻境，结束该段再交另一输出；安魂曲作为分段第二输出，不同时争前台。反应链：先分别用咒/暗入口施加浊燃、暗/魂入口施加黯星，在同一目标上同时维持两种状态才触发失谐；倾陷后追加另判。强化与功能：阿德勒E提供防御倍率护盾及咒持续伤害；阿德勒突破2的浊燃随机减益按结果计，不能保证每次减抗；残虹突破2浊燃至多3层，其他持续伤害施加可补浊燃，浊燃自身不递归；安魂曲突破2仅在目标已倾陷时触发失谐才有追加伤害；法帝娅分摊伤害，黯星结束汲取生命上限；生命倍率心灵伤害不等于魂属性异能伤害。新增理由：相对旧记录keke-gen-canhong-shixie-anhunqu-canhong-heiyu-zaowu，新增阿德勒、法帝娅，替换黑羽、早雾。阿德勒护盾与额外咒持续伤害可适配浊燃叠层，随机减益按实际结果；释放早雾位置但失去她的持续伤害强化。。条件：零共鸣，不依赖专属弧盘，相关被动按培养资料的突破条件解锁；未按持有池筛选，未实测DPS，来源顺序承接旧核心编号，不代表比旧方案更强；没有零/黑羽E瞬环合入口，需要正常积累，启动与反应覆盖不能假定等同旧瞬环合队；分摊不是独立治疗，不保证受击阈值或故意承伤触发协同。依据：当前角色技能全文、培养解锁和当前esper_cycles.json；非官方实测排名。",
+        "updated_at": "2026-10-15T21:29:51+08:00"
+      }
+    },
+    "keke-gen-canhong-fuwen-adeler-canhong-lingke-yiluoyi": {
+      "id": "keke-gen-canhong-fuwen-adeler-canhong-lingke-yiluoyi",
+      "source_core_character_id": "canhong",
+      "member_character_ids": [
+        "canhong",
+        "lingke",
+        "adeler",
+        "yiluoyi"
+      ],
+      "source_archetype": "残虹 · 覆纹新增方案",
+      "source_order": 14,
+      "source_visibility": "local_generated",
+      "editorial": {
+        "status": "unreviewed",
+        "active": true,
+        "tags": [
+          "覆纹",
+          "新增阵容",
+          "按四人组成去重",
+          "机制候选",
+          "零共鸣基准",
+          "双主C:lingke"
+        ],
+        "notes": "职责与轮转：残虹积蚀心并完成幻境追加攻击段；切人解除幻境，结束该段再交另一输出；灵可作为分段第二输出，不同时争前台。反应链：咒/灵角色积正常环合值，通过可用援护入口建立覆纹；灵/咒伤害承接追加收益，合击本身不默认直接触发环合。强化与功能：伊洛伊E攻击增益与治疗、突破4治疗附加无视防御；灵可突破4合击按所选角色属性减抗；不默认解锁合击直接环合觉醒；灵可突破2覆纹基础额外追加伤害30%，对覆纹目标的追加攻击伤害提高10%；阿德勒E提供防御倍率护盾及咒持续伤害。新增理由：相对旧记录keke-gen-canhong-fuwen-canhong-lingke-yiluoyi-zaowu，新增阿德勒，替换早雾。以护盾与咒入口替代早雾，残虹追加攻击可配合灵可覆纹强化；本队无暗不计残虹浊燃强化。。条件：零共鸣，不依赖专属弧盘，相关被动按培养资料的突破条件解锁；未按持有池筛选，未实测DPS，来源顺序承接旧核心编号，不代表比旧方案更强；没有零/黑羽E瞬环合入口，需要正常积累，启动与反应覆盖不能假定等同旧瞬环合队。依据：当前角色技能全文、培养解锁和当前esper_cycles.json；非官方实测排名。",
+        "updated_at": "2026-10-15T21:29:51+08:00"
+      }
+    },
+    "keke-gen-canhong-fuwen-adeler-canhong-haniya-lingke": {
+      "id": "keke-gen-canhong-fuwen-adeler-canhong-haniya-lingke",
+      "source_core_character_id": "canhong",
+      "member_character_ids": [
+        "canhong",
+        "lingke",
+        "adeler",
+        "haniya"
+      ],
+      "source_archetype": "残虹 · 覆纹新增方案",
+      "source_order": 15,
+      "source_visibility": "local_generated",
+      "editorial": {
+        "status": "unreviewed",
+        "active": true,
+        "tags": [
+          "覆纹",
+          "新增阵容",
+          "按四人组成去重",
+          "机制候选",
+          "零共鸣基准",
+          "双主C:lingke"
+        ],
+        "notes": "职责与轮转：残虹积蚀心并完成幻境追加攻击段；切人解除幻境，结束该段再交另一输出；灵可作为分段第二输出，不同时争前台。反应链：咒/灵角色积正常环合值，通过可用援护入口建立覆纹；灵/咒伤害承接追加收益，合击本身不默认直接触发环合。强化与功能：灵可突破4合击按所选角色属性减抗；不默认解锁合击直接环合觉醒；灵可突破2覆纹基础额外追加伤害30%，对覆纹目标的追加攻击伤害提高10%；阿德勒E提供防御倍率护盾及咒持续伤害；哈尼娅技能与终结提供攻击增益。新增理由：相对旧记录keke-gen-canhong-fuwen-canhong-haniya-lingke-zaowu，新增阿德勒，替换早雾。阿德勒护盾、哈尼娅攻击增益支撑灵咒双输出，释放伊洛伊与早雾；缺暗不计哈尼娅黯星汲取，缺常规治疗。。条件：零共鸣，不依赖专属弧盘，相关被动按培养资料的突破条件解锁；未按持有池筛选，未实测DPS，来源顺序承接旧核心编号，不代表比旧方案更强；没有零/黑羽E瞬环合入口，需要正常积累，启动与反应覆盖不能假定等同旧瞬环合队。依据：当前角色技能全文、培养解锁和当前esper_cycles.json；非官方实测排名。",
+        "updated_at": "2026-10-15T21:29:51+08:00"
+      }
+    },
+    "keke-gen-baizang-zhuoran-anhunqu-baizang-yiluoyi-zaowu": {
+      "id": "keke-gen-baizang-zhuoran-anhunqu-baizang-yiluoyi-zaowu",
+      "source_core_character_id": "baizang",
+      "member_character_ids": [
+        "baizang",
+        "anhunqu",
+        "zaowu",
+        "yiluoyi"
+      ],
+      "source_archetype": "白藏 · 浊燃新增方案",
+      "source_order": 5,
+      "source_visibility": "local_generated",
+      "editorial": {
+        "status": "unreviewed",
+        "active": true,
+        "tags": [
+          "浊燃",
+          "新增阵容",
+          "按四人组成去重",
+          "机制候选",
+          "零共鸣基准",
+          "双主C:anhunqu"
+        ],
+        "notes": "职责与轮转：白藏通过普攻与技能生成言灵字并输出，领域与祝字治疗配合自身生命消耗；安魂曲作为分段第二输出，不同时争前台。反应链：咒/暗入口建立浊燃，再用各自持续伤害和强化维持覆盖；没有魂就不计算失谐。强化与功能：伊洛伊E攻击增益与治疗、突破4治疗附加无视防御；早雾终结技增加其他队友攻击，不包括她自身；早雾突破2按持续伤害状态种类增伤，浊燃层数不是状态种类；白藏突破2对已有浊燃目标生成言灵字时再施加浊燃。新增理由：相对旧记录keke-gen-baizang-shixie-anhunqu-baizang-heiyu-zaowu，新增伊洛伊，替换黑羽。伊洛伊治疗和聚怪支持白藏言灵消耗生命；没有魂，失谐不成立，但可额外通过灵咒覆纹服务白藏。。条件：零共鸣，不依赖专属弧盘，相关被动按培养资料的突破条件解锁；未按持有池筛选，未实测DPS，来源顺序承接旧核心编号，不代表比旧方案更强；没有零/黑羽E瞬环合入口，需要正常积累，启动与反应覆盖不能假定等同旧瞬环合队；可补覆纹，但仅按灵/咒实际伤害计算，不算作其他属性主C的通用增伤。依据：当前角色技能全文、培养解锁和当前esper_cycles.json；非官方实测排名。",
+        "updated_at": "2026-10-15T21:29:51+08:00"
+      }
+    },
+    "keke-gen-baizang-shixie-anhunqu-baizang-fadiya-zaowu": {
+      "id": "keke-gen-baizang-shixie-anhunqu-baizang-fadiya-zaowu",
+      "source_core_character_id": "baizang",
+      "member_character_ids": [
+        "baizang",
+        "anhunqu",
+        "zaowu",
+        "fadiya"
+      ],
+      "source_archetype": "白藏 · 失谐新增方案",
+      "source_order": 6,
+      "source_visibility": "local_generated",
+      "editorial": {
+        "status": "unreviewed",
+        "active": true,
+        "tags": [
+          "失谐",
+          "新增阵容",
+          "按四人组成去重",
+          "机制候选",
+          "零共鸣基准",
+          "双主C:anhunqu"
+        ],
+        "notes": "职责与轮转：白藏通过普攻与技能生成言灵字并输出，领域与祝字治疗配合自身生命消耗；安魂曲作为分段第二输出，不同时争前台。反应链：先分别用咒/暗入口施加浊燃、暗/魂入口施加黯星，在同一目标上同时维持两种状态才触发失谐；倾陷后追加另判。强化与功能：早雾终结技增加其他队友攻击，不包括她自身；早雾突破2按持续伤害状态种类增伤，浊燃层数不是状态种类；白藏突破2对已有浊燃目标生成言灵字时再施加浊燃；安魂曲突破2仅在目标已倾陷时触发失谐才有追加伤害；法帝娅分摊伤害，黯星结束汲取生命上限；生命倍率心灵伤害不等于魂属性异能伤害。新增理由：相对旧记录keke-gen-baizang-shixie-anhunqu-baizang-heiyu-zaowu，新增法帝娅，替换黑羽。法帝娅分摊与黯星生命收益配合白藏的生命消耗，早雾服务持续伤害；生命阈值协同只在真实满足条件时发生。。条件：零共鸣，不依赖专属弧盘，相关被动按培养资料的突破条件解锁；未按持有池筛选，未实测DPS，来源顺序承接旧核心编号，不代表比旧方案更强；没有零/黑羽E瞬环合入口，需要正常积累，启动与反应覆盖不能假定等同旧瞬环合队；分摊不是独立治疗，不保证受击阈值或故意承伤触发协同。依据：当前角色技能全文、培养解锁和当前esper_cycles.json；非官方实测排名。",
+        "updated_at": "2026-10-15T21:29:51+08:00"
+      }
+    },
+    "keke-gen-baizang-shixie-baizang-dafutier-fadiya-zaowu": {
+      "id": "keke-gen-baizang-shixie-baizang-dafutier-fadiya-zaowu",
+      "source_core_character_id": "baizang",
+      "member_character_ids": [
+        "baizang",
+        "dafutier",
+        "zaowu",
+        "fadiya"
+      ],
+      "source_archetype": "白藏 · 失谐新增方案",
+      "source_order": 7,
+      "source_visibility": "local_generated",
+      "editorial": {
+        "status": "unreviewed",
+        "active": true,
+        "tags": [
+          "失谐",
+          "新增阵容",
+          "按四人组成去重",
+          "机制候选",
+          "零共鸣基准",
+          "双主C:dafutier"
+        ],
+        "notes": "职责与轮转：白藏通过普攻与技能生成言灵字并输出，领域与祝字治疗配合自身生命消耗；达芙蒂尔作为分段第二输出，不同时争前台。反应链：先分别用咒/暗入口施加浊燃、暗/魂入口施加黯星，在同一目标上同时维持两种状态才触发失谐；倾陷后追加另判。强化与功能：早雾终结技增加其他队友攻击，不包括她自身；早雾突破2按持续伤害状态种类增伤，浊燃层数不是状态种类；白藏突破2对已有浊燃目标生成言灵字时再施加浊燃；达芙蒂尔突破2失谐削减倾陷值上限，最多削减初始上限20%；法帝娅分摊伤害，黯星结束汲取生命上限；生命倍率心灵伤害不等于魂属性异能伤害。新增理由：相对旧记录keke-gen-baizang-shixie-baizang-dafutier-haniya-zaowu，新增法帝娅，替换哈尼娅。达芙蒂尔援护同振与削倾陷上限，法帝娅生存共同支持言灵主输出；分配两段输出而非让三人争驻场。。条件：零共鸣，不依赖专属弧盘，相关被动按培养资料的突破条件解锁；未按持有池筛选，未实测DPS，来源顺序承接旧核心编号，不代表比旧方案更强；没有零/黑羽E瞬环合入口，需要正常积累，启动与反应覆盖不能假定等同旧瞬环合队；分摊不是独立治疗，不保证受击阈值或故意承伤触发协同。依据：当前角色技能全文、培养解锁和当前esper_cycles.json；非官方实测排名。",
+        "updated_at": "2026-10-15T21:29:51+08:00"
+      }
+    },
+    "keke-gen-haiyue-shixie-anhunqu-haiyue-yiluoyi-zaowu": {
+      "id": "keke-gen-haiyue-shixie-anhunqu-haiyue-yiluoyi-zaowu",
+      "source_core_character_id": "haiyue",
+      "member_character_ids": [
+        "haiyue",
+        "anhunqu",
+        "zaowu",
+        "yiluoyi"
+      ],
+      "source_archetype": "海月 · 失谐新增方案",
+      "source_order": 4,
+      "source_visibility": "local_generated",
+      "editorial": {
+        "status": "unreviewed",
+        "active": true,
+        "tags": [
+          "失谐",
+          "新增阵容",
+          "按四人组成去重",
+          "机制候选",
+          "零共鸣基准",
+          "A级主C",
+          "双主C:anhunqu"
+        ],
+        "notes": "职责与轮转：海月以华彩、水母弹与终结技为主输出，移动水母消耗耐力；暗魂状态先建立再等待结算；安魂曲作为分段第二输出，不同时争前台。反应链：先分别用咒/暗入口施加浊燃、暗/魂入口施加黯星，在同一目标上同时维持两种状态才触发失谐；倾陷后追加另判。强化与功能：伊洛伊E攻击增益与治疗、突破4治疗附加无视防御；早雾终结技增加其他队友攻击，不包括她自身；早雾突破2按持续伤害状态种类增伤，浊燃层数不是状态种类；安魂曲突破2仅在目标已倾陷时触发失谐才有追加伤害；海月突破2在黯星结束追加三次魂伤，突破4水母弹命中叠自身攻击。新增理由：相对旧记录keke-gen-haiyue-shixie-anhunqu-haiyue-haniya-zaowu，新增伊洛伊，替换哈尼娅。伊洛伊补治疗、增益与聚怪，让海月水母输出覆盖黯星窗口；通过咒暗浊燃与黯星重叠建立失谐。。条件：零共鸣，不依赖专属弧盘，相关被动按培养资料的突破条件解锁；未按持有池筛选，未实测DPS，来源顺序承接旧核心编号，不代表比旧方案更强；没有零/黑羽E瞬环合入口，需要正常积累，启动与反应覆盖不能假定等同旧瞬环合队；可补覆纹，但仅按灵/咒实际伤害计算，不算作其他属性主C的通用增伤。依据：当前角色技能全文、培养解锁和当前esper_cycles.json；非官方实测排名。",
+        "updated_at": "2026-10-15T21:29:51+08:00"
+      }
+    },
+    "keke-gen-haiyue-shixie-adeler-anhunqu-haiyue-haniya": {
+      "id": "keke-gen-haiyue-shixie-adeler-anhunqu-haiyue-haniya",
+      "source_core_character_id": "haiyue",
+      "member_character_ids": [
+        "haiyue",
+        "anhunqu",
+        "adeler",
+        "haniya"
+      ],
+      "source_archetype": "海月 · 失谐新增方案",
+      "source_order": 5,
+      "source_visibility": "local_generated",
+      "editorial": {
+        "status": "unreviewed",
+        "active": true,
+        "tags": [
+          "失谐",
+          "新增阵容",
+          "按四人组成去重",
+          "机制候选",
+          "零共鸣基准",
+          "A级主C",
+          "双主C:anhunqu"
+        ],
+        "notes": "职责与轮转：海月以华彩、水母弹与终结技为主输出，移动水母消耗耐力；暗魂状态先建立再等待结算；安魂曲作为分段第二输出，不同时争前台。反应链：先分别用咒/暗入口施加浊燃、暗/魂入口施加黯星，在同一目标上同时维持两种状态才触发失谐；倾陷后追加另判。强化与功能：阿德勒E提供防御倍率护盾及咒持续伤害；阿德勒突破2的浊燃随机减益按结果计，不能保证每次减抗；安魂曲突破2仅在目标已倾陷时触发失谐才有追加伤害；哈尼娅技能与终结提供攻击增益；哈尼娅突破2在黯星结束时汲取攻击，保留累计上限与脱战复原；海月突破2在黯星结束追加三次魂伤，突破4水母弹命中叠自身攻击。新增理由：相对旧记录keke-gen-haiyue-shixie-anhunqu-haiyue-haniya-zaowu，新增阿德勒，替换早雾。护盾和攻击辅助构成海月黯星生存变体，阿德勒补咒持续伤害；不借用早雾或伊洛伊。。条件：零共鸣，不依赖专属弧盘，相关被动按培养资料的突破条件解锁；未按持有池筛选，未实测DPS，来源顺序承接旧核心编号，不代表比旧方案更强；没有零/黑羽E瞬环合入口，需要正常积累，启动与反应覆盖不能假定等同旧瞬环合队。依据：当前角色技能全文、培养解锁和当前esper_cycles.json；非官方实测排名。",
+        "updated_at": "2026-10-15T21:29:51+08:00"
+      }
+    },
+    "keke-gen-haiyue-shixie-dafutier-haiyue-yiluoyi-zaowu": {
+      "id": "keke-gen-haiyue-shixie-dafutier-haiyue-yiluoyi-zaowu",
+      "source_core_character_id": "haiyue",
+      "member_character_ids": [
+        "haiyue",
+        "dafutier",
+        "zaowu",
+        "yiluoyi"
+      ],
+      "source_archetype": "海月 · 失谐新增方案",
+      "source_order": 6,
+      "source_visibility": "local_generated",
+      "editorial": {
+        "status": "unreviewed",
+        "active": true,
+        "tags": [
+          "失谐",
+          "新增阵容",
+          "按四人组成去重",
+          "机制候选",
+          "零共鸣基准",
+          "A级主C",
+          "双主C:dafutier"
+        ],
+        "notes": "职责与轮转：海月以华彩、水母弹与终结技为主输出，移动水母消耗耐力；暗魂状态先建立再等待结算；达芙蒂尔作为分段第二输出，不同时争前台。反应链：先分别用咒/暗入口施加浊燃、暗/魂入口施加黯星，在同一目标上同时维持两种状态才触发失谐；倾陷后追加另判。强化与功能：伊洛伊E攻击增益与治疗、突破4治疗附加无视防御；早雾终结技增加其他队友攻击，不包括她自身；早雾突破2按持续伤害状态种类增伤，浊燃层数不是状态种类；达芙蒂尔突破2失谐削减倾陷值上限，最多削减初始上限20%；海月突破2在黯星结束追加三次魂伤，突破4水母弹命中叠自身攻击。新增理由：相对旧记录keke-gen-haiyue-jinran-haiyue-hasuoer-yiluoyi-zaowu，新增达芙蒂尔，替换哈索尔。以达芙蒂尔暗入口和倾陷特化配合海月魂输出，伊洛伊补治疗；不像黑羽，不假设暗入口瞬间满环合值。。条件：零共鸣，不依赖专属弧盘，相关被动按培养资料的突破条件解锁；未按持有池筛选，未实测DPS，来源顺序承接旧核心编号，不代表比旧方案更强；没有零/黑羽E瞬环合入口，需要正常积累，启动与反应覆盖不能假定等同旧瞬环合队；可补覆纹，但仅按灵/咒实际伤害计算，不算作其他属性主C的通用增伤。依据：当前角色技能全文、培养解锁和当前esper_cycles.json；非官方实测排名。",
+        "updated_at": "2026-10-15T21:29:51+08:00"
+      }
+    },
+    "keke-gen-haiyue-jinran-adeler-haiyue-haniya-yi": {
+      "id": "keke-gen-haiyue-jinran-adeler-haiyue-haniya-yi",
+      "source_core_character_id": "haiyue",
+      "member_character_ids": [
+        "haiyue",
+        "yi",
+        "haniya",
+        "adeler"
+      ],
+      "source_archetype": "海月 · 浸染新增方案",
+      "source_order": 7,
+      "source_visibility": "local_generated",
+      "editorial": {
+        "status": "unreviewed",
+        "active": true,
+        "tags": [
+          "浸染",
+          "新增阵容",
+          "按四人组成去重",
+          "机制候选",
+          "零共鸣基准",
+          "A级主C",
+          "全A级方案",
+          "双主C:yi"
+        ],
+        "notes": "职责与轮转：海月以华彩、水母弹与终结技为主输出，移动水母消耗耐力；暗魂状态先建立再等待结算；翳作为分段第二输出，不同时争前台。反应链：魂/相角色积环合值并通过可用援护入口建立浸染，使魂/相输出覆盖增伤窗口，不计算其他属性或心灵伤害的无条件收益。强化与功能：阿德勒E提供防御倍率护盾及咒持续伤害；哈尼娅技能与终结提供攻击增益。新增理由：相对旧记录sfsx-haiyue-03，新增阿德勒，替换法帝娅。全A级浸染方案：翳提供相入口与分段相输出，哈尼娅增攻、阿德勒护盾；无暗不计海月泛音和哈尼娅黯星汲取。。条件：零共鸣，不依赖专属弧盘，相关被动按培养资料的突破条件解锁；未按持有池筛选，未实测DPS，来源顺序承接旧核心编号，不代表比旧方案更强；没有零/黑羽E瞬环合入口，需要正常积累，启动与反应覆盖不能假定等同旧瞬环合队。依据：当前角色技能全文、培养解锁和当前esper_cycles.json；非官方实测排名。",
+        "updated_at": "2026-10-15T21:29:51+08:00"
+      }
+    },
+    "keke-gen-xiaozhi-yingxu-bohe-hasuoer-ling-xiaozhi": {
+      "id": "keke-gen-xiaozhi-yingxu-bohe-hasuoer-ling-xiaozhi",
+      "source_core_character_id": "xiaozhi",
+      "member_character_ids": [
+        "xiaozhi",
+        "ling",
+        "hasuoer",
+        "bohe"
+      ],
+      "source_archetype": "小吱 · 盈蓄新增方案",
+      "source_order": 4,
+      "source_visibility": "local_generated",
+      "editorial": {
+        "status": "unreviewed",
+        "active": true,
+        "tags": [
+          "盈蓄",
+          "新增阵容",
+          "按四人组成去重",
+          "机制候选",
+          "零共鸣基准"
+        ],
+        "notes": "职责与轮转：小吱先积金谷再安排盈余与金谷市场；盈蓄提供终结能量，不能直接等同金谷或变轨次数。反应链：先以光/灵建立创生，再以光/相建立延滞；花命中同一延滞目标时让主输出驻场获得终结能量，不能仅凭三属性齐全计算收益。强化与功能：薄荷突破2扩大花命中范围，不等于提高单花伤害或延长株寿命；哈索尔突破2将延滞延至12秒，对延滞目标提供全队10%暴击率；零突破2在盈蓄获得能量时提供生命回复；小吱突破2使前台盈蓄所得终结能量提高4点。新增理由：相对旧记录keke-gen-xiaozhi-yingxu-hasuoer-ling-xiaozhi-yiluoyi，新增薄荷，替换伊洛伊。薄荷创生范围强化服务群体花命中，小吱前台获得强化能量并进行金谷循环；不把能量直接算作金谷。。条件：零共鸣，不依赖专属弧盘，相关被动按培养资料的突破条件解锁；未按持有池筛选，未实测DPS，来源顺序承接旧核心编号，不代表比旧方案更强；零E为100光环合值快速入口；无盈蓄不计零治疗。依据：当前角色技能全文、培养解锁和当前esper_cycles.json；非官方实测排名。",
+        "updated_at": "2026-10-15T21:29:51+08:00"
+      }
+    },
+    "keke-gen-xiaozhi-yingxu-jiuyuan-ling-xiaozhi-yi": {
+      "id": "keke-gen-xiaozhi-yingxu-jiuyuan-ling-xiaozhi-yi",
+      "source_core_character_id": "xiaozhi",
+      "member_character_ids": [
+        "xiaozhi",
+        "ling",
+        "yi",
+        "jiuyuan"
+      ],
+      "source_archetype": "小吱 · 盈蓄新增方案",
+      "source_order": 5,
+      "source_visibility": "local_generated",
+      "editorial": {
+        "status": "unreviewed",
+        "active": true,
+        "tags": [
+          "盈蓄",
+          "新增阵容",
+          "按四人组成去重",
+          "机制候选",
+          "零共鸣基准"
+        ],
+        "notes": "职责与轮转：小吱先积金谷再安排盈余与金谷市场；盈蓄提供终结能量，不能直接等同金谷或变轨次数。反应链：先以光/灵建立创生，再以光/相建立延滞；花命中同一延滞目标时让主输出驻场获得终结能量，不能仅凭三属性齐全计算收益。强化与功能：九原突破2额外增株、原生株上限6，突破4花命中可触发玫约清算；翳突破2影刺对延滞目标再施加延滞，按命中与时机判断覆盖；零突破2在盈蓄获得能量时提供生命回复；小吱突破2使前台盈蓄所得终结能量提高4点。新增理由：相对旧记录keke-gen-xiaozhi-yingxu-hasuoer-jiuyuan-ling-xiaozhi，新增翳，替换哈索尔。九原增株和清算、翳再施加延滞服务小吱前台供能，释放哈索尔和伊洛伊；依赖真实影刺命中维持窗口。。条件：零共鸣，不依赖专属弧盘，相关被动按培养资料的突破条件解锁；未按持有池筛选，未实测DPS，来源顺序承接旧核心编号，不代表比旧方案更强；零E为100光环合值快速入口；无盈蓄不计零治疗。依据：当前角色技能全文、培养解锁和当前esper_cycles.json；非官方实测排名。",
+        "updated_at": "2026-10-15T21:29:51+08:00"
+      }
+    },
+    "keke-gen-xiaozhi-yingxu-hasuoer-ling-nanali-xiaozhi": {
+      "id": "keke-gen-xiaozhi-yingxu-hasuoer-ling-nanali-xiaozhi",
+      "source_core_character_id": "xiaozhi",
+      "member_character_ids": [
+        "xiaozhi",
+        "ling",
+        "hasuoer",
+        "nanali"
+      ],
+      "source_archetype": "小吱 · 盈蓄新增方案",
+      "source_order": 6,
+      "source_visibility": "local_generated",
+      "editorial": {
+        "status": "unreviewed",
+        "active": true,
+        "tags": [
+          "盈蓄",
+          "新增阵容",
+          "按四人组成去重",
+          "机制候选",
+          "零共鸣基准"
+        ],
+        "notes": "职责与轮转：小吱先积金谷再安排盈余与金谷市场；盈蓄提供终结能量，不能直接等同金谷或变轨次数。反应链：先以光/灵建立创生，再以光/相建立延滞；花命中同一延滞目标时让主输出驻场获得终结能量，不能仅凭三属性齐全计算收益。强化与功能：娜娜莉突破2每株10花、1秒发射；仅娜娜莉自己权柄驻场时才另计其突破4追加；哈索尔突破2将延滞延至12秒，对延滞目标提供全队10%暴击率；零突破2在盈蓄获得能量时提供生命回复；小吱突破2使前台盈蓄所得终结能量提高4点。新增理由：相对旧记录keke-gen-xiaozhi-yingxu-hasuoer-ling-xiaozhi-yiluoyi，新增娜娜莉，替换伊洛伊。娜娜莉强化花数与发射间隔服务小吱前台终结供能；不计娜娜莉全程权柄输出。。条件：零共鸣，不依赖专属弧盘，相关被动按培养资料的突破条件解锁；未按持有池筛选，未实测DPS，来源顺序承接旧核心编号，不代表比旧方案更强；零E为100光环合值快速入口；无盈蓄不计零治疗；娜娜莉作创生强化及短技能位，不计她全程权柄收益。依据：当前角色技能全文、培养解锁和当前esper_cycles.json；非官方实测排名。",
+        "updated_at": "2026-10-15T21:29:51+08:00"
+      }
+    },
+    "keke-gen-xun-chuangsheng-jiuyuan-nanali-xun-yiluoyi": {
+      "id": "keke-gen-xun-chuangsheng-jiuyuan-nanali-xun-yiluoyi",
+      "source_core_character_id": "xun",
+      "member_character_ids": [
+        "xun",
+        "nanali",
+        "jiuyuan",
+        "yiluoyi"
+      ],
+      "source_archetype": "浔 · 创生新增方案",
+      "source_order": 3,
+      "source_visibility": "local_generated",
+      "editorial": {
+        "status": "unreviewed",
+        "active": true,
+        "tags": [
+          "创生",
+          "新增阵容",
+          "按四人组成去重",
+          "机制候选",
+          "零共鸣基准"
+        ],
+        "notes": "职责与轮转：浔先积时计能量并铺创生，记录队友技能后进入时停；时停不能切人，其他角色不能同时驻场。反应链：光/灵角色先通过自身普攻、技能积环合值并按可用援护入口生成创生株，花命中产生范围伤害；原生株与复制体分别统计。强化与功能：娜娜莉突破2每株10花、1秒发射；仅娜娜莉自己权柄驻场时才另计其突破4追加；九原突破2额外增株、原生株上限6，突破4花命中可触发玫约清算；伊洛伊E攻击增益与治疗、突破4治疗附加无视防御；伊洛伊突破2在3秒后复制，复制体不占原生株上限、不再复制；20花、0.5秒间隔、单花原伤害37.5%；浔突破2使创生株时停期间继续攻击；终结技依赖时计能量且不能切人。新增理由：相对旧记录keke-gen-xun-chuangsheng-jiuyuan-ling-nanali-xun，新增伊洛伊，替换零。没有零，用浔自身光普攻与技能积环合，先铺花再记录队友技能并进入时停；终结技使用时计能量，不把创生或治疗当作时计回复。。条件：零共鸣，不依赖专属弧盘，相关被动按培养资料的突破条件解锁；未按持有池筛选，未实测DPS，来源顺序承接旧核心编号，不代表比旧方案更强；没有零/黑羽E瞬环合入口，需要正常积累，启动与反应覆盖不能假定等同旧瞬环合队；浔时停由浔独立驻场，其他角色不得同时驻场；娜娜莉作创生强化及短技能位，不计她全程权柄收益。依据：当前角色技能全文、培养解锁和当前esper_cycles.json；非官方实测排名。",
+        "updated_at": "2026-10-15T21:29:51+08:00"
+      }
+    },
+    "keke-gen-jiuyuan-yingxu-hasuoer-jiuyuan-ling-lingke": {
+      "id": "keke-gen-jiuyuan-yingxu-hasuoer-jiuyuan-ling-lingke",
+      "source_core_character_id": "jiuyuan",
+      "member_character_ids": [
+        "jiuyuan",
+        "ling",
+        "lingke",
+        "hasuoer"
+      ],
+      "source_archetype": "九原 · 盈蓄新增方案",
+      "source_order": 3,
+      "source_visibility": "local_generated",
+      "editorial": {
+        "status": "unreviewed",
+        "active": true,
+        "tags": [
+          "盈蓄",
+          "新增阵容",
+          "按四人组成去重",
+          "机制候选",
+          "零共鸣基准"
+        ],
+        "notes": "职责与轮转：九原通过普攻与技能积子弹、缔结玫约，随后射击与终局清算。反应链：先以光/灵建立创生，再以光/相建立延滞；花命中同一延滞目标时让主输出驻场获得终结能量，不能仅凭三属性齐全计算收益。强化与功能：九原突破2额外增株、原生株上限6，突破4花命中可触发玫约清算；哈索尔突破2将延滞延至12秒，对延滞目标提供全队10%暴击率；零突破2在盈蓄获得能量时提供生命回复；灵可突破4合击按所选角色属性减抗；不默认解锁合击直接环合觉醒。新增理由：相对旧记录keke-gen-jiuyuan-chuangsheng-jiuyuan-ling-nanali-yiluoyi，新增哈索尔、灵可，替换娜娜莉、伊洛伊。灵可选择九原合击减灵抗，九原驻场玫约与终局清算；哈索尔延滞与九原增株建立持续盈蓄，缺伊洛伊由零被动补治疗。。条件：零共鸣，不依赖专属弧盘，相关被动按培养资料的突破条件解锁；未按持有池筛选，未实测DPS，来源顺序承接旧核心编号，不代表比旧方案更强；零E为100光环合值快速入口；无盈蓄不计零治疗。依据：当前角色技能全文、培养解锁和当前esper_cycles.json；非官方实测排名。",
+        "updated_at": "2026-10-15T21:29:51+08:00"
+      }
+    },
+    "keke-gen-hasuoer-yingxu-bohe-hasuoer-jiuyuan-ling": {
+      "id": "keke-gen-hasuoer-yingxu-bohe-hasuoer-jiuyuan-ling",
+      "source_core_character_id": "hasuoer",
+      "member_character_ids": [
+        "hasuoer",
+        "ling",
+        "bohe",
+        "jiuyuan"
+      ],
+      "source_archetype": "哈索尔 · 盈蓄新增方案",
+      "source_order": 3,
+      "source_visibility": "local_generated",
+      "editorial": {
+        "status": "unreviewed",
+        "active": true,
+        "tags": [
+          "盈蓄",
+          "新增阵容",
+          "按四人组成去重",
+          "机制候选",
+          "零共鸣基准"
+        ],
+        "notes": "职责与轮转：哈索尔先积闪送之力再开紧急派送并完成轮转打击，切人会结束状态。反应链：先以光/灵建立创生，再以光/相建立延滞；花命中同一延滞目标时让主输出驻场获得终结能量，不能仅凭三属性齐全计算收益。强化与功能：薄荷突破2扩大花命中范围，不等于提高单花伤害或延长株寿命；九原突破2额外增株、原生株上限6，突破4花命中可触发玫约清算；哈索尔突破2将延滞延至12秒，对延滞目标提供全队10%暴击率；零突破2在盈蓄获得能量时提供生命回复。新增理由：相对旧记录keke-gen-hasuoer-yingxu-hasuoer-jiuyuan-ling-yiluoyi，新增薄荷，替换伊洛伊。薄荷范围强化、九原增株，哈索尔积闪送之力后在紧急派送独立窗口输出；切人即结束该状态，不能中途补辅助。。条件：零共鸣，不依赖专属弧盘，相关被动按培养资料的突破条件解锁；未按持有池筛选，未实测DPS，来源顺序承接旧核心编号，不代表比旧方案更强；零E为100光环合值快速入口；无盈蓄不计零治疗。依据：当前角色技能全文、培养解锁和当前esper_cycles.json；非官方实测排名。",
+        "updated_at": "2026-10-15T21:29:51+08:00"
+      }
+    },
+    "keke-gen-yi-jinran-adeler-haniya-heiyu-yi": {
+      "id": "keke-gen-yi-jinran-adeler-haniya-heiyu-yi",
+      "source_core_character_id": "yi",
+      "member_character_ids": [
+        "yi",
+        "heiyu",
+        "haniya",
+        "adeler"
+      ],
+      "source_archetype": "翳 · 浸染新增方案",
+      "source_order": 3,
+      "source_visibility": "local_generated",
+      "editorial": {
+        "status": "unreviewed",
+        "active": true,
+        "tags": [
+          "浸染",
+          "新增阵容",
+          "按四人组成去重",
+          "机制候选",
+          "零共鸣基准",
+          "A级主C"
+        ],
+        "notes": "职责与轮转：翳先积影刺，再利用尾追和啮逐潜影触碰追击；切人会退出潜影。反应链：魂/相角色积环合值并通过可用援护入口建立浸染，使魂/相输出覆盖增伤窗口，不计算其他属性或心灵伤害的无条件收益。强化与功能：阿德勒E提供防御倍率护盾及咒持续伤害；哈尼娅技能与终结提供攻击增益；黑羽E为其他队友驻场攻击提供失乐鸟协同，终结技增加全队攻击；黑羽突破2浸染基础增伤30%、持续20秒。新增理由：相对旧记录keke-gen-yi-jinran-heiyu-yi-yiluoyi-zaowu，新增阿德勒、哈尼娅，替换伊洛伊、早雾。黑羽浸染强化服务翳相输出，哈尼娅攻击与阿德勒护盾使早雾和伊洛伊可留给另一队；无光不计翳延滞再施加。。条件：零共鸣，不依赖专属弧盘，相关被动按培养资料的突破条件解锁；未按持有池筛选，未实测DPS，来源顺序承接旧核心编号，不代表比旧方案更强；黑羽E提供100魂环合值，其他属性仍需各自入口。依据：当前角色技能全文、培养解锁和当前esper_cycles.json；非官方实测排名。",
+        "updated_at": "2026-10-15T21:29:51+08:00"
+      }
+    },
+    "keke-gen-dafutier-shixie-adeler-baizang-dafutier-haniya": {
+      "id": "keke-gen-dafutier-shixie-adeler-baizang-dafutier-haniya",
+      "source_core_character_id": "dafutier",
+      "member_character_ids": [
+        "dafutier",
+        "baizang",
+        "adeler",
+        "haniya"
+      ],
+      "source_archetype": "达芙蒂尔 · 失谐新增方案",
+      "source_order": 3,
+      "source_visibility": "local_generated",
+      "editorial": {
+        "status": "unreviewed",
+        "active": true,
+        "tags": [
+          "失谐",
+          "新增阵容",
+          "按四人组成去重",
+          "机制候选",
+          "零共鸣基准",
+          "双主C:baizang"
+        ],
+        "notes": "职责与轮转：队友援护先为同振叠层，再给达芙蒂尔强化技能、终结技与幻影移行窗口；白藏作为分段第二输出，不同时争前台。反应链：先分别用咒/暗入口施加浊燃、暗/魂入口施加黯星，在同一目标上同时维持两种状态才触发失谐；倾陷后追加另判。强化与功能：阿德勒E提供防御倍率护盾及咒持续伤害；阿德勒突破2的浊燃随机减益按结果计，不能保证每次减抗；白藏突破2对已有浊燃目标生成言灵字时再施加浊燃；达芙蒂尔突破2失谐削减倾陷值上限，最多削减初始上限20%；哈尼娅技能与终结提供攻击增益；哈尼娅突破2在黯星结束时汲取攻击，保留累计上限与脱战复原。新增理由：相对旧记录keke-gen-dafutier-shixie-baizang-dafutier-haniya-zaowu，新增阿德勒，替换早雾。以阿德勒护盾、持续伤害和随机减益替换早雾；白藏生成言灵字配合浊燃，达芙蒂尔承担强化同振和破倾陷输出。。条件：零共鸣，不依赖专属弧盘，相关被动按培养资料的突破条件解锁；未按持有池筛选，未实测DPS，来源顺序承接旧核心编号，不代表比旧方案更强；没有零/黑羽E瞬环合入口，需要正常积累，启动与反应覆盖不能假定等同旧瞬环合队。依据：当前角色技能全文、培养解锁和当前esper_cycles.json；非官方实测排名。",
+        "updated_at": "2026-10-15T21:29:51+08:00"
+      }
+    },
+    "keke-gen-ling-yingxu-bohe-hasuoer-ling-yiluoyi": {
+      "id": "keke-gen-ling-yingxu-bohe-hasuoer-ling-yiluoyi",
+      "source_core_character_id": "ling",
+      "member_character_ids": [
+        "ling",
+        "hasuoer",
+        "bohe",
+        "yiluoyi"
+      ],
+      "source_archetype": "零 · 盈蓄新增方案",
+      "source_order": 3,
+      "source_visibility": "local_generated",
+      "editorial": {
+        "status": "unreviewed",
+        "active": true,
+        "tags": [
+          "盈蓄",
+          "新增阵容",
+          "按四人组成去重",
+          "机制候选",
+          "零共鸣基准"
+        ],
+        "notes": "职责与轮转：零以E光入口和终结技爆发为核心，与辅助技能交替，不冒称长驻场最高收益。反应链：先以光/灵建立创生，再以光/相建立延滞；花命中同一延滞目标时让主输出驻场获得终结能量，不能仅凭三属性齐全计算收益。强化与功能：薄荷突破2扩大花命中范围，不等于提高单花伤害或延长株寿命；伊洛伊E攻击增益与治疗、突破4治疗附加无视防御；伊洛伊突破2在3秒后复制，复制体不占原生株上限、不再复制；20花、0.5秒间隔、单花原伤害37.5%；哈索尔突破2将延滞延至12秒，对延滞目标提供全队10%暴击率；零突破2在盈蓄获得能量时提供生命回复。新增理由：相对旧记录keke-gen-ling-yingxu-hasuoer-jiuyuan-ling-yiluoyi，新增薄荷，替换九原。零主要承担E和终结爆发，薄荷扩花命中范围、伊洛伊复制与增益、哈索尔维持延滞；与零旧增株方案不同，不宣称原生株上限提高。。条件：零共鸣，不依赖专属弧盘，相关被动按培养资料的突破条件解锁；未按持有池筛选，未实测DPS，来源顺序承接旧核心编号，不代表比旧方案更强；零E为100光环合值快速入口；无盈蓄不计零治疗。依据：当前角色技能全文、培养解锁和当前esper_cycles.json；非官方实测排名。",
+        "updated_at": "2026-10-15T21:29:51+08:00"
+      }
     }
   },
   "removed": [
