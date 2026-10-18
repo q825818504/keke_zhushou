@@ -26,16 +26,30 @@ class VisionService:
         self.scanner_factory=scanner_factory
         self.lock=threading.RLock();self.stop=threading.Event();self.capture_stop=threading.Event();self.thread=None;self.scanner=None
         self.job={'running':False,'message':'尚未开始识别','processed':0,'total':0};self.batch=None
-        self.window=None;self.engine=None
+        self.window=None;self.engine=None;self.extra_engine=None
 
     def status(self):
         with self.lock:
             return json.loads(json.dumps({'job':self.job,'batch':self.batch},ensure_ascii=False))
 
     def _write(self,path,value):
-        path.parent.mkdir(parents=True,exist_ok=True);tmp=path.with_suffix('.'+secrets.token_hex(6)+'.tmp')
-        try:tmp.write_text(json.dumps(value,ensure_ascii=False,allow_nan=False),encoding='utf-8');os.replace(tmp,path)
-        finally:tmp.unlink(missing_ok=True)
+        # Windows readers can briefly deny rename/delete sharing. Coordinate our
+        # own readers and retry external transient locks without truncating JSON.
+        with self.lock:
+            path.parent.mkdir(parents=True,exist_ok=True);tmp=path.with_suffix('.'+secrets.token_hex(6)+'.tmp')
+            try:
+                tmp.write_text(json.dumps(value,ensure_ascii=False,allow_nan=False),encoding='utf-8')
+                delays=(.01,.025,.05,.1,.2,.35)
+                for attempt in range(len(delays)+1):
+                    try:
+                        os.replace(tmp,path)
+                        break
+                    except PermissionError:
+                        if attempt==len(delays):raise
+                        time.sleep(delays[attempt])
+            finally:
+                try:tmp.unlink(missing_ok=True)
+                except OSError:diagnostics.event('批次临时文件暂被占用，保留待清理',file=tmp.name)
 
     def _base(self,account,batch_id):
         if not isinstance(account,str) or not account.strip() or len(account)>80:raise ValueError('账号标签无效')
@@ -43,10 +57,11 @@ class VisionService:
         return self.directory/hashlib.sha256(account.encode()).hexdigest()/batch_id
 
     def load(self,account,batch_id):
-        base=self._base(account,batch_id)
-        batch=json.loads((base/'batch.json').read_text(encoding='utf-8'))
-        batch['storage']=self.storage_paths(base)
-        return batch
+        with self.lock:
+            base=self._base(account,batch_id)
+            batch=json.loads((base/'batch.json').read_text(encoding='utf-8'))
+            batch['storage']=self.storage_paths(base)
+            return batch
 
     @staticmethod
     def storage_paths(base):
@@ -60,13 +75,14 @@ class VisionService:
         return {'opened':True}
 
     def history(self,account):
-        root=self._base(account,'0'*24).parent
-        rows=[]
-        for file in sorted(root.glob('*/batch.json'),key=lambda p:p.stat().st_mtime,reverse=True)[:100]:
-            try:
-                b=json.loads(file.read_text(encoding='utf-8'));rows.append({k:b.get(k) for k in ('id','account','account_uid','mode','saved_at','complete','state','expected','processed')})
-            except (OSError,ValueError):pass
-        return rows
+        with self.lock:
+            root=self._base(account,'0'*24).parent
+            rows=[]
+            for file in sorted(root.glob('*/batch.json'),key=lambda p:p.stat().st_mtime,reverse=True)[:100]:
+                try:
+                    b=json.loads(file.read_text(encoding='utf-8'));rows.append({k:b.get(k) for k in ('id','account','account_uid','mode','saved_at','complete','state','expected','processed')})
+                except (OSError,ValueError):pass
+            return rows
 
     def delete(self,account,batch_id):
         with self.lock:
@@ -192,8 +208,11 @@ class VisionService:
         seen=set()
         worker_errors=[]
         existing={row['file']:row for row in batch['images']}
+        last_checkpoint=time.monotonic()
+        checkpoint_error=None
 
-        def update_progress():
+        def update_progress(persist=True):
+            nonlocal last_checkpoint,checkpoint_error
             batch['images']=sorted(existing.values(),key=lambda row:row['file'])
             batch['records']=[record for image in batch['images'] for record in image.get('records',[])]
             processed=sum(not row.get('pending') and row.get('error')!='采集或识别未完成' for row in batch['images'])
@@ -202,7 +221,17 @@ class VisionService:
             if mode=='new' or not self.job.get('capture_running'):self.job['total']=len(existing)
             phase='采集与识别并行' if self.job.get('capture_running') and not self.capture_stop.is_set() else '正在识别已保存截图'
             self.job['message']=f"已截图{len(existing)}张，已识别{processed}张；{phase}"
-            self._write(base/'batch.json',batch)
+            # Screenshots are already durable. Coalesce metadata checkpoints so
+            # two workers do not rewrite the growing batch for every image.
+            if persist and time.monotonic()-last_checkpoint>=.5:
+                try:
+                    self._write(base/'batch.json',batch)
+                    checkpoint_error=None
+                except PermissionError:
+                    if checkpoint_error is None:diagnostics.event('批次记录暂被占用，继续采集并稍后重试')
+                    checkpoint_error=True
+                finally:last_checkpoint=time.monotonic()
+            if checkpoint_error:self.job['message']+='；批次记录暂被占用，截图继续保存'
 
         def enqueue(source,*unused):
             self.check()
@@ -222,18 +251,32 @@ class VisionService:
                 try:work.put(path,timeout=.1);break
                 except queue.Full:continue
 
-        def recognize():
+        # Never call one RapidOCR instance concurrently: its detector and
+        # recognizer mutate buffers. Two independent engines have bounded CPU
+        # sessions; smaller machines and injected engines retain one worker.
+        worker_count=2 if self.engine_factory is None and (os.cpu_count() or 1)>=4 else 1
+        capture_finished=threading.Event()
+        if mode not in ('mouse','new','gamepad'):capture_finished.set()
+        def recognize(slot):
             try:
+                # Keep the previous single OCR lane while input is active. A
+                # second model initialization/inference must not delay releasing
+                # a held stick and turn one grid step into an auto-repeat.
+                if slot:
+                    capture_finished.wait()
                 while True:
                     path=work.get()
                     if path is None:break
                     if self.stop.is_set():continue
-                    if self.engine is None:
-                        if self.engine_factory:self.engine=self.engine_factory(base/'parser')
+                    engine=self.engine if slot==0 else self.extra_engine
+                    if engine is None:
+                        if self.engine_factory:engine=self.engine_factory(base/'parser')
                         else:
                             from .engine import VisionEngine
-                            self.engine=VisionEngine(base/'parser')
-                    try:result=self.engine.parse(path)
+                            engine=VisionEngine(base/'parser')
+                        if slot==0:self.engine=engine
+                        else:self.extra_engine=engine
+                    try:result=engine.parse(path)
                     except Exception as error:
                         diagnostics.failure('截图识别失败');result={'records':[],'error':str(error),'lines':[]}
                     result={**result,'file':path.name}
@@ -245,14 +288,21 @@ class VisionService:
             except Exception as error:
                 diagnostics.failure('OCR工作线程失败');worker_errors.append(error)
 
-        consumer=threading.Thread(target=recognize,name='vision-ocr',daemon=True)
-        consumer.start()
+        consumers=[threading.Thread(target=recognize,args=(slot,),name=f'vision-ocr-{slot}',daemon=True) for slot in range(worker_count)]
+        for consumer in consumers:consumer.start()
         problem=None
         try:
             if mode in ('mouse','new','gamepad'):
                 import keyboard
                 hook=keyboard.add_hotkey('f8',self.stop_capture)
                 try:
+                    # Initialize before the focus countdown, not immediately
+                    # after the first capture while the next stick is held.
+                    if self.engine is None and self.engine_factory is None:
+                        from .engine import VisionEngine
+                        self.job['message']='正在加载识别模型，加载完成后倒计时3秒开始扫描'
+                        self.engine=VisionEngine(base/'parser')
+                    self.job['message']='请在3秒内切回游戏装备背包；即将从第一件开始扫描'
                     for _ in range(30):self.check_capture();time.sleep(.1)
                     self.guard('interface_input')
                     self.scanner=self.make_scanner(mode,str(base/'images'))
@@ -275,18 +325,21 @@ class VisionService:
                         try:self.scanner.close()
                         except Exception:pass
                     self.scanner=None
+                    capture_finished.set()
             self._collect_images(base)
             for path in sorted((base/'images').glob('*.png')):enqueue(path)
         except Exception as error:
             diagnostics.failure('扫描批次失败');problem=error
         finally:
+            capture_finished.set()
             # Drain saved work on acquisition failure; cancellation skips queued
             # OCR while preserving pending evidence. Never let the next job race
-            # this job's single inference worker.
-            while consumer.is_alive():
-                try:work.put(None,timeout=.1);break
-                except queue.Full:continue
-            consumer.join()
+            # this job's inference workers.
+            for consumer in consumers:
+                while consumer.is_alive():
+                    try:work.put(None,timeout=.1);break
+                    except queue.Full:continue
+            for consumer in consumers:consumer.join()
             if hook is not None:
                 import keyboard
                 keyboard.remove_hotkey(hook)
@@ -296,7 +349,7 @@ class VisionService:
                 for path in sorted((base/'images').glob('*.png')):
                     if path.name not in existing:
                         existing[path.name]={'file':path.name,'records':[],'lines':[],'error':'尚未识别（任务已停止）','pending':True}
-                update_progress()
+                update_progress(persist=False)
                 failures=sum(bool(row.get('error')) and not row.get('pending') for row in batch['images'])
                 batch['complete']=bool(batch['mode'] in ('mouse','gamepad') and batch['capture_complete']
                     and not problem and not self.stop.is_set() and not failures
@@ -307,7 +360,9 @@ class VisionService:
                 if not problem and mode=='new' and not batch['images'] and not batch.get('capture_error'):self.job['message']='未发现新增装备（NEW），本批次未保存装备截图'
                 if not problem and batch.get('capture_error'):self.job['message']+='；采集未完成：'+batch['capture_error']
                 try:self._write(base/'batch.json',batch)
-                except Exception as error:self.job['message']='批次保存失败：'+str(error)
+                except Exception as error:
+                    batch['complete']=False;batch['state']='error'
+                    self.job['message']='截图已保留，但批次记录保存失败：'+str(error)
                 finally:self.job['running']=False
 
     def correct(self,account,batch_id,index,record):

@@ -208,7 +208,10 @@ def _create_directml_ocr(providers: list[str], model_kwargs: dict[str, str]):
 def _create_onnx_cpu_ocr(model_kwargs: dict[str, str]):
     try:
         from rapidocr_onnxruntime import RapidOCR
-        ocr = RapidOCR(use_cls=False, **model_kwargs)
+        # Small UI crops otherwise expand their shortest side to 736 pixels.
+        # Keep native detail and bound each independent worker's CPU use.
+        ocr = RapidOCR(use_cls=False, det_limit_type='max',
+                       intra_op_num_threads=1, inter_op_num_threads=1, **model_kwargs)
         _warmup(ocr)
         return ocr, "ONNX Runtime CPU (通用模式)"
     except Exception as e:

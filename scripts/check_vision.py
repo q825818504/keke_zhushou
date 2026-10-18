@@ -41,6 +41,45 @@ class VisionTests(unittest.TestCase):
     def done(self,service):
         service.thread.join(timeout=5);self.assertFalse(service.status()['job']['running']);return service.status()['batch']
 
+    def test_atomic_write_retries_permission_error_and_preserves_previous_json(self):
+        import os
+        replace=os.replace
+        with tempfile.TemporaryDirectory() as tmp:
+            service=self.service(tmp);path=Path(tmp)/'batch.json'
+            service._write(path,{'old':True})
+            attempts=[]
+            def transient(source,target):
+                attempts.append(1)
+                if len(attempts)<3:
+                    self.assertEqual(json.loads(path.read_text()),{'old':True})
+                    raise PermissionError('fixture shared read handle')
+                return replace(source,target)
+            with patch('vision.service.os.replace',side_effect=transient),patch('vision.service.time.sleep'):
+                service._write(path,{'new':True})
+            self.assertEqual(len(attempts),3)
+            self.assertEqual(json.loads(path.read_text()),{'new':True})
+            with patch('vision.service.os.replace',side_effect=PermissionError('locked')),patch('vision.service.time.sleep'):
+                with self.assertRaises(PermissionError):service._write(path,{'lost':True})
+            self.assertEqual(json.loads(path.read_text()),{'new':True})
+            self.assertEqual(list(Path(tmp).glob('*.tmp')),[])
+
+    def test_120_gamepad_captures_survive_failed_progress_checkpoints(self):
+        import itertools
+        keyboard=SimpleNamespace(add_hotkey=lambda *args:1,remove_hotkey=lambda *args:None)
+        with tempfile.TemporaryDirectory() as tmp,patch.dict(sys.modules,{'keyboard':keyboard}),patch('vision.service.time.sleep'):
+            service=self.service(tmp);service.guard=lambda capability:service.check_capture()
+            write=service._write;failures=[]
+            def checkpoint(path,value):
+                if value.get('images') and value.get('state')=='pending':
+                    failures.append(1);raise PermissionError('fixture occupied checkpoint')
+                return write(path,value)
+            with patch.object(service,'_write',side_effect=checkpoint),patch('vision.service.time.monotonic',side_effect=itertools.count()):
+                service.start('gamepad','A',count=120);batch=self.done(service)
+            self.assertTrue(failures,'fixture must exercise checkpoint failures')
+            self.assertTrue(batch['complete']);self.assertTrue(batch['capture_complete'])
+            self.assertEqual(len(batch['images']),120);self.assertEqual(len(batch['records']),120)
+            self.assertTrue(service.load('A',batch['id'])['complete'])
+
     def test_gamepad_capture_does_not_wait_for_slow_ocr_after_32_images(self):
         captured=threading.Event();release=threading.Event()
         keyboard=SimpleNamespace(add_hotkey=lambda *args:1,remove_hotkey=lambda *args:None)

@@ -237,6 +237,10 @@ class PyAutoGuiMouseScanInput:
     def between_items(self) -> None:
         self._sleep(self._randomization.between_items_seconds(self._rng))
 
+    def park(self, position: tuple[int, int]) -> None:
+        """Leave the equipment grid so hover cannot replace gamepad focus."""
+        self._pyautogui.moveTo(*position,duration=0.1,**self._pause_kwargs())
+
     def release_left(self) -> None:
         self._last_scroll_position = None
         self._pyautogui.mouseUp(button="left", **self._pause_kwargs())

@@ -20,15 +20,17 @@ def _elapsed_ms(start: float) -> float:
     return (time.perf_counter() - start) * 1000.0
 
 
-def process_single_image(processor, image_path: str):
+def process_single_image(processor, image_path: str, *, image=None, full_lines=None):
     total_start = time.perf_counter()
     filename = os.path.basename(image_path)
 
     read_start = time.perf_counter()
-    img = imread_unicode(image_path)
+    img = image
     if img is None:
-        raise ValueError("图像损坏或无法读取")
-    img = crop_window_border_from_image(img)
+        img = imread_unicode(image_path)
+        if img is None:
+            raise ValueError("图像损坏或无法读取")
+        img = crop_window_border_from_image(img)
     read_ms = _elapsed_ms(read_start)
 
     height, width = img.shape[:2]
@@ -68,7 +70,7 @@ def process_single_image(processor, image_path: str):
             ocr_calls=1 if shape_res.get("identity_skipped") else 2,
             profile=profile_name,
         )
-        return _prefer_complete_or_reward_item(processor, img, item, filename)
+        return _prefer_complete_or_reward_item(processor, img, item, filename, full_lines)
 
     set_name = processor.parser._fuzzy_match_set_name(hub_joined_text)
     main_box = regions["tape_main_stat"]
@@ -101,14 +103,14 @@ def process_single_image(processor, image_path: str):
         ocr_calls=3,
         profile=profile_name,
     )
-    return _prefer_complete_or_reward_item(processor, img, item, filename)
+    return _prefer_complete_or_reward_item(processor, img, item, filename, full_lines)
 
 
-def _prefer_complete_or_reward_item(processor, img, item, filename: str):
+def _prefer_complete_or_reward_item(processor, img, item, filename: str, full_lines=None):
     if _has_four_valid_sub_stats(processor, item):
         return item
     try:
-        reward_item = process_reward_scene(processor, img, filename=filename)
+        reward_item = process_reward_scene(processor, img, filename=filename, lines=full_lines() if full_lines else None)
         if _has_four_valid_sub_stats(processor, reward_item):
             return reward_item
     except Exception as exc:
@@ -124,8 +126,9 @@ def _has_four_valid_sub_stats(processor, item) -> bool:
     return sum(1 for stat in sub_stats.keys() if stat in valid_stats) >= 4
 
 
-def process_reward_scene(processor, img, filename: str = ""):
-    lines = processor.ocr_engine.extract_lines(img)
+def process_reward_scene(processor, img, filename: str = "", *, lines=None):
+    if lines is None:
+        lines = processor.ocr_engine.extract_lines(img)
     scene_type = _detect_reward_scene_type(processor, lines)
     if scene_type == "drive":
         return _synthesize_reward_drive(processor, img, lines)

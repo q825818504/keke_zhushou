@@ -1,12 +1,16 @@
 """Shared OCR and screenshot parsing, with honest inferred-field provenance."""
 import json
 import re
+import time
+import diagnostics
 from pathlib import Path
 import cv2
 from .upstream.scanner.batch_processor import BatchProcessor
 from .upstream.integrations.bundled_resources import bundled_config_dir, bundled_root
 from .upstream.integrations.vision.equipment_state_detection import right_panel_button_state_from_image
 from .upstream.features.drive_assembly.role_recognition import resolve_role_recognition
+from .upstream.scanner.window_capture import crop_window_border_from_image
+from .upstream.integrations.vision.screenshot_parser import process_single_image
 
 class VisionEngine:
     def __init__(self, directory):
@@ -15,19 +19,55 @@ class VisionEngine:
         self.roles=[r['name_zh'] for r in json.loads((bundled_root()/'catalog.json').read_text(encoding='utf-8'))['characters']]
 
     def parse(self,path):
+        started=time.perf_counter();fallback=False
+        detector=self.ocr.ocr.text_det
+        original=detector.limit_type
+        try:
+            result=self._parse(path)
+            # Sparse/uncertain recognition gets the original enlarged detector.
+            # Each worker owns its engine, so this setting is never shared.
+            if not result.get('records') or any(len(row.get('sub_attributes') or {})<4 for row in result['records']):
+                fallback=True;detector.limit_type='min'
+                retry=self._parse(path)
+                score=lambda value:sum(len(row.get('sub_attributes') or {}) for row in value.get('records',[]))
+                if score(retry)>=score(result):result=retry
+            return result
+        finally:
+            detector.limit_type=original
+            diagnostics.event('OCR单图完成',elapsed_ms=round((time.perf_counter()-started)*1000),detail_retry=fallback)
+
+    def _parse(self,path):
         from .upstream.utils.image_io import imread_unicode
         image=imread_unicode(str(path))
         if image is None:raise ValueError('图片无法读取')
-        lines=self.ocr.extract_lines(image)
-        role=resolve_role_recognition([line['text'] for line in lines],self.roles)
+        image=crop_window_border_from_image(image)
+        full_lines=None
+        def get_full_lines():
+            nonlocal full_lines
+            if full_lines is None:full_lines=self.ocr.extract_lines(image)
+            return full_lines
+        primary_error=None
         try:
-            items=[self.processor._process_single_image(str(path))]
+            items=[process_single_image(self.processor,str(path),image=image,full_lines=get_full_lines)]
         except Exception as primary:
             try:items=self.processor.parse_identify_items(str(path))
             except Exception:items=[]
-            if not items:
-                return {'lines':lines,'role':vars(role),'state_candidate':right_panel_button_state_from_image(image),
-                        'records':[],'error':str(primary)}
+            if not items:primary_error=str(primary)
+        # Normal inventory captures need only the equipment panel. Keep the
+        # full-scene path for unusual/offline images and reward parsing.
+        if full_lines is not None or primary_error:
+            lines=get_full_lines()
+        else:
+            left=int(image.shape[1]*.67)
+            lines=self.ocr.extract_lines(image[:,left:])
+            lines=[{**line,'box':(line['box'][0]+left,line['box'][1],line['box'][2]+left,line['box'][3])} for line in lines]
+            # A missing panel anchor means this may be a nonstandard layout.
+            texts={line['text'].strip() for line in lines}
+            if not {'主属性','副属性'}.issubset(texts):lines=get_full_lines()
+        role=resolve_role_recognition([line['text'] for line in lines],self.roles)
+        if primary_error:
+            return {'lines':lines,'role':vars(role),'state_candidate':right_panel_button_state_from_image(image),
+                    'records':[],'error':primary_error}
         records=[self.normalize(item) for item in items]
         if len(records)==1:
             main,level=read_visible_panel_fields(lines,image.shape[1])
