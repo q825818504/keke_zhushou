@@ -99,7 +99,8 @@ def main():
     admin_server.KNOWLEDGE = root / "data/knowledge"
     for name, filename in {"TEAM_SOURCE":"team_templates.json", "TEAM_OVERRIDES":"team_overrides.json",
                            "TEAM_BUNDLE":"team_templates.js", "CHAR_OVERRIDES":"character_overrides.json",
-                           "CHAR_BUNDLE":"character_overrides.js"}.items():
+                           "CHAR_BUNDLE":"character_overrides.js", "ESPER_CYCLES":"esper_cycles.json",
+                           "ESPER_CYCLE_BUNDLE":"esper_cycles.js"}.items():
         setattr(admin_server, name, admin_server.KNOWLEDGE / filename)
     ui_root = BUNDLE / "desktop" if getattr(sys, "frozen", False) else Path(__file__).resolve().parent
 

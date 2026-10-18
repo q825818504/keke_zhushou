@@ -9,3 +9,15 @@ __pycache__/
 
 # Generated OCR weights; restore with scripts/prepare_vision_models.py
 desktop/vision/resources/models/*.onnx
+
+# Local workspace state and generated test artifacts
+.planning/
+.idea/
+artifacts/
+experiments/
+_sandbox_temp/
+_tmp_probe/
+.tmp-voice/
+skills/
+*.exe
+*.log

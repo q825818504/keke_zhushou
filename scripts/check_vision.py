@@ -10,6 +10,12 @@ sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'desktop'))
 from vision.service import VisionService
 from runtime import public_server
 
+FIXTURE_UID='123456789012'
+
+class VisionTestService(VisionService):
+    def start(self,mode,account,count=None,files=None,batch_id=None,account_uid=None):
+        return super().start(mode,account,count,files,batch_id,account_uid or FIXTURE_UID)
+
 def image_payload():
     stream=io.BytesIO();Image.new('RGB',(240,160),'white').save(stream,format='PNG')
     return {'data':base64.b64encode(stream.getvalue()).decode()}
@@ -31,9 +37,52 @@ class Scanner:
         return count or 2
 
 class VisionTests(unittest.TestCase):
-    def service(self,tmp):return VisionService(tmp,engine_factory=Engine,scanner_factory=Scanner)
+    def service(self,tmp):return VisionTestService(tmp,engine_factory=Engine,scanner_factory=Scanner)
     def done(self,service):
         service.thread.join(timeout=5);self.assertFalse(service.status()['job']['running']);return service.status()['batch']
+
+    def test_gamepad_capture_does_not_wait_for_slow_ocr_after_32_images(self):
+        captured=threading.Event();release=threading.Event()
+        keyboard=SimpleNamespace(add_hotkey=lambda *args:1,remove_hotkey=lambda *args:None)
+        class SlowEngine(Engine):
+            def parse(self,path):
+                if not release.wait(10):raise RuntimeError('fixture OCR timeout')
+                return super().parse(path)
+        class BurstScanner(Scanner):
+            def start_scan(self,*args,**kwargs):
+                count=super().start_scan(*args,**kwargs);captured.set();return count
+        with tempfile.TemporaryDirectory() as tmp,patch.dict(sys.modules,{'keyboard':keyboard}),patch('vision.service.time.sleep'):
+            service=VisionTestService(tmp,engine_factory=SlowEngine,scanner_factory=BurstScanner)
+            service.guard=lambda capability:service.check_capture()
+            service.start('gamepad','A',count=45)
+            try:self.assertTrue(captured.wait(3),'controller stalled behind the OCR queue')
+            finally:release.set()
+            batch=self.done(service)
+            self.assertEqual(len(batch['images']),45)
+            self.assertEqual(len(batch['records']),45)
+            self.assertTrue(batch['capture_complete'])
+
+    def test_gamepad_fast_png_retains_original_pixels(self):
+        from vision.gamepad_scanner import GamepadScanner
+        pixels=bytes([20,80,140,255,0,128]*12)
+        with tempfile.TemporaryDirectory() as tmp:
+            scanner=GamepadScanner.__new__(GamepadScanner);scanner.capture_dir=tmp
+            frame=SimpleNamespace(rgb=pixels,size=(6,4))
+            with patch('vision.gamepad_scanner.capture_foreground_window',return_value=(frame,None)):
+                filename=scanner.capture_panel(None,1)
+            with Image.open(filename) as image:
+                self.assertEqual(image.size,(6,4));self.assertEqual(image.tobytes(),pixels)
+
+    def test_gamepad_adapter_removes_only_duplicate_countdown(self):
+        from vision.gamepad_scanner import GamepadScanner, UpstreamGamepadScanner
+        from vision.upstream.scanner.gamepad_controller import DEFAULT_SCAN_PROFILE
+        def initialize(scanner,*args,**kwargs):scanner.action_profile=DEFAULT_SCAN_PROFILE
+        with patch.object(UpstreamGamepadScanner,'__init__',initialize):
+            scanner=GamepadScanner('fixture')
+        self.assertEqual(scanner.action_profile.takeover_countdown_seconds,0)
+        self.assertEqual(scanner.action_profile.move_hold_seconds,DEFAULT_SCAN_PROFILE.move_hold_seconds)
+        self.assertEqual(scanner.action_profile.move_settle_seconds,DEFAULT_SCAN_PROFILE.move_settle_seconds)
+        self.assertEqual(scanner.action_profile.row_move_settle_seconds,DEFAULT_SCAN_PROFILE.row_move_settle_seconds)
 
     def test_offline_duplicate_equipment_retained_and_accounts_isolated(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -253,6 +302,14 @@ class VisionTests(unittest.TestCase):
             with self.assertRaises(ValueError):s.start('offline','A',files=[{'data':'bad$'}])
             with self.assertRaises(ValueError):s.start('offline','',files=[image_payload()])
 
+    def test_new_batches_require_valid_manual_uid(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            service=VisionService(tmp,engine_factory=Engine)
+            with self.assertRaisesRegex(ValueError,'UID'):
+                service.start('offline','A',files=[image_payload()])
+            with self.assertRaisesRegex(ValueError,'UID'):
+                service.start('offline','A',files=[image_payload()],account_uid='12x')
+
     def test_http_upload_security_and_image_route(self):
         with tempfile.TemporaryDirectory() as tmp:
             s=self.service(tmp);server=public_server(Path('build/desktop/public'),0,vision=s)
@@ -261,7 +318,7 @@ class VisionTests(unittest.TestCase):
                 status=json.load(urlopen(base+'/vision/status'))
                 headers={'Content-Type':'application/json','Origin':base,'X-Keke-Inventory':status['token']}
                 with self.assertRaises(HTTPError):urlopen(Request(base+'/vision/start',data=b'{}',headers={'Content-Type':'application/json'}))
-                body={'mode':'offline','account':'A','files':[image_payload()]}
+                body={'mode':'offline','account':'A','account_uid':FIXTURE_UID,'files':[image_payload()]}
                 json.load(urlopen(Request(base+'/vision/start',data=json.dumps(body).encode(),headers=headers)))
                 b=self.done(s)
                 self.assertEqual(json.load(urlopen(base+'/vision/batch?account=A&id='+b['id']))['id'],b['id'])

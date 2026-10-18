@@ -16,6 +16,8 @@ def prepare_public(app_version='1.0',app_revision=0) -> Path:
     if not OUTPUT.resolve().is_relative_to((ROOT / "build/desktop").resolve()):
         raise RuntimeError("Generated public output escaped build/desktop")
     OUTPUT.mkdir(parents=True, exist_ok=True)
+    styles_revision = hashlib.sha256((ROOT / "styles.css").read_bytes()).hexdigest()[:12]
+    desktop_styles_revision = hashlib.sha256((ROOT / "desktop/desktop.css").read_bytes()).hexdigest()[:12]
     # Remove only this generated, explicitly contained output from earlier builds.
     for child in OUTPUT.iterdir():
         if child.is_symlink():
@@ -39,6 +41,9 @@ def prepare_public(app_version='1.0',app_revision=0) -> Path:
     bundles=['public-config.js']
     (OUTPUT/'public-config.js').write_text('// Public JSON bindings are served by the local runtime.\n',encoding='utf-8')
     (OUTPUT / "drive_layout_solver.js").write_bytes((ROOT / "drive_layout_solver.js").read_bytes())
+    (OUTPUT / "cassette_scoring.js").write_bytes((ROOT / "cassette_scoring.js").read_bytes())
+    for script in ('loadout_optimizer.js','loadout_worker.js'):
+        (OUTPUT / script).write_bytes((ROOT / script).read_bytes())
     (OUTPUT / "terminal_puzzle.js").write_bytes((ROOT / "terminal_puzzle.js").read_bytes())
     (OUTPUT / "styles.css").write_bytes((ROOT / "styles.css").read_bytes())
     (OUTPUT / "desktop.css").write_bytes((ROOT / "desktop/desktop.css").read_bytes())
@@ -63,21 +68,24 @@ def prepare_public(app_version='1.0',app_revision=0) -> Path:
     subprocess.run(["node", str(ROOT / "desktop/compile_user.cjs"), str(OUTPUT / "app.js")], check=True)
     (OUTPUT / "inventory_sync.js").write_bytes((ROOT / "inventory_sync.js").read_bytes())
     (OUTPUT / "vision_scan.js").write_bytes((ROOT / "vision_scan.js").read_bytes())
+    (OUTPUT / "native_assembly.js").write_bytes((ROOT / "native_assembly.js").read_bytes())
+    (OUTPUT / "native_assembly_planner.js").write_bytes((ROOT / "native_assembly_planner.js").read_bytes())
+    (OUTPUT / "role_build.js").write_bytes((ROOT / "role_build.js").read_bytes())
     nav = '<nav id="userPrimaryNav" aria-label="功能导航">'
-    for route, label in [("team", "自动配队"), ("characters", "角色"), ("arc-drives", "弧盘"), ("cassettes", "空幕"), ("drive-blocks", "驱动块"), ("inventory", "背包数据"), ("vision", "读取数据")]:
-        nav += '<button class="user-primary-nav-item" type="button" data-user-route="' + route + '">' + label + '</button>'
+    for route, label in [("team", "自动配队"), ("characters", "角色"), ("arc-drives", "弧盘"), ("cassettes", "空幕"), ("drive-blocks", "驱动块"), ("role-build", "角色配装"), ("inventory", "背包数据"), ("vision", "读取数据")]:
+        nav += '<button class="user-primary-nav-item" type="button" data-user-route="' + route + '">' + label + ('<span class="role-build-plus" aria-label="PLUS">PLUS</span>' if route == 'role-build' else '') + '</button>'
     nav += "</nav>"
-    scripts = "".join('<script src="' + path + '"></script>' for path in bundles + ["recommendations.js", "drive_layout_solver.js", "terminal_puzzle.js", "inventory_sync.js", "vision_scan.js", "app.js"])
+    scripts = "".join('<script src="' + path + '"></script>' for path in bundles + ["recommendations.js", "cassette_scoring.js", "drive_layout_solver.js", "terminal_puzzle.js", "inventory_sync.js", "native_assembly_planner.js", "native_assembly.js", "role_build.js", "vision_scan.js", "app.js"])
     html = (
         '<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">'
         '<meta name="viewport" content="width=device-width,initial-scale=1">'
-        '<title>可可助手</title><link rel="stylesheet" href="styles.css">'
-        '<link rel="stylesheet" href="desktop.css"><script src="desktop.js"></script></head>'
+        f'<title>可可助手</title><link rel="stylesheet" href="styles.css?v={styles_revision}">'
+        f'<link rel="stylesheet" href="desktop.css?v={desktop_styles_revision}"><script src="desktop.js"></script></head>'
         '<body class="desktop-mode user-mode"><div class="app-shell">'
         '<aside class="desktop-sidebar"><div class="desktop-brand"><img class="desktop-app-mark" src="mint-avatar.png" alt="薄荷">'
-        '<div><strong>可可助手</strong><small>你的配队与养成助手</small></div></div>'
+        '<div><strong>可可助手</strong><small>配队与养成助手</small></div></div>'
         '<p class="desktop-nav-label">功能</p>' + nav +
-        f'<div class="desktop-sidebar-foot">Windows 桌面版 · v{app_version}<br>Ctrl + 1–7 快速切换<br><button id="releaseNotesButton" type="button">更新内容</button><button id="diagnosticsButton" type="button">诊断日志</button></div></aside>'
+        f'<div class="desktop-sidebar-foot">Windows 桌面版 · v{app_version}<br>Ctrl + 1–8 快速切换<br><button id="releaseNotesButton" type="button">更新内容</button><button id="diagnosticsButton" type="button">诊断日志</button></div></aside>'
         '<main class="main-content"><header class="topbar"><div class="breadcrumb"><span>可可助手</span>'
         '<strong id="activeBreadcrumb">自动配队</strong></div></header>' +
         str(view) + '</main></div>' + str(toast) + scripts + '</body></html>'
@@ -102,10 +110,15 @@ def prepare_public(app_version='1.0',app_revision=0) -> Path:
         f"可可助手 Windows 桌面版 v{app_version}\n"
         "图鉴与异能环合资料：环世全鉴 https://wiki.mysqil.com/ 作者 Matsuzaka Yuki。\n"
         "按 CC BY-NC-SA 4.0 使用、整理及共享：https://creativecommons.org/licenses/by-nc-sa/4.0/\n"
+        "图鉴资料已整理为本地结构化记录，界面使用的图片随应用本地打包；原始页面快照不进入用户版。\n"
         "公共配置由Gitee发布服务更新，下载失败可使用完整本地配置。\n",
         encoding="utf-8")
     files = {str(file.relative_to(OUTPUT)).replace("\\", "/"): hashlib.sha256(file.read_bytes()).hexdigest()
              for file in OUTPUT.rglob("*") if file.is_file()}
+    archived_wiki_pages = [name for name in files
+                           if name.startswith("data/mysqil/") and re.search(r"/raw/.*\.html?$", name, re.IGNORECASE)]
+    if archived_wiki_pages:
+        raise RuntimeError("Raw Wiki HTML archives must not enter the user release; ship normalized data and local assets only.")
     forbidden_files = {"admin_bridge.js", "team_manager.js", "reactions.js", "character_recommendations.js"}
     if forbidden_files.intersection(Path(name).name for name in files):
         raise RuntimeError("Private module entered public release")

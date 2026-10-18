@@ -4,6 +4,7 @@ window.KekeAdminBridge = (() => {
   const isLoopback = pageLocation?.protocol === "http:" && pageLocation.hostname === "127.0.0.1";
   let connected = false;
   let canSaveCharacter = false;
+  let canSaveRoleContent = false;
   function setSyncStatus(summary, text) {
     summary.textContent = text;
     const value = String(text || "");
@@ -19,6 +20,7 @@ window.KekeAdminBridge = (() => {
       const status = await response.json();
       connected = response.ok && status.service === "keke-admin";
       canSaveCharacter = status.capabilities?.includes("character-save") === true;
+      canSaveRoleContent = status.capabilities?.includes("character-profile-content-save") === true;
     } catch { connected = false; }
     return connected;
   })();
@@ -62,13 +64,30 @@ window.KekeAdminBridge = (() => {
   async function exportBrowserData() {
     const canonical = window.characterOverrides?.characters || {};
     const localBasic = readLocalJson("keke-role-basics-v1");
+    const localContent = readLocalJson("keke-role-content-v1");
+    const localReactionEnhancements = readLocalJson("keke-role-reaction-enhancements-v1");
     const characterBasics = {};
+    const characterContent = {};
     for (const [id, record] of Object.entries(canonical)) {
       if (record?.name || record?.basic) characterBasics[id] = { name: record.name, basic: record.basic || {} };
+      if (record?.skills || record?.awakenings || record?.resonance) characterContent[id] = { skills: record.skills, awakenings: record.awakenings, resonance: record.resonance };
     }
     for (const [id, record] of Object.entries(localBasic)) {
       characterBasics[id] = { ...characterBasics[id], ...record, basic: { ...characterBasics[id]?.basic, ...record?.basic } };
     }
+    for (const [id, record] of Object.entries(localContent)) characterContent[id] = { ...characterContent[id], ...record };
+    const reactionEnhancements = {};
+    for (const cycle of window.esperCycleKnowledge?.cycles || []) {
+      for (const entry of cycle.enhancements || []) {
+        if (!entry?.character_id) continue;
+        reactionEnhancements[entry.character_id] ||= [];
+        reactionEnhancements[entry.character_id].push({ ...entry, cycle_id: cycle.id });
+      }
+    }
+    for (const [id, record] of Object.entries(canonical)) {
+      if (Array.isArray(record?.reaction_enhancements)) reactionEnhancements[id] = record.reaction_enhancements;
+    }
+    for (const [id, entries] of Object.entries(localReactionEnhancements)) reactionEnhancements[id] = entries;
     const recFromStore = window.CharacterRecommendations?.export?.() || {};
     const localRecommendations = readLocalJson("keke-role-recommendations-v2");
     const characterRecommendations = { ...recFromStore, ...localRecommendations };
@@ -97,6 +116,8 @@ window.KekeAdminBridge = (() => {
       team_overrides: window.teamGuideStore?.overrides?.() || readLocalJson("keke-guide-lineups-v1"),
       character_recommendations: characterRecommendations,
       character_basics: characterBasics,
+      character_content: characterContent,
+      character_reaction_enhancements: reactionEnhancements,
       drive_layouts: driveLayouts
     };
   }
@@ -133,12 +154,19 @@ window.KekeAdminBridge = (() => {
         basic: { ...asRecord(existing.basic), ...asRecord(imported.basic) }
       };
     }
+    const characterContent = { ...asRecord(current.character_content) };
+    for (const [id, value] of Object.entries(asRecord(incoming.character_content))) {
+      characterContent[id] = { ...asRecord(characterContent[id]), ...asRecord(value) };
+    }
+    const reactionEnhancements = { ...asRecord(current.character_reaction_enhancements), ...asRecord(incoming.character_reaction_enhancements) };
     return {
       schema_version: "1.0.0",
       exported_at: new Date().toISOString(),
       team_overrides: { schema_version: "1.0.0", edits: teamEdits, removed: [...removed] },
       character_recommendations: recommendations,
       character_basics: basics,
+      character_content: characterContent,
+      character_reaction_enhancements: reactionEnhancements,
       drive_layouts: [...layouts.values()]
     };
   }
@@ -307,6 +335,8 @@ window.KekeAdminBridge = (() => {
         const result = await jsonRequest("/api/migrate", backup);
         localStorage.removeItem("keke-role-recommendations-v2");
         localStorage.removeItem("keke-role-basics-v1");
+        localStorage.removeItem("keke-role-content-v1");
+        localStorage.removeItem("keke-role-reaction-enhancements-v1");
         localStorage.removeItem("keke-guide-lineups-v1");
         await window.KekeDriveLayoutStore?.clearExported?.((backup.drive_layouts || []).map(item => item?.id).filter(Boolean));
         summary.textContent = result.message + " 已迁移本浏览器维护覆盖；源备份文件与旧 file:// 浏览器数据均保留。刷新页面后载入导入资料。";
@@ -324,10 +354,11 @@ window.KekeAdminBridge = (() => {
     mergeBrowserBackups,
     saveTeamOverrides: overrides => jsonRequest("/api/teams", { overrides }),
     saveCharacterBasics: (id, patch) => jsonRequest("/api/characters/basic", { id, patch }),
-    saveCharacter: async (id, patch, recommended) => {
+    saveCharacter: async (id, patch, recommended, content, reactionEnhancements) => {
       await ready;
       if (!canSaveCharacter) throw new Error("管理程序版本过旧，不支持完整保存。请关闭旧程序并打开新版管理EXE；本机编辑缓存已保留。");
-      return jsonRequest("/api/characters/save", { id, patch, recommended });
+      if (!canSaveRoleContent) throw new Error("当前本地管理程序版本过旧，不支持技能、觉醒和反应强化写回。请重启新版管理程序；本机编辑缓存已保留。");
+      return jsonRequest("/api/characters/save", { id, patch, recommended, content, reaction_enhancements: reactionEnhancements });
     },
     saveCharacterRecommendations: recommendations => jsonRequest("/api/characters/recommendations", { recommendations }),
     uploadDriveLayout: async (id, file) => {

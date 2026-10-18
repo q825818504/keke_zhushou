@@ -28,6 +28,8 @@ TEAM_OVERRIDES = KNOWLEDGE / "team_overrides.json"
 TEAM_BUNDLE = KNOWLEDGE / "team_templates.js"
 CHAR_OVERRIDES = KNOWLEDGE / "character_overrides.json"
 CHAR_BUNDLE = KNOWLEDGE / "character_overrides.js"
+ESPER_CYCLES = KNOWLEDGE / "esper_cycles.json"
+ESPER_CYCLE_BUNDLE = KNOWLEDGE / "esper_cycles.js"
 MAX_JSON_BYTES = 8 * 1024 * 1024
 MAX_IMAGE_BYTES = 15 * 1024 * 1024
 SAFE_ROOT_FILES = {
@@ -42,6 +44,8 @@ GIT_PATHS = {
     "data/knowledge/team_templates.js",
     "data/knowledge/character_overrides.json",
     "data/knowledge/character_overrides.js",
+    "data/knowledge/esper_cycles.json",
+    "data/knowledge/esper_cycles.js",
 }
 
 sys.path.insert(0, str(ROOT / "scripts"))
@@ -119,6 +123,14 @@ def _character_ids() -> set[str]:
         if isinstance(ident, str) and ID_PATTERN.fullmatch(ident):
             ids.add(ident)
     return ids
+
+
+def _character_name(ident: str) -> str:
+    for path in (KNOWLEDGE / "characters").glob("*.json"):
+        value = json.loads(path.read_text(encoding="utf-8-sig"))
+        if isinstance(value, dict) and value.get("id") == ident and isinstance(value.get("name"), str):
+            return value["name"]
+    return ident
 
 
 def _layout_relative_paths(ident: str) -> set[str]:
@@ -266,6 +278,155 @@ def _validate_basic_patch(value: dict) -> dict:
     return {"name": name.strip(), "basic": checked}
 
 
+def _validated_text(value, field: str, limit: int, *, required: bool = False) -> str:
+    if not isinstance(value, str) or len(value) > limit or (required and not value.strip()):
+        raise ValueError(f"{field} 格式无效")
+    return value.strip() if field.endswith("名称") or field.endswith("标签") else value
+
+
+def _validate_character_content(value: dict) -> dict:
+    if not isinstance(value, dict):
+        raise ValueError("角色技能、觉醒与共鸣资料格式无效")
+    checked = {}
+    if "skills" in value:
+        skills = value["skills"]
+        if not isinstance(skills, list) or len(skills) > 50:
+            raise ValueError("角色技能数量无效")
+        result = []
+        for skill in skills:
+            if not isinstance(skill, dict):
+                raise ValueError("技能条目格式无效")
+            item = copy.deepcopy(skill)
+            item["name"] = _validated_text(item.get("name"), "技能名称", 200, required=True)
+            for key, label, limit in (("id", "技能 ID", 200), ("category", "技能分类", 100), ("raw_text", "技能描述", 20000)):
+                if key in item:
+                    item[key] = _validated_text(item[key] if item[key] is not None else "", label, limit)
+            if "level_cap" in item:
+                level_cap = item["level_cap"]
+                # Passive, peculiarity, and city skills use 0 to mean they do
+                # not have an upgradeable level cap in the source data.
+                if isinstance(level_cap, bool) or not isinstance(level_cap, int) or not 0 <= level_cap <= 99:
+                    raise ValueError("技能等级上限需为 0–99 的整数")
+            parts = item.get("description_parts", [])
+            if not isinstance(parts, list) or len(parts) > 100:
+                raise ValueError("技能分段说明数量无效")
+            for part in parts:
+                if not isinstance(part, dict):
+                    raise ValueError("技能分段说明格式无效")
+                if "name" in part:
+                    part["name"] = _validated_text(part["name"] if part["name"] is not None else "", "分段标题", 200)
+                if "text" in part:
+                    part["text"] = _validated_text(part["text"] if part["text"] is not None else "", "分段内容", 5000)
+            parameters = item.get("parameters", [])
+            if not isinstance(parameters, list) or len(parameters) > 100:
+                raise ValueError("技能倍率参数数量无效")
+            for parameter in parameters:
+                if not isinstance(parameter, dict):
+                    raise ValueError("技能倍率参数格式无效")
+                if "label" in parameter:
+                    parameter["label"] = _validated_text(parameter["label"] if parameter["label"] is not None else "", "参数名称", 200)
+                values = parameter.get("values", [])
+                if not isinstance(values, list) or len(values) > 100:
+                    raise ValueError("技能倍率数值数量无效")
+                parameter["values"] = [
+                    _validated_text(str(entry) if isinstance(entry, (int, float)) and not isinstance(entry, bool) else entry, "技能倍率数值", 300)
+                    for entry in values
+                ]
+                if "current_value" in parameter:
+                    current_value = parameter["current_value"]
+                    if current_value is None:
+                        current_value = ""
+                    elif isinstance(current_value, (int, float)) and not isinstance(current_value, bool):
+                        current_value = str(current_value)
+                    parameter["current_value"] = _validated_text(current_value, "当前倍率数值", 300)
+            result.append(item)
+        checked["skills"] = result
+    if "awakenings" in value:
+        awakenings = value["awakenings"]
+        if not isinstance(awakenings, list) or len(awakenings) > 30:
+            raise ValueError("觉醒节点数量无效")
+        result = []
+        for awakening in awakenings:
+            if not isinstance(awakening, dict):
+                raise ValueError("觉醒节点格式无效")
+            item = copy.deepcopy(awakening)
+            item["name"] = _validated_text(item.get("name"), "觉醒名称", 200, required=True)
+            item["description"] = _validated_text(item.get("description") if item.get("description") is not None else "", "觉醒描述", 5000)
+            if "asset" in item:
+                item["asset"] = _validated_text(item["asset"] if item["asset"] is not None else "", "觉醒图片路径", 500)
+            result.append(item)
+        checked["awakenings"] = result
+    if "resonance" in value:
+        resonance = value["resonance"]
+        if not isinstance(resonance, list) or len(resonance) > 30:
+            raise ValueError("共鸣节点数量无效")
+        result = []
+        for entry in resonance:
+            if not isinstance(entry, dict):
+                raise ValueError("共鸣节点格式无效")
+            item = copy.deepcopy(entry)
+            item["name"] = _validated_text(item.get("name"), "共鸣节点名称", 200, required=True)
+            item["description"] = _validated_text(item.get("description") if item.get("description") is not None else "", "共鸣节点描述", 5000)
+            if "asset" in item:
+                item["asset"] = _validated_text(item["asset"] if item["asset"] is not None else "", "共鸣节点图片路径", 500)
+            level = item.get("level")
+            if level is not None and (isinstance(level, bool) or not isinstance(level, int) or not 1 <= level <= 6):
+                raise ValueError("共鸣等级需为 1–6 的整数")
+            result.append(item)
+        checked["resonance"] = result
+    return checked
+
+
+def _load_esper_cycles() -> dict:
+    value = _read_json(ESPER_CYCLES, {"schema_version": "1.0.0", "cycles": []})
+    if not isinstance(value.get("cycles"), list):
+        raise ValueError("反应资料格式无效")
+    return value
+
+
+def _validate_reaction_enhancements(value: list, cycle_document: dict) -> list:
+    if not isinstance(value, list) or len(value) > 20:
+        raise ValueError("角色反应强化数量无效")
+    known_cycles = {cycle.get("id"): cycle for cycle in cycle_document["cycles"] if isinstance(cycle, dict) and isinstance(cycle.get("id"), str)}
+    checked = []
+    seen = set()
+    for entry in value:
+        if not isinstance(entry, dict):
+            raise ValueError("角色反应强化条目格式无效")
+        cycle_id = entry.get("cycle_id")
+        if not isinstance(cycle_id, str) or cycle_id not in known_cycles:
+            raise ValueError("角色反应强化缺少有效反应类型")
+        if cycle_id in seen:
+            raise ValueError("同一角色不能重复选择相同反应类型")
+        seen.add(cycle_id)
+        item = copy.deepcopy(entry)
+        item["cycle_id"] = cycle_id
+        item["label"] = _validated_text(item.get("label", "被动技能"), "强化标签", 100)
+        item["description"] = _validated_text(item.get("description", ""), "反应强化描述", 5000)
+        if "image" in item and item["image"] is not None and not isinstance(item["image"], dict):
+            raise ValueError("反应强化图片资料格式无效")
+        checked.append(item)
+    return checked
+
+
+def _replace_character_reaction_enhancements(cycle_document: dict, ident: str, name: str, entries: list) -> None:
+    by_cycle = {entry["cycle_id"]: entry for entry in entries}
+    for cycle in cycle_document["cycles"]:
+        current = cycle.get("enhancements", [])
+        if not isinstance(current, list):
+            raise ValueError("反应强化资料格式无效")
+        retained = [entry for entry in current if not isinstance(entry, dict) or entry.get("character_id") != ident]
+        entry = by_cycle.get(cycle.get("id"))
+        if entry:
+            record = copy.deepcopy(entry)
+            record.pop("cycle_id", None)
+            record.pop("cycle_name", None)
+            record["character_id"] = ident
+            record["character_name"] = name
+            retained.append(record)
+        cycle["enhancements"] = retained
+
+
 def _load_character_overrides() -> dict:
     value = _read_json(CHAR_OVERRIDES, {"schema_version": "1.0.0", "characters": {}})
     characters = value.get("characters", {})
@@ -275,6 +436,7 @@ def _load_character_overrides() -> dict:
 
 
 def _commit_bundles(team_overrides: dict | None = None, character_overrides: dict | None = None,
+                    esper_cycles: dict | None = None,
                     extra_changes: dict[Path, bytes] | None = None, deletes: tuple[Path, ...] = ()) -> None:
     changes = dict(extra_changes or {})
     if team_overrides is not None:
@@ -284,6 +446,10 @@ def _commit_bundles(team_overrides: dict | None = None, character_overrides: dic
     if character_overrides is not None:
         changes[CHAR_OVERRIDES] = _pretty_json(character_overrides)
         changes[CHAR_BUNDLE] = render_character_bundle(character_overrides).encode("utf-8")
+    if esper_cycles is not None:
+        changes[ESPER_CYCLES] = _pretty_json(esper_cycles)
+        bundle = "window.esperCycleKnowledge = " + json.dumps(esper_cycles, ensure_ascii=False, separators=(",", ":")) + ";\n"
+        changes[ESPER_CYCLE_BUNDLE] = bundle.encode("utf-8")
     _write_transaction(changes, deletes)
 
 
@@ -425,7 +591,7 @@ class Handler(BaseHTTPRequestHandler):
                 self._json({'ok':True,'configured':False,'error':'本机发布凭据不可用'})
             return
         if parsed.path == "/api/ping":
-            self._json({"ok": True, "service": "keke-admin", "version": 2, "capabilities": ["character-save"]})
+            self._json({"ok": True, "service": "keke-admin", "version": 3, "capabilities": ["character-save", "character-profile-content-save"]})
             return
         if parsed.path == "/api/status":
             try:
@@ -500,13 +666,21 @@ class Handler(BaseHTTPRequestHandler):
                 if not isinstance(ident, str) or ident not in _character_ids():
                     raise ValueError("未知角色编号")
                 patch = _validate_basic_patch(body.get("patch"))
+                content = _validate_character_content(body.get("content", {}))
                 recommendation = _validate_recommendations({ident: body.get("recommended")})[ident]
                 document = _load_character_overrides()
                 current = document["characters"].setdefault(ident, {})
                 current["name"] = patch["name"]
                 current["basic"] = {**current.get("basic", {}), **patch["basic"]}
+                current.update(content)
                 current["recommended"] = recommendation
-                _commit_bundles(character_overrides=document)
+                cycle_document = None
+                if "reaction_enhancements" in body:
+                    cycle_document = _load_esper_cycles()
+                    entries = _validate_reaction_enhancements(body["reaction_enhancements"], cycle_document)
+                    _replace_character_reaction_enhancements(cycle_document, ident, patch["name"], entries)
+                    current["reaction_enhancements"] = entries
+                _commit_bundles(character_overrides=document, esper_cycles=cycle_document)
                 self._json({"ok": True, "message": "角色全部修改已保存"})
                 return
             if parsed.path == "/api/characters/basic":
@@ -630,6 +804,12 @@ class Handler(BaseHTTPRequestHandler):
         basics = body.get("character_basics", {})
         if not isinstance(basics, dict):
             raise ValueError("角色基础资料备份格式无效")
+        contents = body.get("character_content", {})
+        if not isinstance(contents, dict) or len(contents) > 200:
+            raise ValueError("角色资料内容备份格式无效")
+        reaction_enhancements = body.get("character_reaction_enhancements", {})
+        if not isinstance(reaction_enhancements, dict) or len(reaction_enhancements) > 200:
+            raise ValueError("角色反应强化备份格式无效")
         layouts = body.get("drive_layouts", [])
         if not isinstance(layouts, list) or len(layouts) > 200:
             raise ValueError("摆放图备份数量无效")
@@ -649,6 +829,22 @@ class Handler(BaseHTTPRequestHandler):
             current["basic"] = {**current.get("basic", {}), **checked["basic"]}
         for ident, recommendation in recommendations.items():
             document["characters"].setdefault(ident, {})["recommended"] = recommendation
+        for ident, content in contents.items():
+            if ident not in _character_ids():
+                raise ValueError(f"浏览器备份含未知角色：{ident}")
+            checked = _validate_character_content(content)
+            document["characters"].setdefault(ident, {}).update(checked)
+
+        cycle_document = _load_esper_cycles() if reaction_enhancements else None
+        if cycle_document is not None:
+            for ident, entries in reaction_enhancements.items():
+                if ident not in _character_ids():
+                    raise ValueError(f"浏览器备份含未知角色：{ident}")
+                checked = _validate_reaction_enhancements(entries, cycle_document)
+                current = document["characters"].get(ident, {})
+                name = current.get("name") or _character_name(ident)
+                _replace_character_reaction_enhancements(cycle_document, ident, name, checked)
+                document["characters"].setdefault(ident, {})["reaction_enhancements"] = checked
 
         extra_changes: dict[Path, bytes] = {}
         for record in layouts:
@@ -668,7 +864,7 @@ class Handler(BaseHTTPRequestHandler):
             extra_changes[ROOT / Path(relative)] = payload
             document["characters"].setdefault(ident, {})["drive_layout_image"] = relative
 
-        _commit_bundles(team_overrides=existing_teams, character_overrides=document, extra_changes=extra_changes)
+        _commit_bundles(team_overrides=existing_teams, character_overrides=document, esper_cycles=cycle_document, extra_changes=extra_changes)
         self._json({"ok": True, "message": "浏览器本地资料已合并到项目；原浏览器数据未自动删除，可确认后手动清理。"})
 
     def _sync_git(self, body: dict) -> None:

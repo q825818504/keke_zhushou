@@ -140,6 +140,13 @@ class AccountSourcesTests(unittest.TestCase):
                 headers={'Content-Type':'application/json','Origin':base,'X-Keke-Inventory':token}
                 result=json.load(urlopen(Request(base+'/inventory/components/check',data=data,headers=headers)))
                 self.assertTrue(result['bundle_ready']);self.assertFalse(result['deployment_ready'])
+                with self.assertRaises(HTTPError) as caught:
+                    urlopen(Request(base+'/inventory/components/deploy',data=data,headers=headers))
+                self.assertEqual(caught.exception.code,400)
+                self.assertFalse((game/'d3d12.dll').exists())
+                json.load(urlopen(Request(base+'/inventory/risk/acknowledge',data=b'{}',headers=headers)))
+                self.assertFalse(json.load(urlopen(base+'/inventory/status'))['native_risk']['enabled'])
+                json.load(urlopen(Request(base+'/inventory/risk-mode',data=b'{"enabled":true}',headers=headers)))
                 result=json.load(urlopen(Request(base+'/inventory/components/deploy',data=data,headers=headers)))
                 self.assertTrue(result['deployment_ready'])
                 result=json.load(urlopen(Request(base+'/inventory/components/remove',data=data,headers=headers)))

@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#f6f7fb">
   <meta name="description" content="可可助手 · 角色与图鉴用户端">
   <title>可可助手 · 角色资料与养成指南</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=ui-20261017b">
 </head>
 <body class="user-mode">
   <div class="app-shell">
@@ -24,7 +24,7 @@
           <span class="workspace-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none"><path d="M5 7.5 12 4l7 3.5v9L12 20l-7-3.5v-9Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="m5 7.5 7 3.5 7-3.5M12 11v9" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
           </span>
-          <span class="workspace-name"><b>角色资料库</b><small>线上版本 · v0.9.2</small></span>
+          <span class="workspace-name"><b>角色资料库</b><small>本地测试版 · V1.5（未发布）</small></span>
           <svg class="chevron" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m8 10 4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
       </div>
@@ -70,7 +70,7 @@
             <button class="user-primary-nav-item is-active pressable" type="button" data-user-route="characters" aria-current="page">角色</button>
             <button class="user-primary-nav-item pressable" type="button" data-user-route="team"><span>自动配队</span><span class="user-nav-badge">主功能</span></button>
             <button class="user-primary-nav-item pressable" type="button" data-user-route="arc-drives">弧盘</button>
-            <button class="user-primary-nav-item pressable" type="button" data-user-route="cassettes">空幕</button><button class="user-primary-nav-item pressable" type="button" data-user-route="drive-blocks">驱动块</button>
+            <button class="user-primary-nav-item pressable" type="button" data-user-route="cassettes">空幕</button><button class="user-primary-nav-item pressable" type="button" data-user-route="drive-blocks">驱动块</button><button class="user-primary-nav-item pressable" type="button" data-user-route="role-build">角色配装<span class="role-build-plus" aria-label="PLUS">PLUS</span></button>
             <button class="user-primary-nav-item pressable" type="button" data-user-route="vision">读取数据</button>
             <button class="user-primary-nav-item pressable" type="button" data-user-route="inventory">背包数据</button>
           </nav>
@@ -111,6 +111,7 @@
         <section class="user-route-panel" id="userTeamRoute" data-user-route-panel="team" hidden aria-labelledby="userTeamTitle"></section>
         <section class="user-route-panel" id="userArcDriveRoute" data-user-route-panel="arc-drives" hidden aria-labelledby="userArcDriveTitle"></section>
         <section class="user-route-panel" id="userSkyCurtainRoute" data-user-route-panel="cassettes" hidden aria-labelledby="userSkyCurtainTitle"></section><section class="user-route-panel" id="userDriverBlockRoute" data-user-route-panel="drive-blocks" hidden aria-labelledby="userDriverBlockTitle"></section>
+        <section class="user-route-panel" id="userRoleBuildRoute" data-user-route-panel="role-build" hidden aria-labelledby="userRoleBuildTitle"></section>
         <section class="user-route-panel" id="userVisionRoute" data-user-route-panel="vision" hidden aria-label="读取数据"></section>
         <section class="user-route-panel" id="userInventoryRoute" data-user-route-panel="inventory" hidden aria-label="背包数据"></section>
         <footer class="user-footer"><span>可可助手 · 为每一次选择保留证据</span></footer>
@@ -158,6 +159,12 @@
             <div class="form-section">
                 <div class="form-section-heading"><span class="section-number">02</span><div><h3>反应强化</h3><p>角色强化哪条反应，以及作用方式</p></div></div>
                 <div id="roleReactionEnhancements"></div>
+                <details class="role-data-editor">
+                  <summary>编辑反应强化</summary>
+                  <p class="role-data-editor-help">选择反应类型，维护该角色对应的强化标签和描述。</p>
+                  <div id="reactionEnhancementEditor"></div>
+                  <button class="outline-button pressable role-editor-add" type="button" data-role-editor-add="reaction">添加反应强化</button>
+                </details>
             </div>
 
 
@@ -182,14 +189,32 @@
               <section class="data-block skills-block">
                 <div class="data-block-heading"><span>技能描述与倍率</span><small>支持逐项展开查看</small></div>
                 <div id="skillsList"></div>
+                <details class="role-data-editor">
+                  <summary>编辑技能资料</summary>
+                  <p class="role-data-editor-help">可修改技能名称、描述、等级上限、分段说明和倍率参数。</p>
+                  <div id="skillsEditor"></div>
+                  <button class="outline-button pressable role-editor-add" type="button" data-role-editor-add="skill">添加技能</button>
+                </details>
               </section>
               <section class="data-block awakenings-block">
                 <div class="data-block-heading"><span>觉醒</span><small id="awakeningCountLabel">6 个觉醒节点</small></div>
                 <div class="awakening-grid" id="awakeningList"></div>
+                <details class="role-data-editor">
+                  <summary>编辑觉醒节点</summary>
+                  <p class="role-data-editor-help">可维护名称、效果描述和本地图片路径。</p>
+                  <div id="awakeningsEditor"></div>
+                  <button class="outline-button pressable role-editor-add" type="button" data-role-editor-add="awakening">添加觉醒节点</button>
+                </details>
               </section>
               <section class="data-block awakenings-block">
-                <div class="data-block-heading"><span>共鸣</span><small>角色共鸣节点</small></div>
+                <div class="data-block-heading"><span>共鸣</span><small id="resonanceCountLabel">角色共鸣节点</small></div>
                 <div class="awakening-grid" id="resonanceList"></div>
+                <details class="role-data-editor">
+                  <summary>编辑共鸣节点</summary>
+                  <p class="role-data-editor-help">可维护共鸣等级、节点名称、效果描述和图片路径。等级可留空，名称必填。</p>
+                  <div id="resonanceEditor"></div>
+                  <button class="outline-button pressable role-editor-add" type="button" data-role-editor-add="resonance">添加共鸣节点</button>
+                </details>
               </section>
               <section class="data-block cultivation-block">
                 <div class="data-block-heading"><span>养成计算</span><small>按目标等级汇总材料</small></div>
@@ -342,11 +367,15 @@
   <script src="team_manager.js"></script>
   <script src="reactions.js"></script>
   <script src="character_recommendations.js"></script>
+  <script src="cassette_scoring.js"></script>
   <script src="drive_layout_solver.js"></script>
   <script src="terminal_puzzle.js"></script>
   <script src="terminal_editor.js"></script>
   <script src="inventory_sync.js"></script>
+  <script src="native_assembly_planner.js"></script>
+  <script src="native_assembly.js"></script>
   <script src="vision_scan.js"></script>
+  <script src="role_build.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

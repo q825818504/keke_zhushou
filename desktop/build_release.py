@@ -100,7 +100,8 @@ def prepare(root=ROOT, config_only=False,patch_release=False):
         subprocess.run([sys.executable,'-m','PyInstaller','--noconfirm','--clean','--onefile','--windowed',
                         '--name',installer.stem,'--distpath',str(output),'--workpath',str(root/'build/installer'),
                         '--specpath',str(root/'build/installer'),'--paths',str(root/'desktop'),
-                        '--icon',str(icon),'--add-data',str(root/'desktop/assets')+';assets',
+                        '--icon',str(icon),'--add-data',str(root/'desktop/assets/mint-avatar.ico')+';assets',
+                        '--add-data',str(root/'desktop/assets/mint-avatar.png')+';assets',
                         '--add-data',str(root/'desktop/update-trust.json')+';.',str(root/'desktop/installer_entry.py')],check=True)
         checksum=digest(installer)
         published_installer=installer.with_name(installer.stem+'-'+checksum[:12]+'.exe')

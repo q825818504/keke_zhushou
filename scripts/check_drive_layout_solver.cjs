@@ -27,5 +27,8 @@ const spatial=all.candidates.map(c=>e.placementsFor(terminal,c.shape_counts,{lim
 const quantity={layout:{rows:1,columns:4,active_slots:[1,2,3,4].map(column=>({row:1,column}))}};
 const weighted=e.generateCandidates({terminal:quantity,preferredModel:2,required:[],allowPartial:false,inventory:[{uid:'h2a',shape_id:H2,stats:{atk:2}},{uid:'h2b',shape_id:H2,stats:{atk:3}},{uid:'h4',shape_id:'cell4_style1_1',stats:{atk:100}}],weights:{atk:1},rankBy:'equipment_first'});
 assert.equal(weighted.candidates[0].metrics.equipmentScore,100,'explicit equipment-first ranking');
+const scoreFirst=e.generateCandidates({terminal:quantity,preferredModel:2,required:[],allowPartial:true,inventory:[{uid:'h2a',shape_id:H2,stats:{atk:2}},{uid:'h2b',shape_id:H2,stats:{atk:3}},{uid:'h4',shape_id:'cell4_style1_1',stats:{atk:100}}],scoreItem:item=>item.stats.atk*e.byId.get(item.shape_id).model,rankBy:'score_first',limit:1});
+assert.equal(scoreFirst.candidates[0].shape_counts['cell4_style1_1'],1,'score-first examines the highest total-value profile before fill tie-breaks');
+assert.equal(scoreFirst.optimalityProven,true,'one returned result can be proven globally optimal after all profiles are scored');
 fs.mkdirSync('build/terminal-qa',{recursive:true});fs.writeFileSync('build/terminal-qa/multi-candidates.json',JSON.stringify({candidateCount:all.candidates.length,optimalProfileCount:optimal.length,mixedIIExample:mixed,inventoryMatched:matched.candidates[0]},null,2));
 console.log(`Multi-candidate engine passed: ${all.candidates.length} feasible shape profiles (${optimal.length} optimal III profiles); mixed II stock, weighted UIDs, fixed/excluded instances, spatial variants and budgets.`);

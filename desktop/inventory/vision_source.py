@@ -13,7 +13,8 @@ def vision_domain(batch):
         for key in ('is_equipped','is_locked','is_discarded'):
             row[key]=item.get(key) if type(item.get(key)) is bool else None
         row.setdefault('provenance',{})['instance_identity']='scan-local'
-        row['evidence']={'batch_id':batch['id'],'image':item.get('image'),'account':batch['account']}
+        row['evidence']={'batch_id':batch['id'],'image':item.get('image'),'account':batch['account'],
+                         'account_uid':batch.get('account_uid')}
         records.append(row)
     return {'contract_version':1,'source':{'adapter':'ocr-scan-v1','snapshot':batch['id'],'mode':batch['mode']},
             'coverage':{'scope':'selected_inventory_list' if batch.get('complete') is True else 'recognized_images',

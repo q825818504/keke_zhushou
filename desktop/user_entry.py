@@ -4,6 +4,7 @@ import json
 import sys
 from pathlib import Path
 from inventory.service import InventoryService
+from inventory.account_uid_reader import read_uid as read_game_uid
 from vision.service import VisionService
 from native.components import ComponentManager
 from runtime import APP_DATA, BUNDLE, guarded, launch_window, public_server, single_instance, local_workspace
@@ -21,7 +22,7 @@ SMOKE = """(() => {
    (!second || (second.sourceRecord && second.memberNames.length === 4 && !first.memberNames.some(name => second.memberNames.includes(name))));
  checks.templates = teamTemplateKnowledge.teams.length >= 27;
  userTeamOwnedNames = savedOwned;
- for (const route of ['characters','arc-drives','cassettes','drive-blocks','inventory','vision']) {
+ for (const route of ['characters','arc-drives','cassettes','drive-blocks','role-build','inventory','vision']) {
    showUserRoute(route);
    const panel = document.querySelector('[data-user-route-panel="' + route + '"]');
    checks[route] = !!panel && !panel.hidden && panel.textContent.trim().length > 20;
@@ -36,6 +37,7 @@ SMOKE = """(() => {
  showUserRoute('inventory');
  checks.visionModule = typeof window.KekeVision?.render === 'function';
  checks.inventoryModule = typeof window.KekeInventory?.render === 'function';
+ checks.roleBuildModule = typeof window.KekeRoleBuild?.render === 'function';
  return { checks, errors: window.__desktopErrors, title: document.title,
    characterCount: Object.keys(characterData).length, viewport: [innerWidth,innerHeight] };
 })()"""
@@ -97,7 +99,8 @@ def main():
     root = BUNDLE / "public" if (BUNDLE / "public").exists() else Path(__file__).resolve().parents[1] / "build/desktop/public"
     vision = VisionService(APP_DATA / "vision-scans")
     components = ComponentManager(APP_DATA / "native-components")
-    inventory = InventoryService(APP_DATA / "player-inventory", components=components, vision=vision)
+    inventory = InventoryService(APP_DATA / "player-inventory", components=components, vision=vision,
+                                uid_reader=read_game_uid)
     server = public_server(root, 0 if args.smoke_report else 8767, workspace=local_workspace if configuration is None else None,
                            inventory=inventory, vision=vision,configuration=configuration,startup_warning=startup_warning)
     launch_window("可可助手", "user", server, report=args.smoke_report, screenshot=args.screenshot, smoke_js=SMOKE)

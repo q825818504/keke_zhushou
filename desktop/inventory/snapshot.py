@@ -12,6 +12,18 @@ DOMAINS = {
  'environment': ('environment', 'records', ('environment.snapshot.v1',)),
 }
 
+def require_current_revision(core, header, check):
+    """Cheap pre-write guard; full records are still read and verified after each write."""
+    current = core.call('native.snapshot.status', {}, check)
+    matches = [row for row in current.get('domains', [])
+               if isinstance(row, dict) and row.get('domain') == header.get('domain')]
+    if (current.get('providerId') != header.get('providerId') or len(matches) != 1
+            or matches[0].get('ready') is not True or matches[0].get('dirty') is not False
+            or matches[0].get('domainKey') != header.get('domainKey')
+            or matches[0].get('revision') != header.get('revision')):
+        raise ValueError('原生装备快照修订已变化，停止后续操作；请重新读取并生成方案')
+    return True
+
 def uid(value):
     if not isinstance(value, dict) or any(type(value.get(k)) is not int or not 0 < value[k] < 4294967295 for k in ('slot','serial')):
         raise ValueError('装备UID无效')

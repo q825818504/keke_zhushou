@@ -15,6 +15,7 @@ from datetime import datetime,timezone
 from concurrent.futures import CancelledError
 from PIL import Image
 import diagnostics
+from inventory.accounts import validate_uid
 
 MODES=('offline','mouse','new','gamepad','retry')
 
@@ -63,7 +64,7 @@ class VisionService:
         rows=[]
         for file in sorted(root.glob('*/batch.json'),key=lambda p:p.stat().st_mtime,reverse=True)[:100]:
             try:
-                b=json.loads(file.read_text(encoding='utf-8'));rows.append({k:b.get(k) for k in ('id','account','mode','saved_at','complete','state','expected','processed')})
+                b=json.loads(file.read_text(encoding='utf-8'));rows.append({k:b.get(k) for k in ('id','account','account_uid','mode','saved_at','complete','state','expected','processed')})
             except (OSError,ValueError):pass
         return rows
 
@@ -92,20 +93,26 @@ class VisionService:
         if not path.is_file():raise ValueError('图片不存在')
         return path
 
-    def start(self,mode,account,count=None,files=None,batch_id=None):
+    def start(self,mode,account,count=None,files=None,batch_id=None,account_uid=None):
         if mode not in MODES:raise ValueError('识别模式无效')
         self._base(account,'0'*24)
+        if mode == 'retry':
+            account_uid = validate_uid(account_uid)
+        else:
+            account_uid = validate_uid(account_uid)
         if mode in ('mouse','gamepad') and (type(count) is not int or not 1<=count<=2000):raise ValueError('请填写1–2000的当前筛选库存数量')
         with self.lock:
             if self.job['running']:raise ValueError('已有识别任务，请等待或取消')
             if mode=='retry':
                 batch=self.load(account,batch_id);base=self._base(account,batch_id)
                 if not any(row.get('error') for row in batch['images']):raise ValueError('此批次没有失败图片')
+                if batch.get('account_uid') not in (None, account_uid):raise ValueError('此批次所属UID与当前账号资料不一致')
+                batch['account_uid'] = account_uid
                 # Retrying OCR cannot repair a cancelled or incomplete acquisition.
                 batch['retry']=True
             else:
                 batch_id=secrets.token_hex(12);base=self._base(account,batch_id);(base/'images').mkdir(parents=True)
-                batch={'schema_version':1,'id':batch_id,'account':account,'mode':mode,'expected':count,
+                batch={'schema_version':1,'id':batch_id,'account':account,'account_uid':account_uid,'mode':mode,'expected':count,
                        'saved_at':datetime.now(timezone.utc).isoformat(),'state':'pending','complete':False,
                        'capture_complete':False,'processed':0,'images':[],'records':[]}
                 if mode=='offline':
@@ -126,7 +133,7 @@ class VisionService:
                     batch['expected']=len(files);batch['capture_complete']=True
             self.stop.clear();self.capture_stop.clear();self.window=None;self.batch=batch
             batch['storage']=self.storage_paths(base)
-            self.job={'running':True,'message':'正在准备OCR；扫描时请在3秒内切回游戏装备背包','processed':0,'total':batch['expected'] or 0,'account':account,'id':batch_id,'capture_running':mode in ('mouse','new','gamepad'),'capture_stopping':False}
+            self.job={'running':True,'message':'正在准备OCR；扫描时请在3秒内切回游戏装备背包','processed':0,'total':batch['expected'] or 0,'account':account,'account_uid':account_uid,'id':batch_id,'capture_running':mode in ('mouse','new','gamepad'),'capture_stopping':False}
             self._write(base/'batch.json',batch)
             self.thread=threading.Thread(target=self._run,args=(base,batch,mode),daemon=True);self.thread.start()
         return self.status()
@@ -169,7 +176,7 @@ class VisionService:
             from .upstream.scanner.drone_scanner import DroneScanner
             from .upstream.integrations.bundled_resources import bundled_config_dir
             return DroneScanner(directory,str(bundled_config_dir()/'templates/new_tag.png'),operation_guard=self.guard)
-        from .upstream.scanner.gamepad_controller import GamepadScanner
+        from .gamepad_scanner import GamepadScanner
         return GamepadScanner(directory,operation_guard=self.guard)
 
     def _collect_images(self,base):
@@ -179,7 +186,9 @@ class VisionService:
 
     def _run(self,base,batch,mode):
         hook=None
-        work=queue.Queue(maxsize=32)
+        # Full gamepad scans queue paths to screenshots already on disk (at most 2000).
+        # A slow OCR worker must not stop controller navigation after 32 captures.
+        work=queue.Queue(maxsize=0 if mode=='gamepad' else 32)
         seen=set()
         worker_errors=[]
         existing={row['file']:row for row in batch['images']}

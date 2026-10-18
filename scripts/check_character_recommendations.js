@@ -14,11 +14,14 @@ const { chromium } = require(process.env.KEKE_PLAYWRIGHT_MODULE || "playwright")
     };
     await page.goto("file:///D:/keke_zhushou/index.html");
     await page.waitForLoadState("networkidle");
-    const defaults = await page.evaluate(() => window.characterKnowledge);
+    const sourceDefaults = await page.evaluate(() => JSON.parse(JSON.stringify(window.characterKnowledge)));
+const defaults = await page.evaluate(() => Object.fromEntries(Object.values(characterData).map(data => [data.id, JSON.parse(JSON.stringify(data.knowledge))])));
     const correctTerminal = "每装配一个Ⅲ型驱动，使暴击伤害增加16%";
-    assert.equal(defaults.zhenhong.terminal.description, correctTerminal, "Zhenhong default terminal must match the live guide");
-    assert.equal(defaults.zhenhong.recommended.cassette.terminal.description, correctTerminal, "nested terminal must be corrected too");
-    assert.deepEqual(await page.evaluate(() => Object.fromEntries(Object.values(characterData).map(data => [data.id, data.knowledge]))), defaults, "all 25 default records must remain identical");
+    assert.equal(sourceDefaults.zhenhong.terminal.description, correctTerminal, "Zhenhong source terminal must match the live guide");
+    assert.equal(defaults.zhenhong.terminal.description, correctTerminal, "Zhenhong effective terminal must match the live guide");
+    assert.equal(sourceDefaults.zhenhong.recommended.cassette.terminal.description, correctTerminal, "nested source terminal must be corrected too");
+    assert.equal(defaults.zhenhong.recommended.cassette.terminal.description, correctTerminal, "nested effective terminal must be corrected too");
+    assert.equal(Object.keys(defaults).length, 25, "all 25 effective role defaults must load");
     await page.evaluate(() => localStorage.setItem("keke-character-builds-v1", JSON.stringify({ zhenhong: { weapon: null, cassette: null } })));
     await reload();
     assert.deepEqual(await page.evaluate(() => Object.fromEntries(Object.values(characterData).map(data => [data.id, data.knowledge]))), defaults, "rolled-back overrides cannot clear defaults");
@@ -50,7 +53,7 @@ const { chromium } = require(process.env.KEKE_PLAYWRIGHT_MODULE || "playwright")
       if (id !== "zhenhong") assert.deepEqual(effective[id], original, `${id}: untouched role remains identical`);
       else assert.deepEqual({ ...effective[id], recommended: original.recommended }, original, "only recommended equipment may change");
     }
-    assert.deepEqual(await page.evaluate(() => window.characterKnowledge), defaults, "imported source data must never mutate");
+    assert.deepEqual(await page.evaluate(() => window.characterKnowledge), sourceDefaults, "imported source data must never mutate");
     await edit();
     await page.locator("[data-reset-recommendation]").click();
     assert.deepEqual(await page.evaluate(() => activeKnowledge.recommended), defaults.zhenhong.recommended, "restore must recover every default field, including affixes and terminal");
@@ -67,7 +70,7 @@ const { chromium } = require(process.env.KEKE_PLAYWRIGHT_MODULE || "playwright")
       if (!role.entries.length) assert.equal(text.trim(), "无", role.name);
       else for (const entry of role.entries) assert.ok(text.includes(entry.name) && text.includes(entry.description), role.name);
     }
-    assert.deepEqual(await page.evaluate(() => window.characterKnowledge), defaults, "reaction display cannot rewrite character facts");
+    assert.deepEqual(await page.evaluate(() => window.characterKnowledge), sourceDefaults, "reaction display cannot rewrite character facts");
     await page.setViewportSize({ width: 390, height: 844 });
     await page.locator(".recommendation-editor summary").click();
     assert.equal(await page.locator('[data-recommendation-kind="weapon"]').isVisible(), true);

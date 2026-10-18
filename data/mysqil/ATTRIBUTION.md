@@ -12,3 +12,10 @@
 - Team recommendations remain in raw snapshots and are excluded from normalized knowledge.
 
 Check license compatibility before redistributing imported descriptions or images, especially in commercial use.
+
+## Local asset use in Keke Assistant
+
+- The app renders the normalized records and local image files referenced by `local_path`; image paths are restricted to the project's `data/` directory.
+- HTML pages under `raw/` are source archives for auditing and re-import only. They contain the source site's original navigation and page resources and are not loaded by the app or copied into the Windows user release.
+- `source_url` and `license_url` fields are retained as attribution metadata. They are not used to fetch images or render clickable source links in the app.
+- The public user release copies only local image files referenced by its app bundle. Keep the author, source, license, and modification notice when sharing adapted data.

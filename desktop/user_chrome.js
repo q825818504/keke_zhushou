@@ -20,6 +20,8 @@ window.addEventListener('DOMContentLoaded', () => {
     vision:'<path d="M3 8V3h5m8 0h5v5M3 16v5h5m8 0h5v-5M5 12h14"/>'
   };
   document.querySelectorAll('.desktop-sidebar [data-user-route]').forEach(button=>{
+    const label=button.dataset.userRoute==='role-build'?'角色配装 PLUS':button.textContent.trim();
+    button.setAttribute('aria-label',label);button.title=label;
     const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
     svg.setAttribute('viewBox','0 0 24 24');svg.setAttribute('aria-hidden','true');
     svg.innerHTML=icons[button.dataset.userRoute] || icons.inventory;button.prepend(svg);
@@ -130,7 +132,7 @@ window.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('focus', check);
 });
 document.addEventListener('keydown', event => {
-  if (!event.ctrlKey || !/^[1-7]$/.test(event.key) || /INPUT|TEXTAREA|SELECT/.test(event.target.tagName)) return;
+  if (!event.ctrlKey || !/^[1-8]$/.test(event.key) || /INPUT|TEXTAREA|SELECT/.test(event.target.tagName)) return;
   event.preventDefault();
-  showUserRoute(['team','characters','arc-drives','cassettes','drive-blocks','inventory','vision'][Number(event.key)-1]);
+  showUserRoute(['team','characters','arc-drives','cassettes','drive-blocks','role-build','inventory','vision'][Number(event.key)-1]);
 });

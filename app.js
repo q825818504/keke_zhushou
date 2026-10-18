@@ -13,7 +13,48 @@ const localRoleContentOverrides = (() => {
     return value && typeof value === "object" && !Array.isArray(value) ? value : {};
   } catch { return {}; }
 })();
+const roleReactionStorageKey = "keke-role-reaction-enhancements-v1";
+const localRoleReactionOverrides = (() => {
+  try {
+    const value = JSON.parse(localStorage.getItem(roleReactionStorageKey) || "{}");
+    return value && typeof value === "object" && !Array.isArray(value) ? value : {};
+  } catch { return {}; }
+})();
+const roleReactionDrafts = Object.create(null);
 const cloneData = value => value == null ? value : JSON.parse(JSON.stringify(value));
+
+function syncCharacterReactionEnhancements(characterId, entries, characterName = "") {
+  const cycles = window.esperCycleKnowledge?.cycles || [];
+  for (const cycle of cycles) {
+    cycle.enhancements = (cycle.enhancements || []).filter(entry => entry.character_id !== characterId);
+  }
+  for (const entry of entries || []) {
+    const cycle = cycles.find(item => item.id === entry.cycle_id);
+    if (!cycle) continue;
+    const record = cloneData(entry) || {};
+    delete record.cycle_id;
+    delete record.cycle_name;
+    record.character_id = characterId;
+    record.character_name = characterName || record.character_name || "";
+    record.label = record.label || "被动技能";
+    record.description = record.description || "";
+    cycle.enhancements ||= [];
+    cycle.enhancements.push(record);
+  }
+}
+
+for (const [characterId, record] of Object.entries(window.characterOverrides?.characters || {})) {
+  if (Object.prototype.hasOwnProperty.call(record, "reaction_enhancements") && Array.isArray(record.reaction_enhancements)) {
+    const source = Object.values(window.characterKnowledge || {}).find(item => item.id === characterId);
+    syncCharacterReactionEnhancements(characterId, record.reaction_enhancements, record.name || source?.name || "");
+  }
+}
+for (const [characterId, entries] of Object.entries(localRoleReactionOverrides)) {
+  if (!Array.isArray(entries)) continue;
+  const source = Object.values(window.characterKnowledge || {}).find(item => item.id === characterId);
+  syncCharacterReactionEnhancements(characterId, entries, localRoleBasicOverrides[characterId]?.name || window.characterOverrides?.characters?.[characterId]?.name || source?.name || "");
+}
+
 const allKnowledge = Object.fromEntries(Object.entries(rawCharacterKnowledge).map(([key, original]) => {
   const canonical = window.characterOverrides?.characters?.[original.id] || {};
   const local = localRoleBasicOverrides[original.id] || {};
@@ -42,7 +83,15 @@ const driverBlockCatalog = window.driverBlockKnowledge || { items: [], source: {
 const teamTemplateKnowledge = window.teamTemplateKnowledge || { teams: [], source_catalog: {} };
 const importedKnowledge = allKnowledge.zhenhong || null;
 let activeKnowledge = importedKnowledge;
-const importedAssetUrl = (asset) => asset?.local_path || "";
+const importedAssetUrl = (asset) => {
+  const localPath = typeof asset?.local_path === "string" ? asset.local_path.trim().replace(/\\/g, "/") : "";
+  if (!localPath) return "";
+  let resolved;
+  try { resolved = new URL(localPath, "https://keke-local.invalid/"); }
+  catch { return ""; }
+  if (resolved.origin !== "https://keke-local.invalid" || !resolved.pathname.startsWith("/data/") || resolved.search || resolved.hash) return "";
+  return localPath;
+};
 function findCharacterIcon(knowledge) {
   const assets = knowledge.assets || [];
   const ownIconName = `${knowledge.id}-icon.`.toLowerCase();
@@ -88,8 +137,6 @@ const characterData = Object.fromEntries(Object.values(allKnowledge).filter((kno
     reaction: facts.primary_reaction || "待补充",
     portrait: portrait ? importedAssetUrl(portrait) : "",
     icon: icon ? importedAssetUrl(icon) : "",
-    sourceUrl: knowledge.provenance?.source_url || "",
-    localSnapshot: knowledge.provenance?.raw_snapshot || "",
     metrics: [String(skills.length), String(parameterCount), String(awakenings.length)],
     slots,
     knowledge: window.CharacterRecommendations.createKnowledge(knowledge)
@@ -155,7 +202,7 @@ let userTeamPinnedCoreNames = [...new Set((Array.isArray(userTeamSavedState.pinn
 let userTeamExpandedInvestmentNames = new Set(userTeamPinnedCoreNames);
 let userTeamSelectedCandidateIndexes = [0, 0];
 let userTeamGenerated = false;
-const userRouteLabels = { characters: "角色", team: "自动配队", "arc-drives": "弧盘", cassettes: "空幕", "drive-blocks": "驱动块", inventory: "背包数据", vision: "读取数据" };
+const userRouteLabels = { characters: "角色", team: "自动配队", "arc-drives": "弧盘", cassettes: "空幕", "drive-blocks": "驱动块", "role-build": "角色配装", inventory: "背包数据", vision: "读取数据" };
 const userTeamElementRing = ["光", "灵", "咒", "暗", "魂", "相"];
 const userTeamReactionRules = (window.esperCycleKnowledge?.cycles || []).map(cycle => ({ name: cycle.name, attrs: cycle.attributes.map(attribute => attribute.name) }));
 
@@ -299,9 +346,239 @@ function refreshRecommendationPreview(knowledge) {
 }
 
 function renderRoleReactionEnhancements(knowledge) {
-  const matches = (window.esperCycleKnowledge?.cycles || []).flatMap(cycle =>
-    (cycle.enhancements || []).filter(entry => entry.character_id === knowledge.id).map(entry => ({ name: cycle.name, description: entry.description })));
-  $("#roleReactionEnhancements").innerHTML = matches.length ? matches.map(entry => `<article class="role-reaction-enhancement"><b>${escapeHtml(entry.name)}</b><p>${escapeHtml(entry.description)}</p></article>`).join("") : '<p class="empty-state">无</p>';
+  const cycles = window.esperCycleKnowledge?.cycles || [];
+  if (!Object.prototype.hasOwnProperty.call(roleReactionDrafts, knowledge.id)) {
+    const canonical = window.characterOverrides?.characters?.[knowledge.id] || {};
+    if (Array.isArray(localRoleReactionOverrides[knowledge.id])) roleReactionDrafts[knowledge.id] = cloneData(localRoleReactionOverrides[knowledge.id]);
+    else if (Object.prototype.hasOwnProperty.call(canonical, "reaction_enhancements") && Array.isArray(canonical.reaction_enhancements)) roleReactionDrafts[knowledge.id] = cloneData(canonical.reaction_enhancements);
+    else roleReactionDrafts[knowledge.id] = cycles.flatMap(cycle =>
+      (cycle.enhancements || []).filter(entry => entry.character_id === knowledge.id)
+        .map(entry => ({ ...cloneData(entry), cycle_id: cycle.id, cycle_name: cycle.name })));
+  }
+  const matches = roleReactionDrafts[knowledge.id] || [];
+  const preview = $("#roleReactionEnhancements");
+  if (preview) preview.innerHTML = matches.length ? matches.map(entry => {
+    const cycle = cycles.find(item => item.id === entry.cycle_id);
+    return `<article class="role-reaction-enhancement"><b>${escapeHtml(cycle?.name || entry.cycle_name || "未选择反应")} · ${escapeHtml(entry.label || "被动技能")}</b><p>${escapeHtml(entry.description || "")}</p></article>`;
+  }).join("") : '<p class="empty-state">暂无反应强化。可在下方添加。</p>';
+
+  const editor = $("#reactionEnhancementEditor");
+  if (!editor) return;
+  editor.innerHTML = matches.length ? matches.map((entry, index) => `
+    <article class="role-edit-entry role-reaction-edit-entry">
+      <div class="role-edit-entry-heading"><b>反应强化 ${index + 1}</b><button class="text-button role-editor-remove" type="button" data-remove-reaction="${index}">删除</button></div>
+      <div class="role-edit-fields role-reaction-fields">
+        <label class="field"><span>反应类型</span><select data-reaction-index="${index}" data-reaction-field="cycle_id"><option value="">选择反应</option>${cycles.filter(cycle => cycle.id === entry.cycle_id || !matches.some((other, otherIndex) => otherIndex !== index && other.cycle_id === cycle.id)).map(cycle => `<option value="${escapeHtml(cycle.id)}"${cycle.id === entry.cycle_id ? " selected" : ""}>${escapeHtml(cycle.name)}</option>`).join("")}</select></label>
+        <label class="field"><span>强化标签</span><input type="text" maxlength="100" value="${escapeHtml(entry.label || "")}" data-reaction-index="${index}" data-reaction-field="label" placeholder="如：被动技能"></label>
+        <label class="field role-edit-wide"><span>强化描述</span><textarea rows="3" maxlength="5000" data-reaction-index="${index}" data-reaction-field="description" placeholder="输入该角色强化反应后的具体效果">${escapeHtml(entry.description || "")}</textarea></label>
+      </div>
+    </article>`).join("") : '<p class="empty-state">暂无条目。添加后选择反应类型并填写效果。</p>';
+}
+
+function renderRoleContentEditors(knowledge) {
+  const skillsEditor = $("#skillsEditor");
+  if (skillsEditor) {
+    const skills = knowledge.skills || [];
+    const hadSkillEditors = skillsEditor.querySelector("[data-skill-editor-index]") != null;
+    const expandedSkills = new Set([...skillsEditor.querySelectorAll("[data-skill-editor-index][open]")].map(entry => Number(entry.dataset.skillEditorIndex)));
+    skillsEditor.innerHTML = skills.length ? skills.map((skill, index) => `
+      <details class="role-edit-entry role-skill-edit-entry" data-skill-editor-index="${index}" ${expandedSkills.has(index) || (!hadSkillEditors && index === 0) ? "open" : ""}>
+        <summary><b>${escapeHtml(skill.name || `技能 ${index + 1}`)}</b><small>${escapeHtml(skill.category || "未分类")} · ${skill.parameters?.length || 0} 个倍率参数</small></summary>
+        <div class="role-edit-entry-body">
+          <div class="role-edit-fields">
+            <label class="field"><span>技能名称</span><input type="text" maxlength="200" value="${escapeHtml(skill.name || "")}" data-skill-index="${index}" data-skill-field="name"></label>
+            <label class="field"><span>技能 ID</span><input type="text" maxlength="200" value="${escapeHtml(skill.id || "")}" data-skill-index="${index}" data-skill-field="id"></label>
+            <label class="field"><span>技能分类</span><input type="text" maxlength="100" value="${escapeHtml(skill.category || "")}" data-skill-index="${index}" data-skill-field="category" placeholder="如：Melee、Skill、Ultimate"></label>
+            <label class="field"><span>等级上限</span><input type="number" min="0" max="99" value="${escapeHtml(skill.level_cap ?? 1)}" data-skill-index="${index}" data-skill-field="level_cap"></label>
+            <label class="field role-edit-wide"><span>技能原始描述</span><textarea rows="4" maxlength="20000" data-skill-index="${index}" data-skill-field="raw_text" placeholder="没有分段说明时，用户端会显示这段内容">${escapeHtml(skill.raw_text || "")}</textarea></label>
+          </div>
+          <div class="role-edit-subsection"><div class="role-edit-subsection-heading"><b>分段说明</b><button class="text-button" type="button" data-role-editor-add-part="${index}">添加说明</button></div>
+            ${(skill.description_parts || []).map((part, partIndex) => `<div class="role-edit-subentry"><label class="field"><span>小标题</span><input type="text" maxlength="200" value="${escapeHtml(part.name || "")}" data-skill-index="${index}" data-skill-part-index="${partIndex}" data-skill-part-field="name"></label><label class="field"><span>说明内容</span><textarea rows="3" maxlength="5000" data-skill-index="${index}" data-skill-part-index="${partIndex}" data-skill-part-field="text">${escapeHtml(part.text || "")}</textarea></label><button class="text-button role-editor-remove" type="button" data-remove-skill-part="${index}:${partIndex}">删除说明</button></div>`).join("") || '<p class="role-data-editor-help">暂无分段说明；原始描述仍会展示。</p>'}
+          </div>
+          <div class="role-edit-subsection"><div class="role-edit-subsection-heading"><b>倍率与参数</b><button class="text-button" type="button" data-role-editor-add-parameter="${index}">添加参数</button></div>
+            ${(skill.parameters || []).map((parameter, parameterIndex) => `<div class="role-edit-subentry role-parameter-edit-entry"><label class="field"><span>参数名称</span><input type="text" maxlength="200" value="${escapeHtml(parameter.label || "")}" data-skill-index="${index}" data-skill-parameter-index="${parameterIndex}" data-skill-parameter-field="label"></label><label class="field"><span>各等级数值（每行一条）</span><textarea rows="3" maxlength="30000" data-skill-index="${index}" data-skill-parameter-index="${parameterIndex}" data-skill-parameter-field="values">${escapeHtml((parameter.values || []).join("\n"))}</textarea></label><button class="text-button role-editor-remove" type="button" data-remove-skill-parameter="${index}:${parameterIndex}">删除参数</button></div>`).join("") || '<p class="role-data-editor-help">暂无倍率参数。</p>'}
+          </div>
+          <button class="text-button role-editor-remove role-editor-remove-entry" type="button" data-remove-skill="${index}">删除技能</button>
+        </div>
+      </details>`).join("") : '<p class="empty-state">暂无技能资料。可添加技能条目。</p>';
+  }
+
+  const awakeningsEditor = $("#awakeningsEditor");
+  if (awakeningsEditor) {
+    const awakenings = knowledge.awakenings || [];
+    awakeningsEditor.innerHTML = awakenings.length ? awakenings.map((awakening, index) => `
+      <article class="role-edit-entry">
+        <div class="role-edit-entry-heading"><b>觉醒节点 ${index + 1}</b><button class="text-button role-editor-remove" type="button" data-remove-awakening="${index}">删除</button></div>
+        <div class="role-edit-fields">
+          <label class="field"><span>节点名称</span><input type="text" maxlength="200" value="${escapeHtml(awakening.name || "")}" data-awakening-index="${index}" data-awakening-field="name"></label>
+          <label class="field"><span>图片路径</span><input type="text" maxlength="500" value="${escapeHtml(awakening.asset || "")}" data-awakening-index="${index}" data-awakening-field="asset" placeholder="data/resources/characters/..."></label>
+          <label class="field role-edit-wide"><span>效果描述</span><textarea rows="3" maxlength="5000" data-awakening-index="${index}" data-awakening-field="description">${escapeHtml(awakening.description || "")}</textarea></label>
+        </div>
+      </article>`).join("") : '<p class="empty-state">暂无觉醒节点。可添加节点。</p>';
+  }
+
+  const resonanceEditor = $("#resonanceEditor");
+  if (resonanceEditor) {
+    const resonance = knowledge.resonance || [];
+    resonanceEditor.innerHTML = resonance.length ? resonance.map((entry, index) => `
+      <article class="role-edit-entry">
+        <div class="role-edit-entry-heading"><b>共鸣节点 ${index + 1}</b><button class="text-button role-editor-remove" type="button" data-remove-resonance="${index}">删除</button></div>
+        <div class="role-edit-fields">
+          <label class="field"><span>共鸣等级</span><input type="number" min="1" max="6" value="${escapeHtml(entry.level ?? "")}" data-resonance-index="${index}" data-resonance-field="level" placeholder="可留空"></label>
+          <label class="field"><span>节点名称</span><input type="text" maxlength="200" value="${escapeHtml(entry.name || "")}" data-resonance-index="${index}" data-resonance-field="name"></label>
+          <label class="field"><span>图片路径</span><input type="text" maxlength="500" value="${escapeHtml(entry.asset || "")}" data-resonance-index="${index}" data-resonance-field="asset" placeholder="data/resources/characters/..."></label>
+          <label class="field role-edit-wide"><span>效果描述</span><textarea rows="3" maxlength="5000" data-resonance-index="${index}" data-resonance-field="description">${escapeHtml(entry.description || "")}</textarea></label>
+        </div>
+      </article>`).join("") : '<p class="empty-state">暂无共鸣节点。可添加节点。</p>';
+  }
+}
+
+function getRoleReactionDraft(knowledge) {
+  return roleReactionDrafts[knowledge.id] || [];
+}
+
+function markRoleDraft() {
+  setText("#draftLabel", "草稿未保存");
+}
+
+function refreshRoleContentPreview(knowledge) {
+  renderSkills(knowledge);
+  renderAwakenings(knowledge);
+  renderResonance(knowledge);
+  setText("#metricSlots", String(knowledge.skills?.length || 0));
+  setText("#metricTeams", String((knowledge.skills || []).reduce((sum, skill) => sum + (skill.parameters || []).length, 0)));
+  setText("#metricGold", String(knowledge.awakenings?.length || 0));
+  setText("#awakeningCountLabel", `${knowledge.awakenings?.length || 0} 个觉醒节点`);
+  renderUserTabPanel(knowledge);
+}
+
+function updateReactionPreview(knowledge) {
+  const preview = $("#roleReactionEnhancements");
+  const cycles = window.esperCycleKnowledge?.cycles || [];
+  const entries = getRoleReactionDraft(knowledge);
+  if (preview) preview.innerHTML = entries.length ? entries.map(entry => {
+    const cycle = cycles.find(item => item.id === entry.cycle_id);
+    return `<article class="role-reaction-enhancement"><b>${escapeHtml(cycle?.name || entry.cycle_name || "未选择反应")} · ${escapeHtml(entry.label || "被动技能")}</b><p>${escapeHtml(entry.description || "")}</p></article>`;
+  }).join("") : '<p class="empty-state">暂无反应强化。可在下方添加。</p>';
+}
+
+function bindRoleContentEditors() {
+  const editor = $("#editorCard");
+  if (!editor) return;
+  editor.addEventListener("input", event => {
+    const field = event.target;
+    const knowledge = activeKnowledge;
+    if (!knowledge) return;
+    if (field.matches("[data-skill-index][data-skill-field]")) {
+      const skill = knowledge.skills?.[Number(field.dataset.skillIndex)];
+      if (!skill) return;
+      const key = field.dataset.skillField;
+      skill[key] = key === "level_cap" ? Math.min(99, Math.max(0, Number(field.value) || 0)) : field.value;
+      refreshRoleContentPreview(knowledge);
+    } else if (field.matches("[data-skill-part-index][data-skill-part-field]")) {
+      const skill = knowledge.skills?.[Number(field.dataset.skillIndex)];
+      const part = skill?.description_parts?.[Number(field.dataset.skillPartIndex)];
+      if (!part) return;
+      part[field.dataset.skillPartField] = field.value;
+      refreshRoleContentPreview(knowledge);
+    } else if (field.matches("[data-skill-parameter-index][data-skill-parameter-field]")) {
+      const skill = knowledge.skills?.[Number(field.dataset.skillIndex)];
+      const parameter = skill?.parameters?.[Number(field.dataset.skillParameterIndex)];
+      if (!parameter) return;
+      if (field.dataset.skillParameterField === "values") {
+        parameter.values = field.value.split(/\r?\n|→/).map(value => value.trim()).filter(Boolean);
+        parameter.current_value = parameter.values[0] || "";
+      } else parameter[field.dataset.skillParameterField] = field.value;
+      refreshRoleContentPreview(knowledge);
+    } else if (field.matches("[data-awakening-index][data-awakening-field]")) {
+      const awakening = knowledge.awakenings?.[Number(field.dataset.awakeningIndex)];
+      if (!awakening) return;
+      awakening[field.dataset.awakeningField] = field.value;
+      renderAwakenings(knowledge);
+      renderUserTabPanel(knowledge);
+    } else if (field.matches("[data-resonance-index][data-resonance-field]")) {
+      const entry = knowledge.resonance?.[Number(field.dataset.resonanceIndex)];
+      if (!entry) return;
+      const key = field.dataset.resonanceField;
+      if (key === "level") {
+        if (field.value === "") delete entry.level;
+        else entry.level = Math.min(6, Math.max(1, Number(field.value) || 1));
+      } else entry[key] = field.value;
+      renderResonance(knowledge);
+      renderUserTabPanel(knowledge);
+    } else if (field.matches("[data-reaction-index][data-reaction-field]")) {
+      const entry = getRoleReactionDraft(knowledge)[Number(field.dataset.reactionIndex)];
+      if (!entry) return;
+      const key = field.dataset.reactionField;
+      entry[key] = field.value;
+      if (key === "cycle_id") entry.cycle_name = window.esperCycleKnowledge?.cycles?.find(cycle => cycle.id === field.value)?.name || "";
+      updateReactionPreview(knowledge);
+    } else return;
+    markRoleDraft();
+  });
+
+  editor.addEventListener("click", event => {
+    const button = event.target.closest("button");
+    if (!button) return;
+    const knowledge = activeKnowledge;
+    if (!knowledge) return;
+    let changed = false;
+    const add = button.dataset.roleEditorAdd;
+    if (add === "skill") {
+      knowledge.skills ||= [];
+      const index = knowledge.skills.length + 1;
+      knowledge.skills.push({ id: `skill-${knowledge.id}-${index}`, name: `新技能 ${index}`, category: "Skill", description_parts: [], raw_text: "", level_cap: 1, parameters: [] });
+      renderRoleContentEditors(knowledge);
+      const newSkillEditor = $("#skillsEditor")?.lastElementChild;
+      if (newSkillEditor?.matches("[data-skill-editor-index]")) newSkillEditor.open = true;
+      changed = true;
+    } else if (add === "awakening") {
+      knowledge.awakenings ||= [];
+      knowledge.awakenings.push({ name: `觉醒 ${knowledge.awakenings.length + 1}`, description: "", asset: "" });
+      renderRoleContentEditors(knowledge);
+      changed = true;
+    } else if (add === "resonance") {
+      knowledge.resonance ||= [];
+      const usedLevels = new Set(knowledge.resonance.map(entry => Number(entry.level)).filter(Number.isInteger));
+      const nextLevel = Array.from({ length: 6 }, (_, index) => index + 1).find(level => !usedLevels.has(level));
+      knowledge.resonance.push({ ...(nextLevel ? { level: nextLevel } : {}), name: `共鸣节点 ${knowledge.resonance.length + 1}`, description: "", asset: "" });
+      renderRoleContentEditors(knowledge);
+      changed = true;
+    } else if (add === "reaction") {
+      const cycles = window.esperCycleKnowledge?.cycles || [];
+      const firstCycle = cycles.find(cycle => !getRoleReactionDraft(knowledge).some(entry => entry.cycle_id === cycle.id));
+      if (!firstCycle) { notify("这个角色已添加全部反应类型"); return; }
+      roleReactionDrafts[knowledge.id] ||= [];
+      roleReactionDrafts[knowledge.id].push({ cycle_id: firstCycle?.id || "", cycle_name: firstCycle?.name || "", character_id: knowledge.id, character_name: knowledge.name, label: "被动技能", description: "" });
+      renderRoleReactionEnhancements(knowledge);
+      changed = true;
+    } else if (button.dataset.roleEditorAddPart != null) {
+      const skill = knowledge.skills?.[Number(button.dataset.roleEditorAddPart)];
+      if (skill) { skill.description_parts ||= []; skill.description_parts.push({ name: "", text: "" }); renderRoleContentEditors(knowledge); changed = true; }
+    } else if (button.dataset.roleEditorAddParameter != null) {
+      const skill = knowledge.skills?.[Number(button.dataset.roleEditorAddParameter)];
+      if (skill) { skill.parameters ||= []; skill.parameters.push({ label: "", source_key: skill.id || skill.name || "", values: [], current_value: "" }); renderRoleContentEditors(knowledge); changed = true; }
+    } else if (button.dataset.removeSkill != null) {
+      knowledge.skills?.splice(Number(button.dataset.removeSkill), 1); renderRoleContentEditors(knowledge); changed = true;
+    } else if (button.dataset.removeAwakening != null) {
+      knowledge.awakenings?.splice(Number(button.dataset.removeAwakening), 1); renderRoleContentEditors(knowledge); changed = true;
+    } else if (button.dataset.removeResonance != null) {
+      knowledge.resonance?.splice(Number(button.dataset.removeResonance), 1); renderRoleContentEditors(knowledge); changed = true;
+    } else if (button.dataset.removeReaction != null) {
+      getRoleReactionDraft(knowledge).splice(Number(button.dataset.removeReaction), 1); renderRoleReactionEnhancements(knowledge); changed = true;
+    } else if (button.dataset.removeSkillPart) {
+      const [skillIndex, partIndex] = button.dataset.removeSkillPart.split(":").map(Number);
+      knowledge.skills?.[skillIndex]?.description_parts?.splice(partIndex, 1); renderRoleContentEditors(knowledge); changed = true;
+    } else if (button.dataset.removeSkillParameter) {
+      const [skillIndex, parameterIndex] = button.dataset.removeSkillParameter.split(":").map(Number);
+      knowledge.skills?.[skillIndex]?.parameters?.splice(parameterIndex, 1); renderRoleContentEditors(knowledge); changed = true;
+    }
+    if (changed) {
+      refreshRoleContentPreview(knowledge);
+      updateReactionPreview(knowledge);
+      markRoleDraft();
+    }
+  });
 }
 
 function renderBaseStats(knowledge) {
@@ -344,6 +621,7 @@ function renderResonance(knowledge) {
   const target = $("#resonanceList");
   if (!target) return;
   const entries = knowledge.resonance || [];
+  setText("#resonanceCountLabel", `${entries.length} 个共鸣节点`);
   target.innerHTML = entries.length ? entries.map((entry) => `
     <article class="awakening-card">${entry.asset ? `<img src="${escapeHtml(importedAssetUrl({ local_path: entry.asset }))}" alt="${escapeHtml(entry.name || "共鸣")}">` : '<span class="asset-placeholder awakening-placeholder">共</span>'}<div><b>${entry.level ? `Lv.${entry.level} · ` : ""}${escapeHtml(entry.name || "共鸣")}</b><p>${escapeHtml(entry.description)}</p></div></article>`).join("") : emptyState("暂无共鸣节点");
 }
@@ -513,7 +791,11 @@ function renderCassetteRecommendationEditor(knowledge) {
   const target = $("#cassetteRecommendationEditor");
   const cassette = knowledge.recommended?.cassette;
   if (!target) return;
-  if (!cassette) { target.innerHTML = emptyState("没有来源卡带可供配置推荐属性"); return; }
+  const scoring = window.KekeCassetteScoring;
+  const weights = scoring ? Object.entries(scoring.PRIORITY_WEIGHTS).filter(([priority]) => Number(priority) > 0) : [];
+  const weightTable = weights.map(([priority, weight]) => `<tr><th>P${priority}</th><td>${Math.round(weight * 100)}%</td></tr>`).join("");
+  const policy = `<aside class="cassette-scoring-policy" aria-label="空幕推荐评分规则"><div class="cassette-scoring-policy-head"><div><span>统一评分规则 · 用户端与管理端共用</span><b>空幕属性适配分：主属性 60% + 副属性 40%</b></div><span class="cassette-policy-badge">V1.5 本地测试</span></div><table class="cassette-weight-table"><thead><tr><th>优先级</th><th>属性权重</th></tr></thead><tbody>${weightTable}</tbody></table><ul><li><b>主属性：</b>60 × 主属性权重 × 品质系数；未选中的属性权重为 0。</li><li><b>副属性：</b>40 × 当前四条副属性权重之和 ÷ 此空幕合法副词条池中权重最高的四种不重复属性之和 × 品质系数。品质后上限仍为 40。</li><li><b>单块驱动：</b>100 × 四条不重复副属性权重和 ÷ 同形驱动合法副词条池中权重最高的四种属性权重和 × 品质系数；固定主属性不参与，沿用本角色卡带副属性推荐。</li><li><b>品质系数：</b>金色 ×1.00、紫色 ×0.80、蓝色 ×0.60。来自同词条装备实际数值比例；空幕主属性、副属性与同形驱动副属性都按此折算。金色沿用原有评分基准。</li><li><b>整体总评：</b>驱动盘面分 = Σ（单块分 × 占格数）÷ 可用格数，空槽为 0；总分 = 空幕分 + 驱动盘面分，上限 200；配装毕业率 = 总分 ÷ 200。空幕毕业率单独表示空幕分 ÷ 100。</li><li><b>毕业配装：</b>按同形状实例分组取高分装备，枚举形状数量并按盘面加权总分优先验证合法摆放；独立线程搜索，达到预算时只报告当前最佳，不宣称已证实最高分。默认同时排除其他角色占用的空幕和驱动，本角色装备保留。</li><li><b>保存与装配：</b>每账号、每原生角色实例保留一套方案；保存稳定装备引用和属性签名，刷新后重新解析。实例消失、属性变化或保护装备被其他角色占用时方案失效；自动装配和拆卸先显示操作清单，执行时逐件校验游戏实时来源与结果。</li><li><b>等级：</b>ACE ≥ 95%、S ≥ 85%、A ≥ 70%、B ≥ 50%，其余 C。单件按自身百分制评分，总评按配装毕业率。缺推荐、缺词条、摆放重叠或越界时不生成总评。用户端只显示当前装备，已移除候选列表。</li><li><b>口径：</b>未选择属性为 0；已选择的 P1 仍为正权重。词条种类衡量推荐适配度，品质按实数值比例折算；强化等级不重复叠加，套装和实战收益不计分。</li></ul><div class="cassette-scoring-example"><b>示例</b><span>若合法副词条池的前四档为 P5、P4、P3、P2（权重和 3.1），则金色“主属性 P5 + 四条 P1”约为 <strong>80.6 分</strong>；金色“主属性 P4 + 副属性 P5/P4/P3/P2”是 <strong>91 分</strong>。紫色、蓝色示例分别再乘 0.80、0.60。</span></div></aside>`;
+  if (!cassette) { target.innerHTML = policy + emptyState("没有来源卡带可供配置推荐属性"); return; }
   const buildGroup = (kind, title) => {
     const selected = new Map(recommendedAffixes(cassette, kind).map((item) => [item.name, normalizeAffixPriority(item.priority)]));
     const options = CASSETTE_RECOMMENDATION_AFFIX_OPTIONS[kind];
@@ -526,7 +808,7 @@ function renderCassetteRecommendationEditor(knowledge) {
         return '<div class="affix-editor-row"><button type="button" class="affix-choice pressable' + (isSelected ? ' is-selected' : '') + '" data-affix-option="' + kind + '" data-affix-name="' + escapeHtml(name) + '" aria-pressed="' + isSelected + '">' + (isSelected ? '✓ ' : '+ ') + escapeHtml(name) + '</button><label class="affix-priority"><span>优先级</span><output data-affix-priority-value>' + priority + '/5</output><input data-affix-priority type="range" min="1" max="5" step="1" value="' + priority + '" aria-label="' + escapeHtml(name) + '优先级" aria-valuetext="' + priority + ' / 5"' + (isSelected ? '' : ' disabled') + '></label></div>';
       }).join("") + '</div></div>';
   };
-  target.innerHTML = '<div class="affix-editor-note">这里只维护推荐，不改变原站记录的随机可出现词条池。</div>' +
+  target.innerHTML = policy + '<div class="affix-editor-note">这里只维护推荐，不改变原站记录的随机可出现词条池。</div>' +
     buildGroup("main", "推荐主属性") +
     buildGroup("sub", "推荐副属性");
   if (target.dataset.bound === "true") return;
@@ -857,6 +1139,7 @@ function updateImportedPanel(data) {
   renderBaseStats(knowledge);
   renderSkills(knowledge);
   renderAwakenings(knowledge);
+  renderRoleContentEditors(knowledge);
   renderResonance(knowledge);
   renderSkillTargets(knowledge);
   renderCassetteRecommendationEditor(knowledge);
@@ -1414,6 +1697,25 @@ function bindSave() {
         summary: knowledge.basic?.summary || ""
       }
     };
+    const sourceKnowledge = Object.values(rawCharacterKnowledge).find(entry => entry.id === knowledge.id) || {};
+    const canonicalContent = window.characterOverrides?.characters?.[knowledge.id] || {};
+    const localContent = localRoleContentOverrides[knowledge.id] || {};
+    const contentPatch = {};
+    for (const key of ["skills", "awakenings", "resonance"]) {
+      if ((knowledge[key] || []).length || (sourceKnowledge[key] || []).length || Object.prototype.hasOwnProperty.call(canonicalContent, key) || Object.prototype.hasOwnProperty.call(localContent, key)) {
+        contentPatch[key] = cloneData(knowledge[key] || []);
+      }
+    }
+    const reactionEnhancements = cloneData(getRoleReactionDraft(knowledge));
+    if ((contentPatch.skills || []).some(skill => !String(skill.name || "").trim())) { notify("每项技能都需要填写名称"); return; }
+    if ((contentPatch.awakenings || []).some(awakening => !String(awakening.name || "").trim())) { notify("每个觉醒节点都需要填写名称"); return; }
+    if ((contentPatch.resonance || []).some(entry => !String(entry.name || "").trim())) { notify("每个共鸣节点都需要填写名称"); return; }
+    if (reactionEnhancements.some(entry => !entry.cycle_id || !(window.esperCycleKnowledge?.cycles || []).some(cycle => cycle.id === entry.cycle_id))) {
+      notify("请为每条反应强化选择有效的反应类型"); return;
+    }
+    if (new Set(reactionEnhancements.map(entry => entry.cycle_id)).size !== reactionEnhancements.length) {
+      notify("同一角色的每种反应只能添加一条强化"); return;
+    }
     const cassette = knowledge.recommended?.cassette;
     if (cassette) {
       for (const kind of ["main", "sub"]) {
@@ -1431,17 +1733,28 @@ function bindSave() {
       return;
     }
     try {
+      if (Object.keys(contentPatch).length) localRoleContentOverrides[knowledge.id] = contentPatch;
+      localRoleReactionOverrides[knowledge.id] = reactionEnhancements;
       localRoleBasicOverrides[knowledge.id] = patch;
+      localStorage.setItem(roleContentStorageKey, JSON.stringify(localRoleContentOverrides));
+      localStorage.setItem(roleReactionStorageKey, JSON.stringify(localRoleReactionOverrides));
       localStorage.setItem(roleBasicStorageKey, JSON.stringify(localRoleBasicOverrides));
+      syncCharacterReactionEnhancements(knowledge.id, reactionEnhancements, name);
     } catch { notify("浏览器存储不可用，角色资料没有保存"); return; }
 
     const original = allKnowledge[knowledge.id];
     if (original) {
       original.name = name;
       original.basic = { ...(original.basic || {}), ...patch.basic };
+      if (Object.prototype.hasOwnProperty.call(contentPatch, "skills")) original.skills = cloneData(contentPatch.skills);
+      if (Object.prototype.hasOwnProperty.call(contentPatch, "awakenings")) original.awakenings = cloneData(contentPatch.awakenings);
+      if (Object.prototype.hasOwnProperty.call(contentPatch, "resonance")) original.resonance = cloneData(contentPatch.resonance);
     }
     knowledge.name = name;
     knowledge.basic = { ...(knowledge.basic || {}), ...patch.basic };
+    if (Object.prototype.hasOwnProperty.call(contentPatch, "skills")) knowledge.skills = cloneData(contentPatch.skills);
+    if (Object.prototype.hasOwnProperty.call(contentPatch, "awakenings")) knowledge.awakenings = cloneData(contentPatch.awakenings);
+    if (Object.prototype.hasOwnProperty.call(contentPatch, "resonance")) knowledge.resonance = cloneData(contentPatch.resonance);
     data.rarity = patch.basic.rarity || "—";
     data.element = patch.basic.element || "—";
     data.cassetteType = patch.basic.cassette_type || "—";
@@ -1469,14 +1782,21 @@ function bindSave() {
     try {
       const connected = window.KekeAdminBridge ? await window.KekeAdminBridge.ready : false;
       if (connected) {
-        await window.KekeAdminBridge.saveCharacter(knowledge.id, patch, knowledge.recommended || {});
+        await window.KekeAdminBridge.saveCharacter(knowledge.id, patch, knowledge.recommended || {}, contentPatch, reactionEnhancements);
         window.characterOverrides ||= { schema_version: "1.0.0", characters: {} };
         window.characterOverrides.characters ||= {};
         const existing = window.characterOverrides.characters[knowledge.id] || {};
-        window.characterOverrides.characters[knowledge.id] = { ...existing, name, basic: { ...(existing.basic || {}), ...patch.basic }, recommended: JSON.parse(JSON.stringify(knowledge.recommended || {})) };
+        window.characterOverrides.characters[knowledge.id] = { ...existing, name, basic: { ...(existing.basic || {}), ...patch.basic }, ...contentPatch, reaction_enhancements: cloneData(reactionEnhancements), recommended: JSON.parse(JSON.stringify(knowledge.recommended || {})) };
+        syncCharacterReactionEnhancements(knowledge.id, reactionEnhancements, name);
         delete localRoleBasicOverrides[knowledge.id];
+        delete localRoleContentOverrides[knowledge.id];
+        delete localRoleReactionOverrides[knowledge.id];
         if (Object.keys(localRoleBasicOverrides).length) localStorage.setItem(roleBasicStorageKey, JSON.stringify(localRoleBasicOverrides));
         else localStorage.removeItem(roleBasicStorageKey);
+        if (Object.keys(localRoleContentOverrides).length) localStorage.setItem(roleContentStorageKey, JSON.stringify(localRoleContentOverrides));
+        else localStorage.removeItem(roleContentStorageKey);
+        if (Object.keys(localRoleReactionOverrides).length) localStorage.setItem(roleReactionStorageKey, JSON.stringify(localRoleReactionOverrides));
+        else localStorage.removeItem(roleReactionStorageKey);
         persisted = true;
         window.CharacterRecommendations.clearPersistedCharacter(knowledge.id);
       }
@@ -1487,7 +1807,7 @@ function bindSave() {
     setText(".updated-time", persisted ? "资料已写入项目" : "尚未写入项目");
     setText("#recommendationStatus", persisted ? "全部修改已保存" : "仅保存在本机，尚未写入项目");
     if (persisted) window.dispatchEvent(new Event("keke-role-saved"));
-    if (persisted) notify(`${name} 的基础资料、推荐配置和词条优先级已全部保存`);
+    if (persisted) notify(`${name} 的基础资料、技能、觉醒、反应强化和推荐配置已写入项目`);
     else if (!window.KekeAdminBridge?.connected) notify(`${name} 已保存在当前浏览器，尚未写入项目`);
   };
   $("#saveDraftButton").addEventListener("click", async () => {
@@ -1540,6 +1860,7 @@ bindDriverBlockCatalog();
 bindSearch();
 bindBasicPreview();
 bindSave();
+bindRoleContentEditors();
 bindImpact();
 bindMisc();
 bindDriveLayoutUpload();
@@ -1574,6 +1895,28 @@ function userMaterialEntries(knowledge, targetLevel, targets = userSkillTargets)
   });
   const catalog = knowledge.cultivation?.material_catalog || {};
   return [...totals.entries()].map(([id, amount]) => ({ id, amount, name: catalog[id]?.name || id, icon: materialAsset(knowledge, id) }));
+}
+
+function userMaterialListMarkup(entries) {
+  return entries.length
+    ? `<div class="user-material-grid">${entries.map((entry) => `<article class="user-material-card">${userMediaMarkup(entry.icon, entry.name, "材")}<div><b>${escapeHtml(entry.name)}</b><span>${entry.amount.toLocaleString()}</span></div></article>`).join("")}</div>`
+    : `<div class="user-empty">暂无养成材料数据。</div>`;
+}
+
+function updateUserCultivationTarget(input, knowledge) {
+  const levels = String(input.dataset.levelOptions || "").split(",").map(Number).filter(Number.isFinite);
+  if (!levels.length || !knowledge) return;
+  const index = Math.max(0, Math.min(levels.length - 1, Number(input.value) || 0));
+  userTargetLevel = levels[index];
+  const output = $("#userTargetLevelValue");
+  if (output) output.textContent = `Lv.${userTargetLevel}`;
+  input.setAttribute("aria-valuetext", `Lv.${userTargetLevel}`);
+  input.style.setProperty("--user-range-fill", `${levels.length > 1 ? (index / (levels.length - 1)) * 100 : 100}%`);
+  const entries = userMaterialEntries(knowledge, userTargetLevel, userSkillTargets);
+  const count = $("#userMaterialCount");
+  const list = $("#userCultivationMaterialList");
+  if (count) count.textContent = String(entries.length);
+  if (list) list.innerHTML = userMaterialListMarkup(entries);
 }
 
 function userCharacterEntries() {
@@ -1803,10 +2146,26 @@ function renderUserCultivation(knowledge) {
   const levelCap = knowledge.base_stats?.level_cap || 80;
   const levelOptions = [...new Set([30, 40, 50, 60, 70, levelCap].filter((level) => level <= levelCap))];
   if (!levelOptions.includes(Number(userTargetLevel))) userTargetLevel = levelOptions[levelOptions.length - 1] || levelCap;
+  const selectedLevelIndex = Math.max(0, levelOptions.indexOf(Number(userTargetLevel)));
+  const levelProgress = levelOptions.length > 1 ? (selectedLevelIndex / (levelOptions.length - 1)) * 100 : 100;
   const entries = userMaterialEntries(knowledge, userTargetLevel, userSkillTargets);
   const skills = knowledge.cultivation?.skills || [];
   const skillTargetMarkup = skills.length ? `<div class="user-skill-targets"><div class="user-skill-targets-head"><div><span>技能目标</span><b>每项技能单独规划</b><small>默认按各技能最高等级计算，调整后材料会立即更新。</small></div><em>${skills.length} 项</em></div><div class="user-skill-target-grid">${skills.map((skill, index) => { const levels = skillTargetOptions(skill); const selected = userSkillTargetValue(knowledge, skill, index); const fixed = levels.length === 1; return `<label class="user-skill-target-row"><span><b>${escapeHtml(skill.name || `技能 ${index + 1}`)}</b><small>${fixed ? "固定节点" : `可选至 Lv.${Math.max(...levels)}`}</small></span><select data-user-skill-target="${index}" ${fixed ? "disabled" : ""}>${levels.map((level) => `<option value="${level}"${level === selected ? " selected" : ""}>Lv.${level}</option>`).join("")}</select></label>`; }).join("")}</div></div>` : `<div class="user-skill-targets user-empty">当前角色暂无结构化技能养成节点。</div>`;
-  return `<section class="user-section-heading"><div><span class="user-section-kicker">养成规划</span><h2>知道还差多少。</h2><p>角色等级与每项技能目标分开设置，材料汇总会跟着你的选择变化。</p></div><label class="user-level-control"><span>角色目标</span><select id="userTargetLevel">${levelOptions.map((level) => `<option value="${level}"${level === userTargetLevel ? " selected" : ""}>Lv.${level}</option>`).join("")}</select></label></section><div class="user-cultivation-layout"><section class="user-surface"><div class="user-section-heading"><div><span class="user-section-kicker">材料清单</span><h2>${entries.length} 种材料</h2></div></div>${skillTargetMarkup}${entries.length ? `<div class="user-material-grid">${entries.map((entry) => `<article class="user-material-card">${userMediaMarkup(entry.icon, entry.name, "材")}<div><b>${escapeHtml(entry.name)}</b><span>${entry.amount.toLocaleString()}</span></div></article>`).join("")}</div>` : `<div class="user-empty">暂无养成材料数据。</div>`}</section><aside class="user-surface user-cultivation-summary"><span class="user-section-kicker">目标状态</span><h3>Lv.${userTargetLevel}</h3><p>角色等级与 ${skills.length || 0} 项技能目标已分别计入材料汇总。</p><ul><li><span>角色等级上限</span><b>Lv.${levelCap}</b></li><li><span>技能目标</span><b>${skills.length ? `${skills.length} 项已设置` : "暂无"}</b></li><li><span>预计材料种类</span><b>${entries.length} 种</b></li></ul></aside></div>`;
+  return `<section class="user-section-heading"><div><span class="user-section-kicker">养成规划</span><h2>知道还差多少。</h2><p>调整角色等级和技能目标，材料清单会即时更新。</p></div></section><section class="user-surface user-cultivation-materials"><div class="user-cultivation-toolbar"><div class="user-material-heading"><span class="user-section-kicker">材料清单</span><h2><b id="userMaterialCount">${entries.length}</b> 种材料</h2></div><label class="user-level-range-control"><span class="user-level-range-heading"><span>角色目标等级</span><output id="userTargetLevelValue" for="userTargetLevel">Lv.${userTargetLevel}</output></span><input id="userTargetLevel" type="range" min="0" max="${Math.max(0, levelOptions.length - 1)}" step="1" value="${selectedLevelIndex}" data-level-options="${levelOptions.join(",")}" style="--user-range-fill:${levelProgress}%" aria-label="角色目标等级" aria-valuetext="Lv.${userTargetLevel}" ${levelOptions.length < 2 ? "disabled" : ""}><span class="user-level-range-marks" aria-hidden="true">${levelOptions.map((level) => `<span>Lv.${level}</span>`).join("")}</span></label></div>${skillTargetMarkup}<div id="userCultivationMaterialList">${userMaterialListMarkup(entries)}</div></section>`;
+}
+
+function renderUserConstellation(knowledge) {
+  const section = (title, entries) => {
+    const nodes = Array.isArray(entries) ? entries : [];
+    return '<section class="user-surface user-constellation-section"><h2>' + title + '</h2>'
+      + (nodes.length ? '<ol class="user-constellation-list">' + nodes.map((node, index) =>
+        '<li><span>' + escapeHtml(title + ' ' + (node.level ?? index + 1)) + '</span><div><h3>'
+        + escapeHtml(node.name || title + '节点 ' + (index + 1)) + '</h3><p>'
+        + escapeHtml(node.description || '该节点的效果资料暂未补充。') + '</p></div></li>'
+      ).join('') + '</ol>' : '<p class="user-empty">当前角色暂无' + title + '资料。</p>') + '</section>';
+  };
+  return '<section class="user-section-heading"><div><h2>觉醒与共鸣</h2><p>查看这名角色各节点的完整效果。</p></div></section>'
+    + section('觉醒', knowledge.awakenings) + section('共鸣', knowledge.resonance);
 }
 
 function renderUserTabPanel(knowledge) {
@@ -1878,6 +2237,9 @@ function bindUserExperience() {
     renderUserTabPanel(activeKnowledge);
     $("#userTabNav")?.scrollIntoView({ behavior: "smooth", block: "center" });
   });
+  $("#userTabPanel")?.addEventListener("input", (event) => {
+    if (event.target.id === "userTargetLevel") updateUserCultivationTarget(event.target, activeKnowledge);
+  });
   $("#userTabPanel")?.addEventListener("change", (event) => {
     if (event.target.matches("[data-user-skill-target]")) {
       const index = Number(event.target.dataset.userSkillTarget);
@@ -1888,9 +2250,7 @@ function bindUserExperience() {
       renderUserTabPanel(activeKnowledge);
       return;
     }
-    if (event.target.id !== "userTargetLevel") return;
-    userTargetLevel = Number(event.target.value) || 80;
-    renderUserTabPanel(activeKnowledge);
+    if (event.target.id === "userTargetLevel") return;
   });
   $("#userHeroCard")?.addEventListener("click", (event) => {
     const action = event.target.closest("[data-user-action]");
@@ -2054,6 +2414,24 @@ function userTeamCreateCandidate(coreName, memberNames, options = {}) {
   };
 }
 
+function userTeamCollectPlans(coreName, blockedNames = new Set(), records = null) {
+  const available = new Set(userTeamAvailableNames().filter((name) => !blockedNames.has(name)));
+  if (!coreName || !available.has(coreName)) return [];
+  const templates = records || (window.teamGuideStore ? window.teamGuideStore.all() : (teamTemplateKnowledge.teams || []));
+  return templates.map((team, maintenanceIndex) => ({ team, maintenanceIndex,
+    orderedNames: Array.isArray(team.member_character_ids) ? team.member_character_ids.map((id) => userTeamNameById[id]) : [] }))
+    .filter(({ team, orderedNames }) => team.editorial?.active !== false
+      && team.source_core_character_id === characterData[coreName]?.id
+      && orderedNames.length === 4 && new Set(orderedNames).size === 4
+      && orderedNames.includes(coreName) && orderedNames.every((name) => name && available.has(name)))
+    .sort((first, second) => (first.team.source_order || 0) - (second.team.source_order || 0))
+    .map(({ team, orderedNames, maintenanceIndex }) => {
+      const candidate = userTeamCreateCandidate(coreName, orderedNames, { sourceRecord: team, orderedNames });
+      candidate.score += userTeamInvestmentRank(coreName) * 0.3;
+      return { ...candidate, maintenanceIndex };
+    });
+}
+
 function userTeamBuildPlans(coreName, blockedNames = new Set(), limit = 3) {
   const seen = new Set();
   return userTeamCollectPlans(coreName, blockedNames).filter((candidate) => {
@@ -2082,24 +2460,7 @@ function userTeamRecommendPlans(lockedCoreName = "", blockedNames = new Set(), l
   }).slice(0, limit);
 }
 
-function userTeamCollectPlans(coreName, blockedNames = new Set(), records = null) {
-  const available = new Set(userTeamAvailableNames().filter((name) => !blockedNames.has(name)));
-  if (!coreName || !available.has(coreName)) return [];
-  const templates = records || (window.teamGuideStore ? window.teamGuideStore.all() : (teamTemplateKnowledge.teams || []));
-  return templates.map((team, maintenanceIndex) => ({ team, maintenanceIndex,
-    orderedNames: Array.isArray(team.member_character_ids) ? team.member_character_ids.map((id) => userTeamNameById[id]) : [] }))
-    .filter(({ team, orderedNames }) => team.editorial?.active !== false
-      && team.source_core_character_id === characterData[coreName]?.id
-      && orderedNames.length === 4 && new Set(orderedNames).size === 4
-      && orderedNames.includes(coreName) && orderedNames.every((name) => name && available.has(name)))
-    .sort((first, second) => (first.team.source_order || 0) - (second.team.source_order || 0))
-    .map(({ team, orderedNames, maintenanceIndex }) => {
-      const candidate = userTeamCreateCandidate(coreName, orderedNames, { sourceRecord: team, orderedNames });
-      candidate.score += userTeamInvestmentRank(coreName) * 0.3;
-      return { ...candidate, maintenanceIndex };
-    });
-}
-
+// Dual teams use maintained rosters as a joint unit. No single-team truncation or rarity ranking here.
 function userTeamPairQuality(plan) {
   const { counts, profile, primaryReaction, coreKind } = plan;
   const roles = (coreKind === "main" || coreKind === "secondary" ? 7 : 0)
@@ -2176,41 +2537,6 @@ function userTeamRecommendPairs(lockedCoreNames = [], limit = 3) {
   return { pairs: unique.slice(0, Math.min(3, Math.max(0, limit))), total: unique.length, reason: null };
 }
 
-function userTeamPairResultMarkup(result, selectedIndex) {
-  if (!result.pairs.length) {
-    const titles = { first: "没有第一队候选", second: "没有第二队候选", conflict: "所有双队组合都存在角色冲突", locks: "主C锁定条件无效" };
-    const reasons = { first: "第一队没有符合已选角色与核心条件的启用维护阵容。",
-      second: "第二队没有符合已选角色与不同核心条件的启用维护阵容。",
-      conflict: "两边均有维护阵容，但无法同时使用八名不同角色。",
-      locks: "请按顺序锁定至多两位不同主C。" };
-    const detail = result.conflictNames?.length ? "最近一组冲突角色：" + result.conflictNames.join("、") + "。"
-      : result.missingNames?.length ? "最近一套阵容尚未勾选：" + result.missingNames.join("、") + "。" : "";
-    return '<section class="user-team-result user-team-result-empty" role="status"><div class="user-section-heading"><div><h2>双队无解：' + escapeHtml(titles[result.reason]) + '</h2><p>' + escapeHtml(reasons[result.reason] + detail + "请调整角色池或锁定主C；停用阵容不会参与推荐。") + '</p></div><span class="user-result-pill">无可行组合</span></div></section>';
-  }
-  const safeIndex = Math.min(Math.max(0, selectedIndex), result.pairs.length - 1);
-  const selected = result.pairs[safeIndex];
-  const picker = '<div class="user-team-candidates" role="group" aria-label="双队组合方案">' + result.pairs.map((pair, index) =>
-    '<button class="user-team-candidate' + (safeIndex === index ? ' is-active' : '') + '" type="button" data-user-team-pair="' + index + '" aria-pressed="' + (safeIndex === index) + '"><span>组合方案 ' + (index + 1) + '</span><b>第一队 · ' + escapeHtml(pair.first.coreName) + '</b><small>' + escapeHtml(pair.first.memberNames.join('、')) + '</small><b>第二队 · ' + escapeHtml(pair.second.coreName) + '</b><small>' + escapeHtml(pair.second.memberNames.join('、')) + '</small></button>'
-  ).join("") + '</div>';
-  return '<section class="user-team-result"><div class="user-section-heading"><div><h2>双队组合方案</h2><p>已先校验两队能够同时成立，再按双队结构与机制匹配排序。选择组合会同时切换两队，最多展示三组。</p></div><span class="user-result-pill">' + result.pairs.length + ' 组可选</span></div>' + picker + '</section>'
-    + userTeamResultSection("第一队", 0, [selected.first], 0, true)
-    + userTeamResultSection("第二队", 1, [selected.second], 0, true);
-}
-
-function renderUserConstellation(knowledge) {
-  const section = (title, entries) => {
-    const nodes = Array.isArray(entries) ? entries : [];
-    return '<section class="user-surface user-constellation-section"><h2>' + title + '</h2>'
-      + (nodes.length ? '<ol class="user-constellation-list">' + nodes.map((node, index) =>
-        '<li><span>' + escapeHtml(title + ' ' + (node.level ?? index + 1)) + '</span><div><h3>'
-        + escapeHtml(node.name || title + '节点 ' + (index + 1)) + '</h3><p>'
-        + escapeHtml(node.description || '该节点的效果资料暂未补充。') + '</p></div></li>'
-      ).join('') + '</ol>' : '<p class="user-empty">当前角色暂无' + title + '资料。</p>') + '</section>';
-  };
-  return '<section class="user-section-heading"><div><h2>觉醒与共鸣</h2><p>查看这名角色各节点的完整效果。</p></div></section>'
-    + section('觉醒', knowledge.awakenings) + section('共鸣', knowledge.resonance);
-}
-
 function userTeamMemberCard(entry, label, isCore = false) {
   const role = userTeamRoleLabel(entry.data);
   const element = entry.data.element && entry.data.element !== "待补充" ? " · " + entry.data.element : "";
@@ -2272,6 +2598,27 @@ function userTeamResultSection(title, teamIndex, plans, selectedIndex, joint = f
   const sourceRecord = plan.sourceRecord;
   const sourceMarkup = '<div class="user-team-source-note"><span>阵容说明</span><b>' + escapeHtml(sourceRecord.source_archetype || "维护阵容") + '</b>' + (sourceRecord.editorial?.notes ? '<p>' + escapeHtml(sourceRecord.editorial.notes) + '</p>' : '') + '</div>';
   return '<section class="user-team-result"><div class="user-section-heading"><div><span class="user-section-kicker">' + escapeHtml(title) + '</span><h2>' + escapeHtml(plan.coreName) + ' 的方案</h2><p>' + (joint ? '两队由同一个组合确定，八名角色互不重复。' : '从维护阵容中选择适合你的方案。') + '</p></div><span class="user-result-pill">' + "维护阵容" + '</span></div>' + (joint ? "" : userTeamCandidatePickerMarkup(plans, safeIndex, teamIndex)) + '<div class="user-team-grid">' + memberMarkup + '</div>' + missingMarkup + userTeamReasonMarkup(plan) + sourceMarkup + '</section>';
+}
+
+function userTeamPairResultMarkup(result, selectedIndex) {
+  if (!result.pairs.length) {
+    const titles = { first: "没有第一队候选", second: "没有第二队候选", conflict: "所有双队组合都存在角色冲突", locks: "主C锁定条件无效" };
+    const reasons = { first: "第一队没有符合已选角色与核心条件的启用维护阵容。",
+      second: "第二队没有符合已选角色与不同核心条件的启用维护阵容。",
+      conflict: "两边均有维护阵容，但无法同时使用八名不同角色。",
+      locks: "请按顺序锁定至多两位不同主C。" };
+    const detail = result.conflictNames?.length ? "最近一组冲突角色：" + result.conflictNames.join("、") + "。"
+      : result.missingNames?.length ? "最近一套阵容尚未勾选：" + result.missingNames.join("、") + "。" : "";
+    return '<section class="user-team-result user-team-result-empty" role="status"><div class="user-section-heading"><div><h2>双队无解：' + escapeHtml(titles[result.reason]) + '</h2><p>' + escapeHtml(reasons[result.reason] + detail + "请调整角色池或锁定主C；停用阵容不会参与推荐。") + '</p></div><span class="user-result-pill">无可行组合</span></div></section>';
+  }
+  const safeIndex = Math.min(Math.max(0, selectedIndex), result.pairs.length - 1);
+  const selected = result.pairs[safeIndex];
+  const picker = '<div class="user-team-candidates" role="group" aria-label="双队组合方案">' + result.pairs.map((pair, index) =>
+    '<button class="user-team-candidate' + (safeIndex === index ? ' is-active' : '') + '" type="button" data-user-team-pair="' + index + '" aria-pressed="' + (safeIndex === index) + '"><span>组合方案 ' + (index + 1) + '</span><b>第一队 · ' + escapeHtml(pair.first.coreName) + '</b><small>' + escapeHtml(pair.first.memberNames.join('、')) + '</small><b>第二队 · ' + escapeHtml(pair.second.coreName) + '</b><small>' + escapeHtml(pair.second.memberNames.join('、')) + '</small></button>'
+  ).join("") + '</div>';
+  return '<section class="user-team-result"><div class="user-section-heading"><div><h2>双队组合方案</h2><p>已先校验两队能够同时成立，再按双队结构与机制匹配排序。选择组合会同时切换两队，最多展示三组。</p></div><span class="user-result-pill">' + result.pairs.length + ' 组可选</span></div>' + picker + '</section>'
+    + userTeamResultSection("第一队", 0, [selected.first], 0, true)
+    + userTeamResultSection("第二队", 1, [selected.second], 0, true);
 }
 
 function renderUserTeamRoute() {
@@ -2400,7 +2747,7 @@ function renderUserDriverBlockRoute() {
   }).join("");
   const mainStats = activeTier?.main_stats || [];
   const randomStats = activeTier?.random_stats || [];
-  const statMarkup = mainStats.map((stat) => '<div><span>' + escapeHtml(stat.name || "主属性") + '</span><b>' + escapeHtml(formatDriverBlockValue(stat.values?.[levelIndex], stat.is_percent)) + '</b></div>').join("");
+  const statMarkup = mainStats.map((stat, index) => '<div><span>' + escapeHtml(stat.name || "主属性") + '</span><b data-user-driver-stat="' + index + '">' + escapeHtml(formatDriverBlockValue(stat.values?.[levelIndex], stat.is_percent)) + '</b></div>').join("");
   const randomMarkup = randomStats.map((stat) => '<span>' + escapeHtml(stat.name) + ' · ' + escapeHtml(formatDriverBlockValue(stat.value, stat.is_percent)) + '</span>').join("");
   const detail = selected && activeTier ? '<article class="user-library-detail"><div class="user-library-detail-head"><div class="user-library-detail-image">' + (activeTier.images?.[userSelectedDriverBlockQuality]?.local_path ? '<img src="' + escapeHtml(activeTier.images[userSelectedDriverBlockQuality].local_path) + '" alt="' + escapeHtml(selected.name || "驱动块") + '">' : "块") + '</div><div><span class="user-result-pill">' + escapeHtml(selected.model + " · " + qualityLabels[userSelectedDriverBlockQuality] + "色 " + activeTier.grade + "级") + '</span><h2>' + escapeHtml(selected.model + " · " + (selected.shape || selected.grid_count + " 格")) + '</h2><p>' + escapeHtml(selected.grid_count + " 格 · " + activeTier.random_slot_count + " 个随机副词条槽 · " + randomStats.length + " 种候选词条") + '</p>' + '</div></div><section class="arc-drive-detail-section"><div class="arc-detail-section-head"><div><h3>品质与形状图</h3><small>切换品质查看对应成长数据</small></div></div><div class="sky-curtain-quality-selector" role="group" aria-label="用户端驱动块品质">' + qualityButtons + '</div></section><section class="arc-drive-detail-section"><div class="arc-detail-section-head"><div><h3>固定主属性</h3><small>强化 +0 至 +' + (activeTier.level?.max ?? 20) + '</small></div><label class="driver-block-level-control">强化 +<output>' + level + '</output><input data-user-driver-level type="range" min="' + (activeTier.level?.min ?? 0) + '" max="' + (activeTier.level?.max ?? 20) + '" value="' + level + '" aria-label="驱动块强化等级"></label></div><div class="user-library-stat-grid">' + statMarkup + '</div></section><section class="user-library-copy"><span>随机副属性池 · ' + randomStats.length + ' 种</span><div class="user-affix-chip-list">' + (randomMarkup || "<span>暂无随机副属性</span>") + '</div></section></article>' : '<div class="user-empty">没有找到符合条件的驱动块。</div>';
   target.innerHTML = '<div class="user-route-intro"><div><span class="user-section-kicker">图鉴</span><h1 id="userDriverBlockTitle">驱动块</h1><p>浏览型号、形状、品质成长和随机副属性。</p></div><div class="user-route-status"><i></i><span>' + items.length + ' / ' + (driverBlockCatalog.items || []).length + ' 种形状</span></div></div><div class="user-library-toolbar"><label class="user-search"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="1.7"/><path d="m16 16 4 4" stroke="currentColor" stroke-linecap="round"/></svg><input id="userDriverBlockSearch" type="search" value="' + escapeHtml(userDriverBlockSearchQuery) + '" placeholder="搜索型号、形状或副属性" aria-label="搜索驱动块"></label><div class="user-library-filters" role="group" aria-label="驱动块型号筛选">' + modelButtons + '</div></div><div class="user-library-layout"><div class="user-library-grid" aria-label="用户端驱动块列表">' + (cards || '<div class="user-empty">没有找到符合条件的驱动块。</div>') + '</div>' + detail + '</div>';
@@ -2417,6 +2764,7 @@ function renderUserRouteView(route = userActiveRoute) {
   if (safeRoute === "arc-drives") renderUserArcDriveRoute();
   if (safeRoute === "cassettes") renderUserSkyCurtainRoute();
   if (safeRoute === "drive-blocks") renderUserDriverBlockRoute();
+  if (safeRoute === "role-build") window.KekeRoleBuild?.render();
   if (safeRoute === "vision") window.KekeVision?.render();
   if (safeRoute === "inventory") window.KekeInventory?.render();
 }
@@ -2599,9 +2947,25 @@ function bindUserCatalogRoutes() {
     }
   });
   $("#userDriverBlockRoute")?.addEventListener("input", (event) => {
-    if (event.target.id !== "userDriverBlockSearch") return;
-    userDriverBlockSearchQuery = event.target.value.trim().toLowerCase();
-    renderUserDriverBlockRoute();
+    if (event.target.matches("[data-user-driver-level]")) {
+      const slider = event.target;
+      userSelectedDriverBlockLevel = Number(slider.value);
+      const item = (driverBlockCatalog.items || []).find((entry) => entry.id === userSelectedDriverBlockId);
+      const tier = item?.qualities?.[userSelectedDriverBlockQuality] || item?.qualities?.gold;
+      const levelIndex = userSelectedDriverBlockLevel - (tier?.level?.min ?? 0);
+      const output = slider.closest(".driver-block-level-control")?.querySelector("output");
+      if (output) output.textContent = String(userSelectedDriverBlockLevel);
+      slider.closest(".arc-drive-detail-section")?.querySelectorAll(".user-library-stat-grid > div").forEach((row, index) => {
+        const value = row.querySelector("b");
+        const stat = tier?.main_stats?.[index];
+        if (value && stat) value.textContent = formatDriverBlockValue(stat.values?.[levelIndex], stat.is_percent);
+      });
+      return;
+    }
+    if (event.target.id === "userDriverBlockSearch") {
+      userDriverBlockSearchQuery = event.target.value.trim().toLowerCase();
+      renderUserDriverBlockRoute();
+    }
   });
   $("#userDriverBlockRoute")?.addEventListener("change", (event) => {
     if (event.target.matches("[data-user-driver-level]")) {

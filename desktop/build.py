@@ -16,9 +16,15 @@ def make_icon(directory):
 
 
 def build(target, dist=None, layout='onefile', app_version='1.0',app_revision=0):
-    dist = Path(dist or ROOT / "dist/windows").resolve()
+    default_dist = ROOT / ("dist/windows/admin" if target == "admin" else "dist/windows")
+    dist = Path(dist or default_dist).resolve()
     if not dist.is_relative_to((ROOT / "dist").resolve()):
         raise ValueError("Desktop output must stay within this project's dist directory")
+    if target == "admin":
+        try:
+            import requests  # noqa: F401
+        except ImportError as error:
+            raise RuntimeError("Admin EXE builds require requests from desktop/requirements.txt") from error
     directory = ROOT / "build/desktop"
     directory.mkdir(parents=True, exist_ok=True)
     icon = make_icon(directory)
@@ -29,7 +35,9 @@ def build(target, dist=None, layout='onefile', app_version='1.0',app_revision=0)
         public = prepare_public(app_version,app_revision)
         data = [str(public) + ";public", str(ROOT / "desktop/inventory/component-identity.json") + ";inventory", str(ROOT / "desktop/vision/resources") + ";vision/resources", str(ROOT / "desktop/vision/upstream/LICENSE") + ";vision/upstream", str(ROOT / "desktop/vision/upstream/NOTICE.md") + ";vision/upstream", str(ROOT / "desktop/vision/upstream/source-manifest.json") + ";vision/upstream"]
         data += [str(ROOT / 'build/native-components') + ';native-components', str(ROOT / 'desktop/native/component-identity.json') + ';native', str(ROOT / 'desktop/native/NOTICE.md') + ';native']
-        data += [str(ROOT/'desktop/assets')+';assets']
+        data += [str(ROOT/'desktop/assets'/name)+';assets' for name in ('mint-avatar.ico','mint-avatar.png')]
+        data += [str(ROOT/'desktop/inventory/equipment-layouts.json')+';inventory']
+        data += [str(ROOT/'desktop/inventory/account_uid_reader/native/KekeNativeReader.dll')+';inventory/account_uid_reader/native']
         name = "KekeAssistant"
         if layout=='directory':
             trust=json.loads((ROOT/'desktop/update-trust.json').read_text())

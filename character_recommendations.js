@@ -63,10 +63,14 @@ window.CharacterRecommendations = (() => {
     catch (_) { return false; }
   }
   function reset(knowledge) {
-    const next = { ...saved }; delete next[knowledge.id];
+    const next = { ...saved };
+    const maintained = window.characterOverrides?.characters?.[knowledge.id]?.recommended;
+    if (maintained && typeof maintained === "object") next[knowledge.id] = clone(maintained);
+    else delete next[knowledge.id];
     try { localStorage.setItem(key, JSON.stringify(next)); saved = next; }
     catch (_) { return false; }
-    knowledge.recommended = clone(originals[knowledge.id]?.recommended || {});
+    const original = originals[knowledge.id];
+    knowledge.recommended = original ? createKnowledge(original).recommended : {};
     return true;
   }
   function exportOverrides() { return clone(saved); }

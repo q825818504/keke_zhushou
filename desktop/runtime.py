@@ -58,6 +58,8 @@ def local_workspace():
 
 def public_server(root: Path, port: int, workspace=None, inventory=None, vision=None, configuration=None, startup_warning=None):
     inventory_token = secrets.token_urlsafe(32)
+    # Consent belongs to this application run, never the persisted account config.
+    native_risk = {'acknowledged': False, 'enabled': False}
     release_ready=False
     manifest = json.loads((root / "public-manifest.json").read_text(encoding="utf-8"))
     allowed = set(manifest["files"]) | {"public-manifest.json"}
@@ -127,7 +129,7 @@ def public_server(root: Path, port: int, workspace=None, inventory=None, vision=
                 self.send_error(404)
                 return
             if relative == 'inventory/status' and inventory:
-                self.inventory_json({**inventory.status(), 'token':inventory_token})
+                self.inventory_json({**inventory.status(), 'token':inventory_token, 'native_risk':dict(native_risk)})
                 return
             if relative == 'inventory/snapshot' and inventory:
                 account = parse_qs(urlsplit(self.path).query).get('account', [inventory.config['account']])[0]
@@ -141,7 +143,7 @@ def public_server(root: Path, port: int, workspace=None, inventory=None, vision=
                 return
             if relative.startswith('vision/') and vision:
                 params=parse_qs(urlsplit(self.path).query)
-                account=params.get('account',['默认账号'])[0]
+                account=params.get('account',[inventory.config.get('account','默认账号') if inventory else '默认账号'])[0]
                 try:
                     if relative=='vision/status':self.inventory_json({**vision.status(),'token':inventory_token})
                     elif relative=='vision/history':self.inventory_json(vision.history(account))
@@ -227,12 +229,35 @@ def public_server(root: Path, port: int, workspace=None, inventory=None, vision=
                     elif path=='/vision/stop-capture':result=vision.stop_capture()
                     elif path=='/vision/open-folder':result=vision.open_folder(body.get('account'),body.get('id'))
                     elif path=='/vision/correct':result=vision.correct(body.get('account'),body.get('id'),body.get('index'),body.get('record'))
-                    else:result=vision.start(body.get('mode'),body.get('account'),body.get('count'),body.get('files'),body.get('id'))
+                    else:
+                        if inventory:
+                            with inventory.lock:
+                                if inventory.native_busy():raise ValueError('请先等待原生读取或装备操作结束')
+                                mode=body.get('mode')
+                                account=body.get('account')
+                                profile=inventory.accounts.get(account)
+                                supplied_uid=body.get('account_uid')
+                                if mode=='retry':
+                                    if not profile:raise ValueError('请先选择识别批次所属账号资料')
+                                    batch=vision.load(account,body.get('id'))
+                                    account_uid=batch.get('account_uid') or profile.get('uid')
+                                    if supplied_uid and supplied_uid!=account_uid:raise ValueError('重试UID与原批次不一致')
+                                    if not account_uid:raise ValueError('此旧批次尚未绑定UID，请先在背包数据中手动绑定账号资料')
+                                    if profile.get('uid') != account_uid:raise ValueError('请先将此批次所属资料手动绑定到对应 UID')
+                                else:
+                                    from inventory.accounts import validate_uid
+                                    account_uid=validate_uid(supplied_uid)
+                                    profile=inventory.accounts.resolve_uid(account_uid)
+                                    account=profile['account']
+                                result=vision.start(mode,account,body.get('count'),body.get('files'),body.get('id'),account_uid)
+                        else:result=vision.start(body.get('mode'),body.get('account'),body.get('count'),body.get('files'),body.get('id'),body.get('account_uid'))
                     self.inventory_json(result)
                 except (ValueError,OSError) as error:
                     diagnostics.failure('识别扫描请求失败');self.inventory_json({'error':str(error)},400)
                 return
-            if not inventory or path not in ('/inventory/start','/inventory/cancel','/inventory/delete','/inventory/components/check','/inventory/components/deploy','/inventory/components/remove'):
+            if not inventory or path not in ('/inventory/risk/acknowledge','/inventory/risk-mode','/inventory/start','/inventory/cancel','/inventory/delete','/inventory/account/delete','/inventory/account/select','/inventory/account/note','/inventory/account/bind','/inventory/components/check','/inventory/components/deploy','/inventory/components/remove',
+                '/inventory/equipment/inspect','/inventory/equipment/preview','/inventory/equipment/assemble-preview','/inventory/equipment/start','/inventory/equipment/cancel',
+                '/inventory/equipment/save-build','/inventory/equipment/delete-build','/inventory/equipment/saved-preview'):
                 self.send_error(404)
                 return
             try:
@@ -242,19 +267,54 @@ def public_server(root: Path, port: int, workspace=None, inventory=None, vision=
                 body = json.loads(self.rfile.read(length))
                 if not isinstance(body,dict):
                     raise ValueError('请求格式无效')
-                if path=='/inventory/delete':
+                if path in ('/inventory/risk/acknowledge', '/inventory/risk-mode'):
+                    with inventory.lock:
+                        if path.endswith('/acknowledge'):
+                            native_risk['acknowledged'] = True
+                        else:
+                            enabled = body.get('enabled')
+                            if type(enabled) is not bool:raise ValueError('风险模式状态无效')
+                            if enabled and not native_risk['acknowledged']:raise ValueError('请先阅读并确认 DLL 读取风险提示')
+                            if inventory.native_busy():raise ValueError('请等待当前原生读取或装备操作结束后再切换风险模式')
+                            native_risk['enabled'] = enabled
+                        result = dict(native_risk)
+                elif path=='/inventory/account/delete':
+                    result=inventory.delete_account(body.get('account'),body.get('uid'))
+                elif path=='/inventory/account/select':
+                    result=inventory.select_account(body.get('account'))
+                elif path=='/inventory/account/note':
+                    result=inventory.set_account_note(body.get('account'),body.get('note'))
+                elif path=='/inventory/account/bind':
+                    result=inventory.bind_account_uid(body.get('account'),body.get('uid'),body.get('replace_existing',False))
+                elif '/equipment/' in path:
+                    action=path.rsplit('/',1)[1]
+                    if action=='inspect':result=inventory.equipment.inspect(body.get('account') or inventory.config.get('account'))
+                    elif action=='save-build':result=inventory.equipment.save_build_plan(body.get('account'),body.get('selection_id'),body.get('character_id'),body.get('core'),body.get('modules'),body.get('exclude_others'),body.get('complete'))
+                    elif action=='delete-build':result=inventory.equipment.delete_build_plan(body.get('account'),body.get('character_id'))
+                    elif action=='saved-preview':result=inventory.equipment.preview_saved(body.get('account'),body.get('character_id'))
+                    elif action=='preview':result=inventory.equipment.preview(body.get('account'),body.get('character_ids'),body.get('categories'))
+                    elif action=='assemble-preview':result=inventory.equipment.preview_assembly(body.get('account'),body.get('selection_id'),body.get('character_id'),body.get('core'),body.get('modules'),body.get('placement_mode'))
+                    elif action=='start':result=inventory.equipment.start(body.get('token'))
+                    else:result=inventory.equipment.cancel()
+                elif path=='/inventory/delete':
                     result=inventory.delete(body.get('account'),body.get('source'))
                 elif '/components/' in path:
                     if not inventory.components:raise ValueError('此版本尚未内置原生组件')
-                    if inventory.status()['job']['running']:raise ValueError('同步期间不能修改组件')
                     action=path.rsplit('/',1)[1]
                     method={'check':inventory.components.inspect,'deploy':inventory.components.deploy,'remove':inventory.components.remove}[action]
-                    result=method(body.get('game_directory'))
+                    with inventory.lock:
+                        if action=='deploy' and not (native_risk['acknowledged'] and native_risk['enabled']):
+                            raise ValueError('请先在读取数据中启用风险模式，再部署 DLL 组件')
+                        if inventory.native_busy():raise ValueError('原生读取或装备操作期间不能修改组件')
+                        result=method(body.get('game_directory'))
                 else:
-                    result = inventory.cancel() if path.endswith('/cancel') else inventory.start(account=body.get('account'))
+                    with inventory.lock:
+                        if path=='/inventory/start' and not (native_risk['acknowledged'] and native_risk['enabled']):
+                            raise ValueError('请先在读取数据中启用风险模式，再使用 DLL 读取')
+                        result = inventory.cancel() if path.endswith('/cancel') else inventory.start(account=body.get('account'))
                 self.inventory_json(result)
-            except (ValueError, OSError) as error:
-                diagnostics.failure('原生读取或组件操作失败')
+            except (ValueError, OSError, RuntimeError) as error:
+                diagnostics.failure('原生读取、装备或组件操作失败')
                 self.inventory_json({'error':str(error)}, 400)
 
 

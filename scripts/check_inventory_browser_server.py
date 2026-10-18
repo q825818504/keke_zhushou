@@ -35,6 +35,11 @@ with tempfile.TemporaryDirectory() as tmp:
     service._write(service._path('自主格式测试'),{'schema_version':2,'account':'自主格式测试','domains':{},'inventory':{
         'equipment':{**own,'records':[{'instance_id':'own-drive','category':'drive','is_equipped':True,'name':'自有驱动'}, {'instance_id':'own-tape','category':'tape','is_equipped':False}]},
         'characters':{**own,'records':[{'character_id':'own-character'}]}}})
+    service.accounts.discover_legacy()
+    service.bind_account_uid('OCR账号','123456789012')
+    service.select_account('默认账号')
+    empty_profile=service.accounts.resolve_uid('987654321098')
+    service.set_account_note(empty_profile['account'],'空账号测试')
     server=public_server(Path(__file__).resolve().parents[1]/'build/desktop/public',0,inventory=service,vision=vision)
     print(json.dumps({'port':server.server_port}),flush=True)
     try: server.serve_forever()

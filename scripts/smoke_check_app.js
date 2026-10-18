@@ -10,6 +10,7 @@ const scriptPaths = [...html.matchAll(/<script\s+src=["']([^"']+)["']/g)].map((m
 assert.ok(scriptPaths.length, "index.html must load its app scripts");
 assert.equal(scriptPaths.at(-1), "app.js", "app.js must run after its data bundles");
 assert.ok(scriptPaths.indexOf("data/knowledge/team_templates.js") < scriptPaths.indexOf("app.js"), "team templates must load before app.js");
+assert.ok(scriptPaths.indexOf("cassette_scoring.js") < scriptPaths.indexOf("role_build.js"), "the shared cassette scorer must load before the user role-build module");
 
 for (const relativePath of scriptPaths) {
   const absolutePath = path.join(root, relativePath);
@@ -23,7 +24,7 @@ assert.ok(toastLookup >= 0, "app.js must initialize its toast element");
 assert.ok(app.indexOf("const $ = (selector, scope = document) => scope.querySelector(selector);") < toastLookup, "$ selector helper must exist before startup uses it");
 assert.match(app, /let userTeamTeamCount = userTeamSavedState\.teamCount === 2 \? 2 : 1;/, "team count must initialize before rendering the team route");
 
-const sandbox = { window: {} };
+const sandbox = { window: { addEventListener() {} }, URL };
 vm.createContext(sandbox);
 for (const relativePath of scriptPaths.slice(0, -1)) {
   vm.runInContext(fs.readFileSync(path.join(root, relativePath), "utf8"), sandbox, { filename: relativePath });
@@ -44,6 +45,29 @@ assert.equal(invalidTeamReferences.length, 0, "team templates must only referenc
 
 const iconSelectorStart = app.indexOf("function findCharacterIcon(");
 assert.ok(iconSelectorStart >= 0, "character icons must be selected by character identity");
+const assetResolverStart = app.indexOf("const importedAssetUrl =");
+assert.ok(assetResolverStart >= 0 && assetResolverStart < iconSelectorStart, "the local asset resolver must be defined before character helpers");
+const assetResolver = vm.runInContext(`${app.slice(assetResolverStart, iconSelectorStart)}\nimportedAssetUrl;`, sandbox);
+assert.equal(assetResolver({ local_path: "data/resources/characters/zhenhong/characters/zhenhong.webp" }), "data/resources/characters/zhenhong/characters/zhenhong.webp");
+assert.equal(assetResolver({ local_path: "https://wiki.mysqil.com/images/characters/zhenhong.webp" }), "", "external image URLs must never enter the UI");
+assert.equal(assetResolver({ local_path: "//wiki.mysqil.com/images/characters/zhenhong.webp" }), "", "protocol-relative image URLs must never enter the UI");
+assert.equal(assetResolver({ local_path: "data/resources/../../outside.webp" }), "", "asset paths must stay under local data");
+assert.equal(assetResolver({ local_path: "data/%2e%2e/outside.webp" }), "", "encoded path traversal must stay out of the asset resolver");
+const referencedAssetPaths = new Set();
+const collectAssetPaths = (value) => {
+  if (Array.isArray(value)) return value.forEach(collectAssetPaths);
+  if (!value || typeof value !== "object") return;
+  for (const [key, item] of Object.entries(value)) {
+    if (key === "local_path" && typeof item === "string") referencedAssetPaths.add(item);
+    else collectAssetPaths(item);
+  }
+};
+for (const catalog of [sandbox.window.characterKnowledge, sandbox.window.characterOverrides, sandbox.window.arcDriveKnowledge,
+  sandbox.window.skyCurtainKnowledge, sandbox.window.driverBlockKnowledge, sandbox.window.esperCycleKnowledge]) collectAssetPaths(catalog);
+for (const relativePath of referencedAssetPaths) {
+  assert.equal(assetResolver({ local_path: relativePath }), relativePath, `local asset must resolve under data/: ${relativePath}`);
+  assert.ok(fs.existsSync(path.join(root, relativePath)), `local asset file must exist: ${relativePath}`);
+}
 const iconSelectorEnd = app.indexOf("const characterData", iconSelectorStart);
 vm.runInContext(app.slice(iconSelectorStart, iconSelectorEnd), sandbox);
 const selectedIconHashes = new Map();
@@ -84,5 +108,6 @@ assert.equal(resolveCassette({ recommended: { cassette: { id: "unlisted-cassette
 assert.equal(resolveCassette({ recommended: { cassette: { id: curtains[0].id, acquisition: "旧摘要" } } }).acquisition, curtains[0].acquisition, "catalog acquisition must take precedence over stale character summaries");
 
 console.log(`Smoke check passed: ${characters.length} characters, ${teams.length} team templates, all scripts resolve and parse.`);
+console.log(`Local asset checks passed: ${referencedAssetPaths.size} paths exist; external URLs and path traversal are rejected.`);
 console.log(`Character icon checks passed: ${selectedIconHashes.size} unique, existing, identity-matched icon files.`);
 console.log(`Cassette acquisition checks passed: ${charactersWithCassette.length} character recommendations match the shared catalog.`);

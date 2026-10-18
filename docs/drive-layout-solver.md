@@ -6,7 +6,7 @@
 
 ## 两层候选
 
-- **形状组合**：每种固定朝向形状需要几块。例如两个Ⅱ横，与一个Ⅱ横加一个Ⅱ竖，是不同组合；这层直接影响玩家库存能否满足。
+- **形状组合**：每种固定朝向形状需要几块。例如两个Ⅱ横，与一个Ⅱ横加一个Ⅱ竖，是不同组合；这层直接影响玩家库存能否满足。`rankBy: 'score_first'` 会先比较所有组合的实际装备评分，再以填充格数、终端偏好和块数破同分。
 - **坐标摆法**：同一形状组合可能有多种摆放位置。库存评分相同时可视为等价参考；需要坐标变体时单独枚举，不用大量位置变化挤占形状组合候选。
 
 `generateCandidates()` 默认每种形状组合只保留一套合法坐标，按 `profileKey` 去重。`placementsFor()` 可以为指定形状组合枚举不同坐标。
@@ -71,7 +71,7 @@ const result = DriveLayoutSolver.generateCandidates({
 - `metrics`：实际填充格数、优先型号数量、装备得分与块数。
 - `placementKey`：忽略D编号后的坐标身份。
 
-总体结果包含 `status`、`searchComplete`、`truncated`、`rankingComplete` 和搜索节点数。`status` 为 `ok`、`infeasible` 或 `budget_exhausted`。预算耗尽不能解释为无解。候选数截断或坐标枚举截断会明确标记；`searchComplete` 只针对声明的 `scope`，默认是形状组合，不表示枚举了所有坐标摆法。
+总体结果包含 `status`、`searchComplete`、`truncated`、`rankingComplete`、`optimalityProven` 和搜索节点数。`status` 为 `ok`、`infeasible` 或 `budget_exhausted`。预算耗尽不能解释为无解。候选数截断或坐标枚举截断会明确标记；`searchComplete` 只针对声明的 `scope`，默认是形状组合，不表示枚举了所有坐标摆法。`score_first` 在完整计算了所有库存形状组合分数后，按分数降序检查摆放合法性；找到首个可行组合即能证明最高分，坐标差异不会改变其装备分数。
 
 候选排序只有在 `rankingComplete` 为 true 时才能确认为整个已定义搜索范围内的最佳排序。未完成的结果仍可以提供已验证可行的候选，但不得宣称全局最优。
 

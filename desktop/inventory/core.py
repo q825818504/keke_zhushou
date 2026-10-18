@@ -7,6 +7,13 @@ import time
 from collections import deque
 import diagnostics
 
+class CoreRpcError(RuntimeError):
+    def __init__(self, error):
+        self.code = error.get('code')
+        self.data = error.get('data') if isinstance(error.get('data'), dict) else {}
+        self.domain_code = self.data.get('domain_code')
+        super().__init__(str(error.get('message', '组件读取失败')))
+
 class Core:
     def __init__(self, executable, pid, data_dir=None):
         command = [str(executable), 'serve-native', '--stdio', '--game-pid', str(pid)]
@@ -75,7 +82,7 @@ class Core:
                 continue
             if 'error' in value:
                 error = value['error']
-                raise RuntimeError(str(error.get('message', '组件读取失败')))
+                raise CoreRpcError(error)
             result = value.get('result')
             if not isinstance(result, dict):
                 raise ValueError('采集组件返回格式无效')

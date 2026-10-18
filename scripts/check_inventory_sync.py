@@ -118,21 +118,31 @@ class InventoryTests(unittest.TestCase):
 
     def test_atomic_retention_and_account_isolation(self):
         with tempfile.TemporaryDirectory() as tmp:
-            service=InventoryService(tmp)
+            account='uid:123456789012'
+            service=InventoryService(tmp,uid_reader=lambda pid:'123456789012')
             adapter=NteAdapter(core_factory=lambda *args:FakeCore(fail='items'),pid_reader=lambda:123)
             adapter.root=Path(tmp); adapter.executable=Path('not-executed')
-            before={'schema_version':1,'account':'A','domains':{'items':{'rows':[{'old':7}]}}}
-            service._write(service._path('A'),before)
+            before={'schema_version':1,'account':account,'account_uid':'123456789012','domains':{'items':{'rows':[{'old':7}]}}}
+            service._write(service._path(account),before)
             service.job={'running':True,'domains':{}}
             service._run(adapter,'A')
-            saved=service.load('A')
+            saved=service.load(account)
             self.assertEqual(saved['domains']['items'],before['domains']['items'])
             self.assertEqual(len(saved['domains']['equipment']['rows']),65)
             self.assertEqual(service.load('B')['domains'],{})
             self.assertFalse(service.status()['job']['running'])
-            self.assertTrue(service._path('A').with_suffix('.previous.json').is_file())
+            self.assertTrue(service._path(account).with_suffix('.previous.json').is_file())
             service.stop.set()
             with self.assertRaises(Cancelled):service.check()
+
+    def test_native_read_without_uid_reader_saves_no_data(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            adapter=NteAdapter(core_factory=lambda *args:FakeCore(),pid_reader=lambda:123)
+            adapter.root=Path(tmp);adapter.executable=Path('not-executed')
+            service=InventoryService(tmp);service.job={'running':True,'domains':{}}
+            service._run(adapter,'旧标签')
+            self.assertIn('UID',service.status()['job']['message'])
+            self.assertEqual(list(Path(tmp).glob('account-*.json')),[])
 
     def test_v1_migration_is_read_only_and_maps_owned_fields(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -170,10 +180,10 @@ class InventoryTests(unittest.TestCase):
                     'coverage':{'collection_complete':True,'account_complete':None},'records':rows})
             def close(self):self.closed=True
         with tempfile.TemporaryDirectory() as tmp:
-            adapter=OwnAdapter();service=InventoryService(tmp,adapter_factory=lambda name:adapter)
+            adapter=OwnAdapter();service=InventoryService(tmp,adapter_factory=lambda name:adapter,uid_reader=lambda pid:'123456789012')
             service.start(tmp,'A');service.thread.join(timeout=3)
             self.assertFalse(service.status()['job']['running'])
-            saved=service.load('A')
+            saved=service.load('uid:123456789012')
             self.assertEqual(saved['domains'],{})
             self.assertEqual([r['category'] for r in saved['inventory']['equipment']['records']],['drive','tape'])
             self.assertEqual(saved['inventory']['characters']['records'][0]['character_id'],'our-character')
@@ -184,7 +194,7 @@ class InventoryTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             pids=iter([123,456]);adapter=NteAdapter(core_factory=FakeCore,pid_reader=lambda:next(pids))
             adapter.root=Path(tmp);adapter.executable=Path('not-executed')
-            service=InventoryService(tmp);service.job={'running':True,'domains':{}}
+            service=InventoryService(tmp,uid_reader=lambda pid:'123456789012');service.job={'running':True,'domains':{}}
             service._run(adapter,'A')
             self.assertEqual(service.load('A')['inventory'],{})
             self.assertIn('进程已变化',service.status()['job']['message'])
