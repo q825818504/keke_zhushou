@@ -66,18 +66,6 @@
           }
         },
         {
-          "character_id": "xun",
-          "character_name": "浔",
-          "label": "被动技能",
-          "description": "「创生」强化：时停期间，「创生株」攻击不暂停。",
-          "image": {
-            "source_url": "https://wiki.mysqil.com/images/characters/xun-icon.webp",
-            "source_path": "/images/characters/xun-icon.webp",
-            "local_path": "data/mysqil/esper-cycles/assets/characters/xun-icon.webp",
-            "sha256": "cecac312b9dfca36e5063051636def495a7cc80bd778b5e7ef4e6679ea201669"
-          }
-        },
-        {
           "character_id": "jiuyuan",
           "character_name": "九原",
           "label": "被动技能",
@@ -99,6 +87,18 @@
             "source_path": "/images/characters/yiluoyi-icon.webp",
             "local_path": "data/mysqil/esper-cycles/assets/characters/yiluoyi-icon.webp",
             "sha256": "870452b4802e06e80a770a67732ba1a6eb107f4179d9512575e49502ec3ad152"
+          }
+        },
+        {
+          "character_id": "xun",
+          "character_name": "浔",
+          "label": "被动技能",
+          "description": "「创生」强化：时停期间，「创生株」攻击不暂停。",
+          "image": {
+            "source_url": "https://wiki.mysqil.com/images/characters/xun-icon.webp",
+            "source_path": "/images/characters/xun-icon.webp",
+            "local_path": "data/mysqil/esper-cycles/assets/characters/xun-icon.webp",
+            "sha256": "cecac312b9dfca36e5063051636def495a7cc80bd778b5e7ef4e6679ea201669"
           }
         }
       ],
