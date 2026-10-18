@@ -146,5 +146,35 @@ class UpdateTests(unittest.TestCase):
             command=run.call_args.args[0]
             self.assertIn('safe.directory='+self.root.resolve().as_posix(),command)
 
+    def test_missing_shared_asset_is_reuploaded_and_verified(self):
+        from unittest.mock import Mock,call
+        from urllib.error import HTTPError
+        from release_publish import verified_asset_url
+        api=Mock();api.upload.return_value='https://gitee.com/new'
+        path=self.root/'asset.part';path.write_bytes(b'test')
+        with patch('release_publish.verify_download',side_effect=[HTTPError('https://gitee.com/old',404,'missing',{},None),None]) as verify:
+            self.assertEqual(verified_asset_url(api,7,path,'https://gitee.com/old'),'https://gitee.com/new')
+            api.upload.assert_called_once_with(7,path)
+            self.assertEqual(verify.call_args_list,[call('https://gitee.com/old',path),call('https://gitee.com/new',path)])
+
+    def test_bad_existing_asset_never_triggers_silent_replacement(self):
+        from unittest.mock import Mock
+        from urllib.error import HTTPError
+        from release_publish import verified_asset_url
+        for error in (RuntimeError('hash mismatch'),HTTPError('https://gitee.com/old',403,'denied',{},None)):
+            api=Mock()
+            with patch('release_publish.verify_download',side_effect=error):
+                with self.assertRaises(type(error)):verified_asset_url(api,7,self.root/'asset.part','https://gitee.com/old')
+            api.upload.assert_not_called()
+
+    def test_replacement_asset_must_pass_anonymous_verification(self):
+        from unittest.mock import Mock
+        from urllib.error import HTTPError
+        from release_publish import verified_asset_url
+        api=Mock();api.upload.return_value='https://gitee.com/new'
+        with patch('release_publish.verify_download',side_effect=[HTTPError('https://gitee.com/old',404,'missing',{},None),RuntimeError('bad replacement')]):
+            with self.assertRaisesRegex(RuntimeError,'bad replacement'):
+                verified_asset_url(api,7,self.root/'asset.part','https://gitee.com/old')
+
 
 if __name__=='__main__':unittest.main(verbosity=2)

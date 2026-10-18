@@ -8,6 +8,7 @@ import os
 import subprocess
 import threading
 from datetime import datetime, timezone
+from urllib.error import HTTPError
 import requests
 from release_credentials import read_secrets, save_secrets, signing_identity
 from update_protocol import PRODUCT, REPOSITORY, atomic_json, checked_url, digest, open_url
@@ -136,6 +137,20 @@ def audit_files(output,artifacts):
     return selected
 
 
+def verified_asset_url(api, release_id, path, url=None):
+    if url:
+        try:
+            verify_download(url,path)
+            return url
+        except HTTPError as error:
+            if error.code != 404:raise
+    # A retired release can leave a stale index. Only re-upload the audited
+    # local artifact, and always verify the replacement anonymously.
+    url=api.upload(release_id,path)
+    verify_download(url,path)
+    return url
+
+
 def publish(root,output):
     root=Path(root).resolve(); output=Path(output).resolve()
     if not output.is_relative_to(root/'dist/windows/releases'): raise ValueError('只允许发布专用发行产物目录')
@@ -217,8 +232,8 @@ def publish(root,output):
             checksum=digest(path)
             url=download_index.get(checksum,{}).get('url') or receipts.get(path.name,{}).get('url')
             if not url and matched:url=matched.get('browser_download_url') or matched.get('url')
-            if not url: url=api.upload(release['id'],path)
-            verify_download(url,path); urls[path.name]=url
+            url=verified_asset_url(api,release['id'],path,url)
+            urls[path.name]=url
             receipts[path.name]={'url':url,'sha256':checksum};atomic_json(receipt_file,receipts)
             download_index[checksum]={'url':url,'size':path.stat().st_size,'name':path.name}
             atomic_json(index_file,download_index)

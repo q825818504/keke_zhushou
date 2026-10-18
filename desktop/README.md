@@ -1,6 +1,6 @@
 # 可可助手 Windows 桌面版
 
-正式发行改为联网安装器，构建与发布见 [RELEASE.md](RELEASE.md)。当前用户安装入口为 `dist/windows/final/KokoAssistantSetup-v1.0.exe`，Gitee首版已通过匿名下载验证；管理端保持单EXE。
+正式发行改为联网安装器，构建与发布见 [RELEASE.md](RELEASE.md)。当前用户安装入口为 `dist/windows/final/KokoAssistantSetup-v1.5.exe`，Gitee首版已通过匿名下载验证；管理端保持单EXE。
 它们显示独立 Windows 应用窗口，没有浏览器地址栏或浏览器标签页。界面采用现有资料与交互代码，在 WebView2 中呈现桌面侧栏和工具栏；不是全套 Windows 原生控件重写。
 
 用户版首次打开自动配队。侧栏提供角色、弧盘、空幕、驱动块、背包数据和读取数据；Ctrl+1 至 Ctrl+7 切换功能。用户发行资源不包含管理 DOM、资料写入接口、Git 模块、管理脚本或原始来源快照。
