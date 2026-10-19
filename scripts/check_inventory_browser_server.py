@@ -20,10 +20,10 @@ with tempfile.TemporaryDirectory() as tmp:
         def prepare(self,folder):raise ValueError('测试环境不运行原生采集')
     service=InventoryService(Path(tmp)/'inventory',adapter_factory=lambda _:UnavailableAdapter(),components=components,vision=vision)
     for account in ('默认账号','OCR账号'):
-        for batch_id,complete,count,mode in [('1'*24,True,2,'mouse'),('2'*24,False,1,'new')]:
+        for batch_id,complete,count,mode,saved_at in [('1'*24,True,2,'mouse','2026-10-08T10:00:00+00:00'),('2'*24,False,1,'new','2026-10-08T10:15:00+00:00')]:
             records=[{'instance_id':'scan-local-'+str(i),'image':str(i)+'.png','category':'drive' if i==0 else 'tape','name':'OCR装备','is_equipped':None} for i in range(count)]
             vision._write(vision._base(account,batch_id)/'batch.json',{'schema_version':1,'id':batch_id,'account':account,'mode':mode,'complete':complete,'capture_complete':complete,'state':'parsed',
-                'saved_at':'2026-10-08T10:00:00+00:00','processed':count,'images':[],'records':records})
+                'saved_at':saved_at,'processed':count,'images':[],'records':records})
     value={'schema_version':1,'account':'默认账号','domains':{}}
     for kind in DOMAINS:
         data=read_snapshot(FakeCore(),kind,lambda:None)

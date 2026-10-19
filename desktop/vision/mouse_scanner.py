@@ -78,7 +78,9 @@ class VerifiedMouseScanner(MouseInventoryScanner):
         scale=self._content_height(frame)/self.layout.base_height
         anchor=self.layout.cell_center(2,3,frame.rect.width,frame.rect.height)
         position=(frame.rect.left+anchor[0],frame.rect.top+anchor[1])
-        for attempt in range(40):
+        final_page=0<self.expected_count-slot.index<=self.layout.columns*(self.layout.visible_rows-1)
+        previous=None;stationary=0
+        for attempt in range(60):
             if self._stopped:raise MouseInventoryScanError('扫描已停止')
             self._input.scroll(position,-120)
             self.scroll_command_count+=1;self.scroll_amounts.append(-120)
@@ -86,15 +88,28 @@ class VerifiedMouseScanner(MouseInventoryScanner):
             current=self._capture_frame()
             thumb=detect_scroll_thumb(current.image)
             if thumb is None:raise MouseInventoryScanError('翻页后无法确认滚动条，已停止')
-            if thumb.at_bottom:return current,0,0,True
             center=detect_selected_card_center_y(current.image,expected_x=x,scale=scale)
             if center is None:raise MouseInventoryScanError('翻页后无法定位原选中行，已停止以避免错位')
-            if target-spacing*.4<=center<=target+spacing*.12:
+            # One scrollbar pixel can represent many items in a large bag.
+            # A near-bottom thumb is not proof that the list has reached its end.
+            state=(thumb.top,thumb.bottom,center)
+            stationary=stationary+1 if previous and state[:2]==previous[:2] and abs(center-previous[2])<=2 else 0
+            previous=state
+            if thumb.at_bottom and stationary>=3:
+                if not final_page:raise MouseInventoryScanError('列表已到底，但剩余数量超过一页；请核对筛选数量后重扫')
+                first_row=max(0,(self.expected_count+self.layout.columns-1)//self.layout.columns-self.layout.visible_rows)
+                row=(slot.index-1)//self.layout.columns-first_row
+                if not 0<=row<self.layout.visible_rows:raise MouseInventoryScanError('末页锚点与库存数量不符，已停止')
+                _,expected_y=self.layout.cell_center(row,slot.column,frame.rect.width,frame.rect.height)
+                offset=round(center-expected_y)
+                if abs(offset)>spacing*.45:raise MouseInventoryScanError('末页网格偏移超出范围，请核对数量后重扫')
+                return current,row,offset,True
+            if not final_page and target-spacing*.4<=center<=target+spacing*.12:
                 offset=round(center-target)
                 # Wait for inertia to settle and verify the same row again.
                 self._sleep(.3);settled=self._capture_frame()
                 checked=detect_selected_card_center_y(settled.image,expected_x=x,scale=scale)
                 if checked is None or abs(checked-center)>3:raise MouseInventoryScanError('列表仍在移动，已停止以避免点击错位')
                 return settled,0,offset,False
-            if center<target-spacing*.4:raise MouseInventoryScanError('滚动超过预期行，已停止以避免漏件')
+            if not final_page and center<target-spacing*.4:raise MouseInventoryScanError('滚动超过预期行，已停止以避免漏件')
         raise MouseInventoryScanError('翻页未到达预期行，扫描已停止')

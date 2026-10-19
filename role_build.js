@@ -5,8 +5,29 @@ window.KekeRoleBuild = (() => {
   let pollTimer=null, pollGeneration=0, globalNotice='', nativeReadBusy=false;
   let pendingDeleteRole=null, deleteDialog=null;
   const esc = value => String(value ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
-  const root = () => document.querySelector("#userRoleBuildRoute");
+  const root = () => document.querySelector("#userRoleBuildPlusRoute");
   const score = value => Number.isFinite(value) ? value.toFixed(1) : "—";
+  const locksKey=()=>`keke-plus-role-locks:${encodeURIComponent(snapshot?.account_uid||account)}`;
+  function roleLocks(){try{const value=JSON.parse(localStorage.getItem(locksKey())||'[]');return new Set(Array.isArray(value)?value.map(String):[]);}catch{return new Set();}}
+  function toggleRoleLock(role){
+    try{
+      const locks=roleLocks();if(locks.has(role.id))locks.delete(role.id);else locks.add(role.id);
+      localStorage.setItem(locksKey(),JSON.stringify([...locks]));clearCalculation();
+      actionMessage=locks.has(role.id)?`已锁定 ${role.name} 当前装备，其他角色计算时不会使用这些装备。`:`已解除 ${role.name} 的装备保护。`;paint();
+    }catch{actionMessage='角色锁保存失败，请检查本机存储后重试。';paint();}
+  }
+  function unlockAllRoles(){
+    if(!snapshot?.account_uid)return;
+    try{
+      localStorage.removeItem(locksKey());clearCalculation();
+      actionMessage='已解除当前 UID 的全部角色装备保护。';paint();
+    }catch{actionMessage='解锁失败，请检查本机存储后重试。';paint();}
+  }
+  const lockIcon=()=>'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/><path d="M12 14v3"/></svg>';
+  function lockButton(role,disabled){
+    const locked=roleLocks().has(role.id);
+    return `<button type="button" class="rb-lock-toggle${locked?' is-locked':''}" data-role-lock aria-pressed="${locked}" aria-label="${locked?'解锁':'锁定'}${esc(role.name)}的当前配装" title="${locked?'已锁定：其他角色计算时不会使用其装备':'锁定当前角色已装备的空幕与驱动'}" ${disabled?'disabled':''}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/><path d="M12 14v3"/></svg></button>`;
+  }
   function openDeleteConfirmation(role) {
     if(!deleteDialog){
       deleteDialog=document.createElement('dialog');
@@ -186,7 +207,7 @@ window.KekeRoleBuild = (() => {
     const preview=operationPreview;
     const batchPreview=preview?.execution_mode==='one_key';
     const operationStatus=job?`<div class="rb-operation-status" role="status">${esc(job.message)} · ${esc(job.completed||0)} / ${esc(job.total||0)}${job.running?(job.batch_active?'<span class="rb-muted">批量指令已提交，完成核验前无法中断</span>':'<button type="button" class="rb-button" data-build-cancel>停止操作</button>'):''}${job.unknown?'<button type="button" class="rb-button" data-build-status>重新查询状态</button>':''}</div>`:'';
-    return `<section class="rb-actions"><div class="rb-section-heading"><h3>${tab==='calculate'?'毕业配装计算':'保存方案与游戏操作'}</h3></div>${tab==='calculate'?`<label class="rb-exclude"><input type="checkbox" data-build-exclude ${excludeOthers?'checked':''} ${disabled?'disabled':''}>不使用其他角色已装备的驱动与空幕<span>本角色当前装备仍参与</span></label><div class="rb-action-buttons"><button type="button" class="rb-button rb-button-primary" data-build-calculate ${disabled?'disabled':''}>${calculating?'正在搜索合法搭配…':'计算毕业配装'}</button>${calculating?'<button type="button" class="rb-button" data-build-stop>停止计算</button>':''}<button type="button" class="rb-button" data-build-save ${disabled||!proposal?'disabled':''}>保存该角色方案</button></div>`:`<div class="rb-action-buttons"><button type="button" class="rb-button rb-button-primary" data-build-equip ${disabled||!saved?.valid?'disabled':''}>自动装配已保存方案</button><button type="button" class="rb-button" data-build-unequip ${disabled?'disabled':''}>拆卸本角色空幕与驱动</button></div>${!saved?'<p class="rb-muted">请先在计算配装中计算并保存该角色方案。</p>':!saved.valid?`<p class="rb-action-notice">${esc(saved.reason)}。请重新计算并保存。</p>`:''}`}${chosen?planView(role,chosen,tab==='game'):''}${preview?`<div class="rb-operation-preview"><h3>${preview.operation==='assembly'?'自动装配预览':'拆卸预览'}</h3><p>${batchPreview?'空幕和驱动将通过一次批量指令提交，完成后整体核验':`共 ${preview.total} 步`}${preview.transfers?` · 从其他角色转移 ${preview.transfers} 件`:''}</p><ol>${preview.items.map(item=>`<li>${item.action==='equip'?'装入':'卸下'} · ${esc(item.character_name)} · ${esc(item.label)} ${esc(item.name)}</li>`).join('')}</ol>${preview.total?`<button class="rb-button rb-button-primary" type="button" data-build-execute ${disabled?'disabled':''}>${batchPreview?'确认一键装配并核验':`确认执行 ${preview.total} 步`}</button>`:'<p>当前装备与方案一致，无需操作。</p>'}<button class="rb-button" type="button" data-build-dismiss ${disabled?'disabled':''}>关闭预览</button></div>`:''}${operationStatus}${actionMessage?`<p class="rb-action-notice" role="status">${esc(actionMessage)}</p>`:''}</section>`;
+    return `<section class="rb-actions"><div class="rb-section-heading"><h3>${tab==='calculate'?'毕业配装计算':'保存方案与游戏操作'}</h3>${tab==='calculate'?lockButton(role,disabled):''}</div>${tab==='calculate'?`<label class="rb-exclude"><input type="checkbox" data-build-exclude ${excludeOthers?'checked':''} ${disabled?'disabled':''}>不使用其他角色已装备的驱动与空幕<span>本角色当前装备仍参与</span></label><div class="rb-action-buttons"><button type="button" class="rb-button rb-button-primary" data-build-calculate ${disabled?'disabled':''}>${calculating?'正在搜索合法搭配…':'计算毕业配装'}</button>${calculating?'<button type="button" class="rb-button" data-build-stop>停止计算</button>':''}<button type="button" class="rb-button" data-build-save ${disabled||!proposal?'disabled':''}>保存该角色方案</button></div>`:`<div class="rb-action-buttons"><button type="button" class="rb-button rb-button-primary" data-build-equip ${disabled||!saved?.valid?'disabled':''}>自动装配已保存方案</button><button type="button" class="rb-button" data-build-unequip ${disabled?'disabled':''}>拆卸本角色空幕与驱动</button></div>${!saved?'<p class="rb-muted">请先在计算配装中计算并保存该角色方案。</p>':!saved.valid?`<p class="rb-action-notice">${esc(saved.reason)}。请重新计算并保存。</p>`:''}`}${chosen?planView(role,chosen,tab==='game'):''}${preview?`<div class="rb-operation-preview"><h3>${preview.operation==='assembly'?'自动装配预览':'拆卸预览'}</h3><p>${batchPreview?'空幕和驱动将通过一次批量指令提交，完成后整体核验':`共 ${preview.total} 步`}${preview.transfers?` · 从其他角色转移 ${preview.transfers} 件`:''}</p><ol>${preview.items.map(item=>`<li>${item.action==='equip'?'装入':'卸下'} · ${esc(item.character_name)} · ${esc(item.label)} ${esc(item.name)}</li>`).join('')}</ol>${preview.total?`<button class="rb-button rb-button-primary" type="button" data-build-execute ${disabled?'disabled':''}>${batchPreview?'确认一键装配并核验':`确认执行 ${preview.total} 步`}</button>`:'<p>当前装备与方案一致，无需操作。</p>'}<button class="rb-button" type="button" data-build-dismiss ${disabled?'disabled':''}>关闭预览</button></div>`:''}${operationStatus}${actionMessage?`<p class="rb-action-notice" role="status">${esc(actionMessage)}</p>`:''}</section>`;
   }
 
   function calculate(role) {
@@ -202,7 +223,7 @@ window.KekeRoleBuild = (() => {
         paint();
       };
       worker.onerror=()=>{worker?.terminate();worker=null;calculating=false;actionMessage='计算线程无法运行，请刷新重试。';paint();};
-      worker.postMessage({snapshot,characterId:role.id,cassette:role.cassette,excludeOthers,driverCatalog:window.driverBlockKnowledge,tapeCatalog:window.skyCurtainKnowledge});
+      worker.postMessage({snapshot,characterId:role.id,cassette:role.cassette,excludeOthers,protectedOwners:[...roleLocks()],driverCatalog:window.driverBlockKnowledge,tapeCatalog:window.skyCurtainKnowledge});
     }catch(error){calculating=false;actionMessage=error.message;paint();}
   }
 
@@ -215,6 +236,9 @@ window.KekeRoleBuild = (() => {
       if(current!==generation||selectedRoleId!==targetRole)throw Error('账号或角色已切换，请重试');
       if(action==='save'){
         if(!proposal)throw Error('请先计算方案');
+        const protectedRoles=roleLocks();
+        const chosenIds=new Set([proposal.core,...proposal.modules.map(row=>row.id)]);
+        if(snapshot.items.some(item=>chosenIds.has(item.id)&&item.owner!=null&&String(item.owner)!==role.id&&protectedRoles.has(String(item.owner))))throw Error('方案包含已锁定角色的装备，请重新计算。');
         const saved=await request('/inventory/equipment/save-build',{account:targetAccount,selection_id:snapshot.selection_id,character_id:Number(role.id),...proposal},status.token);
         if(current===generation){snapshot.saved_plans||={};snapshot.saved_plans[role.id]=saved;actionMessage='方案已保存，可在游戏配装中自动装配。';}
       }else if(action==='equip'||action==='unequip'){
@@ -278,15 +302,17 @@ window.KekeRoleBuild = (() => {
     const owned = roles(), visible=tab==='game'?owned.filter(role=>Object.prototype.hasOwnProperty.call(snapshot?.saved_plans||{},role.id)):owned, filtered = visible.filter(role => nameKey(role.name).includes(nameKey(query)) || nameKey(role.data?.id).includes(nameKey(query)));
     if (!filtered.some(role => role.id === selectedRoleId) && !(loading && selectedRoleId)) { clearCalculation();selectedRoleId = filtered[0]?.id || ""; }
     const selected = filtered.find(role => role.id === selectedRoleId);
-    panel.innerHTML = `<header class="rb-header"><h1 id="userRoleBuildTitle">配装</h1><nav class="user-role-build-tabs rb-tabs" aria-label="角色配装功能"><button type="button" data-role-build-tab="calculate" aria-pressed="${tab === 'calculate'}">计算配装</button><button type="button" data-role-build-tab="game" aria-pressed="${tab === 'game'}">游戏配装</button></nav><div class="rb-account"><span class="rb-status-dot${snapshot?.ready ? ' is-ready' : ''}"></span>${esc(snapshot?.account_uid ? 'UID ' + snapshot.account_uid : '尚未读取 UID')}<small>角色配装 PLUS</small></div></header><div class="rb-toolbar"><label class="rb-search"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4 4"/></svg><input type="search" data-role-search aria-label="${tab==='game'?'搜索已保存方案的角色':'搜索已读取的持有角色'}" placeholder="${tab==='game'?'搜索已保存方案的角色':'搜索已读取的持有角色'}" value="${esc(query)}"></label><button class="rb-button" type="button" data-role-refresh ${loading ? 'disabled' : ''}>${loading ? '载入中…' : '刷新快照'}</button><button class="rb-button rb-button-primary" type="button" data-go-read ${nativeReadBusy || !window.KekeVision?.isRiskModeEnabled()?'disabled':''} title="${window.KekeVision?.isRiskModeEnabled()?'读取当前游戏账号数据':'请先在读取数据中启用风险模式'}">${nativeReadBusy?'DLL读取中…':'读取游戏数据'}</button></div>${globalNotice?`<p class="rb-action-notice rb-global-notice" role="status">${esc(globalNotice)}</p>`:''}<div class="rb-roster-heading"><span>${tab==='game'?'已保存方案':'已持有角色'} <b>${visible.length}</b></span><small>${tab==='game'?'仅显示当前账号已保存方案的角色':'仅显示当前账号游戏快照中的角色'}</small></div><div class="rb-roster" aria-label="${tab==='game'?'已保存方案的角色':'已读取的持有角色'}">${filtered.map(role => {
+    panel.innerHTML = `<header class="rb-header"><h1 id="userRoleBuildPlusTitle">配装</h1><nav class="user-role-build-tabs rb-tabs" aria-label="角色配装功能"><button type="button" data-role-build-tab="calculate" aria-pressed="${tab === 'calculate'}">计算配装</button><button type="button" data-role-build-tab="game" aria-pressed="${tab === 'game'}">游戏配装</button></nav><div class="rb-account"><span class="rb-status-dot${snapshot?.ready ? ' is-ready' : ''}"></span>${esc(snapshot?.account_uid ? 'UID ' + snapshot.account_uid : '尚未读取 UID')}<small>角色配装 PLUS</small><button type="button" class="rb-button" data-role-unlock-all ${!snapshot?.account_uid||!roleLocks().size||loading||actionBusy||job?.running?'disabled':''}>解锁全部</button></div></header><div class="rb-toolbar"><label class="rb-search"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4 4"/></svg><input type="search" data-role-search aria-label="${tab==='game'?'搜索已保存方案的角色':'搜索已读取的持有角色'}" placeholder="${tab==='game'?'搜索已保存方案的角色':'搜索已读取的持有角色'}" value="${esc(query)}"></label><button class="rb-button" type="button" data-role-refresh ${loading ? 'disabled' : ''}>${loading ? '载入中…' : '刷新快照'}</button><button class="rb-button rb-button-primary" type="button" data-go-read ${nativeReadBusy || !window.KekeVision?.isRiskModeEnabled()?'disabled':''} title="${window.KekeVision?.isRiskModeEnabled()?'读取当前游戏账号数据':'请先在读取数据中启用风险模式'}">${nativeReadBusy?'DLL读取中…':'读取游戏数据'}</button></div>${globalNotice?`<p class="rb-action-notice rb-global-notice" role="status">${esc(globalNotice)}</p>`:''}<div class="rb-roster-heading"><span>${tab==='game'?'已保存方案':'已持有角色'} <b>${visible.length}</b></span><small>${tab==='game'?'仅显示当前账号已保存方案的角色':'仅显示当前账号游戏快照中的角色'}</small></div><div class="rb-roster" aria-label="${tab==='game'?'已保存方案的角色':'已读取的持有角色'}">${filtered.map(role => {
       const saved=snapshot?.saved_plans?.[role.id]; const result = assessment(role,tab==='game'?(saved?.valid?saved:null):(role.id===selectedRoleId?proposal:null)).overall;
-      return `<button type="button" class="rb-role-card" data-cassette-score-role="${esc(role.id)}" aria-pressed="${role.id === selectedRoleId}">${avatar(role)}<span><b>${esc(role.name)}</b><small>${tab==='game'&&!saved?.valid?'方案需重新计算':result ? '总分 ' + score(result.total) + ' · ' + result.grade : role.cassette ? '待评分' : '推荐待配置'}</small></span><i aria-hidden="true"></i></button>`;
+      return `<button type="button" class="rb-role-card" data-cassette-score-role="${esc(role.id)}" aria-pressed="${role.id === selectedRoleId}">${avatar(role)}${roleLocks().has(role.id)?`<span class="rb-role-lock-badge" title="当前角色装备已锁定" aria-label="装备已锁定">${lockIcon()}</span>`:''}<span><b>${esc(role.name)}</b><small>${tab==='game'&&!saved?.valid?'方案需重新计算':result ? '总分 ' + score(result.total) + ' · ' + result.grade : role.cassette ? '待评分' : '推荐待配置'}</small></span><i aria-hidden="true"></i></button>`;
     }).join('') || `<div class="rb-empty">${loading ? '正在载入当前账号角色…' : !snapshot?.ready ? esc(message || snapshot?.message || '请先读取游戏数据，载入已持有角色。') : tab==='game' ? (visible.length?'没有匹配的已保存方案':'暂无已保存方案，请先在计算配装中计算并保存。') : owned.length ? '没有匹配的已持有角色' : '该快照未包含持有角色，请重新读取游戏数据。'}</div>`}</div>${selected ? details(selected) : ''}<footer class="rb-source">${snapshot?.ready ? `已保存快照 · ${esc(snapshot.saved_at || '时间未记录')} · ${esc(snapshot.equipment_count ?? snapshot.items?.length ?? 0)} 件装备` : esc(message || '角色和装备均使用本机账号读取快照')}</footer>`;
     const roster = panel.querySelector('.rb-roster');
     if (roster) roster.scrollLeft = rosterScrollLeft;
+    panel.querySelector('[data-role-unlock-all]')?.addEventListener('click',unlockAllRoles);
     panel.querySelectorAll("[data-role-build-tab]").forEach(button => button.onclick = () => { operationPreview=null;globalNotice='';if(!job?.running)job=null;actionMessage='';tab = button.dataset.roleBuildTab; paint(); });
     panel.querySelectorAll("[data-cassette-score-role]").forEach(button => button.onclick = () => { clearCalculation();globalNotice='';selectedRoleId = button.dataset.cassetteScoreRole; paint(); });
     panel.querySelector('[data-build-exclude]')?.addEventListener('change',event=>{excludeOthers=event.target.checked;clearCalculation();paint();});
+    panel.querySelector('[data-role-lock]')?.addEventListener('click',()=>selected&&toggleRoleLock(selected));
     panel.querySelector('[data-build-calculate]')?.addEventListener('click',()=>calculate(selected));
     panel.querySelector('[data-build-stop]')?.addEventListener('click',()=>{clearCalculation();actionMessage='计算已停止';paint();});
     for(const action of ['save','equip','unequip','execute','cancel'])panel.querySelector(`[data-build-${action}]`)?.addEventListener('click',()=>perform(action,selected));
@@ -328,6 +354,7 @@ window.KekeRoleBuild = (() => {
     if (current === generation) { loading = false; paint(); }
   }
 
+  window.addEventListener?.("storage",event=>{if(event.key===locksKey()){clearCalculation();if(!root()?.hidden)paint();}});
   window.addEventListener?.("keke-native-risk-changed", () => { if (!root()?.hidden) paint(); });
   window.addEventListener?.('keke-account-deleted',event=>{
     if(event.detail?.account!==account)return;

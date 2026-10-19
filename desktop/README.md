@@ -1,6 +1,6 @@
 # 可可助手 Windows 桌面版
 
-正式发行改为联网安装器，构建与发布见 [RELEASE.md](RELEASE.md)。当前用户安装入口为 `dist/windows/final/KokoAssistantSetup-v1.5.exe`，Gitee首版已通过匿名下载验证；管理端保持单EXE。
+正式发行改为联网安装器，构建与发布见 [RELEASE.md](RELEASE.md)。当前用户安装入口为 `dist/windows/final/KokoAssistantSetup-v1.6.exe`，Gitee首版已通过匿名下载验证；管理端保持单EXE。
 它们显示独立 Windows 应用窗口，没有浏览器地址栏或浏览器标签页。界面采用现有资料与交互代码，在 WebView2 中呈现桌面侧栏和工具栏；不是全套 Windows 原生控件重写。
 
 用户版首次打开自动配队。侧栏提供角色、弧盘、空幕、驱动块、背包数据和读取数据；Ctrl+1 至 Ctrl+7 切换功能。用户发行资源不包含管理 DOM、资料写入接口、Git 模块、管理脚本或原始来源快照。
@@ -22,9 +22,9 @@ Windows 电脑需要 Python 3.10+、Node.js（仅构建用户 JavaScript）和 E
 
 只重建用户版或管理版，将 all 改为 user 或 admin。生成的 dist、build、虚拟环境和 node_modules 不提交 Git。依赖清单和构建脚本保留在私有仓库。
 
-V1.5 本地测试统一运行 `.venv-ocr/Scripts/python.exe scripts/build_v15_test.py`，固定覆盖 `dist/windows/test-v1.5/KekeAssistant.exe`。成功构建后清理已知旧测试包和空输出目录；不生成新的功能命名目录，不发布，不触碰正式版、账号数据或非空目录中的其他文件。若旧测试版仍运行导致 Windows 锁定 EXE，关闭旧实例后重试清理。
+V1.6 本地测试运行 `.venv-ocr/Scripts/python.exe scripts/build_v16_test.py --revision 4`，输出 `dist/windows/test-v1.6-r4/KekeAssistant.exe`；构建并校验成功后仅保留最新测试包。正式发行另用 `desktop/build_release.py` 和 `desktop/release_publish.py`。
 
-角色配装的毕业计算在 Worker 中按角色优先级搜索最高加权总分与合法盘面，达到搜索预算时明确显示未证实最优。默认排除其他角色占用的空幕和驱动；本角色装备始终参与。计算后每账号每角色可保存一套方案，本机文件位于库存目录 `build-plans/`，使用原生角色实例与稳定装备引用校验。读取后重新解析临时句柄；装备消失、属性改变或占用限制冲突会使方案失效。游戏配装从保存方案生成操作预览，再确认执行自动装配；含空幕和驱动的完整方案通过一次原生批量指令提交，并用最新完整背包快照整体核验。仅驱动或单件操作继续逐件核对；拆卸只针对所选角色的空幕与驱动，停止仅阻止尚未派发的操作。
+角色配装 PLUS 保留 DLL 快照与原生装备操作。v1.6 新增的标准「角色配装」从图鉴列出角色（排除塔吉多），单独选择可选 UID 账号和已保存的 DLL 快照 / OCR 历史读取时间，沿用毕业配装求解与评分规则，只用所选快照计算，并按账号、快照及角色在本机保存方案。其游戏配装从方案生成预览后，通过 OCR 角色识别、游戏内筛选、逐件拖放和画面复核逐步执行；每次输入前检查异环仍在前台，并支持停止后续输入。真实游戏内执行需在用户自己的游戏和显示环境中验收。
 
 ## 第一版边界
 
@@ -43,3 +43,9 @@ V1.5 本地测试统一运行 `.venv-ocr/Scripts/python.exe scripts/build_v15_te
     .venv-ocr/Scripts/python.exe desktop/build.py user --dist-dir dist/windows/final
 
 详见[数据来源](../docs/account-data-sources.md)、[OCR接入](../docs/ocr-integration.md)与[功能计划](../docs/plans/inventory-data-collection.md)。源码同步不包含EXE、真实截图或玩家数据。
+
+V1.6 修订 1 引入独立截图路径队列、增量计数、后台检查点以及运行中轻量进度响应。测试包保留策略现以修订 3 为准。
+
+V1.6 修订 2：使用 `scripts/build_v16_test.py --revision 2` 构建到 `dist/windows/test-v1.6-r2/`。新增末页稳定锚点、每格盘面复检/两轮缺块补装，以及 OCR 百分点单位转换与属性图鉴检查；旧扫描数据通过只读视图校验，原始截图和批次不改写。
+
+V1.6 修订 3：PLUS 按账号保存角色装备保护锁；普通游戏配装使用保存的装备快照展示方案。构建命令 `scripts/build_v16_test.py --revision 3`；构建及审计成功后清理仅包含测试 EXE 的旧测试目录，只保留最新测试包，不影响正式版和账号数据。

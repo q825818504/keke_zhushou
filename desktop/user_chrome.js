@@ -16,11 +16,13 @@ window.addEventListener('DOMContentLoaded', () => {
     'arc-drives':'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/>',
     cassettes:'<rect x="3" y="5" width="18" height="14" rx="3"/><circle cx="8" cy="11" r="2"/><circle cx="16" cy="11" r="2"/><path d="m6 19 2-4h8l2 4"/>',
     'drive-blocks':'<rect x="3" y="3" width="18" height="18" rx="3"/><path d="M9 3v18M15 3v18M3 9h18M3 15h18"/>',
+    'role-build':'<path d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Z"/><path d="m4 7.5 8 4.5 8-4.5M12 12v9"/>',
+    'role-build-plus':'<path d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Z"/><path d="m4 7.5 8 4.5 8-4.5M12 12v9"/>',
     inventory:'<path d="m3 7 9-4 9 4v10l-9 4-9-4V7Zm0 0 9 4 9-4M12 11v10"/>',
     vision:'<path d="M3 8V3h5m8 0h5v5M3 16v5h5m8 0h5v-5M5 12h14"/>'
   };
   document.querySelectorAll('.desktop-sidebar [data-user-route]').forEach(button=>{
-    const label=button.dataset.userRoute==='role-build'?'角色配装 PLUS':button.textContent.trim();
+    const label=button.dataset.userRoute==='role-build-plus'?'角色配装 PLUS':button.textContent.trim();
     button.setAttribute('aria-label',label);button.title=label;
     const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
     svg.setAttribute('viewBox','0 0 24 24');svg.setAttribute('aria-hidden','true');
@@ -132,7 +134,7 @@ window.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('focus', check);
 });
 document.addEventListener('keydown', event => {
-  if (!event.ctrlKey || !/^[1-8]$/.test(event.key) || /INPUT|TEXTAREA|SELECT/.test(event.target.tagName)) return;
+  if (!event.ctrlKey || !/^[1-9]$/.test(event.key) || /INPUT|TEXTAREA|SELECT/.test(event.target.tagName)) return;
   event.preventDefault();
-  showUserRoute(['team','characters','arc-drives','cassettes','drive-blocks','role-build','inventory','vision'][Number(event.key)-1]);
+  showUserRoute(['team','characters','arc-drives','cassettes','drive-blocks','role-build','role-build-plus','inventory','vision'][Number(event.key)-1]);
 });

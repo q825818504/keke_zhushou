@@ -131,6 +131,9 @@ def public_server(root: Path, port: int, workspace=None, inventory=None, vision=
             if relative == 'inventory/status' and inventory:
                 self.inventory_json({**inventory.status(), 'token':inventory_token, 'native_risk':dict(native_risk)})
                 return
+            if relative == 'inventory/ui-assembly/status' and inventory:
+                self.inventory_json(inventory.ui_assembly.status())
+                return
             if relative == 'inventory/snapshot' and inventory:
                 account = parse_qs(urlsplit(self.path).query).get('account', [inventory.config['account']])[0]
                 if not account or len(account)>80:
@@ -145,7 +148,7 @@ def public_server(root: Path, port: int, workspace=None, inventory=None, vision=
                 params=parse_qs(urlsplit(self.path).query)
                 account=params.get('account',[inventory.config.get('account','默认账号') if inventory else '默认账号'])[0]
                 try:
-                    if relative=='vision/status':self.inventory_json({**vision.status(),'token':inventory_token})
+                    if relative=='vision/status':self.inventory_json({**vision.status(compact=True),'token':inventory_token})
                     elif relative=='vision/history':self.inventory_json(vision.history(account))
                     elif relative=='vision/batch':self.inventory_json(vision.load(account,params.get('id',[''])[0]))
                     elif relative=='vision/image':
@@ -257,7 +260,8 @@ def public_server(root: Path, port: int, workspace=None, inventory=None, vision=
                 return
             if not inventory or path not in ('/inventory/risk/acknowledge','/inventory/risk-mode','/inventory/start','/inventory/cancel','/inventory/delete','/inventory/account/delete','/inventory/account/select','/inventory/account/note','/inventory/account/bind','/inventory/components/check','/inventory/components/deploy','/inventory/components/remove',
                 '/inventory/equipment/inspect','/inventory/equipment/preview','/inventory/equipment/assemble-preview','/inventory/equipment/start','/inventory/equipment/cancel',
-                '/inventory/equipment/save-build','/inventory/equipment/delete-build','/inventory/equipment/saved-preview'):
+                '/inventory/equipment/save-build','/inventory/equipment/delete-build','/inventory/equipment/saved-preview',
+                '/inventory/ui-assembly/start','/inventory/ui-assembly/cancel'):
                 self.send_error(404)
                 return
             try:
@@ -286,6 +290,11 @@ def public_server(root: Path, port: int, workspace=None, inventory=None, vision=
                     result=inventory.set_account_note(body.get('account'),body.get('note'))
                 elif path=='/inventory/account/bind':
                     result=inventory.bind_account_uid(body.get('account'),body.get('uid'),body.get('replace_existing',False))
+                elif path=='/inventory/ui-assembly/start':
+                    result=inventory.ui_assembly.start(body.get('account'),body.get('source'),body.get('role_name'),
+                        body.get('role_id'),body.get('board'),body.get('core'),body.get('modules'),body.get('role_alias'),body.get('source_saved_at'))
+                elif path=='/inventory/ui-assembly/cancel':
+                    result=inventory.ui_assembly.cancel()
                 elif '/equipment/' in path:
                     action=path.rsplit('/',1)[1]
                     if action=='inspect':result=inventory.equipment.inspect(body.get('account') or inventory.config.get('account'))

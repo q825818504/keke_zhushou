@@ -57,9 +57,25 @@ const root=path.resolve(__dirname,'..');
   assert.equal(identity.account,'uid:123456789012');assert.equal(identity.native_account,null);
   await page.locator('#diagnosticsButton').click();
   await page.locator('#diagnosticsDialog').waitFor({state:'visible'});
+  const diagnosticsResponse=page.waitForResponse(response=>response.url().endsWith('/diagnostics/refresh'));
   await page.locator('#diagnosticsDialog [data-action="refresh"]').click();
-  await page.waitForFunction(()=>document.querySelector('#diagnosticsDialog pre')?.textContent.includes('tcl86t.dll'));
+  const diagnostics=await (await diagnosticsResponse).json();assert(Array.isArray(diagnostics.crashes));
+  await page.waitForFunction(()=>document.querySelector('#diagnosticsDialog pre')?.textContent.startsWith('系统崩溃记录')&&document.querySelector('#diagnosticsDialog pre')?.textContent.includes('功能日志'));
   await page.locator('#diagnosticsDialog [data-action="close"]').click();
+  const finished=await page.evaluate(async()=>await (await fetch('/vision/status')).json());
+  const compact={...finished,job:{...finished.job,running:true,capture_running:true,processed:549,total:1425,captured:574,message:'已截图574张，已识别549张'},
+    batch:{...finished.batch,mode:'mouse',compact:true,image_count:574,record_count:549,pending_count:25,failure_count:0,images:[],records:[]}};
+  let activeHistoryRequests=0;
+  page.on('request',request=>{if(request.url().includes('/vision/history'))activeHistoryRequests++;});
+  await page.route('**/vision/status',route=>route.fulfill({json:compact}));
+  await page.evaluate(()=>window.KekeVision.render());
+  await page.waitForFunction(()=>document.querySelector('#userVisionRoute').textContent.includes('已识别 549 件'));
+  assert.equal(await page.getByRole('button',{name:'导出识别批次'}).isDisabled(),true);
+  assert.equal(await page.locator('#userVisionRoute .vision-evidence').count(),0);
+  assert.equal(activeHistoryRequests,0,'Active scans must not repeatedly read full history JSON');
+  await page.unroute('**/vision/status');
+  await page.evaluate(()=>window.KekeVision.render());
+  await page.waitForFunction(()=>document.querySelector('#userVisionRoute').textContent.includes('已识别 1 件'));
   await page.screenshot({path:path.join(root,'build/vision-ui-qa.png'),fullPage:true});assert.deepEqual(errors,[]);
   console.log('Vision UI passed: method switching, OCR controls outside backpack, screenshot upload, history/account isolation, image evidence, escaped text, backpack correction and export.');
  }catch(error){if(page)console.log('vision-debug',await page.evaluate(async()=>({text:document.querySelector('#userVisionRoute')?.textContent,mode:document.querySelector('#visionMode')?.value,status:await (await fetch('/vision/status')).json()})));throw error;}finally{if(browser)await browser.close();server.kill();}

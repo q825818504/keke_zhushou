@@ -11,6 +11,7 @@ assert.ok(scriptPaths.length, "index.html must load its app scripts");
 assert.equal(scriptPaths.at(-1), "app.js", "app.js must run after its data bundles");
 assert.ok(scriptPaths.indexOf("data/knowledge/team_templates.js") < scriptPaths.indexOf("app.js"), "team templates must load before app.js");
 assert.ok(scriptPaths.indexOf("cassette_scoring.js") < scriptPaths.indexOf("role_build.js"), "the shared cassette scorer must load before the user role-build module");
+assert.ok(scriptPaths.indexOf("role_build.js") < scriptPaths.indexOf("role_build_standard.js"), "the PLUS and standard role-build modules must both load before app.js");
 
 for (const relativePath of scriptPaths) {
   const absolutePath = path.join(root, relativePath);

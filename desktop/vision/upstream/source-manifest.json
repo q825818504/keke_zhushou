@@ -21,8 +21,8 @@
   },
   "src.features.drive_assembly.input_backends": {
     "source_sha256": "c3f574ef2007181363c576fb0bce10b28e59293187aba5e9a65e32147efca96f",
-    "changes": "namespace rewrite; Keke resource/catalog/logging adapters",
-    "adapted_sha256": "1030e3467e55eb790538de941e1ef903ae287b65f18c48ed23c2039179cbd680"
+    "changes": "namespace rewrite; Keke resource/catalog/logging adapters; Keke r2: report repair rounds",
+    "adapted_sha256": "b1abddbeb258f2045d666c25718bf08321756fed6f049ec082ed8afd75393ad6"
   },
   "src.features.drive_assembly.randomization": {
     "source_sha256": "f00f6f578f11643fb9d46f79bc88d07a633123cf348f258b3ac82f86f381d075",
@@ -101,8 +101,8 @@
   },
   "src.integrations.vision.mouse_scan_grid": {
     "source_sha256": "b60e59367ba17ef0d8b6aceb69aafdc5f4f9a2c061484c9a1cb741e6b5c1d3c0",
-    "changes": "namespace rewrite; Keke resource/catalog/logging adapters",
-    "adapted_sha256": "c38effea982c8128a6fc2872a6f1d57d2f4ea42150690372e6056446c9f53a96"
+    "changes": "namespace rewrite; Keke resource/catalog/logging adapters; Keke r2: distinguish selected pink outlines from purple rarity borders",
+    "adapted_sha256": "195412b4e7bbe2ebd7dce9c7a7b4e5e09f12cafe90d58601e8d6ea5dc4afb720"
   },
   "src.integrations.vision.mouse_scan_input": {
     "source_sha256": "0f37831680b2bcb58878c0926e9ae306293658cdf98a16760a1bc73bc302dc7b",
@@ -198,5 +198,65 @@
   "src.integrations.vision.mouse_scan_runtime": {
     "changes": "Keke compatibility shim or adapted upstream module",
     "adapted_sha256": "8f2fcd1687bd13646e403bcf168b275a3a0a7ed498e052fa01647ff68544558a"
+  },
+  "src.features.drive_assembly.assembly_session": {
+    "source_sha256": "671d99d74efbdbdf81a99d13a3facc23c1b84c3b2308a33b1b87a3e78ee57065",
+    "changes": "namespace rewrite; Keke UI assembly adapter; Keke r2: per-cell occupancy verification and verification screenshots",
+    "adapted_sha256": "1e4c8779e8a432a6247b91c30b7d11f316e77c046b666e1a469c83fb77aab24a"
+  },
+  "src.features.drive_assembly.executor": {
+    "source_sha256": "0d2dbfc71372758287ab6690db9da8b9c7568ca3a510032d91195bee5edebc08",
+    "changes": "namespace rewrite; Keke UI assembly adapter; Keke r2: bounded missing-block-only repair and final re-verification",
+    "adapted_sha256": "2bee72a80fbcb1d21ad3b6945b5c303108856039b5a6ab11ae8802ecc3808c06"
+  },
+  "src.features.drive_assembly.page_filter_mapping": {
+    "source_sha256": "4f1ee05dce31a17a598a0747e8f5687c61d5567a1ffb350cb390f17b097ef7cc",
+    "changes": "namespace rewrite; Keke UI assembly adapter",
+    "adapted_sha256": "c5f2e8864208f065071e191852cfb61dda65e4a587946c482eae7fecfba69429"
+  },
+  "src.features.drive_assembly.page_mapping_helpers": {
+    "source_sha256": "5b61b6aabbdfaaf712857de30a330a4108e840ad28fef70346075e5649ebb3b1",
+    "changes": "namespace rewrite; Keke UI assembly adapter",
+    "adapted_sha256": "55d4e331561ba5e5fe993d6563083e0114a9d6cf76d6c07a151c8ba732e1785a"
+  },
+  "src.features.drive_assembly.page_mapping": {
+    "source_sha256": "b4a020299eb2ad625d72de9f0fe1b0bcfa3a1abad386f71fd9c0a449a49174c6",
+    "changes": "namespace rewrite; Keke UI assembly adapter",
+    "adapted_sha256": "f76eb750fdc1884afac44c9de26f36aa631d01fd1f640cbff15b852a0e660328"
+  },
+  "src.features.drive_assembly.page_navigation_mapping": {
+    "source_sha256": "b5d01ff7f547e12d072b6e4f63a59ca6cebebc1008a30dfb9b2df9a4232974db",
+    "changes": "namespace rewrite; Keke UI assembly adapter",
+    "adapted_sha256": "af6f44100e508d685fb685ffa65b919cac9876a324d0e708063346e24737d6f2"
+  },
+  "src.features.drive_assembly.role_flow": {
+    "source_sha256": "a1d2a0555f58a45d9b371d5bc0b9d3ab19d9c4b6b7903fa0e518afd6bc65568a",
+    "changes": "namespace rewrite; Keke UI assembly adapter",
+    "adapted_sha256": "56550b3baaef207b352e83c3b7651af797bc2faebc9ab6e70f5da16f45efcd88"
+  },
+  "src.features.drive_assembly.tape_plan": {
+    "source_sha256": "7ba030bcb5104ec23cda7ae533b9ff6104661f75d7c3cfde2964e5956fd5144f",
+    "changes": "namespace rewrite; Keke UI assembly adapter",
+    "adapted_sha256": "f1b4dd5d8b74004973f3a0a79a6b1f16a553ad3a8a9661ddf193ce07ff737f7d"
+  },
+  "src.features.drive_assembly.ui_bridge": {
+    "source_sha256": "8591c4f0c3dcd066e2cb0794e6826fe8a0321c38a9175799648af63f2d414e57",
+    "changes": "namespace rewrite; Keke UI assembly adapter",
+    "adapted_sha256": "984ded7b9f89489002bda554370477066eee05e5f8082394739183c42b548428"
+  },
+  "src.domain.drive_layout": {
+    "source_sha256": "77459c9e97ee0a56b9a925e04f57d4d1fd1f52621bbf47ee548f9cf0aa38144d",
+    "changes": "namespace rewrite; Keke UI assembly adapter",
+    "adapted_sha256": "46e052dd189b0444d10bd474f5cb29edc8e27730e8815494fa6b235e9cd4e939"
+  },
+  "src.domain.equipment_duplicate_marker": {
+    "source_sha256": "a622ab856e4ae23933f954162a62bac737933e96a7d59379fa39df6c24577d53",
+    "changes": "namespace rewrite; Keke UI assembly adapter",
+    "adapted_sha256": "a622ab856e4ae23933f954162a62bac737933e96a7d59379fa39df6c24577d53"
+  },
+  "src.utils.set_name": {
+    "source_sha256": "1fe42880a42872c7da0dc04f4fe8cc5c2e2312cbef24b32ae4b2c24691189d84",
+    "changes": "namespace rewrite; Keke UI assembly adapter",
+    "adapted_sha256": "1fe42880a42872c7da0dc04f4fe8cc5c2e2312cbef24b32ae4b2c24691189d84"
   }
 }

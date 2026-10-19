@@ -51,6 +51,12 @@ const root=path.resolve(__dirname,'..');
   assert.equal(await page.locator('#userInventoryRoute [data-native]').count(),0);
   assert.equal(await page.getByRole('heading',{name:'背包数据',exact:true}).count(),1);
   await page.getByRole('button',{name:'读取新数据',exact:true}).click();
+  const riskDialog=page.locator('#nativeRiskDialog');
+  await riskDialog.waitFor({state:'visible'});
+  await riskDialog.getByRole('button',{name:'我已了解',exact:true}).click();
+  await riskDialog.waitFor({state:'hidden'});
+  await page.waitForFunction(()=>!document.querySelector('#nativeRiskMode')?.disabled);
+  await page.locator('#nativeRiskMode').check();
   await page.waitForFunction(()=>!document.querySelector('[data-native="check"]')?.disabled);
   assert.equal(await page.locator('#visionMode option').count(),5);
   await page.getByRole('button',{name:'检测环境',exact:true}).click();
@@ -74,10 +80,12 @@ const root=path.resolve(__dirname,'..');
   assert.ok(visionAlignment.labelDelta<=1,`Collection labels are misaligned: ${JSON.stringify(visionAlignment)}`);
   assert.ok(visionAlignment.controlDelta<=1,`Collection controls are misaligned: ${JSON.stringify(visionAlignment)}`);
   await page.screenshot({path:path.join(root,'build/vision-qa.png')});
-  await page.setViewportSize({width:760,height:900});
+  await page.setViewportSize({width:600,height:900});
   const narrowVision=await page.evaluate(()=>({overflow:document.documentElement.scrollWidth>innerWidth,
+    viewport:innerWidth,stackMedia:matchMedia('(max-width: 800px)').matches,
     modeTop:document.querySelector('#visionMode').getBoundingClientRect().top,
     accountTop:document.querySelector('#visionAccountSelect').getBoundingClientRect().top,
+    settings:[...document.querySelectorAll('#userVisionRoute .inventory-settings')].map(el=>({classes:el.className,columns:getComputedStyle(el).gridTemplateColumns,labels:[...el.querySelectorAll(':scope > label')].map(label=>({text:label.textContent.slice(0,40),top:label.getBoundingClientRect().top}))})),
     navLabels:[...document.querySelectorAll('.desktop-sidebar [data-user-route]')].every(button=>button.getAttribute('aria-label')&&button.title)}));
   assert.equal(narrowVision.overflow,false,`Narrow app viewport overflows: ${JSON.stringify(narrowVision)}`);
   assert.ok(narrowVision.accountTop>narrowVision.modeTop,`Narrow settings should stack: ${JSON.stringify(narrowVision)}`);
@@ -98,8 +106,7 @@ const root=path.resolve(__dirname,'..');
   await page.getByRole('button',{name:'确认绑定 UID'}).click();
   await page.waitForFunction(()=>document.querySelector('#userInventoryRoute').textContent.includes('UID 已改绑'));
   assert.equal(await page.locator('#inventoryAccountUID').isDisabled(),true);
-  assert.equal(await page.getByRole('button',{name:'UID已绑定'}).isDisabled(),true);
-  assert((await page.locator('#userInventoryRoute').textContent()).includes('无法改绑'));
+  assert.equal(await page.getByRole('button',{name:'删除 UID 及数据'}).isEnabled(),true);
   await page.locator('#inventoryAccountSelect').selectOption('OCR账号');
   await page.waitForFunction(()=>document.querySelectorAll('#userInventoryRoute .inventory-summary strong')[4]?.textContent==='—' && document.querySelectorAll('#inventorySource option').length===3);
   assert.deepEqual(await page.locator('#userInventoryRoute .inventory-summary > strong').allTextContents(),['2','1','1','—','—']);
@@ -137,10 +144,10 @@ const root=path.resolve(__dirname,'..');
   await page.getByRole('button',{name:'确认删除（含该来源保存文件）'}).click();
   await page.waitForFunction(()=>!document.querySelector('#inventorySource option[value="native"]'));
   assert.equal(await page.locator('#inventorySource option[value="ocr:'+ '1'.repeat(24)+'"]').count(),1);
-  await page.locator('[data-user-route="role-build"]').click();
-  await page.waitForFunction(()=>document.querySelector('#userRoleBuildRoute .rb-account')?.textContent.includes('尚未读取 UID'));
+  await page.locator('[data-user-route="role-build-plus"]').click();
+  await page.waitForFunction(()=>document.querySelector('#userRoleBuildPlusRoute .rb-account')?.textContent.includes('尚未读取 UID'));
   assert.equal(await page.locator('[data-role-account]').count(),0);
-  assert.equal(await page.locator('#userRoleBuildRoute .rb-account').textContent().then(text=>text.includes('UID 987654321098')),false);
+  assert.equal(await page.locator('#userRoleBuildPlusRoute .rb-account').textContent().then(text=>text.includes('UID 987654321098')),false);
   assert.deepEqual(errors,[]);
   console.log('Backpack / native collection UI passed: desktop sidebar, five backpack counters and classification filters, other data, pagination, search, escaped raw fields, export, account isolation, failed-start retention and reload.');
   } catch(error) {if(page)console.log('fixture-debug',await page.evaluate(()=>({requests:window.__inventoryRequests?.slice(-15),account:document.querySelector('#inventoryAccountSelect')?.value,status:document.querySelector('#userInventoryRoute [role="status"]')?.textContent})));throw error;} finally {if(browser)await browser.close();server.kill();}

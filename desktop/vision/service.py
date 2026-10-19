@@ -20,6 +20,7 @@ from inventory.accounts import validate_uid
 MODES=('offline','mouse','new','gamepad','retry')
 
 class VisionService:
+    CHECKPOINT_INTERVAL = 2.0
     def __init__(self,directory,engine_factory=None,scanner_factory=None):
         self.directory=Path(directory)
         self.engine_factory=engine_factory
@@ -27,15 +28,26 @@ class VisionService:
         self.lock=threading.RLock();self.stop=threading.Event();self.capture_stop=threading.Event();self.thread=None;self.scanner=None
         self.job={'running':False,'message':'尚未开始识别','processed':0,'total':0};self.batch=None
         self.window=None;self.engine=None;self.extra_engine=None
+        self.write_lock=threading.Lock()
+        self._active_images=None
 
-    def status(self):
+    def status(self, compact=False):
         with self.lock:
-            return json.loads(json.dumps({'job':self.job,'batch':self.batch},ensure_ascii=False))
+            batch=self.batch
+            if compact and self.job.get('running') and batch:
+                batch={k:v for k,v in batch.items() if k not in ('images','records')}
+                batch.update(compact=True,images=[],records=[],
+                    image_count=self.job.get('captured',0),record_count=self.job.get('record_count',0),
+                    pending_count=self.job.get('pending_count',0),failure_count=self.job.get('failure_count',0))
+            elif self.job.get('running') and batch and self._active_images is not None:
+                images=sorted(self._active_images.values(),key=lambda row:row['file'])
+                batch={**batch,'images':images,'records':[record for image in images for record in image.get('records',[])]}
+            return json.loads(json.dumps({'job':self.job,'batch':batch},ensure_ascii=False))
 
     def _write(self,path,value):
         # Windows readers can briefly deny rename/delete sharing. Coordinate our
         # own readers and retry external transient locks without truncating JSON.
-        with self.lock:
+        with self.write_lock:
             path.parent.mkdir(parents=True,exist_ok=True);tmp=path.with_suffix('.'+secrets.token_hex(6)+'.tmp')
             try:
                 tmp.write_text(json.dumps(value,ensure_ascii=False,allow_nan=False),encoding='utf-8')
@@ -147,7 +159,7 @@ class VisionService:
                                 image.convert('RGB').save(base/'images'/f'{index:05d}.png')
                         except (OSError,Image.DecompressionBombError):raise ValueError('图像损坏或无法读取')
                     batch['expected']=len(files);batch['capture_complete']=True
-            self.stop.clear();self.capture_stop.clear();self.window=None;self.batch=batch
+            self.stop.clear();self.capture_stop.clear();self.window=None;self.batch=batch;self._active_images=None
             batch['storage']=self.storage_paths(base)
             self.job={'running':True,'message':'正在准备OCR；扫描时请在3秒内切回游戏装备背包','processed':0,'total':batch['expected'] or 0,'account':account,'account_uid':account_uid,'id':batch_id,'capture_running':mode in ('mouse','new','gamepad'),'capture_stopping':False}
             self._write(base/'batch.json',batch)
@@ -202,35 +214,59 @@ class VisionService:
 
     def _run(self,base,batch,mode):
         hook=None
-        # Full gamepad scans queue paths to screenshots already on disk (at most 2000).
-        # A slow OCR worker must not stop controller navigation after 32 captures.
-        work=queue.Queue(maxsize=0 if mode=='gamepad' else 32)
+        # Queue only durable file paths (at most 2000). Neither mouse nor
+        # controller navigation should wait for OCR throughput.
+        work=queue.Queue()
         seen=set()
         worker_errors=[]
         existing={row['file']:row for row in batch['images']}
-        last_checkpoint=time.monotonic()
+        with self.lock:self._active_images=existing
         checkpoint_error=None
+        checkpoint_stop=threading.Event()
+        counts={'processed':0,'records':0,'pending':0,'failures':0}
+
+        def contribution(row):
+            pending=bool(row.get('pending') or row.get('error')=='采集或识别未完成')
+            return {'processed':int(not pending),'records':len(row.get('records',[])),
+                    'pending':int(pending),'failures':int(bool(row.get('error')) and not pending)}
+
+        for row in existing.values():
+            for key,value in contribution(row).items():counts[key]+=value
+
+        def set_image(name,row):
+            if name in existing:
+                for key,value in contribution(existing[name]).items():counts[key]-=value
+            existing[name]=row
+            for key,value in contribution(row).items():counts[key]+=value
+
+        def batch_snapshot():
+            # Results are immutable after insertion; only copy the containers.
+            images=sorted(existing.values(),key=lambda row:row['file'])
+            return {**batch,'images':images,'records':[record for image in images for record in image.get('records',[])],
+                    'processed':counts['processed']}
+
+        def checkpoint():
+            nonlocal checkpoint_error
+            while not checkpoint_stop.wait(self.CHECKPOINT_INTERVAL):
+                try:
+                    with self.lock:value=batch_snapshot()
+                    self._write(base/'batch.json',value)
+                    checkpoint_error=None
+                except Exception:
+                    if checkpoint_error is None:diagnostics.failure('批次检查点暂时保存失败，截图继续保存')
+                    checkpoint_error=True
+
+        checkpoint_thread=threading.Thread(target=checkpoint,name='vision-checkpoint',daemon=True)
+        checkpoint_thread.start()
 
         def update_progress(persist=True):
-            nonlocal last_checkpoint,checkpoint_error
-            batch['images']=sorted(existing.values(),key=lambda row:row['file'])
-            batch['records']=[record for image in batch['images'] for record in image.get('records',[])]
-            processed=sum(not row.get('pending') and row.get('error')!='采集或识别未完成' for row in batch['images'])
+            processed=counts['processed']
             batch['processed']=processed
             self.job.update(processed=processed,captured=len(existing),queued=work.qsize())
+            self.job.update(record_count=counts['records'],pending_count=counts['pending'],failure_count=counts['failures'])
             if mode=='new' or not self.job.get('capture_running'):self.job['total']=len(existing)
             phase='采集与识别并行' if self.job.get('capture_running') and not self.capture_stop.is_set() else '正在识别已保存截图'
             self.job['message']=f"已截图{len(existing)}张，已识别{processed}张；{phase}"
-            # Screenshots are already durable. Coalesce metadata checkpoints so
-            # two workers do not rewrite the growing batch for every image.
-            if persist and time.monotonic()-last_checkpoint>=.5:
-                try:
-                    self._write(base/'batch.json',batch)
-                    checkpoint_error=None
-                except PermissionError:
-                    if checkpoint_error is None:diagnostics.event('批次记录暂被占用，继续采集并稍后重试')
-                    checkpoint_error=True
-                finally:last_checkpoint=time.monotonic()
             if checkpoint_error:self.job['message']+='；批次记录暂被占用，截图继续保存'
 
         def enqueue(source,*unused):
@@ -243,7 +279,7 @@ class VisionService:
             if source!=path:shutil.copy2(source,path)
             seen.add(path.name)
             with self.lock:
-                existing[path.name]={'file':path.name,'records':[],'lines':[],'pending':True,'error':'等待识别'}
+                set_image(path.name,{'file':path.name,'records':[],'lines':[],'pending':True,'error':'等待识别'})
                 update_progress()
             while True:
                 self.check()
@@ -284,7 +320,7 @@ class VisionService:
                         row['instance_id']=f"vision:{batch['id']}:{path.stem}:{index}"
                         row['image']=path.name
                     with self.lock:
-                        existing[path.name]=result;update_progress()
+                        set_image(path.name,result);update_progress()
             except Exception as error:
                 diagnostics.failure('OCR工作线程失败');worker_errors.append(error)
 
@@ -340,6 +376,8 @@ class VisionService:
                     try:work.put(None,timeout=.1);break
                     except queue.Full:continue
             for consumer in consumers:consumer.join()
+            checkpoint_stop.set()
+            checkpoint_thread.join()
             if hook is not None:
                 import keyboard
                 keyboard.remove_hotkey(hook)
@@ -348,8 +386,9 @@ class VisionService:
                 self._collect_images(base)
                 for path in sorted((base/'images').glob('*.png')):
                     if path.name not in existing:
-                        existing[path.name]={'file':path.name,'records':[],'lines':[],'error':'尚未识别（任务已停止）','pending':True}
+                        set_image(path.name,{'file':path.name,'records':[],'lines':[],'error':'尚未识别（任务已停止）','pending':True})
                 update_progress(persist=False)
+                batch.update(batch_snapshot())
                 failures=sum(bool(row.get('error')) and not row.get('pending') for row in batch['images'])
                 batch['complete']=bool(batch['mode'] in ('mouse','gamepad') and batch['capture_complete']
                     and not problem and not self.stop.is_set() and not failures
@@ -363,7 +402,7 @@ class VisionService:
                 except Exception as error:
                     batch['complete']=False;batch['state']='error'
                     self.job['message']='截图已保留，但批次记录保存失败：'+str(error)
-                finally:self.job['running']=False
+                finally:self.job['running']=False;self._active_images=None
 
     def correct(self,account,batch_id,index,record):
         with self.lock:

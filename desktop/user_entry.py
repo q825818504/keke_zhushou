@@ -22,7 +22,7 @@ SMOKE = """(() => {
    (!second || (second.sourceRecord && second.memberNames.length === 4 && !first.memberNames.some(name => second.memberNames.includes(name))));
  checks.templates = teamTemplateKnowledge.teams.length >= 27;
  userTeamOwnedNames = savedOwned;
- for (const route of ['characters','arc-drives','cassettes','drive-blocks','role-build','inventory','vision']) {
+ for (const route of ['characters','arc-drives','cassettes','drive-blocks','role-build','role-build-plus','inventory','vision']) {
    showUserRoute(route);
    const panel = document.querySelector('[data-user-route-panel="' + route + '"]');
    checks[route] = !!panel && !panel.hidden && panel.textContent.trim().length > 20;
@@ -38,6 +38,7 @@ SMOKE = """(() => {
  checks.visionModule = typeof window.KekeVision?.render === 'function';
  checks.inventoryModule = typeof window.KekeInventory?.render === 'function';
  checks.roleBuildModule = typeof window.KekeRoleBuild?.render === 'function';
+ checks.standardRoleBuildModule = typeof window.KekeRoleBuildStandard?.render === 'function';
  return { checks, errors: window.__desktopErrors, title: document.title,
    characterCount: Object.keys(characterData).length, viewport: [innerWidth,innerHeight] };
 })()"""

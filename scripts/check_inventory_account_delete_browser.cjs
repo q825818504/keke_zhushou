@@ -19,7 +19,7 @@ const root=path.resolve(__dirname,'..');
     if(await page.evaluate(async()=>(await(await fetch('/release/status')).json()).show)){
       await page.locator('#releaseNotesDialog').waitFor({state:'visible'});await page.locator('#releaseNotesDialog button').click();
     }
-    const nav=page.locator('.desktop-sidebar [data-user-route="role-build"]');
+    const nav=page.locator('.desktop-sidebar [data-user-route="role-build-plus"]');
     assert.equal(await nav.locator('.role-build-plus').textContent(),'PLUS');
     assert.match(await nav.getAttribute('aria-label'),/角色配装/);
     await page.locator('[data-user-route="inventory"]').click();

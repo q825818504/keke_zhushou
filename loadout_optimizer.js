@@ -21,7 +21,7 @@
     return key?String(catalogItems.find(row=>nameKey(row.name)===key)?.id||''):'';
   }
 
-  function optimize({snapshot,characterId,cassette,driverCatalog,tapeCatalog,excludeOthers=true,maxNodes=2000000,maxMs=15000},scorer){
+  function optimize({snapshot,characterId,cassette,driverCatalog,tapeCatalog,excludeOthers=true,protectedOwners=[],maxNodes=2000000,maxMs=15000},scorer){
     const role=snapshot.characters.find(row=>String(row.character_id)===String(characterId));
     if(!role?.board?.length)throw Error('请先读取角色盘面');
     if(!cassette?.id)throw Error('该角色尚未在图鉴中配置推荐空幕，无法计算毕业配装');
@@ -37,7 +37,11 @@
     const terminal={layout:{rows:5,columns:5,active_slots:role.board.map(([row,column])=>({row:Number(row),column:Number(column)}))}};
     const capacity=engine.board(terminal)?.cells.length;
     if(!capacity)throw Error('角色驱动盘面无效');
-    const available=snapshot.items.filter(item=>!excludeOthers||item.owner==null||String(item.owner)===String(characterId));
+    const protectedRoles=new Set(protectedOwners.map(String));
+    const available=snapshot.items.filter(item=>{
+      const own=item.owner!=null&&String(item.owner)===String(characterId);
+      return (own||item.owner==null||!protectedRoles.has(String(item.owner)))&&(!excludeOthers||item.owner==null||own);
+    });
     let tape=null,tapeScore=-1,tapeIsOwn=false,skipped=0;
     for(const item of available){
       if(item.category!=='tape'||catalogIdForTape(item,catalogItems)!==String(cassette.id))continue;

@@ -11,6 +11,7 @@ from .upstream.integrations.vision.equipment_state_detection import right_panel_
 from .upstream.features.drive_assembly.role_recognition import resolve_role_recognition
 from .upstream.scanner.window_capture import crop_window_border_from_image
 from .upstream.integrations.vision.screenshot_parser import process_single_image
+from .stat_validation import validate_record
 
 class VisionEngine:
     def __init__(self, directory):
@@ -26,10 +27,10 @@ class VisionEngine:
             result=self._parse(path)
             # Sparse/uncertain recognition gets the original enlarged detector.
             # Each worker owns its engine, so this setting is never shared.
-            if not result.get('records') or any(len(row.get('sub_attributes') or {})<4 for row in result['records']):
+            if not result.get('records') or any(len(row.get('sub_attributes') or {})<4 or row.get('usable_for_calculation') is False for row in result['records']):
                 fallback=True;detector.limit_type='min'
                 retry=self._parse(path)
-                score=lambda value:sum(len(row.get('sub_attributes') or {}) for row in value.get('records',[]))
+                score=lambda value:(sum(row.get('usable_for_calculation') is not False for row in value.get('records',[])),sum(len(row.get('sub_attributes') or {}) for row in value.get('records',[])))
                 if score(retry)>=score(result):result=retry
             return result
         finally:
@@ -76,7 +77,7 @@ class VisionEngine:
             records[0]['provenance']['main_attributes']='ocr' if main else 'unknown'
             records[0]['provenance']['level']='ocr' if level is not None else 'unknown'
         return {'lines':lines,'role':vars(role),'state_candidate':right_panel_button_state_from_image(image),
-                'records':records}
+                'records':[validate_record(record) for record in records]}
 
     @staticmethod
     def normalize(item):

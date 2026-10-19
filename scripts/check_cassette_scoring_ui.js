@@ -39,10 +39,10 @@ const { chromium } = require(process.env.KEKE_PLAYWRIGHT_MODULE || "playwright")
     const targetFile=require('node:url').fileURLToPath(targetPage);
     await page.goto(`http://127.0.0.1:${server.address().port}/`+path.relative(workspace,targetFile).split(path.sep).join('/'));
     await page.waitForLoadState("networkidle");
-    await page.locator('[data-user-route="role-build"]').click();
-    await page.waitForSelector("#userRoleBuildRoute .rb-roster");
+    await page.locator('[data-user-route="role-build-plus"]').click();
+    await page.waitForSelector("#userRoleBuildPlusRoute .rb-roster");
     assert.equal(await page.locator("[data-cassette-score-role]").count(), 0, "a missing read roster must never show the entire character library");
-    assert.equal(await page.locator("#userRoleBuildRoute select").count(), 0, "owned characters use selectable cards, not an all-character dropdown");
+    assert.equal(await page.locator("#userRoleBuildPlusRoute select").count(), 0, "owned characters use selectable cards, not an all-character dropdown");
 
     const testRole = await page.evaluate(() => {
       const entries = typeof characterData === "undefined" ? [] : Object.values(characterData);
@@ -85,17 +85,17 @@ const { chromium } = require(process.env.KEKE_PLAYWRIGHT_MODULE || "playwright")
     assert.equal(await page.locator(".rb-selected-role h2").innerText(), testRole.otherName);
     const rosterOffset=await page.evaluate(()=>{
       const style=document.createElement('style');style.id='role-build-scroll-regression';
-      style.textContent='#userRoleBuildRoute .rb-roster{width:350px}.rb-role-card{flex:0 0 280px}';document.head.append(style);
-      const roster=document.querySelector('#userRoleBuildRoute .rb-roster');roster.scrollLeft=80;
+      style.textContent='#userRoleBuildPlusRoute .rb-roster{width:350px}.rb-role-card{flex:0 0 280px}';document.head.append(style);
+      const roster=document.querySelector('#userRoleBuildPlusRoute .rb-roster');roster.scrollLeft=80;
       document.querySelector('[data-cassette-score-role="1076"]').click();
-      return document.querySelector('#userRoleBuildRoute .rb-roster').scrollLeft;
+      return document.querySelector('#userRoleBuildPlusRoute .rb-roster').scrollLeft;
     });
     assert.equal(rosterOffset,80,'selecting another role keeps the horizontal roster position');
     await page.locator('#role-build-scroll-regression').evaluate(node=>node.remove());
     await page.locator('[data-cassette-score-role="1076"]').click();
     assert.equal(await page.locator(".rb-board-cell.is-filled").count(), 3, "the current drive placement uses the selected native character owner ID");
     assert.equal(await page.locator(".rb-gear-row").count(), 2, "current equipped tape and drive must render separately from scored candidates");
-    assert.equal(await page.locator("#userRoleBuildRoute .user-cassette-score-card,.rb-candidates").count(), 0, "candidate UI is removed");
+    assert.equal(await page.locator("#userRoleBuildPlusRoute .user-cassette-score-card,.rb-candidates").count(), 0, "candidate UI is removed");
     assert.equal(await page.locator('.rb-board-piece .rb-drive-art image').count(),1);
     assert.equal(await page.locator('.rb-gear-symbol .rb-drive-art image').count(),1);
     const imagePath=await page.locator('.rb-board-piece image').getAttribute('href');
@@ -200,7 +200,7 @@ const { chromium } = require(process.env.KEKE_PLAYWRIGHT_MODULE || "playwright")
     assert.ok((await page.locator('.rb-plan-context').innerText()).includes('推荐空幕四件套内最高分'),'calculation is explicitly constrained to the recommended cassette and its four-piece set');
     assert.ok((await page.locator('.rb-plan-context').innerText()).includes('种驱动组合'),'the result reports how many shape profiles were evaluated');
     assert.ok(!(await page.locator('.rb-current-gear').innerText()).includes('#99'),'default exclusion protects foreign tape');
-    assert.equal(await page.locator('#userRoleBuildRoute .rb-board').count(),1,'calculated loadout reuses the existing board');
+    assert.equal(await page.locator('#userRoleBuildPlusRoute .rb-board').count(),1,'calculated loadout reuses the existing board');
     assert.equal(await page.locator('.rb-proposed-plan').count(),0,'no additional plan display');
     await page.locator('[data-build-exclude]').uncheck();
     assert.equal(await page.locator('[data-build-save]').isDisabled(),true,'changing ownership scope invalidates a computed plan');
@@ -236,7 +236,7 @@ const { chromium } = require(process.env.KEKE_PLAYWRIGHT_MODULE || "playwright")
     await page.locator('[data-role-build-tab="game"]').click();
     assert.equal(await page.locator('[data-cassette-score-role]').count(),1,'game tab only lists saved roles');
     assert.equal(await page.locator('[data-cassette-score-role="1046"]').count(),1);
-    assert.equal(await page.locator('#userRoleBuildRoute .rb-board').count(),1,'saved plan uses the same single board');
+    assert.equal(await page.locator('#userRoleBuildPlusRoute .rb-board').count(),1,'saved plan uses the same single board');
     assert.equal(await page.locator('[data-build-delete]').count(),1,'saved game plans expose a delete action');
     const deletePlacement=await page.locator('[data-build-delete]').evaluate(node=>{const button=node.getBoundingClientRect(),metrics=node.parentElement.querySelector('.rb-build-metrics').getBoundingClientRect();return{buttonTop:button.top,buttonRight:button.right,metricsBottom:metrics.bottom,metricsRight:metrics.right};});
     assert.ok(deletePlacement.buttonTop>=deletePlacement.metricsBottom && deletePlacement.buttonRight>=deletePlacement.metricsRight-1,'delete action sits below and right-aligned with the score header');
@@ -265,8 +265,8 @@ const { chromium } = require(process.env.KEKE_PLAYWRIGHT_MODULE || "playwright")
     await page.locator('[data-build-execute]').waitFor();
     assert.deepEqual(await page.evaluate(()=>window.__buildRequests.find(row=>row.action==='unequip-preview').body),{account:workflowInfo.account,character_ids:[1046],categories:['drive','tape']});
     await page.locator('[data-build-dismiss]').click();
-    page.once('dialog',dialog=>dialog.accept());
     await page.locator('[data-build-delete]').click();
+    await page.locator('.rb-confirm-dialog [data-delete-accept]').click();
     await page.waitForFunction(()=>document.querySelector('.rb-global-notice')?.textContent.includes('已保存方案已删除'));
     assert.deepEqual(await page.evaluate(()=>window.__buildRequests.find(row=>row.action==='delete').body),{account:workflowInfo.account,character_id:1046});
     assert.equal(await page.locator('[data-cassette-score-role]').count(),0,'deleting the last saved plan removes it from the game tab');
@@ -276,7 +276,7 @@ const { chromium } = require(process.env.KEKE_PLAYWRIGHT_MODULE || "playwright")
     assert.equal(await page.locator(".rb-selected-role h2").innerText(),testRole.otherName);
     await page.locator('[data-role-build-tab="game"]').click();
     assert.equal(await page.locator('[data-cassette-score-role]').count(),0,'owned but unsaved roles must not appear on game tab');
-    assert.ok((await page.locator('#userRoleBuildRoute').innerText()).includes('暂无已保存方案'));
+    assert.ok((await page.locator('#userRoleBuildPlusRoute').innerText()).includes('暂无已保存方案'));
     await page.locator('[data-role-build-tab="calculate"]').click();
     await page.evaluate(()=>{
       window.__nativeStartCalls=[];
@@ -293,7 +293,7 @@ const { chromium } = require(process.env.KEKE_PLAYWRIGHT_MODULE || "playwright")
     await page.locator("[data-go-read]").click();
     await page.waitForFunction(()=>window.__nativeStartCalls?.length===1);
     assert.deepEqual(await page.evaluate(()=>window.__nativeStartCalls[0]),{account:"切换后的账号"},"the build-page read action starts native collection for the currently viewed account");
-    assert.equal(await page.locator("#userRoleBuildRoute").evaluate(node=>!node.hidden),true,"starting a read keeps the build page visible");
+    assert.equal(await page.locator("#userRoleBuildPlusRoute").evaluate(node=>!node.hidden),true,"starting a read keeps the build page visible");
     assert.equal(await page.locator("#userVisionRoute").evaluate(node=>node.hidden),true,"native reading does not navigate to the collection page");
     await page.evaluate(()=>window.KekeRoleBuild.setSnapshot({ready:true,account:"空账号",characters:[],items:[]}));
     assert.equal(await page.locator("[data-cassette-score-role]").count(),0,"an empty owned roster never falls back to all roles");
@@ -309,7 +309,7 @@ const { chromium } = require(process.env.KEKE_PLAYWRIGHT_MODULE || "playwright")
       assert.ok(policyText.includes("80.6 分") && policyText.includes("91 分"));
       assert.ok(policyText.includes('ACE') && policyText.includes('200'));
     } else {
-      assert.equal(await page.locator("#userRoleBuildRoute .cassette-scoring-policy").count(), 0, "the user package must not expose the management-only editor");
+      assert.equal(await page.locator("#userRoleBuildPlusRoute .cassette-scoring-policy").count(), 0, "the user package must not expose the management-only editor");
     }
     assert.deepEqual(errors, [], "the user and management pages must not emit browser errors");
     console.log(`Role-build UI checks passed: owned-only cards, account switch, search, equipment/art, scoring, game tab, ${targetPage===sourcePage?'web mobile overflow':'desktop scroll container'} and no browser errors.`);

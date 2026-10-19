@@ -71,11 +71,12 @@ def prepare_public(app_version='1.0',app_revision=0) -> Path:
     (OUTPUT / "native_assembly.js").write_bytes((ROOT / "native_assembly.js").read_bytes())
     (OUTPUT / "native_assembly_planner.js").write_bytes((ROOT / "native_assembly_planner.js").read_bytes())
     (OUTPUT / "role_build.js").write_bytes((ROOT / "role_build.js").read_bytes())
+    (OUTPUT / "role_build_standard.js").write_bytes((ROOT / "role_build_standard.js").read_bytes())
     nav = '<nav id="userPrimaryNav" aria-label="功能导航">'
-    for route, label in [("team", "自动配队"), ("characters", "角色"), ("arc-drives", "弧盘"), ("cassettes", "空幕"), ("drive-blocks", "驱动块"), ("role-build", "角色配装"), ("inventory", "背包数据"), ("vision", "读取数据")]:
-        nav += '<button class="user-primary-nav-item" type="button" data-user-route="' + route + '">' + label + ('<span class="role-build-plus" aria-label="PLUS">PLUS</span>' if route == 'role-build' else '') + '</button>'
+    for route, label in [("team", "自动配队"), ("characters", "角色"), ("arc-drives", "弧盘"), ("cassettes", "空幕"), ("drive-blocks", "驱动块"), ("role-build", "角色配装"), ("role-build-plus", "角色配装"), ("inventory", "背包数据"), ("vision", "读取数据")]:
+        nav += '<button class="user-primary-nav-item" type="button" data-user-route="' + route + '">' + label + ('<span class="role-build-plus" aria-label="PLUS">PLUS</span>' if route == 'role-build-plus' else '') + '</button>'
     nav += "</nav>"
-    scripts = "".join('<script src="' + path + '"></script>' for path in bundles + ["recommendations.js", "cassette_scoring.js", "drive_layout_solver.js", "terminal_puzzle.js", "inventory_sync.js", "native_assembly_planner.js", "native_assembly.js", "role_build.js", "vision_scan.js", "app.js"])
+    scripts = "".join('<script src="' + path + '"></script>' for path in bundles + ["recommendations.js", "cassette_scoring.js", "drive_layout_solver.js", "terminal_puzzle.js", "inventory_sync.js", "native_assembly_planner.js", "native_assembly.js", "role_build.js", "role_build_standard.js", "vision_scan.js", "app.js"])
     html = (
         '<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">'
         '<meta name="viewport" content="width=device-width,initial-scale=1">'
@@ -85,7 +86,7 @@ def prepare_public(app_version='1.0',app_revision=0) -> Path:
         '<aside class="desktop-sidebar"><div class="desktop-brand"><img class="desktop-app-mark" src="mint-avatar.png" alt="薄荷">'
         '<div><strong>可可助手</strong><small>配队与养成助手</small></div></div>'
         '<p class="desktop-nav-label">功能</p>' + nav +
-        f'<div class="desktop-sidebar-foot">Windows 桌面版 · v{app_version}<br>Ctrl + 1–8 快速切换<br><button id="releaseNotesButton" type="button">更新内容</button><button id="diagnosticsButton" type="button">诊断日志</button></div></aside>'
+        f'<div class="desktop-sidebar-foot">Windows 桌面版 · v{app_version}<br>Ctrl + 1–9 快速切换<br><button id="releaseNotesButton" type="button">更新内容</button><button id="diagnosticsButton" type="button">诊断日志</button></div></aside>'
         '<main class="main-content"><header class="topbar"><div class="breadcrumb"><span>可可助手</span>'
         '<strong id="activeBreadcrumb">自动配队</strong></div></header>' +
         str(view) + '</main></div>' + str(toast) + scripts + '</body></html>'

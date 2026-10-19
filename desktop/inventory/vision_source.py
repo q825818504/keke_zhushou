@@ -1,11 +1,11 @@
 """OCR observations in the shared account view, without native identity synthesis."""
-from copy import deepcopy
+from vision.stat_validation import validate_record
 
 def vision_domain(batch):
     records=[]
     for index,item in enumerate(batch.get('records',[])):
         if not isinstance(item,dict) or item.get('category') not in ('drive','tape'):continue
-        row=deepcopy(item)
+        row=validate_record(item)
         # An OCR identity belongs only to this batch. Identical stat rolls can be distinct items.
         row['instance_id']='ocr:'+batch['id']+':'+str(item.get('instance_id',index))
         row['native_instance_id']=None

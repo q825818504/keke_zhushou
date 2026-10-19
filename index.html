@@ -70,7 +70,7 @@
             <button class="user-primary-nav-item is-active pressable" type="button" data-user-route="characters" aria-current="page">角色</button>
             <button class="user-primary-nav-item pressable" type="button" data-user-route="team"><span>自动配队</span><span class="user-nav-badge">主功能</span></button>
             <button class="user-primary-nav-item pressable" type="button" data-user-route="arc-drives">弧盘</button>
-            <button class="user-primary-nav-item pressable" type="button" data-user-route="cassettes">空幕</button><button class="user-primary-nav-item pressable" type="button" data-user-route="drive-blocks">驱动块</button><button class="user-primary-nav-item pressable" type="button" data-user-route="role-build">角色配装<span class="role-build-plus" aria-label="PLUS">PLUS</span></button>
+            <button class="user-primary-nav-item pressable" type="button" data-user-route="cassettes">空幕</button><button class="user-primary-nav-item pressable" type="button" data-user-route="drive-blocks">驱动块</button><button class="user-primary-nav-item pressable" type="button" data-user-route="role-build">角色配装</button><button class="user-primary-nav-item pressable" type="button" data-user-route="role-build-plus">角色配装<span class="role-build-plus" aria-label="PLUS">PLUS</span></button>
             <button class="user-primary-nav-item pressable" type="button" data-user-route="vision">读取数据</button>
             <button class="user-primary-nav-item pressable" type="button" data-user-route="inventory">背包数据</button>
           </nav>
@@ -112,6 +112,7 @@
         <section class="user-route-panel" id="userArcDriveRoute" data-user-route-panel="arc-drives" hidden aria-labelledby="userArcDriveTitle"></section>
         <section class="user-route-panel" id="userSkyCurtainRoute" data-user-route-panel="cassettes" hidden aria-labelledby="userSkyCurtainTitle"></section><section class="user-route-panel" id="userDriverBlockRoute" data-user-route-panel="drive-blocks" hidden aria-labelledby="userDriverBlockTitle"></section>
         <section class="user-route-panel" id="userRoleBuildRoute" data-user-route-panel="role-build" hidden aria-labelledby="userRoleBuildTitle"></section>
+        <section class="user-route-panel" id="userRoleBuildPlusRoute" data-user-route-panel="role-build-plus" hidden aria-labelledby="userRoleBuildPlusTitle"></section>
         <section class="user-route-panel" id="userVisionRoute" data-user-route-panel="vision" hidden aria-label="读取数据"></section>
         <section class="user-route-panel" id="userInventoryRoute" data-user-route-panel="inventory" hidden aria-label="背包数据"></section>
         <footer class="user-footer"><span>可可助手 · 为每一次选择保留证据</span></footer>
@@ -376,6 +377,7 @@
   <script src="native_assembly.js"></script>
   <script src="vision_scan.js"></script>
   <script src="role_build.js"></script>
+  <script src="role_build_standard.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

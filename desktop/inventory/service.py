@@ -29,6 +29,8 @@ class InventoryService:
         self.job = {'running':False, 'message':'尚未开始同步', 'domains':{}}
         from .equipment import EquipmentService
         self.equipment = EquipmentService(self)
+        from .ui_assembly import UIAssemblyService
+        self.ui_assembly = UIAssemblyService(self)
         self.config = {'account':'默认账号', 'adapter':'nte-native-v1'}
         try:
             self.config.update(json.loads((self.directory/'config.json').read_text(encoding='utf-8')))
@@ -164,7 +166,8 @@ class InventoryService:
             selected = self.accounts.get(config.get('account'))
             return json.loads(json.dumps({'config':config, 'job':self.job, 'native_operation':self.native_operation,
                 'account_profiles':profiles, 'account_uid':selected.get('uid') if selected else None,
-                'equipment_job':self.equipment.status(), 'components':self.components.status() if self.components else None, 'vision_job':dict(self.vision.job) if self.vision else None}))
+                'equipment_job':self.equipment.status(), 'ui_assembly_job':self.ui_assembly.status(),
+                'components':self.components.status() if self.components else None, 'vision_job':dict(self.vision.job) if self.vision else None}))
 
     def _save_config(self):
         self._write(self.directory/'config.json',self.config)

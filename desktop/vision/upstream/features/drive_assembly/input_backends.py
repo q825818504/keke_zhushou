@@ -92,6 +92,7 @@ class AssemblyExecutionReport:
     duplicate_roles: list[dict[str, Any]] = field(default_factory=list)
     unrecognized_roles: list[dict[str, Any]] = field(default_factory=list)
     verification_failures: list[dict[str, Any]] = field(default_factory=list)
+    repair_attempts: list[dict[str, Any]] = field(default_factory=list)
 
     @property
     def executed_actions(self) -> int:

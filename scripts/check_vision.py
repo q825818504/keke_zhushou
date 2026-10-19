@@ -64,16 +64,23 @@ class VisionTests(unittest.TestCase):
             self.assertEqual(list(Path(tmp).glob('*.tmp')),[])
 
     def test_120_gamepad_captures_survive_failed_progress_checkpoints(self):
-        import itertools
+        checkpoint_seen=threading.Event()
         keyboard=SimpleNamespace(add_hotkey=lambda *args:1,remove_hotkey=lambda *args:None)
         with tempfile.TemporaryDirectory() as tmp,patch.dict(sys.modules,{'keyboard':keyboard}),patch('vision.service.time.sleep'):
             service=self.service(tmp);service.guard=lambda capability:service.check_capture()
+            service.CHECKPOINT_INTERVAL=.001
+            class CheckpointScanner(Scanner):
+                def start_scan(self,*args,**kwargs):
+                    result=super().start_scan(*args,**kwargs)
+                    if not checkpoint_seen.wait(2):raise RuntimeError('checkpoint did not run')
+                    return result
+            service.scanner_factory=CheckpointScanner
             write=service._write;failures=[]
             def checkpoint(path,value):
                 if value.get('images') and value.get('state')=='pending':
-                    failures.append(1);raise PermissionError('fixture occupied checkpoint')
+                    failures.append(1);checkpoint_seen.set();raise PermissionError('fixture occupied checkpoint')
                 return write(path,value)
-            with patch.object(service,'_write',side_effect=checkpoint),patch('vision.service.time.monotonic',side_effect=itertools.count()):
+            with patch.object(service,'_write',side_effect=checkpoint):
                 service.start('gamepad','A',count=120);batch=self.done(service)
             self.assertTrue(failures,'fixture must exercise checkpoint failures')
             self.assertTrue(batch['complete']);self.assertTrue(batch['capture_complete'])

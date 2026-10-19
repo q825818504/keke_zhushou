@@ -39,7 +39,7 @@ function fixture(){
     },{url,body});
     await openServer();
     assert.deepEqual(await risk(),{acknowledged:false,enabled:false});
-    await page.locator('[data-user-route="role-build"]').click();
+    await page.locator('[data-user-route="role-build-plus"]').click();
     assert.equal(await page.locator('[data-go-read]').isDisabled(),true);
     await page.locator('[data-user-route="vision"]').click();
     const dialog=page.locator('#nativeRiskDialog');await dialog.waitFor({state:'visible'});
@@ -73,10 +73,10 @@ function fixture(){
     assert.equal(deploys,1);
     await page.locator('[data-native="start"]').click();await page.waitForFunction(()=>!document.querySelector('[data-native="start"]').disabled);
     assert.equal(reads,1);
-    await page.locator('[data-user-route="role-build"]').click();
+    await page.locator('[data-user-route="role-build-plus"]').click();
     await page.waitForFunction(()=>!document.querySelector('[data-go-read]').disabled);
     await page.locator('[data-go-read]').click();
-    await page.waitForFunction(()=>document.querySelector('#userRoleBuildRoute').textContent.includes('DLL 原生读取已启动'));
+    await page.waitForFunction(()=>document.querySelector('#userRoleBuildPlusRoute').textContent.includes('DLL 原生读取已启动'));
     assert.equal(reads,2);
     await page.evaluate(()=>window.dispatchEvent(new CustomEvent('keke-inventory-synced')));
     await page.locator('[data-user-route="vision"]').click();assert.equal(await dialog.count(),0);
@@ -86,7 +86,7 @@ function fixture(){
     await page.screenshot({path:path.join(root,'build/native-risk-off-qa.png')});
     const rejection=await page.evaluate(()=>window.KekeVision.startNativeRead().then(()=>null,error=>error.message));
     assert.match(rejection,/风险模式/);assert.equal(reads,2);
-    await page.locator('[data-user-route="role-build"]').click();
+    await page.locator('[data-user-route="role-build-plus"]').click();
     assert.equal(await page.locator('[data-go-read]').isDisabled(),true);
     await page.unrouteAll({behavior:'wait'});
     await page.reload();await page.locator('[data-user-route="vision"]').click();

@@ -82,7 +82,7 @@ def detect_selected_card_center_y(
         return None
     hsv = cv2.cvtColor(roi, cv2.COLOR_BGR2HSV)
     mask = (
-        (hsv[:, :, 0] >= 140)
+        (hsv[:, :, 0] >= 162)
         & (hsv[:, :, 0] <= 179)
         & (hsv[:, :, 1] >= 100)
         & (hsv[:, :, 2] >= 120)

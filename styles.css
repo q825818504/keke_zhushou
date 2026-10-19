@@ -1921,7 +1921,7 @@ body:not(.user-mode) .topbar { position:sticky; top:0; z-index:40; background:rg
 .rb-confirm-actions .rb-confirm-accept { color:#fff; background:#a53b4a; border-color:#d05d6c; }
 .rb-confirm-actions .rb-confirm-accept:hover { background:#bd4656; }
 .rb-workspace ::selection { color:#fff; background:#225fa9; }
-.rb-workspace button,.rb-workspace input { font:inherit; }
+.rb-workspace button,.rb-workspace input,.rb-workspace select { font:inherit; }
 .rb-workspace button { cursor:pointer; }
 .rb-workspace button:disabled { cursor:wait; opacity:.55; }
 .rb-workspace :is(button,input,summary):focus-visible { outline:2px solid var(--rb-cyan); outline-offset:3px; }
@@ -1936,6 +1936,13 @@ body:not(.user-mode) .topbar { position:sticky; top:0; z-index:40; background:rg
 .rb-account-picker select { min-width:150px;max-width:220px;padding:6px 24px 6px 8px;color:#e8eef6;background:#101923;border:1px solid #344456;border-radius:6px;font-size:11px; }
 .rb-account-picker select:hover { border-color:#5586bb; }
 .rb-account-picker select:focus-visible { outline:2px solid var(--rb-cyan);outline-offset:2px; }
+.rb-data-selectors { display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:16px;padding:13px;background:#0b1118;border:1px solid var(--rb-line);border-radius:8px; }
+.rb-data-selectors label { display:grid;gap:6px;min-width:0;color:#bdc9d8;font-size:11px; }
+.rb-data-selectors select { width:100%;min-width:0;min-height:38px;padding:7px 10px;color:var(--rb-ink);background:#101923;border:1px solid #344456;border-radius:6px; }
+.rb-data-selectors small { color:var(--rb-muted);font-size:10px;line-height:1.45; }
+.rb-alias-field { display:grid;gap:6px;width:min(100%,420px);margin-top:14px;color:#becbd9;font-size:11px; }
+.rb-alias-field input { min-height:37px;padding:7px 10px;color:var(--rb-ink);background:#0b1118;border:1px solid var(--rb-line);border-radius:6px; }
+.rb-alias-field input::placeholder { color:#8997a8; }
 .rb-status-dot { width:7px; height:7px; border-radius:50%; background:#758295; }
 .rb-status-dot.is-ready { background:#51d594; }
 .rb-toolbar { display:flex; gap:8px; margin:17px 0 16px; }
@@ -2009,7 +2016,7 @@ body:not(.user-mode) .topbar { position:sticky; top:0; z-index:40; background:rg
 .rb-operation-preview { margin-top:18px; padding:15px; border:1px solid #536b87; border-radius:7px; color:#d7e3f1; font-size:12px; }
 .rb-operation-preview li { margin-bottom:7px; }
 .rb-operation-preview button { margin-right:10px; }
-@media(max-width:600px) { .rb-plan-layout { grid-template-columns:1fr; gap:18px; } .rb-action-buttons > button { flex:1; } }
+@media(max-width:600px) { .rb-plan-layout { grid-template-columns:1fr; gap:18px; } .rb-action-buttons > button { flex:1; } .rb-data-selectors { grid-template-columns:1fr; } .rb-header { flex-wrap:wrap;gap:12px; } .rb-account { margin-left:0; } .rb-toolbar { flex-wrap:wrap; } .rb-search { flex-basis:100%; } }
 .rb-drive-art { display:block; width:100%; height:100%; }
 .rb-board-piece .rb-drive-art { overflow:visible; }
 .rb-board-cell { display:grid; place-items:center; min-width:0; color:#b9d0e9; background:#16202c; border:1px solid #34455b; border-radius:5px; font-size:10px; font-weight:650; }
@@ -2359,3 +2366,13 @@ body:not(.desktop-mode) .user-footer { color: #66666f; }
 @media (prefers-reduced-transparency: reduce) {
   body:not(.desktop-mode) .topbar { background: #fafafc; backdrop-filter: none; -webkit-backdrop-filter: none; }
 }
+
+.rb-lock-toggle {display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;margin-left:auto;color:#8d98a5;background:#131c26;border:1px solid #3a4756;border-radius:7px;cursor:pointer;}
+.rb-lock-toggle svg {width:20px;height:20px;}
+.rb-lock-toggle.is-locked {color:#ff5c65;background:#35171f;border-color:#db444f;}
+.rb-lock-toggle:disabled {opacity:.5;cursor:default;}
+
+/* PLUS roster lock is a display-only badge. */
+.rb-role-card {position:relative;}
+.rb-role-card > .rb-role-lock-badge {position:absolute;right:7px;top:5px;display:block;width:14px;height:14px;color:#ff5c65;pointer-events:none;}
+.rb-role-lock-badge svg {display:block;width:14px;height:14px;}

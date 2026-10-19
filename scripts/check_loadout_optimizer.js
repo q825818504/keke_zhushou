@@ -78,6 +78,11 @@ assert.equal(result.tapeScore<scorer.scoreItem(foreignTape,cassette,cassetteInfo
 const blocked={...snapshot,items:snapshot.items.map(item=>item.id===mandatoryDrives[0].id?{...item,owner:2}:item)};
 assert.throws(()=>run(blocked),/缺少.*四件套/);
 result=run(blocked,{excludeOthers:false});assert.equal(result.complete,true);
+assert.throws(()=>run(blocked,{excludeOthers:false,protectedOwners:['2']}),/缺少.*四件套/,'locked foreign drives stay excluded even when transfers are allowed');
+assert.equal(run(snapshot,{excludeOthers:false,protectedOwners:[1]}).complete,true,'a locked role may still calculate using its own equipment');
+const protectedTape={...snapshot,items:snapshot.items.map(item=>item.id===recommendedTape.id?{...item,owner:2}:item)};
+assert.throws(()=>run(protectedTape,{excludeOthers:false,protectedOwners:[2]}),/没有可用的图鉴推荐空幕/,'role protection also excludes its cassette');
+assert.equal(run(protectedTape,{excludeOthers:false,protectedOwners:[]}).core,recommendedTape.id,'unlock restores foreign equipment eligibility');
 
 // Direct set IDs are authoritative; a mismatched explicit ID cannot fall back to a matching display name.
 const mismatched={...snapshot,items:snapshot.items.map(item=>item.id===recommendedTape.id?{...item,name:cassetteInfo.name,set_id:'emozhixie-zuzhou'}:item)};

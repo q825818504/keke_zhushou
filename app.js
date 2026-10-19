@@ -202,7 +202,7 @@ let userTeamPinnedCoreNames = [...new Set((Array.isArray(userTeamSavedState.pinn
 let userTeamExpandedInvestmentNames = new Set(userTeamPinnedCoreNames);
 let userTeamSelectedCandidateIndexes = [0, 0];
 let userTeamGenerated = false;
-const userRouteLabels = { characters: "角色", team: "自动配队", "arc-drives": "弧盘", cassettes: "空幕", "drive-blocks": "驱动块", "role-build": "角色配装", inventory: "背包数据", vision: "读取数据" };
+const userRouteLabels = { characters: "角色", team: "自动配队", "arc-drives": "弧盘", cassettes: "空幕", "drive-blocks": "驱动块", "role-build": "角色配装", "role-build-plus": "角色配装 PLUS", inventory: "背包数据", vision: "读取数据" };
 const userTeamElementRing = ["光", "灵", "咒", "暗", "魂", "相"];
 const userTeamReactionRules = (window.esperCycleKnowledge?.cycles || []).map(cycle => ({ name: cycle.name, attrs: cycle.attributes.map(attribute => attribute.name) }));
 
@@ -2764,7 +2764,8 @@ function renderUserRouteView(route = userActiveRoute) {
   if (safeRoute === "arc-drives") renderUserArcDriveRoute();
   if (safeRoute === "cassettes") renderUserSkyCurtainRoute();
   if (safeRoute === "drive-blocks") renderUserDriverBlockRoute();
-  if (safeRoute === "role-build") window.KekeRoleBuild?.render();
+  if (safeRoute === "role-build") window.KekeRoleBuildStandard?.render();
+  if (safeRoute === "role-build-plus") window.KekeRoleBuild?.render();
   if (safeRoute === "vision") window.KekeVision?.render();
   if (safeRoute === "inventory") window.KekeInventory?.render();
 }
