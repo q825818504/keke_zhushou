@@ -7,6 +7,13 @@ import sys
 from prepare_public import prepare_public, ROOT
 
 
+def ssl_runtime_asset():
+    """Keep vendor-specific CA policy data next to PyInstaller's frozen ssl.py."""
+    import ssl
+    policy = Path(ssl.__file__).with_name("codex-rejected-cas.pem")
+    return str(policy) + ";." if policy.is_file() else None
+
+
 def make_icon(directory):
     import shutil
     directory.mkdir(parents=True,exist_ok=True)
@@ -58,6 +65,9 @@ def build(target, dist=None, layout='onefile', app_version='1.0',app_revision=0,
     else:
         data = [str(ROOT / "desktop/desktop.css") + ";desktop", str(ROOT / "desktop/desktop.js") + ";desktop"]
         name = "KekeAssistantAdmin"
+    ssl_asset = ssl_runtime_asset()
+    if ssl_asset:
+        data.append(ssl_asset)
     args = [sys.executable, "-m", "PyInstaller", "--noconfirm", "--clean", '--onedir' if layout=='directory' else '--onefile', "--windowed",
             "--name", name, "--icon", str(icon), "--paths", str(ROOT / "scripts"),
             "--distpath", str(dist), "--workpath", str(directory / "pyinstaller"),
@@ -71,6 +81,16 @@ def build(target, dist=None, layout='onefile', app_version='1.0',app_revision=0,
     subprocess.run(args, check=True)
     exe = dist / (name + ".exe")
     if layout=='directory': exe=dist/name/(name+'.exe')
+    if ssl_asset:
+        if layout == 'directory':
+            bundled_policy = dist/name/'_internal'/'codex-rejected-cas.pem'
+            if not bundled_policy.is_file():
+                raise RuntimeError("Frozen SSL policy data is missing from the application bundle")
+        else:
+            from PyInstaller.archive.readers import CArchiveReader
+            archive = CArchiveReader(str(exe))
+            if not any("codex-rejected-cas.pem" in entry for entry in archive.toc):
+                raise RuntimeError("Frozen SSL policy data is missing from the application EXE")
     if target == "user":
         from PyInstaller.archive.readers import CArchiveReader
         archive = CArchiveReader(str(exe))
