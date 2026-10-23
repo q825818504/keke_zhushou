@@ -29,6 +29,12 @@ class InventoryService:
         self.job = {'running':False, 'message':'尚未开始同步', 'domains':{}}
         from .equipment import EquipmentService
         self.equipment = EquipmentService(self)
+        from .management import BackpackManagement
+        self.management = BackpackManagement(self)
+        from .state_actions import EquipmentStateActions
+        self.state_actions = EquipmentStateActions(self)
+        from .decomposition import DecompositionService
+        self.decomposition = DecompositionService(self)
         from .ui_assembly import UIAssemblyService
         self.ui_assembly = UIAssemblyService(self)
         self.config = {'account':'默认账号', 'adapter':'nte-native-v1'}
@@ -109,6 +115,7 @@ class InventoryService:
                 self.vision.delete(account,source[4:])
             else:
                 raise ValueError('请选择要删除的已保存数据')
+            self.management.delete_source(account, source)
         return {'deleted':True,'source':source}
 
     def delete_account(self, account, uid):
@@ -123,7 +130,8 @@ class InventoryService:
             if not profile or profile.get('uid') != uid:
                 raise ValueError('账号资料已变化，请刷新后重新确认删除')
             native = self._path(account)
-            files = [native, native.with_suffix('.previous.json'), path_for(self.directory, account)]
+            files = [native, native.with_suffix('.previous.json'), path_for(self.directory, account),
+                     self.management.path_for(account)]
             root = self.directory.resolve()
             for file in files:
                 if file.is_symlink() or not file.resolve().is_relative_to(root):
@@ -167,6 +175,8 @@ class InventoryService:
             return json.loads(json.dumps({'config':config, 'job':self.job, 'native_operation':self.native_operation,
                 'account_profiles':profiles, 'account_uid':selected.get('uid') if selected else None,
                 'equipment_job':self.equipment.status(), 'ui_assembly_job':self.ui_assembly.status(),
+                'state_action_job':self.state_actions.status(),
+                'decomposition_job':self.decomposition.status(),
                 'components':self.components.status() if self.components else None, 'vision_job':dict(self.vision.job) if self.vision else None}))
 
     def _save_config(self):

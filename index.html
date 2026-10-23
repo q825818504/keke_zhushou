@@ -72,7 +72,7 @@
             <button class="user-primary-nav-item pressable" type="button" data-user-route="arc-drives">弧盘</button>
             <button class="user-primary-nav-item pressable" type="button" data-user-route="cassettes">空幕</button><button class="user-primary-nav-item pressable" type="button" data-user-route="drive-blocks">驱动块</button><button class="user-primary-nav-item pressable" type="button" data-user-route="role-build">角色配装</button><button class="user-primary-nav-item pressable" type="button" data-user-route="role-build-plus">角色配装<span class="role-build-plus" aria-label="PLUS">PLUS</span></button>
             <button class="user-primary-nav-item pressable" type="button" data-user-route="vision">读取数据</button>
-            <button class="user-primary-nav-item pressable" type="button" data-user-route="inventory">背包数据</button>
+            <div class="user-nav-group"><button class="user-primary-nav-item pressable" type="button" data-user-route="inventory">背包数据</button><button class="user-primary-nav-item user-nav-subitem pressable" type="button" data-user-route="inventory-management">背包管理</button></div>
           </nav>
           <button class="user-topbar-link user-admin-link pressable" type="button" id="userAdminButton"><span class="admin-link-mark">⌘</span>管理端</button>
         </div>      </header>
@@ -115,6 +115,7 @@
         <section class="user-route-panel" id="userRoleBuildPlusRoute" data-user-route-panel="role-build-plus" hidden aria-labelledby="userRoleBuildPlusTitle"></section>
         <section class="user-route-panel" id="userVisionRoute" data-user-route-panel="vision" hidden aria-label="读取数据"></section>
         <section class="user-route-panel" id="userInventoryRoute" data-user-route-panel="inventory" hidden aria-label="背包数据"></section>
+        <section class="user-route-panel" id="userInventoryManagementRoute" data-user-route-panel="inventory-management" hidden aria-label="背包管理"></section>
         <footer class="user-footer"><span>可可助手 · 为每一次选择保留证据</span></footer>
       </section>
       <div id="roleManagementView" hidden>
@@ -373,6 +374,7 @@
   <script src="terminal_puzzle.js"></script>
   <script src="terminal_editor.js"></script>
   <script src="inventory_sync.js"></script>
+  <script src="inventory_management.js"></script>
   <script src="native_assembly_planner.js"></script>
   <script src="native_assembly.js"></script>
   <script src="vision_scan.js"></script>

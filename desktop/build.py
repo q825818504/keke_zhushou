@@ -15,7 +15,7 @@ def make_icon(directory):
     return icon
 
 
-def build(target, dist=None, layout='onefile', app_version='1.0',app_revision=0):
+def build(target, dist=None, layout='onefile', app_version='1.0',app_revision=0,native_decomposition=False):
     default_dist = ROOT / ("dist/windows/admin" if target == "admin" else "dist/windows")
     dist = Path(dist or default_dist).resolve()
     if not dist.is_relative_to((ROOT / "dist").resolve()):
@@ -38,6 +38,17 @@ def build(target, dist=None, layout='onefile', app_version='1.0',app_revision=0)
         data += [str(ROOT/'desktop/assets'/name)+';assets' for name in ('mint-avatar.ico','mint-avatar.png')]
         data += [str(ROOT/'desktop/inventory/equipment-layouts.json')+';inventory']
         data += [str(ROOT/'desktop/inventory/account_uid_reader/native/KekeNativeReader.dll')+';inventory/account_uid_reader/native']
+        cleanup_identity=ROOT/'desktop/native/cleanup-identity.json'
+        if native_decomposition:
+            if not cleanup_identity.is_file(): raise ValueError('请先构建原生分解测试组件')
+            cleanup=json.loads(cleanup_identity.read_text(encoding='utf-8'))
+            import hashlib
+            for filename,expected in cleanup['files'].items():
+                artifact=ROOT/'build/native-decomposition'/filename
+                if not artifact.is_file() or hashlib.sha256(artifact.read_bytes()).hexdigest()!=expected:
+                    raise ValueError('分解测试组件校验失败，请先运行 scripts/build_cleanup_native.py')
+                data += [str(artifact)+';native-decomposition']
+            data += [str(cleanup_identity)+';native']
         name = "KekeAssistant"
         if layout=='directory':
             trust=json.loads((ROOT/'desktop/update-trust.json').read_text())

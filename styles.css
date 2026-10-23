@@ -2376,3 +2376,24 @@ body:not(.desktop-mode) .user-footer { color: #66666f; }
 .rb-role-card {position:relative;}
 .rb-role-card > .rb-role-lock-badge {position:absolute;right:7px;top:5px;display:block;width:14px;height:14px;color:#ff5c65;pointer-events:none;}
 .rb-role-lock-badge svg {display:block;width:14px;height:14px;}
+
+/* Backpack confirmation and batch filters share the reading-risk dialog surface. */
+.bm-confirm-dialog .bm-confirm-copy{white-space:pre-wrap;line-height:1.75;margin-top:18px;max-height:55vh;overflow:auto;font-size:14px;color:#514c60}
+.bm-filter-dialog{width:min(740px,calc(100vw - 32px));max-height:90vh;overflow:auto}
+.bm-filter-body{max-height:56vh;overflow:auto;margin-top:20px;padding-right:8px}
+.bm-filter-dialog fieldset{border:0;border-bottom:1px solid #e7e5ef;margin:0 0 16px;padding:0 0 16px;min-width:0}
+.bm-filter-dialog legend{font-weight:650;font-size:14px;margin-bottom:10px;color:#343044}
+.bm-filter-options{display:flex;flex-wrap:wrap;gap:8px}
+.bm-filter-options label{display:flex;align-items:center;gap:6px;padding:8px 12px;border:1px solid #ded9ed;border-radius:8px;font-size:13px;cursor:pointer;background:#faf9fd;color:#514c60}
+.bm-filter-options label:has(input:checked){background:#eeebff;border-color:#7663d8;color:#4936ad}
+.bm-filter-options input{accent-color:#5740c3}
+.bm-filter-options label:has(input:disabled){opacity:.5;cursor:default}
+.bm-filter-dialog .inventory-actions{flex-wrap:wrap;gap:8px}
+.bm-bulk-actions{display:flex;flex-wrap:wrap;gap:8px}
+.bm-bulk-actions button{padding:8px 12px;border:1px solid #bcb4d8;border-radius:8px;background:#f7f5ff;color:#4936ad;cursor:pointer}
+.bm-bulk-actions button:hover{background:#eae5ff}
+.bm-bulk-actions button:focus-visible,.bm-filter-dialog button:focus-visible,.bm-confirm-dialog button:focus-visible{outline:2px solid #7663d8;outline-offset:2px}
+.bm-list-controls{flex-wrap:wrap;gap:12px}
+
+.bm-filter-dialog .inventory-actions button:not(.primary-button),.bm-confirm-dialog .inventory-actions button:not(.primary-button){padding:10px 15px;border:1px solid #ded9ed;border-radius:10px;background:#faf9fd;color:#514c60;cursor:pointer;font:inherit;font-size:14px}
+.bm-filter-dialog .inventory-actions button:not(.primary-button):hover,.bm-confirm-dialog .inventory-actions button:not(.primary-button):hover{background:#eeebff;border-color:#b6aadf}

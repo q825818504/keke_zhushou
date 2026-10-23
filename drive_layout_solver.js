@@ -117,6 +117,7 @@
   }
   function profileKey(counts) {return definitions.map(s=>`${s.id}:${counts[s.id]||0}`).join('|');}
   function compareMetrics(a,b,rankBy) {
+    if(rankBy==='passive_strict') return b.preferred-a.preferred || b.equipmentScore-a.equipmentScore || b.filled-a.filled || a.pieceCount-b.pieceCount;
     if(rankBy==='score_first') return b.equipmentScore-a.equipmentScore || b.filled-a.filled || b.preferred-a.preferred || a.pieceCount-b.pieceCount;
     return b.filled-a.filled || (rankBy==='equipment_first' ? b.equipmentScore-a.equipmentScore || b.preferred-a.preferred : b.preferred-a.preferred || b.equipmentScore-a.equipmentScore) || a.pieceCount-b.pieceCount;
   }
@@ -182,7 +183,7 @@
   function generateCandidates({terminal,preferredModel=preference(terminal),required=[],fixed=[],inventoryCounts,inventory,weights={},scoreItem,excludedUids=[],limit=64,maxNodes=500000,layoutsPerProfile=1,rankBy='passive_first',allowPartial=true}={}) {
     const b=board(terminal);
     if(!b || ![0,2,3,4].includes(preferredModel) || !validate(terminal,{version:1,preferred_model:preferredModel,pieces:fixed}).valid) throw new TypeError('Invalid board, preference or fixed pieces');
-    if(!Number.isInteger(limit)||limit<1||limit>256||!Number.isInteger(maxNodes)||maxNodes<1||!Number.isInteger(layoutsPerProfile)||layoutsPerProfile<1||layoutsPerProfile>64||!['passive_first','equipment_first','score_first'].includes(rankBy))throw new TypeError('Invalid candidate options');
+    if(!Number.isInteger(limit)||limit<1||limit>256||!Number.isInteger(maxNodes)||maxNodes<1||!Number.isInteger(layoutsPerProfile)||layoutsPerProfile<1||layoutsPerProfile>64||!['passive_first','equipment_first','score_first','passive_strict'].includes(rankBy))throw new TypeError('Invalid candidate options');
     const minimum=definitions.map(()=>0),shapeIndex=new Map(definitions.map((s,i)=>[s.id,i]));
     if(!Array.isArray(required))throw new TypeError('Required drives must be an array');
     for(const r of required){if(!shapeIndex.has(r.shape_id)||!Number.isInteger(r.count)||r.count<1)throw new TypeError('Invalid required shape');minimum[shapeIndex.get(r.shape_id)]+=r.count;}
@@ -242,7 +243,7 @@
     // In score_first mode every feasible profile's upper score is known before
     // placement checks. The first legal profile is therefore optimal even when
     // the caller only needs one result; no coordinate search can change its score.
-    const optimalityProven=rankBy==='score_first'&&enumerationComplete&&!unresolved&&candidates.length>0;
+    const optimalityProven=['score_first','passive_strict'].includes(rankBy)&&enumerationComplete&&!unresolved&&candidates.length>0;
     return {candidates,status:candidates.length?'ok':searchComplete?'infeasible':'budget_exhausted',searchComplete,truncated:!searchComplete,rankingComplete:enumerationComplete&&!unresolved,optimalityProven,nodes,examinedProfiles:examined,generatedProfiles:profiles.length,scope:layoutsPerProfile===1?'shape_counts':'placements',rankBy};
   }
   return {definitions,byId,board,pieceCells,validate,solve,preference,terminalOf,profileKey,weightedItemScore,placementsFor,generateCandidates};

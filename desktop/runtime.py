@@ -144,6 +144,14 @@ def public_server(root: Path, port: int, workspace=None, inventory=None, vision=
                 except (OSError, ValueError):
                     self.inventory_json({'error':'本机快照读取失败，请保留文件检查'}, 500)
                 return
+            if relative == 'inventory/management' and inventory:
+                params=parse_qs(urlsplit(self.path).query)
+                account=params.get('account',[inventory.config.get('account','默认账号')])[0]
+                source=params.get('source',['auto'])[0]
+                try:self.inventory_json(inventory.management.inspect(account,source))
+                except ValueError as error:self.inventory_json({'error':str(error)},400)
+                except OSError:self.inventory_json({'error':'背包管理标记读取失败，请保留文件检查'},500)
+                return
             if relative.startswith('vision/') and vision:
                 params=parse_qs(urlsplit(self.path).query)
                 account=params.get('account',[inventory.config.get('account','默认账号') if inventory else '默认账号'])[0]
@@ -261,12 +269,15 @@ def public_server(root: Path, port: int, workspace=None, inventory=None, vision=
             if not inventory or path not in ('/inventory/risk/acknowledge','/inventory/risk-mode','/inventory/start','/inventory/cancel','/inventory/delete','/inventory/account/delete','/inventory/account/select','/inventory/account/note','/inventory/account/bind','/inventory/components/check','/inventory/components/deploy','/inventory/components/remove',
                 '/inventory/equipment/inspect','/inventory/equipment/preview','/inventory/equipment/assemble-preview','/inventory/equipment/start','/inventory/equipment/cancel',
                 '/inventory/equipment/save-build','/inventory/equipment/delete-build','/inventory/equipment/saved-preview',
+                '/inventory/equipment/state-preview','/inventory/equipment/state-start','/inventory/equipment/state-cancel',
+                '/inventory/management/save',
                 '/inventory/ui-assembly/start','/inventory/ui-assembly/cancel'):
                 self.send_error(404)
                 return
             try:
                 length = int(self.headers.get('Content-Length','0'))
-                if not 0 <= length <= 4096 or self.headers.get('Content-Type') != 'application/json':
+                max_length=8*1024*1024 if path=='/inventory/management/save' else 256*1024 if path=='/inventory/equipment/state-preview' else 4096
+                if not 0 <= length <= max_length or self.headers.get('Content-Type') != 'application/json':
                     raise ValueError('请求格式无效')
                 body = json.loads(self.rfile.read(length))
                 if not isinstance(body,dict):
@@ -295,6 +306,16 @@ def public_server(root: Path, port: int, workspace=None, inventory=None, vision=
                         body.get('role_id'),body.get('board'),body.get('core'),body.get('modules'),body.get('role_alias'),body.get('source_saved_at'))
                 elif path=='/inventory/ui-assembly/cancel':
                     result=inventory.ui_assembly.cancel()
+                elif path=='/inventory/equipment/state-preview':
+                    result=inventory.state_actions.preview(body.get('account'),body.get('source'),body.get('instance_ids'),body.get('field'))
+                elif path=='/inventory/equipment/state-start':
+                    if not (native_risk['acknowledged'] and native_risk['enabled']):
+                        raise ValueError('请先在读取数据中启用风险模式，再修改游戏装备状态')
+                    result=inventory.state_actions.start(body.get('token'))
+                elif path=='/inventory/equipment/state-cancel':
+                    result=inventory.state_actions.cancel()
+                elif path=='/inventory/management/save':
+                    result={'annotations':inventory.management.save(body.get('account'),body.get('source'),body.get('updates'))}
                 elif '/equipment/' in path:
                     action=path.rsplit('/',1)[1]
                     if action=='inspect':result=inventory.equipment.inspect(body.get('account') or inventory.config.get('account'))
@@ -334,6 +355,12 @@ def public_server(root: Path, port: int, workspace=None, inventory=None, vision=
 
 
 def launch_window(title, mode, server, api=None, report=None, screenshot=None, smoke_js=None, smoke_action=None):
+    if mode == 'user' and os.name == 'nt':
+        try:
+            if ctypes.windll.shell32.IsUserAnAdmin():
+                title += '（管理员运行）'
+        except OSError:
+            pass
     profile = APP_DATA / ("desktop-" + mode)
     profile.mkdir(parents=True, exist_ok=True)
     threading.Thread(target=server.serve_forever, daemon=True).start()

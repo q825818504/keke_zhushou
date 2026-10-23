@@ -67,6 +67,7 @@ def prepare_public(app_version='1.0',app_revision=0) -> Path:
         'return { ...original, recommended }; } };', encoding="utf-8")
     subprocess.run(["node", str(ROOT / "desktop/compile_user.cjs"), str(OUTPUT / "app.js")], check=True)
     (OUTPUT / "inventory_sync.js").write_bytes((ROOT / "inventory_sync.js").read_bytes())
+    (OUTPUT / "inventory_management.js").write_bytes((ROOT / "inventory_management.js").read_bytes())
     (OUTPUT / "vision_scan.js").write_bytes((ROOT / "vision_scan.js").read_bytes())
     (OUTPUT / "native_assembly.js").write_bytes((ROOT / "native_assembly.js").read_bytes())
     (OUTPUT / "native_assembly_planner.js").write_bytes((ROOT / "native_assembly_planner.js").read_bytes())
@@ -74,9 +75,12 @@ def prepare_public(app_version='1.0',app_revision=0) -> Path:
     (OUTPUT / "role_build_standard.js").write_bytes((ROOT / "role_build_standard.js").read_bytes())
     nav = '<nav id="userPrimaryNav" aria-label="功能导航">'
     for route, label in [("team", "自动配队"), ("characters", "角色"), ("arc-drives", "弧盘"), ("cassettes", "空幕"), ("drive-blocks", "驱动块"), ("role-build", "角色配装"), ("role-build-plus", "角色配装"), ("inventory", "背包数据"), ("vision", "读取数据")]:
+        if route == 'inventory':
+            nav += '<div class="user-nav-group"><button class="user-primary-nav-item" type="button" data-user-route="inventory">背包数据</button><button class="user-primary-nav-item user-nav-subitem" type="button" data-user-route="inventory-management">背包管理</button></div>'
+            continue
         nav += '<button class="user-primary-nav-item" type="button" data-user-route="' + route + '">' + label + ('<span class="role-build-plus" aria-label="PLUS">PLUS</span>' if route == 'role-build-plus' else '') + '</button>'
     nav += "</nav>"
-    scripts = "".join('<script src="' + path + '"></script>' for path in bundles + ["recommendations.js", "cassette_scoring.js", "drive_layout_solver.js", "terminal_puzzle.js", "inventory_sync.js", "native_assembly_planner.js", "native_assembly.js", "role_build.js", "role_build_standard.js", "vision_scan.js", "app.js"])
+    scripts = "".join('<script src="' + path + '"></script>' for path in bundles + ["recommendations.js", "cassette_scoring.js", "drive_layout_solver.js", "terminal_puzzle.js", "inventory_sync.js", "inventory_management.js", "native_assembly_planner.js", "native_assembly.js", "role_build.js", "role_build_standard.js", "vision_scan.js", "app.js"])
     html = (
         '<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">'
         '<meta name="viewport" content="width=device-width,initial-scale=1">'

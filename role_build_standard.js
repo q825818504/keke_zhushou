@@ -281,7 +281,7 @@ window.KekeRoleBuildStandard = (() => {
         if(current!==generation||selectedRoleId!==roleId)return;
         worker?.terminate();worker=null;calculating=false;
         if(event.data.error)actionMessage=event.data.error;
-        else {proposal=event.data.result;actionMessage=proposal.complete?`已比较 ${proposal.schemes_evaluated} 种驱动组合，并在推荐空幕四件套约束内验证为最高分。`:'已找到可用方案，但搜索达到限制，尚未证明为最高分。';}
+        else {proposal=event.data.result;actionMessage=proposal.complete?`已比较 ${proposal.schemes_evaluated} 种驱动组合，强制满足套装四种驱动；优先最大化盘面被动对应型号数量，再比较词条评分。`:'已找到满足套装四种驱动的可用方案，但搜索达到限制，尚未证明盘面被动数量和评分最优。';}
         paint();
       };
       worker.onerror=()=>{worker?.terminate();worker=null;calculating=false;actionMessage='计算线程无法运行，请刷新重试。';paint();};
