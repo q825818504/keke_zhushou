@@ -332,11 +332,16 @@ def public_server(root: Path, port: int, workspace=None, inventory=None, vision=
                     if not inventory.components:raise ValueError('此版本尚未内置原生组件')
                     action=path.rsplit('/',1)[1]
                     method={'check':inventory.components.inspect,'deploy':inventory.components.deploy,'remove':inventory.components.remove}[action]
+                    diagnostics.event('原生组件操作开始',action=action,requested_game_directory=body.get('game_directory'),
+                        risk_mode_enabled=bool(native_risk['acknowledged'] and native_risk['enabled']))
                     with inventory.lock:
                         if action=='deploy' and not (native_risk['acknowledged'] and native_risk['enabled']):
                             raise ValueError('请先在读取数据中启用风险模式，再部署 DLL 组件')
                         if inventory.native_busy():raise ValueError('原生读取或装备操作期间不能修改组件')
                         result=method(body.get('game_directory'))
+                    diagnostics.event('原生组件操作完成',action=action,bundle_ready=result.get('bundle_ready'),
+                        deployment_ready=result.get('deployment_ready'),endpoint_scan_state=result.get('endpoint_scan_state'),
+                        issue_count=len(result.get('issues',[])))
                 else:
                     with inventory.lock:
                         if path=='/inventory/start' and not (native_risk['acknowledged'] and native_risk['enabled']):
