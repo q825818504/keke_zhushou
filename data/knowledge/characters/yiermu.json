@@ -3038,9 +3038,9 @@
     },
     {
       "type": "character_portrait",
-      "source_url": "https://api.everness.info/data/assets/UI_Icon/Appearance/1090/Fashion_1090_0/256_Fashion_1090_0.webp",
-      "local_path": "data/resources/characters/yiermu/characters/yiermu.webp",
-      "sha256": "4a7c42705b154761953934c30f794ac5a7dbf74f8463eed8a7ea5eaf49564f21"
+      "source_url": "https://cdn.prydwen.gg/images/nte/characters/elyms_full.webp",
+      "local_path": "data/resources/characters/yiermu/characters/elyms_full.webp",
+      "sha256": "ac712af9b049d9123621c85f8677d9a3f049ae57bef8b4c31d280711f11a98d8"
     },
     {
       "type": "awakening_icon",
