@@ -26,7 +26,16 @@ def export_config(root, destination):
     atomic_json(destination/'config.json',{'schema':1,'bindings':bindings})
     document=load_config(destination)
     assets={}
-    for relative in sorted(set(re.findall(r'data/[^"\s]+?\.(?:webp|png|jpe?g|gif|svg)',json.dumps(document,ensure_ascii=False)))):
+    def local_asset_paths(value):
+        if isinstance(value,dict):
+            for item in value.values():
+                yield from local_asset_paths(item)
+        elif isinstance(value,list):
+            for item in value:
+                yield from local_asset_paths(item)
+        elif isinstance(value,str) and not value.startswith(('http://','https://')):
+            yield from re.findall(r'data/[^"\s]+?\.(?:webp|png|jpe?g|gif|svg)',value)
+    for relative in sorted(set(local_asset_paths(document))):
         source=(root/relative).resolve()
         if not source.is_relative_to(root/'data') or not source.is_file():
             raise ValueError('公共配置图片缺失：'+relative)
