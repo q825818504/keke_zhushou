@@ -1,7 +1,7 @@
 {
   "schema": 1,
-  "last_published": "1.7",
-  "config_revision": 20,
+  "last_published": "1.8",
+  "config_revision": 21,
   "config_hash": "fd79fd63323422e39636dd4d2ce1282b5b35d97fb422506b7e28e6ceecd45d16",
-  "app_revision": 2
+  "app_revision": 0
 }
