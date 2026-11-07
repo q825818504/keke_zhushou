@@ -1,0 +1,107 @@
+{
+  "schema_version": "0.3",
+  "entity_type": "character",
+  "id": "exe",
+  "name": "Exe",
+  "review_status": "draft",
+  "basic": {
+    "rarity": "S",
+    "element": "",
+    "cassette_type": "",
+    "role": "待补充",
+    "position": "待补充",
+    "rating": "待确认",
+    "summary": "1.5 版本下半阶段登场；角色属性、技能与养成资料待补充。"
+  },
+  "recommended": {
+    "weapon": null,
+    "cassette": null
+  },
+  "terminal": null,
+  "drive_layout_image": "",
+  "base_stats": {
+    "level_cap": 0,
+    "stats": []
+  },
+  "skills": [],
+  "awakenings": [],
+  "resonance": [],
+  "voice_actors": {},
+  "cultivation": {
+    "ascension": [],
+    "skills": [],
+    "material_catalog": {}
+  },
+  "assets": [],
+  "provenance": {
+    "source": "official_announcement",
+    "source_name": "TapTap · 异环 1.5 版本介绍",
+    "source_url": "https://www.taptap.cn/game-event/13483",
+    "imported_at": "2026-11-05T12:25:18Z",
+    "source_license": "官方公告",
+    "user_supplied_sources": []
+  },
+  "scope": {
+    "included": [
+      "角色名称",
+      "S 级稀有度",
+      "1.5 下半阶段登场信息"
+    ],
+    "excluded": [
+      "属性",
+      "定位",
+      "技能",
+      "觉醒",
+      "共鸣",
+      "基础属性",
+      "养成材料",
+      "推荐配装",
+      "配队推荐"
+    ],
+    "note": "仅录入当前可核实的公告信息；其他字段待官方或游戏内资料发布后补全。"
+  },
+  "manual_review": [
+    {
+      "field": "basic.element",
+      "value": "待官方或游戏内资料确认",
+      "source_type": "official_announcement",
+      "status": "pending"
+    },
+    {
+      "field": "skills",
+      "value": "角色单体资料尚未发布到当前可读取数据源",
+      "source_type": "import_validation",
+      "status": "pending"
+    },
+    {
+      "field": "awakenings",
+      "value": "待补充",
+      "source_type": "import_validation",
+      "status": "pending"
+    },
+    {
+      "field": "resonance",
+      "value": "待补充",
+      "source_type": "import_validation",
+      "status": "pending"
+    },
+    {
+      "field": "base_stats",
+      "value": "待补充",
+      "source_type": "import_validation",
+      "status": "pending"
+    },
+    {
+      "field": "cultivation",
+      "value": "待补充",
+      "source_type": "import_validation",
+      "status": "pending"
+    },
+    {
+      "field": "assets",
+      "value": "角色图标待补充",
+      "source_type": "asset_validation",
+      "status": "pending"
+    }
+  ]
+}

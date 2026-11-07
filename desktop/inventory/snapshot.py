@@ -1,6 +1,8 @@
 """Bounded snapshot reader: page identity, source revision and UID validation."""
 import json
 
+from .core import CoreRpcError
+
 META = ('providerId','domain','snapshotId','generation','domainKey','observedUnixUs','observedMonotonicMs',
         'enabled','ready','state','recordCount','sourceRecordCount','enumerationComplete','complete',
         'sourceCoverage','changeCoverage','missing','failed','truncated')
@@ -69,11 +71,21 @@ def read_snapshot(core, kind, check):
         identity += ['collectionComplete','collectionScope','sourceRecordCount']
     rows, pages, offset, size = [], [], 0, 0
     method = 'native.' + domain + '.page' if field != 'records' else 'native.snapshot.page'
+    raw_equipment = False
     while True:
         params = {'snapshotId':header['snapshotId'],'offset':offset,'limit':64, **scope}
         if field == 'records':
             params['domain'] = domain
-        page = core.call(method, params, check)
+        try:
+            page = core.call(method, params, check)
+        except CoreRpcError as error:
+            if (kind != 'equipment' or pages or error.domain_code != 'NATIVE_MAPPING_UNSUPPORTED'
+                    or error.data.get('detail') != 'native_projection_unavailable'):
+                raise
+            raw_equipment = True
+            method, field = 'native.snapshot.page', 'records'
+            identity.append('characterRefs')
+            page = core.call(method, {**params, 'domain': domain}, check)
         if any(type(page.get(k)) is not type(header[k]) or page.get(k)!=header[k] for k in identity):
             raise ValueError('分页来源发生变化，本次数据已丢弃')
         part = page.get(field)
@@ -87,7 +99,7 @@ def read_snapshot(core, kind, check):
         size += len(json.dumps(page,ensure_ascii=False).encode())
         if size > 64*1024*1024:
             raise ValueError('数据超过64MB限制')
-        if kind == 'equipment' and page.get('projectionComplete') is not True:
+        if kind == 'equipment' and not raw_equipment and page.get('projectionComplete') is not True:
             raise ValueError('装备字段映射尚未完成')
         rows.extend(part)
         # Keep every returned field, including sparse-profile diagnostics and equipped references.
@@ -95,6 +107,13 @@ def read_snapshot(core, kind, check):
         offset = end
         if next_offset is None:
             break
+    if raw_equipment:
+        from .equipment_projection import project_equipment
+        rows, characters, references = project_equipment(rows, header['characterRefs'])
+        for page in pages:
+            page.update(characters=characters, referencedItemUids=references, projectionComplete=True,
+                        statProvenance={'main': 'static_catalog_curve', 'percent': 'static_catalog',
+                                        'sub': 'raw_save_struct_float'})
     if kind == 'equipment':
         keys = [uid(row.get('uid')) for row in rows]
         if len(keys) != len(set(keys)):

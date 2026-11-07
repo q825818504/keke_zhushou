@@ -2,6 +2,12 @@
 
 日期：2026-10-08。用户确认：只接识别与扫描，暂不接单件评分；自动游戏账号识别暂缓。
 
+## 背包管理锁定/弃置的 OCR 参考（2026-10-21）
+
+NTE Drive Calculator 的上游视觉代码已有鼠标装备状态同步路线：[状态图标检测](https://github.com/hxwd94666/NTE-Drive-Calculator/blob/0e7a6b4e8e61d7a288e520bbc192a411d68c2fb1/src/integrations/vision/equipment_state_detection.py) 先用右侧锁定/弃置按钮区域的 OpenCV 灰度与 HSV 亮度比例判断当前状态；[鼠标状态同步](https://github.com/hxwd94666/NTE-Drive-Calculator/blob/0e7a6b4e8e61d7a288e520bbc192a411d68c2fb1/src/integrations/vision/mouse_state_sync.py) 按扫描网格坐标重新选中目标装备，再用右侧详情面板图像与原扫描截图比对身份；只在身份及当前状态均匹配时点击；锁定切到弃置时识别并确认游戏弹窗；最后重新采图确认目标状态。这里的状态检测是图像分类/颜色阈值，不是文字 OCR。
+
+计算器的鼠标 `MouseEquipmentStateSync` 和手柄状态切换代码可作为后续 OCR 操作参考，但目前没有接入可可助手的「背包管理」按钮。OCR 装备只有扫描批次内的实例身份，不能映射为 DLL 装备 UID；OCR 操作必须沿用扫描顺序、截图身份复核和状态复核，不能把 scan-local ID 传给原生 setter。本轮仅接入 DLL 原生锁定/弃置，没有向游戏发送 OCR 输入。
+
 ## 已核实的公开实现
 
 调查基准为 NTE-Drive-Calculator 提交 0e7a6b4e8e61d7a288e520bbc192a411d68c2fb1。本轮逐项检查29个核心Python文件，可解析且无缺失；来源哈希与导入依赖记录在规划目录的artifacts/ocr-source-audit.json。语法核验不代表模型推理、扫描或实机测试已通过。

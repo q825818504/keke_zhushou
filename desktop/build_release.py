@@ -92,17 +92,26 @@ def prepare(root=ROOT, config_only=False,patch_release=False):
     if patch_release and manifest['config_hash']!=state.get('config_hash'):raise ValueError('同版本补丁不得隐式修改公共配置，请先单独发布配置')
     if not config_only:
         manifest['release_notes']=notes
-        from build import build
-        from build import make_icon
+        from build import build, make_icon, ssl_runtime_asset
         icon=make_icon(root/'build/desktop')
         manifest['prerequisites']=prepare_prerequisites(root,output)
         installer=output/f'KokoAssistantSetup-v{app_version}.exe'
-        subprocess.run([sys.executable,'-m','PyInstaller','--noconfirm','--clean','--onefile','--windowed',
+        installer_args=[sys.executable,'-m','PyInstaller','--noconfirm','--clean','--onefile','--windowed',
                         '--name',installer.stem,'--distpath',str(output),'--workpath',str(root/'build/installer'),
                         '--specpath',str(root/'build/installer'),'--paths',str(root/'desktop'),
                         '--icon',str(icon),'--add-data',str(root/'desktop/assets/mint-avatar.ico')+';assets',
                         '--add-data',str(root/'desktop/assets/mint-avatar.png')+';assets',
-                        '--add-data',str(root/'desktop/update-trust.json')+';.',str(root/'desktop/installer_entry.py')],check=True)
+                        '--add-data',str(root/'desktop/update-trust.json')+';.']
+        ssl_asset=ssl_runtime_asset()
+        if ssl_asset:
+            installer_args += ['--add-data',ssl_asset]
+        installer_args += [str(root/'desktop/installer_entry.py')]
+        subprocess.run(installer_args,check=True)
+        if ssl_asset:
+            from PyInstaller.archive.readers import CArchiveReader
+            installer_archive=CArchiveReader(str(installer))
+            if not any('codex-rejected-cas.pem' in entry for entry in installer_archive.toc):
+                raise RuntimeError('Frozen SSL policy data is missing from the installer EXE')
         checksum=digest(installer)
         published_installer=installer.with_name(installer.stem+'-'+checksum[:12]+'.exe')
         installer.replace(published_installer)

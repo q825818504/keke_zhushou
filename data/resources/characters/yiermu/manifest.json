@@ -1,0 +1,10 @@
+{
+  "resource_root": "data/resources/characters/yiermu",
+  "entity_type": "character",
+  "entity_id": "yiermu",
+  "asset_count": 10,
+  "source_snapshot": "https://everness.info/zh-Hans/espers/1090",
+  "source_license": "未声明",
+  "updated_at": "2026-11-05",
+  "supplemental_art_source": "https://www.prydwen.gg/neverness-to-everness/characters/elyms"
+}

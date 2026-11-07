@@ -83,7 +83,9 @@
       limit:1,
       maxNodes,
       allowPartial:true,
-      rankBy:'score_first'
+      // Lexicographic priority, never a finite bonus that stats can outweigh.
+      // The four required shapes remain hard constraints in every profile.
+      rankBy:'passive_strict'
     });
     const best=search.candidates[0];
     if(!best){
@@ -101,6 +103,7 @@
     const driveScore=best.metrics.equipmentScore/capacity;
     return {core:tape.id,modules,exclude_others:excludeOthers,complete:search.optimalityProven===true,skipped,
       nodes:search.nodes,tapeScore,driveScore,total:tapeScore+driveScore,filled:best.metrics.filled,capacity,
+      ranking_policy:'passive_strict',preferred_model:best.plan.preferred_model,preferred_count:best.metrics.preferred,
       cassette_id:String(cassette.id),schemes_evaluated:search.generatedProfiles,schemes_checked:search.examinedProfiles};
   }
   return {optimize};

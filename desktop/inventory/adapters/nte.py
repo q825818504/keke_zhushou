@@ -6,6 +6,8 @@ import hashlib
 import json
 import os
 import subprocess
+import time
+import diagnostics
 from . import Observation, SessionChanged
 from ..core import Core
 from ..catalog import display_names
@@ -15,24 +17,31 @@ from ..contract import CONTRACT_VERSION, validate_domain
 def capture_pid():
     if os.name != 'nt':
         raise RuntimeError('游戏同步仅支持Windows桌面版')
-    script = "@(Get-Process HTGame -ErrorAction SilentlyContinue | ForEach-Object { @{pid=$_.Id;created=$_.StartTime.ToFileTime()} }) | ConvertTo-Json -Compress"
+    script = "@(Get-Process HTGame -ErrorAction SilentlyContinue | ForEach-Object { $created=$null; try{$created=$_.StartTime.ToFileTime()}catch{}; @{pid=$_.Id;created=$created} }) | ConvertTo-Json -Compress"
     environment=dict(os.environ);environment.pop('PSModulePath',None)
     result = subprocess.run(['powershell.exe','-NoProfile','-NonInteractive','-Command',"[Console]::OutputEncoding=[Text.UTF8Encoding]::new(); "+script],
         env=environment,capture_output=True, encoding='utf-8', timeout=5, creationflags=subprocess.CREATE_NO_WINDOW)
     if result.returncode:
+        diagnostics.event('原生端点进程查询失败',exit_code=result.returncode,stderr=(result.stderr or '')[-800:])
         raise RuntimeError('无法核对游戏进程')
     values = json.loads(result.stdout or '[]')
     if isinstance(values,dict):
         values = [values]
     if len(values)!=1:
+        diagnostics.event('原生端点进程数量不符合要求',process_count=len(values),processes=[{'pid':row.get('pid'),'created':row.get('created')} for row in values])
         raise RuntimeError('请登录游戏并只保留一个游戏进程')
     value = values[0]
+    if value.get('created') is None:
+        diagnostics.event('原生端点进程启动时间读取失败',pid=value.get('pid'))
+        raise RuntimeError('无法读取游戏进程启动时间，详细信息已记录到诊断日志')
     kernel = ctypes.WinDLL('kernel32',use_last_error=True)
     kernel.WaitNamedPipeW.argtypes = [ctypes.c_wchar_p,ctypes.c_uint32]
     kernel.WaitNamedPipeW.restype = ctypes.c_int
     pipe = chr(92)*2 + '.' + chr(92) + 'pipe' + chr(92) + 'nte.capture.v1.' + str(value['pid']) + '.' + str(value['created'])
-    if not kernel.WaitNamedPipeW(pipe,1) and ctypes.get_last_error() not in (5,121,231):
-        raise RuntimeError('当前游戏的原生组件未就绪。请在账号数据中检测环境并部署配套组件，重新启动游戏并登录后重试')
+    waiting=bool(kernel.WaitNamedPipeW(pipe,1));winerror=0 if waiting else ctypes.get_last_error()
+    diagnostics.event('原生端点等待检查',pid=value['pid'],created=value['created'],pipe=pipe,wait_succeeded=waiting,winerror=winerror)
+    if not waiting and winerror not in (5,121,231):
+        raise RuntimeError(f'当前游戏的原生组件端点未就绪（WaitNamedPipe WinError {winerror}）。请查看诊断日志并核对组件部署')
     return value['pid']
 
 
@@ -110,6 +119,36 @@ def normalize_snapshot(kind, raw):
     return validate_domain(kind,value)
 
 
+def recover_elyms_profile(snapshot):
+    """Project observed Elyms fields when the pinned Core lacks her catalog identity."""
+    if snapshot['header'].get('collectionScope') != 'CARD_not_temporary_excludes_FINAL_TOWER_CHARACTER_and_trial':
+        return False
+    if any(row.get('character_id') == 1090 for row in snapshot['rows']):
+        return False
+    matches = [
+        row for page in snapshot['pages'] for row in (page.get('rawRecords') or [])
+        if isinstance(row, dict) and row.get('ItemID') in (1090, '1090')
+    ]
+    if len(matches) != 1:
+        return False
+    row = matches[0]
+    if (row.get('kind') != 'HTCharacterItem' or row.get('ownership') != 'permanent_CARD_member'
+            or row.get('bIsTemporary') is not False
+            or row.get('duplicateObjectObserved') is not False or row.get('duplicateUidObserved') is not False):
+        return False
+    profile = {'character_id': 1090}
+    for source, target, low, high in (
+        ('CharacterLevel', 'character_level', 1, 80),
+        ('BreakthroughLevel', 'breakthrough_stage', 0, 6),
+        ('AwakenLevel', 'awakening_level', 0, 6),
+    ):
+        value = row.get(source)
+        if type(value) is int and low <= value <= high:
+            profile[target] = value
+    snapshot['rows'].append(profile)
+    return True
+
+
 class NteAdapter:
     adapter_id='nte-native-v1'
     domains=tuple(DOMAINS)
@@ -139,29 +178,52 @@ class NteAdapter:
             raise ValueError('目录缺少原生nte-core.exe')
         # User-selected component has to match the public pinned build, not just its local manifest.
         expected = json.loads((Path(__file__).parents[1]/'component-identity.json').read_text(encoding='utf-8'))
-        if core_digest(executable)!=expected['core_sha256']:
+        actual_core_hash=core_digest(executable)
+        if actual_core_hash!=expected['core_sha256']:
+            diagnostics.event('原生Core文件校验失败',path=str(executable),expected_sha256=expected['core_sha256'],actual_sha256=actual_core_hash)
             raise ValueError('Core不是已适配的公开版本（0.4.4）；请使用说明中的固定版本组件')
         self.root=root
         self.executable=executable
+        diagnostics.event('原生Core文件校验通过',path=str(executable),sha256=actual_core_hash)
 
     def open(self,check):
         check()
         self.pid=self.pid_reader()
-        self.core=self.factory(self.executable,self.pid,self.root/'data')
+        diagnostics.event('原生Core连接开始',pid=self.pid,core_path=str(self.executable))
+        try:self.core=self.factory(self.executable,self.pid,self.root/'data')
+        except Exception as error:
+            diagnostics.event('原生Core握手失败',pid=self.pid,error_type=type(error).__name__,error=str(error)[:1200],
+                stderr_tail=' / '.join(getattr(getattr(error,'__cause__',None),'stderr_tail',[]) or []))
+            raise
+        diagnostics.event('原生Core握手成功',pid=self.pid,protocol_version=self.core.hello.get('protocol_version'),
+            capabilities=self.core.hello.get('capabilities',[]))
         check()
 
     def read(self,kind,check,previous=None):
-        snapshot=read_snapshot(self.core,kind,check)
+        started=time.perf_counter()
+        try:snapshot=read_snapshot(self.core,kind,check)
+        except Exception as error:
+            diagnostics.event('原生快照读取失败',pid=self.pid,domain=kind,error_type=type(error).__name__,error=str(error)[:1200],
+                rpc_code=getattr(error,'code',None),domain_code=getattr(error,'domain_code',None),elapsed_ms=round((time.perf_counter()-started)*1000))
+            raise
         provider=snapshot['header']['providerId']
         if self.provider is not None and provider!=self.provider:
             raise SessionChanged('游戏会话已变化，停止本次同步')
         self.provider=provider
-        if self.pid_reader()!=self.pid:
+        current_pid=self.pid_reader()
+        if current_pid!=self.pid:
+            diagnostics.event('原生读取期间游戏进程变化',expected_pid=self.pid,actual_pid=current_pid,domain=kind)
             raise SessionChanged('游戏进程已变化，停止本次同步')
         snapshot['saved_at']=datetime.now(timezone.utc).isoformat()
+        recovered = kind == 'characters' and recover_elyms_profile(snapshot)
         snapshot['display_names']=display_names(self.root,kind,snapshot['rows'])
+        if recovered:
+            snapshot['display_names']['1090'] = '曳尔沐'
         if kind=='characters':
             snapshot['observed_profiles']=merge_profiles((previous or {}).get('observed_profiles',[]),snapshot['rows'],snapshot['saved_at'])
+        diagnostics.event('原生快照读取成功',pid=self.pid,domain=kind,row_count=len(snapshot.get('rows',[])),
+            revision=snapshot.get('header',{}).get('revision'),collection_complete=snapshot.get('header',{}).get('collectionComplete'),
+            elapsed_ms=round((time.perf_counter()-started)*1000))
         return Observation(normalize_snapshot(kind,snapshot),snapshot)
 
     def abort(self):

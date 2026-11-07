@@ -1738,6 +1738,15 @@ body:not(.user-mode) .topbar { position:sticky; top:0; z-index:40; background:rg
 .inventory-other-data { margin:0 0 20px;color:#817a8e;font-size:12px; }
 .inventory-other-data > summary { cursor:pointer; }
 .inventory-other-data .inventory-actions { margin-top:12px; }
+.inventory-manual-roles { display:flex;align-items:center;justify-content:space-between;gap:18px;margin:0 0 18px;padding:16px;border:1px solid #e3def8;border-radius:14px;background:#faf9ff; }
+.inventory-manual-roles strong { color:#463b84;font-size:13px; }
+.inventory-manual-roles p { margin:6px 0 0;color:#777184;font-size:11px;line-height:1.6; }
+.inventory-manual-role-actions { display:flex;align-items:center;gap:8px;min-width:min(100%,360px); }
+.inventory-manual-role-actions select { flex:1;min-width:0;min-height:40px;padding:9px 11px;border:1px solid #d8d5e2;border-radius:9px;background:#fff;color:#282735;font:inherit;font-size:13px; }
+.inventory-manual-role-actions button,.inventory-manual-remove { white-space:nowrap; }
+.inventory-manual-role-actions button:disabled { opacity:.55;cursor:not-allowed; }
+.inventory-manual-remove { margin:0 0 12px 4px; }
+@media(max-width:800px) { .inventory-manual-roles,.inventory-manual-role-actions { align-items:stretch;flex-direction:column;min-width:0; } }
 
 #userVisionRoute select, #userVisionRoute textarea { border: 1px solid var(--border-color, #ddd); border-radius: 10px; padding: 10px; background: var(--card-bg, #fff); color: inherit; font: inherit; }
 #userVisionRoute textarea { width: 100%; box-sizing: border-box; font-family: monospace; }
@@ -1946,6 +1955,10 @@ body:not(.user-mode) .topbar { position:sticky; top:0; z-index:40; background:rg
 .rb-status-dot { width:7px; height:7px; border-radius:50%; background:#758295; }
 .rb-status-dot.is-ready { background:#51d594; }
 .rb-toolbar { display:flex; gap:8px; margin:17px 0 16px; }
+.rb-manual-add { display:flex; align-items:flex-end; gap:8px; margin:-7px 0 14px; padding:11px; background:#0b1118; border:1px solid #284158; border-radius:8px; }
+.rb-manual-add label { display:flex; flex:1; min-width:0; flex-direction:column; gap:6px; color:#b8c9df; font-size:11px; }
+.rb-manual-add select { width:100%; min-width:0; min-height:38px; padding:7px 10px; color:var(--rb-ink); background:#101b27; border:1px solid #37617a; border-radius:7px; }
+.rb-manual-add select:focus-visible { outline:2px solid #73b5f5; outline-offset:1px; }
 .rb-search { display:flex; flex:1; min-width:0; align-items:center; gap:9px; padding:0 11px; color:var(--rb-muted); background:#0b1118; border:1px solid var(--rb-line); border-radius:7px; }
 .rb-search svg { flex:none; width:17px; height:17px; stroke:currentColor; stroke-width:1.6; }
 .rb-search input { width:100%; min-width:0; height:37px; color:var(--rb-ink); caret-color:var(--rb-cyan); background:transparent; border:0; outline:0; }
@@ -1967,6 +1980,9 @@ body:not(.user-mode) .topbar { position:sticky; top:0; z-index:40; background:rg
 .rb-role-card small { color:#b8c9df; font-size:11px; }
 .rb-role-card[aria-pressed="true"] small { color:#e6f2ff; }
 .rb-role-card i { align-self:flex-end; width:8px; height:8px; margin-left:auto; background:#47d494; border-radius:50%; }
+.rb-role-card i.is-manual { background:#f1b75f; }
+.rb-manual-note { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-top:12px; padding:11px 12px; color:#f1d9a8; background:#211a10; border:1px solid #66502b; border-radius:7px; font-size:12px; line-height:1.6; }
+.rb-manual-note p { margin:0; }
 .rb-detail { margin-top:17px; padding:20px; border:1px solid var(--rb-line); border-radius:10px; background:#0b1017; }
 .rb-detail-heading { display:flex; align-items:center; justify-content:space-between; gap:20px; margin-bottom:22px; }
 .rb-detail-side { display:flex; flex-direction:column; align-items:flex-end; gap:11px; margin-left:auto; }
@@ -2016,7 +2032,7 @@ body:not(.user-mode) .topbar { position:sticky; top:0; z-index:40; background:rg
 .rb-operation-preview { margin-top:18px; padding:15px; border:1px solid #536b87; border-radius:7px; color:#d7e3f1; font-size:12px; }
 .rb-operation-preview li { margin-bottom:7px; }
 .rb-operation-preview button { margin-right:10px; }
-@media(max-width:600px) { .rb-plan-layout { grid-template-columns:1fr; gap:18px; } .rb-action-buttons > button { flex:1; } .rb-data-selectors { grid-template-columns:1fr; } .rb-header { flex-wrap:wrap;gap:12px; } .rb-account { margin-left:0; } .rb-toolbar { flex-wrap:wrap; } .rb-search { flex-basis:100%; } }
+@media(max-width:600px) { .rb-plan-layout { grid-template-columns:1fr; gap:18px; } .rb-action-buttons > button { flex:1; } .rb-data-selectors { grid-template-columns:1fr; } .rb-header { flex-wrap:wrap;gap:12px; } .rb-account { margin-left:0; } .rb-toolbar { flex-wrap:wrap; } .rb-search { flex-basis:100%; } .rb-manual-add { flex-wrap:wrap; } .rb-manual-add label { flex-basis:100%; } .rb-manual-note { align-items:flex-start; flex-direction:column; } }
 .rb-drive-art { display:block; width:100%; height:100%; }
 .rb-board-piece .rb-drive-art { overflow:visible; }
 .rb-board-cell { display:grid; place-items:center; min-width:0; color:#b9d0e9; background:#16202c; border:1px solid #34455b; border-radius:5px; font-size:10px; font-weight:650; }
@@ -2376,3 +2392,24 @@ body:not(.desktop-mode) .user-footer { color: #66666f; }
 .rb-role-card {position:relative;}
 .rb-role-card > .rb-role-lock-badge {position:absolute;right:7px;top:5px;display:block;width:14px;height:14px;color:#ff5c65;pointer-events:none;}
 .rb-role-lock-badge svg {display:block;width:14px;height:14px;}
+
+/* Backpack confirmation and batch filters share the reading-risk dialog surface. */
+.bm-confirm-dialog .bm-confirm-copy{white-space:pre-wrap;line-height:1.75;margin-top:18px;max-height:55vh;overflow:auto;font-size:14px;color:#514c60}
+.bm-filter-dialog{width:min(740px,calc(100vw - 32px));max-height:90vh;overflow:auto}
+.bm-filter-body{max-height:56vh;overflow:auto;margin-top:20px;padding-right:8px}
+.bm-filter-dialog fieldset{border:0;border-bottom:1px solid #e7e5ef;margin:0 0 16px;padding:0 0 16px;min-width:0}
+.bm-filter-dialog legend{font-weight:650;font-size:14px;margin-bottom:10px;color:#343044}
+.bm-filter-options{display:flex;flex-wrap:wrap;gap:8px}
+.bm-filter-options label{display:flex;align-items:center;gap:6px;padding:8px 12px;border:1px solid #ded9ed;border-radius:8px;font-size:13px;cursor:pointer;background:#faf9fd;color:#514c60}
+.bm-filter-options label:has(input:checked){background:#eeebff;border-color:#7663d8;color:#4936ad}
+.bm-filter-options input{accent-color:#5740c3}
+.bm-filter-options label:has(input:disabled){opacity:.5;cursor:default}
+.bm-filter-dialog .inventory-actions{flex-wrap:wrap;gap:8px}
+.bm-bulk-actions{display:flex;flex-wrap:wrap;gap:8px}
+.bm-bulk-actions button{padding:8px 12px;border:1px solid #bcb4d8;border-radius:8px;background:#f7f5ff;color:#4936ad;cursor:pointer}
+.bm-bulk-actions button:hover{background:#eae5ff}
+.bm-bulk-actions button:focus-visible,.bm-filter-dialog button:focus-visible,.bm-confirm-dialog button:focus-visible{outline:2px solid #7663d8;outline-offset:2px}
+.bm-list-controls{flex-wrap:wrap;gap:12px}
+
+.bm-filter-dialog .inventory-actions button:not(.primary-button),.bm-confirm-dialog .inventory-actions button:not(.primary-button){padding:10px 15px;border:1px solid #ded9ed;border-radius:10px;background:#faf9fd;color:#514c60;cursor:pointer;font:inherit;font-size:14px}
+.bm-filter-dialog .inventory-actions button:not(.primary-button):hover,.bm-confirm-dialog .inventory-actions button:not(.primary-button):hover{background:#eeebff;border-color:#b6aadf}

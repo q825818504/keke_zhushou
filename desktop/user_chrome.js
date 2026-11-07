@@ -19,6 +19,7 @@ window.addEventListener('DOMContentLoaded', () => {
     'role-build':'<path d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Z"/><path d="m4 7.5 8 4.5 8-4.5M12 12v9"/>',
     'role-build-plus':'<path d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Z"/><path d="m4 7.5 8 4.5 8-4.5M12 12v9"/>',
     inventory:'<path d="m3 7 9-4 9 4v10l-9 4-9-4V7Zm0 0 9 4 9-4M12 11v10"/>',
+    'inventory-management':'<path d="M4 5h16M4 12h16M4 19h16"/><circle cx="2.5" cy="5" r=".5"/><circle cx="2.5" cy="12" r=".5"/><circle cx="2.5" cy="19" r=".5"/>',
     vision:'<path d="M3 8V3h5m8 0h5v5M3 16v5h5m8 0h5v-5M5 12h14"/>'
   };
   document.querySelectorAll('.desktop-sidebar [data-user-route]').forEach(button=>{

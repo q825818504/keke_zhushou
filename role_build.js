@@ -70,7 +70,7 @@ window.KekeRoleBuild = (() => {
       if (!id || seen.has(id)) return false;
       seen.add(id); return true;
     }).map(row => {
-      const match = library.find(([name, data]) => String(data.id) === String(row.character_id) || nameKey(name) === nameKey(row.name));
+      const match = library.find(([name, data]) => (data.knowledge?.assets?.some(asset => asset.type === 'character_icon' && String(asset.source_url || '').includes('/Appearance/' + row.character_id + '/')) || String(data.id) === String(row.character_id)) || nameKey(name) === nameKey(row.name));
       return { id: String(row.character_id), name: row.name || match?.[0] || `角色 ${row.character_id}`, data: match?.[1], native: row, cassette: match?.[1]?.knowledge?.recommended?.cassette };
     });
   }

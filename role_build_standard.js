@@ -45,7 +45,14 @@ window.KekeRoleBuildStandard = (() => {
     const library = typeof characterData === "undefined" ? [] : Object.entries(characterData);
     return library.filter(([, data]) => data?.id && String(data.id) !== 'tajiduo').map(([name, data]) => {
       const active = data.knowledge?.terminal?.layout?.active_slots || data.knowledge?.recommended?.cassette?.terminal?.layout?.active_slots || [];
-      const board = active.filter(slot => Number.isInteger(slot?.row) && Number.isInteger(slot?.column)).map(slot => [slot.row, slot.column]);
+      let board = active.filter(slot => Number.isInteger(slot?.row) && Number.isInteger(slot?.column)).map(slot => [slot.row, slot.column]);
+      // The encyclopedia can center the playable board on a larger canvas.
+      if (board.some(([row, column]) => row > 5 || column > 5)) {
+        const firstRow = Math.min(...board.map(([row]) => row));
+        const firstColumn = Math.min(...board.map(([, column]) => column));
+        board = board.map(([row, column]) => [row - firstRow + 1, column - firstColumn + 1]);
+      }
+      if (board.some(([row, column]) => row < 1 || column < 1 || row > 5 || column > 5)) board = [];
       return { id: String(data.id), name, data, native: { character_id: String(data.id), board }, cassette: data.knowledge?.recommended?.cassette };
     });
   }
@@ -281,7 +288,7 @@ window.KekeRoleBuildStandard = (() => {
         if(current!==generation||selectedRoleId!==roleId)return;
         worker?.terminate();worker=null;calculating=false;
         if(event.data.error)actionMessage=event.data.error;
-        else {proposal=event.data.result;actionMessage=proposal.complete?`已比较 ${proposal.schemes_evaluated} 种驱动组合，并在推荐空幕四件套约束内验证为最高分。`:'已找到可用方案，但搜索达到限制，尚未证明为最高分。';}
+        else {proposal=event.data.result;actionMessage=proposal.complete?`已比较 ${proposal.schemes_evaluated} 种驱动组合，强制满足套装四种驱动；优先最大化盘面被动对应型号数量，再比较词条评分。`:'已找到满足套装四种驱动的可用方案，但搜索达到限制，尚未证明盘面被动数量和评分最优。';}
         paint();
       };
       worker.onerror=()=>{worker?.terminate();worker=null;calculating=false;actionMessage='计算线程无法运行，请刷新重试。';paint();};

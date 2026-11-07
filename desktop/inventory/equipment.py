@@ -193,7 +193,8 @@ class EquipmentService:
         for cid in sorted(state['characters']):
             rows = [row for row in state['items'].values() if row.get('equipped') is True
                     and row.get('equipped_character_id') == cid]
-            result.append({'character_id': cid, 'name': character_names.get(str(cid), '角色 ' + str(cid)),
+            name = character_names.get(str(cid)) or CATALOG['characters'].get(str(cid), {}).get('name')
+            result.append({'character_id': cid, 'name': name or '角色 ' + str(cid),
                            'drive': sum(row.get('kind') == 'module' for row in rows),
                            'tape': sum(row.get('kind') == 'core' for row in rows)})
         return result
