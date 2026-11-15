@@ -16,7 +16,7 @@ from release_publish import signed, audit_files
 from release_publish import configure, API, Gitee, git
 import requests
 from build_release import candidate_version
-from public_config import export_config, validated_config
+from public_config import export_config, validated_config, local_asset_paths
 import installer_entry
 
 
@@ -92,6 +92,16 @@ class UpdateTests(unittest.TestCase):
         result=refresh_config(data,'key',self.config,lambda _:None,lambda *_:{'kind':'config','config_schema':1,'revision':1,'package':{'sha256':'../../evil'}})
         self.assertEqual(result[0],self.config)
         self.assertFalse((self.root/'evil').exists())
+    def test_asset_paths_ignore_remote_urls_inside_text(self):
+        remote = 'https://api.everness.info/data/assets/UI/player/YH_UI_juexingICON/1009_2.webp'
+        local = 'data/resources/characters/yiermu/awaken/UI_UI_player_YH_UI_juexingICON_1009_2.webp'
+        document = {'source_url': remote, 'notes': '来源：' + remote,
+                    'markdown': '![icon](' + remote + ')',
+                    'mixed': remote + ' ' + local,
+                    'asset': local,
+                    'protocol_relative': '//example.org/data/remote.png'}
+        self.assertEqual(set(local_asset_paths(document)), {local})
+
     def test_export_matches_bindings_and_images(self):
         document=export_config(Path(__file__).resolve().parents[1],self.root/'export')
         self.assertEqual(set(document['bindings']),protocol.BINDINGS)
