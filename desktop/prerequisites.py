@@ -5,7 +5,9 @@ import subprocess
 from update_protocol import download_package
 
 DOWNLOADS={
-    'webview2':('MicrosoftEdgeWebView2RuntimeInstallerX64.exe','https://go.microsoft.com/fwlink/p/?LinkId=2124701'),
+    # Evergreen Bootstrapper（约 1.8 MB）：运行时自己联网装完整包，避免在 Gitee 附件里
+    # 常驻 205 MB 的离线安装文件。支持 /silent /install，与离线包参数一致。
+    'webview2':('MicrosoftEdgeWebView2Setup.exe','https://go.microsoft.com/fwlink/p/?LinkId=2124703'),
     'vcredist':('VC_redist.x64.exe','https://aka.ms/vc14/vc_redist.x64.exe')}
 
 
