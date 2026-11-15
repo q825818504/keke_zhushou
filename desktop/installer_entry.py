@@ -98,7 +98,7 @@ def install(root, public_key, progress):
     folder=root/'app'/manifest['version']; root.mkdir(parents=True,exist_ok=True)
     staging=root/'app'/('.stage-'+secrets.token_hex(8)); staging.parent.mkdir(parents=True,exist_ok=True)
     archive=root/('download-'+secrets.token_hex(8)+'.zip')
-    download_package(manifest['package'],archive,progress)
+    download_package(manifest['package'],archive,progress,cache_dir=root/'part-cache')
     progress('正在解压并校验安装内容…')
     safe_extract(archive,staging)
     info=json.loads((staging/'_internal/release-info.json').read_text())
@@ -114,6 +114,7 @@ def install(root, public_key, progress):
     atomic_json(root/'installation.json',{'product':'koko-assistant','root':str(root)})
     atomic_json(root/'active-version.json',{'directory':str(folder.relative_to(root)).replace('\\','/'),'version':manifest['version'],'revision':manifest.get('revision',0)})
     archive.unlink(missing_ok=True)
+    trim_cache(root/'part-cache')
     if os.name=='nt':
         import winreg
         with winreg.CreateKey(winreg.HKEY_CURRENT_USER,r'Software\Microsoft\Windows\CurrentVersion\Uninstall\KokoAssistant') as key:
@@ -130,6 +131,22 @@ def launch(root):
     folder=(root/selected).resolve()
     if not folder.is_relative_to((root/'app').resolve()): raise ValueError('安装记录目录无效')
     subprocess.Popen([str(folder/'KekeAssistantApp.exe')],cwd=str(folder),creationflags=getattr(subprocess,'CREATE_NO_WINDOW',0))
+
+
+def trim_cache(cache, limit=400*1024**2):
+    """保留最近用过的分块（约两个版本），避免缓存无限增长。"""
+    cache=Path(cache)
+    try:
+        files=sorted((p for p in cache.iterdir() if p.is_file()),key=lambda p:p.stat().st_mtime,reverse=True)
+    except OSError:
+        return
+    total=0
+    for path in files:
+        try: total+=path.stat().st_size
+        except OSError: continue
+        if total>limit:
+            try: path.unlink()
+            except OSError: pass
 
 
 def main():

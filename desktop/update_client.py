@@ -3,14 +3,42 @@ from pathlib import Path
 import json
 import os
 import secrets
+import shutil
 import subprocess
 import sys
 from update_protocol import CHANNEL, atomic_json, checked_hash, download_package, fetch_envelope, safe_extract, version
 from public_config import validated_config
 
 
+def assets_ready(directory, expected):
+    try:
+        marker = json.loads((directory / 'ready.json').read_text(encoding='utf-8'))
+        return marker.get('sha256') == expected and (directory / 'data').is_dir()
+    except Exception:
+        return False
+
+
+def link_assets(target, assets):
+    """把共享图片缓存链接进配置目录；跨卷或权限不足时回退复制。"""
+    linked = copied = 0
+    for source in assets.rglob('*'):
+        if not source.is_file() or source.name == 'ready.json':
+            continue
+        destination = target / source.relative_to(assets)
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        if destination.exists():
+            continue
+        try:
+            os.link(source, destination); linked += 1
+        except OSError:
+            shutil.copyfile(source, destination); copied += 1
+    return linked, copied
+
+
 def refresh_config(app_data, public_key, fallback, progress, fetch=fetch_envelope):
     root=Path(app_data)/'public-config'; root.mkdir(parents=True,exist_ok=True)
+    assets_root=Path(app_data)/'public-config-assets'; assets_root.mkdir(parents=True,exist_ok=True)
+    part_cache=Path(app_data)/'part-cache'
     pointer=root/'current.json'; current=None
     try:
         name=json.loads(pointer.read_text())['directory']
@@ -19,6 +47,7 @@ def refresh_config(app_data, public_key, fallback, progress, fetch=fetch_envelop
         validated_config(current)
     except Exception:
         current=None
+    folder=None
     try:
         progress('正在检查公共配置…')
         manifest=fetch(CHANNEL+'config-latest.json',public_key)
@@ -27,25 +56,49 @@ def refresh_config(app_data, public_key, fallback, progress, fetch=fetch_envelop
         checked_hash(manifest['package']['sha256'])
         if current and manifest['revision']<json.loads(pointer.read_text())['revision']:
             raise ValueError('拒绝回退到旧版公共配置')
-        name=f'r{manifest["revision"]}-{manifest["package"]["sha256"][:16]}'
+        data_package=manifest.get('data_package'); assets_package=manifest.get('assets_package')
+        incremental=isinstance(data_package,dict) and isinstance(assets_package,dict)
+        assets_hash=(manifest.get('assets_hash') or assets_package['sha256'])[:16] if incremental else None
+        tail=('-'+assets_hash[:8]) if incremental else ''
+        name=f'r{manifest["revision"]}-{manifest["package"]["sha256"][:16]}{tail}'
         candidate=root/name
         if current!=candidate:
-            archive=root/(name+'.zip')
-            download_package(manifest['package'],archive,progress)
             staging=root/('.stage-'+secrets.token_hex(8))
-            safe_extract(archive,staging,config_only=True)
+            if incremental:
+                # 增量路径：只下 JSON 数据包；图片统一进共享缓存，未变则不重下。
+                archive=root/(name+'-data.zip')
+                download_package(data_package,archive,progress,cache_dir=part_cache)
+                safe_extract(archive,staging,config_only=True)
+                folder=assets_root/assets_hash
+                if not assets_ready(folder,manifest.get('assets_hash') or assets_package['sha256']):
+                    progress('正在下载公共配置图片…')
+                    assets_archive=assets_root/('.assets-'+secrets.token_hex(8)+'.zip')
+                    download_package(assets_package,assets_archive,progress,cache_dir=part_cache)
+                    temporary=assets_root/('.stage-'+secrets.token_hex(8))
+                    safe_extract(assets_archive,temporary,config_only=True)
+                    if folder.exists(): shutil.rmtree(folder)
+                    os.replace(temporary,folder)
+                    atomic_json(folder/'ready.json',{'sha256':manifest.get('assets_hash') or assets_package['sha256']})
+                    assets_archive.unlink(missing_ok=True)
+                link_assets(staging,folder)
+            else:
+                archive=root/(name+'.zip')
+                download_package(manifest['package'],archive,progress,cache_dir=part_cache)
+                safe_extract(archive,staging,config_only=True)
             validated_config(staging)
             if candidate.exists():
                 validated_config(candidate)
+                if staging.exists(): shutil.rmtree(staging)
             else:
                 os.replace(staging,candidate)
-            atomic_json(pointer,{'directory':name,'revision':manifest['revision']})
+            atomic_json(pointer,{'directory':name,'revision':manifest['revision'],**({'assets':assets_hash} if incremental else {})})
             archive.unlink(missing_ok=True)
             if staging.exists():
-                import shutil
                 shutil.rmtree(staging)
-        from release_lifecycle import cleanup_config
+        from release_lifecycle import cleanup_config, cleanup_assets
         cleanup_config(root,candidate)
+        if folder is not None:
+            cleanup_assets(assets_root,folder)
         return candidate, None
     except Exception as error:
         selected=current or Path(fallback)

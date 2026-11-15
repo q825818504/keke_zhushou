@@ -6,6 +6,7 @@ import json
 import os
 import re
 import secrets
+import shutil
 import stat
 import urllib.request
 from urllib.parse import urlsplit
@@ -16,6 +17,10 @@ PRODUCT = 'koko-assistant'
 REPOSITORY = 'Alime17/koko-assistant-update'
 CHANNEL = f'https://gitee.com/{REPOSITORY}/raw/main/channels/'
 HOSTS = {'gitee.com', 'foruda.gitee.com', 'api.gitee.com', 'raw.giteeusercontent.com'}
+# 第三方运行库（WebView2/VC++）允许直连微软官方源，避免把 220 MB 塞进 Gitee 附件配额。
+# 清单本身有 Ed25519 签名且钉死 sha256，域名白名单只负责挡住“清单里的 URL 被重定向到别处”。
+TRUSTED_HOST_SUFFIXES = ('.microsoft.com',)
+DIRECT_HOSTS = {'aka.ms', 'go.microsoft.com'}
 BINDINGS = {'characterKnowledge', 'characterOverrides', 'arcDriveKnowledge', 'skyCurtainKnowledge',
             'driverBlockKnowledge', 'teamTemplateKnowledge', 'teamGuideOverrides', 'esperCycleKnowledge'}
 
@@ -50,7 +55,10 @@ def atomic_json(path, value):
 
 def checked_url(url):
     value = urlsplit(url)
-    if value.scheme != 'https' or value.hostname not in HOSTS or value.username or value.password or value.port not in (None, 443):
+    host = value.hostname or ''
+    trusted = host in HOSTS or host in DIRECT_HOSTS or any(
+        host.endswith(suffix) and len(host) > len(suffix) for suffix in TRUSTED_HOST_SUFFIXES)
+    if value.scheme != 'https' or not trusted or value.username or value.password or value.port not in (None, 443):
         raise ValueError('更新下载地址不受信任')
     return url
 
@@ -84,7 +92,35 @@ def verify_envelope(envelope, public_key):
     return document
 
 
-def download_package(description, destination, progress=lambda message: None):
+def _stream_to(url, output, limit, progress=None, label=''):
+    count = 0
+    checksum = hashlib.sha256()
+    with open_url(url) as stream:
+        while chunk := stream.read(1024*1024):
+            count += len(chunk)
+            if count > limit:
+                raise ValueError('下载大小超过清单声明')
+            checksum.update(chunk)
+            output.write(chunk)
+            if progress:
+                progress(f'{label}：{count//1024**2} MB')
+    return count, checksum.hexdigest()
+
+
+def cached_part(cache, part):
+    """复用上一次发行留下的同哈希分块，避免整包重下。"""
+    if not cache:
+        return None
+    path = Path(cache) / part['sha256']
+    try:
+        if path.is_file() and path.stat().st_size == part['size'] and digest(path) == part['sha256']:
+            return path
+    except OSError:
+        return None
+    return None
+
+
+def download_package(description, destination, progress=lambda message: None, cache_dir=None):
     destination = Path(destination)
     temporary = destination.with_suffix('.partial')
     destination.parent.mkdir(parents=True, exist_ok=True)
@@ -92,30 +128,62 @@ def download_package(description, destination, progress=lambda message: None):
     checked_hash(description['sha256'])
     if type(expected) is not int or not 0 < expected <= 2*1024**3:
         raise ValueError('更新包大小无效')
-    if not isinstance(description['parts'],list) or not 1<=len(description['parts'])<=32:
+    parts = description.get('parts') or []
+    if not isinstance(parts, list) or not 1 <= len(parts) <= 32:
         raise ValueError('更新分块数量无效')
-    total = 0
+    cache = Path(cache_dir) if cache_dir else None
+    if cache is not None:
+        cache.mkdir(parents=True, exist_ok=True)
+    staging = temporary.with_suffix('.chunk')
     try:
+        direct = description.get('download_url')
+        if isinstance(direct, str) and direct:
+            try:
+                with temporary.open('wb') as output:
+                    count, checksum = _stream_to(direct, output, expected, progress, '正在从官方源下载')
+                if count != expected or checksum != description['sha256']:
+                    raise ValueError('官方源内容与清单不符')
+                os.replace(temporary, destination)
+                return destination
+            except Exception as error:
+                progress('官方源不可用，改用备用下载：' + str(error))
+                temporary.unlink(missing_ok=True)
+        total = 0
+        reused = 0
         with temporary.open('wb') as output:
-            for index, part in enumerate(description['parts']):
-                count = 0; checksum = hashlib.sha256()
+            for index, part in enumerate(parts):
                 checked_hash(part['sha256'])
                 if type(part['size']) is not int or not 0 < part['size'] <= 100_000_000:
                     raise ValueError('更新分块大小无效')
-                with open_url(part['url']) as stream:
-                    while chunk := stream.read(1024*1024):
-                        count += len(chunk); total += len(chunk)
-                        if count > part['size'] or total > expected:
-                            raise ValueError('下载大小超过清单声明')
-                        checksum.update(chunk); output.write(chunk)
-                        progress(f'正在下载 {index+1}/{len(description["parts"])}：{total//1024**2}/{expected//1024**2} MB')
-                if count != part['size'] or checksum.hexdigest() != part['sha256']:
+                cached = cached_part(cache, part)
+                if cached is not None:
+                    total += part['size']; reused += part['size']
+                    if total > expected:
+                        raise ValueError('下载大小超过清单声明')
+                    with cached.open('rb') as source:
+                        shutil.copyfileobj(source, output)
+                    progress(f'复用本地分块 {index+1}/{len(parts)}，已节省 {reused//1024**2} MB')
+                    continue
+                with staging.open('wb') as chunk_file:
+                    count, checksum = _stream_to(part['url'], chunk_file, part['size'], progress,
+                                                 f'正在下载 {index+1}/{len(parts)}')
+                if count != part['size'] or checksum != part['sha256']:
                     raise ValueError('下载分块不完整或校验失败')
+                total += count
+                if total > expected:
+                    raise ValueError('下载大小超过清单声明')
+                with staging.open('rb') as source:
+                    shutil.copyfileobj(source, output)
+                if cache is not None:
+                    os.replace(staging, cache / part['sha256'])
+                else:
+                    staging.unlink(missing_ok=True)
         if total != expected or digest(temporary) != description['sha256']:
             raise ValueError('更新包校验失败')
         os.replace(temporary, destination)
     finally:
         temporary.unlink(missing_ok=True)
+        staging.unlink(missing_ok=True)
 
 
 def safe_extract(archive, directory, config_only=False):
