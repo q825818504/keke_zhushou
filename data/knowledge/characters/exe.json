@@ -32,7 +32,16 @@
     "skills": [],
     "material_catalog": {}
   },
-  "assets": [],
+  "assets": [
+    {
+      "type": "character_icon",
+      "source_url": "",
+      "local_path": "data/resources/characters/exe/characters/exe-icon.webp",
+      "sha256": "fd8c654afe69d9c780fe2a23e72d0d9e6c60896176d1c347dba7309d07cd9523",
+      "placeholder": true,
+      "note": "资料站未提供 Exe 角色素材，此为本机生成的占位图标，不代表游戏内形象。"
+    }
+  ],
   "provenance": {
     "source": "official_announcement",
     "source_name": "TapTap · 异环 1.5 版本介绍",

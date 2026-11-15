@@ -66,6 +66,18 @@
           }
         },
         {
+          "character_id": "xun",
+          "character_name": "浔",
+          "label": "被动技能",
+          "description": "「创生」强化：时停期间，「创生株」攻击不暂停。",
+          "image": {
+            "source_url": "https://wiki.mysqil.com/images/characters/xun-icon.webp",
+            "source_path": "/images/characters/xun-icon.webp",
+            "local_path": "data/mysqil/esper-cycles/assets/characters/xun-icon.webp",
+            "sha256": "cecac312b9dfca36e5063051636def495a7cc80bd778b5e7ef4e6679ea201669"
+          }
+        },
+        {
           "character_id": "jiuyuan",
           "character_name": "九原",
           "label": "被动技能",
@@ -87,18 +99,6 @@
             "source_path": "/images/characters/yiluoyi-icon.webp",
             "local_path": "data/mysqil/esper-cycles/assets/characters/yiluoyi-icon.webp",
             "sha256": "870452b4802e06e80a770a67732ba1a6eb107f4179d9512575e49502ec3ad152"
-          }
-        },
-        {
-          "character_id": "xun",
-          "character_name": "浔",
-          "label": "被动技能",
-          "description": "「创生」强化：时停期间，「创生株」攻击不暂停。",
-          "image": {
-            "source_url": "https://wiki.mysqil.com/images/characters/xun-icon.webp",
-            "source_path": "/images/characters/xun-icon.webp",
-            "local_path": "data/mysqil/esper-cycles/assets/characters/xun-icon.webp",
-            "sha256": "cecac312b9dfca36e5063051636def495a7cc80bd778b5e7ef4e6679ea201669"
           }
         }
       ],
@@ -171,13 +171,17 @@
           "character_id": "mingyin",
           "character_name": "明音凛",
           "label": "被动技能",
-          "description": "「延滞」强化:全队首次触发「延滞」后，明音凛获得持续至脱离战斗的强化:每隔3秒，「泛音列_为其附着的目标施加「延滞」，「音域 为范围内所有敌人施加「延滞」。全队每次对处于「延滞」状态的目标重新施加「延滞」时，明音凛根据目标剩余的「延滞」时间，对其造成相当于明音凛150%攻击力的相属性异能伤害，该伤害视为「变轨技能」伤害。每剩余1秒，该次伤害整体提升20%，最多提升160%。每个目标的剩余「延滞」时间独立计算;同一目标每1秒至多触发1次该伤害。"
+          "description": "「延滞」强化:全队首次触发「延滞」后，明音凛获得持续至脱离战斗的强化:每隔3秒，「泛音列_为其附着的目标施加「延滞」，「音域 为范围内所有敌人施加「延滞」。全队每次对处于「延滞」状态的目标重新施加「延滞」时，明音凛根据目标剩余的「延滞」时间，对其造成相当于明音凛150%攻击力的相属性异能伤害，该伤害视为「变轨技能」伤害。每剩余1秒，该次伤害整体提升20%，最多提升160%。每个目标的剩余「延滞」时间独立计算;同一目标每1秒至多触发1次该伤害。",
+          "origin": "local",
+          "source_note": "游戏 1.4/1.5 实装的角色技能文本；wiki 的 esper-cycles 快照（1.4 时期）尚未收录该角色强化，故单独标记为本地维护条目，不计入来源逐字对账。"
         },
         {
           "character_id": "yiermu",
           "character_name": "曳尔沐",
           "label": "被动技能",
-          "description": "「延滞」强化:队伍中任意角色对目标施加「延滞」时，曳尔沐会在7.5秒后对该目标追加一次「延滞」。该效果每7秒至多触发一次，且通过该效果施加的「延滞」不会再次触发该效果。"
+          "description": "「延滞」强化:队伍中任意角色对目标施加「延滞」时，曳尔沐会在7.5秒后对该目标追加一次「延滞」。该效果每7秒至多触发一次，且通过该效果施加的「延滞」不会再次触发该效果。",
+          "origin": "local",
+          "source_note": "游戏 1.4/1.5 实装的角色技能文本；wiki 的 esper-cycles 快照（1.4 时期）尚未收录该角色强化，故单独标记为本地维护条目，不计入来源逐字对账。"
         }
       ],
       "source_url": "https://wiki.mysqil.com/esper-cycles",
@@ -270,7 +274,9 @@
           "character_id": "yiermu",
           "character_name": "曳尔沐",
           "label": "被动技能",
-          "description": "「盈蓄」强化:当前驻场角色获得终结能量时，全队角色的光属性异能伤害提高3.75%，持续30秒，最多叠加8层，重复触发刷新持续时间。"
+          "description": "「盈蓄」强化:当前驻场角色获得终结能量时，全队角色的光属性异能伤害提高3.75%，持续30秒，最多叠加8层，重复触发刷新持续时间。",
+          "origin": "local",
+          "source_note": "游戏 1.4/1.5 实装的角色技能文本；wiki 的 esper-cycles 快照（1.4 时期）尚未收录该角色强化，故单独标记为本地维护条目，不计入来源逐字对账。"
         }
       ],
       "source_url": "https://wiki.mysqil.com/esper-cycles",
@@ -531,7 +537,7 @@
   ],
   "coverage": {
     "reaction_count": 8,
-    "enhancement_count": 20,
+    "enhancement_count": 23,
     "image_count": 26,
     "article_text_complete": true,
     "source_text_sha256": "03cfe9749aef76f8c4ef2101daab993161a8586e668fb79e5ab9bd8fc5341253",
@@ -592,6 +598,7 @@
       "12",
       "20%"
     ],
-    "tables": 0
+    "tables": 0,
+    "local_enhancement_count": 3
   }
 }

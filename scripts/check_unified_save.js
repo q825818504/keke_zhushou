@@ -27,8 +27,18 @@ async function check(fail) {
     document:{body:{classList:{contains:()=>false}}}, recommendedAffixes:(cassette,kind)=>cassette['recommended_'+kind+'_affixes'],
     normalizeAffixPriority:value=>Math.min(5,Math.max(1,Math.round(value||1)))};
   vm.createContext(context);
-  vm.runInContext(fs.readFileSync('character_recommendations.js','utf8'),context);
-  vm.runInContext(binding+';bindSave();',context);
+  // bindSave 依赖 app.js 顶层的 rawCharacterKnowledge/localRole*Overrides/cloneData 等定义。
+  // 注入真实源码而不是手写桩，避免测试与实现分叉；同一脚本内注入才能共享 const 绑定。
+  const headEnd = source.indexOf('\nfunction syncCharacterReactionEnhancements');
+  assert.ok(headEnd > 0, 'app.js 顶部件定义区必须可定位');
+  const draftStart = source.indexOf('function getRoleReactionDraft(');
+  const draftEnd = source.indexOf('}', source.indexOf('return roleReactionDrafts', draftStart));
+  assert.ok(draftStart > 0 && draftEnd > draftStart, 'app.js 必须提供 getRoleReactionDraft');
+  const syncStart = source.indexOf('function syncCharacterReactionEnhancements(');
+  const syncEnd = source.indexOf('\n}', syncStart) + 2;
+  assert.ok(syncStart >= 0 && syncEnd > syncStart, 'app.js 必须提供 syncCharacterReactionEnhancements');
+  const prelude = source.slice(0, headEnd) + '\n' + source.slice(syncStart, syncEnd) + '\n' + source.slice(draftStart, draftEnd + 1);
+  vm.runInContext(prelude + '\n' + fs.readFileSync('character_recommendations.js', 'utf8') + '\n' + binding + ';bindSave();', context);
   await callbacks['#saveDraftButton:click']();
   assert.equal(requests.length,1);
   assert.equal(requests[0].recommended.cassette.recommended_main_affixes[0].priority,5);
@@ -54,8 +64,17 @@ async function check(fail) {
 }
 async function checkUserRefresh() {
   const handlers = {}, state = new Map();let tick,version='old',reloads=0;
-  const context = {window:{addEventListener:(name,fn)=>handlers[name]=fn},document:{addEventListener:()=>{}},
+  const fakeElement = () => ({classList:{add(){},remove(){},toggle(){},contains:()=>false},style:{},dataset:{},
+    textContent:'',innerHTML:'',value:'',checked:false,disabled:false,hidden:false,
+    setAttribute(){},getAttribute:()=>null,appendChild(){},removeChild(){},remove(){},addEventListener(){},append(){},insertBefore(){},click(){}});
+  const context = {window:{addEventListener:(name,fn)=>handlers[name]=fn},document:{addEventListener:()=>{},
+    body:{classList:{add(){},remove(){},toggle(){},contains:()=>false},dataset:{},appendChild(){},setAttribute(){}},
+    documentElement:{classList:{add(){},remove(){}},appendChild(){}},head:{appendChild(){}},
+    querySelector:()=>fakeElement(),querySelectorAll:()=>[],createElement:()=>fakeElement(),
+    createElementNS:()=>fakeElement(),getElementById:()=>fakeElement(),getElementsByTagName:()=>[]},
     sessionStorage:{getItem:k=>state.get(k)||null,setItem:(k,v)=>state.set(k,v),removeItem:k=>state.delete(k)},
+    requestAnimationFrame:fn=>{fn();return 0;},cancelAnimationFrame:()=>{},setTimeout:(fn)=>fn&&0,
+    matchMedia:()=>({matches:false,addEventListener(){},removeEventListener(){}}),
     fetch:async()=>({ok:true,json:async()=>({version})}),setInterval:fn=>tick=fn,
     userActiveRoute:'characters',selectedCharacter:'娜娜莉',userActiveTab:'build',
     location:{reload:()=>reloads++},characterData:{},applyCharacter:()=>{},showUserRoute:()=>{}};

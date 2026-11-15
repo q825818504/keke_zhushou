@@ -63,12 +63,33 @@ function valid(result,locks=[],pool=null){
 // Actual maintained overrides, not just imported source teams.
 {
  const {sandbox:s,vm,root}=load();vm.runInContext(fs.readFileSync(path.join(root,'team_manager.js'),'utf8').split('let guideDraft =')[0],s);
- const names=vm.runInContext('Object.keys(characterData)',s);const without=Array.from(names).filter(n=>n!=='阿德勒');
- vm.runInContext(`userTeamOwnedNames=new Set(${JSON.stringify(without)})`,s);
- const missing=s.userTeamRecommendPairs(['残虹','安魂曲']);assert.equal(missing.pairs.length,0);assert.equal(missing.reason,'conflict');checks++;
+ const names=vm.runInContext('Object.keys(characterData)',s);
+ vm.runInContext(`userTeamOwnedNames=new Set(${JSON.stringify(Array.from(names))})`,s);
+ const idOf=n=>vm.runInContext('characterData['+JSON.stringify(n)+'].id',s);
+ // 缺人/冲突改用受控维护记录：真实资料每队都有几十条阵容，单一角色已不再是必需件，
+ // 拿真实数据断言“移除某人必 conflict”会随资料扩张而失真。
+ const original=s.window.teamGuideStore;
+ const stubTeam=(core,members,id)=>({id,source_core_character_id:idOf(core),member_character_ids:members.map(idOf),editorial:{active:true}});
+ s.window.teamGuideStore={all:()=>[
+   stubTeam('残虹',['残虹','白藏','黑羽','阿德勒'],'stub-first'),
+   stubTeam('安魂曲',['安魂曲','白藏','黑羽','哈尼娅'],'stub-second')]};
+ const conflict=s.userTeamRecommendPairs(['残虹','安魂曲']);
+ assert.equal(conflict.pairs.length,0,'共享成员的两队不成立');assert.equal(conflict.reason,'conflict');
+ s.window.teamGuideStore={all:()=>[
+   stubTeam('残虹',['残虹','白藏','黑羽','阿德勒'],'stub-first'),
+   stubTeam('安魂曲',['安魂曲','哈尼娅','早雾','伊洛伊'],'stub-second')]};
+ assert.equal(s.userTeamRecommendPairs(['残虹','安魂曲']).pairs.length,1,'无重叠时必须给出配对');
+ const short=['残虹','白藏','黑羽'];
+ vm.runInContext(`userTeamOwnedNames=new Set(${JSON.stringify(Array.from(names).filter(n=>!['阿德勒','哈尼娅','早雾','伊洛伊'].includes(n)))})`,s);
+ s.window.teamGuideStore={all:()=>[
+   stubTeam('残虹',['残虹','白藏','黑羽','阿德勒'],'stub-first'),
+   stubTeam('安魂曲',['安魂曲','哈尼娅','早雾','伊洛伊'],'stub-second')]};
+ const partial=s.userTeamRecommendPairs(['残虹','安魂曲']);
+ assert.equal(partial.pairs.length,0,'缺成员时不得凑出双队');assert.equal(partial.reason,'first');
+ s.window.teamGuideStore=original;checks+=3;
  vm.runInContext(`userTeamOwnedNames=new Set(${JSON.stringify(Array.from(names))})`,s);
  const present=s.userTeamRecommendPairs(['残虹','安魂曲']);valid(present,['残虹','安魂曲']);assert(present.pairs.length);
- assert(present.pairs.some(p=>Array.from(p.second.memberNames).sort().join('|')===['安魂曲','白藏','黑羽','阿德勒'].sort().join('|')));checks++;
+ assert(present.pairs.every(p=>!p.first.memberNames.some(n=>p.second.memberNames.includes(n))),'双队成员必须互斥');checks++;
  for(const locks of [[],['残虹'],['残虹','安魂曲'],['安魂曲','残虹']]) {
   const r=s.userTeamRecommendPairs(locks);valid(r,locks,Array.from(names));assert.deepEqual(JSON.parse(JSON.stringify(r)),JSON.parse(JSON.stringify(s.userTeamRecommendPairs(locks))));
   const records=s.window.teamGuideStore.all(),cores=Array.from(new Set(records.filter(t=>t.editorial?.active!==false).map(t=>vm.runInContext('userTeamNameById['+JSON.stringify(t.source_core_character_id)+']',s)))).filter(Boolean);
