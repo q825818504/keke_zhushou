@@ -4073,7 +4073,13 @@
           "character_id": "mingyin",
           "character_name": "明音凛",
           "label": "被动技能",
-          "description": "「延滞」强化:全队首次触发「延滞」后，明音凛获得持续至脱离战斗的强化:每隔3秒，「泛音列_为其附着的目标施加「延滞」，「音域 为范围内所有敌人施加「延滞」。全队每次对处于「延滞」状态的目标重新施加「延滞」时，明音凛根据目标剩余的「延滞」时间，对其造成相当于明音凛150%攻击力的相属性异能伤害，该伤害视为「变轨技能」伤害。每剩余1秒，该次伤害整体提升20%，最多提升160%。每个目标的剩余「延滞」时间独立计算;同一目标每1秒至多触发1次该伤害。"
+          "description": "「延滞」强化:全队首次触发「延滞」后，明音凛获得持续至脱离战斗的强化:每隔3秒，「泛音列_为其附着的目标施加「延滞」，「音域 为范围内所有敌人施加「延滞」。全队每次对处于「延滞」状态的目标重新施加「延滞」时，明音凛根据目标剩余的「延滞」时间，对其造成相当于明音凛150%攻击力的相属性异能伤害，该伤害视为「变轨技能」伤害。每剩余1秒，该次伤害整体提升20%，最多提升160%。每个目标的剩余「延滞」时间独立计算;同一目标每1秒至多触发1次该伤害。",
+          "image": {
+            "source_url": "",
+            "source_path": "",
+            "local_path": "data/resources/characters/mingyin/characters/mingyin-icon.webp",
+            "sha256": "7192426890d5f2770a1853c490b6c86b71df767c2e86ad9f430f1064a2ff16de"
+          }
         }
       ],
       "resonance": [
@@ -9238,7 +9244,13 @@
           "character_id": "yiermu",
           "character_name": "曳尔沐",
           "label": "被动技能",
-          "description": "「延滞」强化:队伍中任意角色对目标施加「延滞」时，曳尔沐会在7.5秒后对该目标追加一次「延滞」。该效果每7秒至多触发一次，且通过该效果施加的「延滞」不会再次触发该效果。"
+          "description": "「延滞」强化:队伍中任意角色对目标施加「延滞」时，曳尔沐会在7.5秒后对该目标追加一次「延滞」。该效果每7秒至多触发一次，且通过该效果施加的「延滞」不会再次触发该效果。",
+          "image": {
+            "source_url": "",
+            "source_path": "",
+            "local_path": "data/resources/characters/yiermu/characters/yiermu-icon.webp",
+            "sha256": "c2674ead684e10528e64b7d88fcb5575e0d5dfcc39d7c47d61e64a7a15e3d76d"
+          }
         },
         {
           "cycle_id": "cycle_7",
@@ -9246,7 +9258,13 @@
           "character_id": "yiermu",
           "character_name": "曳尔沐",
           "label": "被动技能",
-          "description": "「盈蓄」强化:当前驻场角色获得终结能量时，全队角色的光属性异能伤害提高3.75%，持续30秒，最多叠加8层，重复触发刷新持续时间。"
+          "description": "「盈蓄」强化:当前驻场角色获得终结能量时，全队角色的光属性异能伤害提高3.75%，持续30秒，最多叠加8层，重复触发刷新持续时间。",
+          "image": {
+            "source_url": "",
+            "source_path": "",
+            "local_path": "data/resources/characters/yiermu/characters/yiermu-icon.webp",
+            "sha256": "c2674ead684e10528e64b7d88fcb5575e0d5dfcc39d7c47d61e64a7a15e3d76d"
+          }
         }
       ]
     }

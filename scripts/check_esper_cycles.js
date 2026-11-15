@@ -30,6 +30,9 @@ for (const entry of localEnhancements) {
   assert.ok((entry.source_note || "").length > 20, "本地新增强化必须写明依据，不得冒充来源原文");
 }
 assert.equal(knowledge.coverage.local_enhancement_count, localEnhancements.length, "本地维护条目数必须与 coverage 一致");
+for (const cycle of knowledge.cycles) for (const entry of cycle.enhancements) {
+  assert.ok(entry.image && entry.image.local_path, `${cycle.name}/${entry.character_name} 缺少强化图标，页面渲染会崩`);
+}
 const sandbox = {window:{}};
 vm.runInNewContext(fs.readFileSync(path.join(root,"data/knowledge/esper_cycles.js"),"utf8"),sandbox);
 assert.deepEqual(JSON.parse(JSON.stringify(sandbox.window.esperCycleKnowledge)),knowledge, "browser bundle matches JSON");
