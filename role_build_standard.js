@@ -423,10 +423,24 @@ window.KekeRoleBuildStandard = (() => {
         if(invalid.length)globalNotice=`${invalid.length} 件装备的属性未通过图鉴核对，暂不参与计算。请在背包中核对原图并修正，或重新识别。`;
         else if(repaired)globalNotice=`已按属性图鉴修正 ${repaired} 处可确认的小数点遗漏；原图、识别原文和修正依据保留在背包数据中。`;
         const characters=data.inventory?.characters?.records||[];
+        // One roster read per load: index roles and characters instead of
+        // re-walking the library for every item. The id/name match order is
+        // preserved by comparing the two first-match positions per item.
+        const roleList=roles();
+        const roleIndexById=new Map(),roleIndexByKey=new Map(),characterIndex=new Map();
+        roleList.forEach((role,index)=>{
+          if(!roleIndexById.has(role.id))roleIndexById.set(role.id,index);
+          const key=nameKey(role.name);
+          if(!roleIndexByKey.has(key))roleIndexByKey.set(key,index);
+        });
+        characters.forEach(row=>{const key=String(row?.character_id);if(!characterIndex.has(key))characterIndex.set(key,row);});
         for(const item of items){
           if(item.owner!=null){
-            const character=characters.find(row=>String(row.character_id)===String(item.owner));
-            const role=roles().find(row=>row.id===String(item.owner)||character?.name&&nameKey(character.name)===nameKey(row.name));
+            const character=characterIndex.get(String(item.owner));
+            const idIndex=roleIndexById.get(String(item.owner));
+            const nameIndex=character?.name?roleIndexByKey.get(nameKey(character.name)):undefined;
+            const index=[idIndex,nameIndex].reduce((low,value)=>value===undefined?low:Math.min(low,value),Infinity);
+            const role=index===Infinity?undefined:roleList[index];
             // Unknown owners still count as other characters for exclusion.
             if(role)item.owner=role.id;
           }
@@ -434,7 +448,7 @@ window.KekeRoleBuildStandard = (() => {
         const profile=accountProfiles.find(row=>row.account===account);
         const complete=selected.complete===true&&equipment.coverage?.collection_complete===true&&!invalid.length;
         snapshot={ready:true,complete,account,account_uid:data.ocr_batch?.account_uid||data.account_uid||profile?.uid||null,source_id:selectedSource,
-          saved_at:equipment.saved_at||selected.saved_at,equipment_count:rawRecords.length,items,characters:roles().map(role=>({character_id:role.id,name:role.name,board:role.native.board})),
+          saved_at:equipment.saved_at||selected.saved_at,equipment_count:rawRecords.length,items,characters:roleList.map(role=>({character_id:role.id,name:role.name,board:role.native.board})),
           saved_plans:loadPlans(account,selectedSource,equipment.saved_at||selected.saved_at),coverage:equipment.coverage||{}};
         const validIds=new Set(items.map(item=>item.id));
         for(const plan of Object.values(snapshot.saved_plans)){

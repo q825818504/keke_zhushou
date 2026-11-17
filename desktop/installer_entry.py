@@ -8,7 +8,6 @@ import secrets
 import shutil
 import subprocess
 import sys
-import time
 from update_protocol import CHANNEL, atomic_json, download_package, fetch_envelope, safe_extract, version
 from public_config import validated_config
 from update_client import check_window
@@ -98,32 +97,38 @@ def install(root, public_key, progress):
     folder=root/'app'/manifest['version']; root.mkdir(parents=True,exist_ok=True)
     staging=root/'app'/('.stage-'+secrets.token_hex(8)); staging.parent.mkdir(parents=True,exist_ok=True)
     archive=root/('download-'+secrets.token_hex(8)+'.zip')
-    download_package(manifest['package'],archive,progress,cache_dir=root/'part-cache')
-    progress('正在解压并校验安装内容…')
-    safe_extract(archive,staging)
-    info=json.loads((staging/'_internal/release-info.json').read_text())
-    if info['version']!=manifest['version'] or info.get('revision',0)!=manifest.get('revision',0) or info['public_key']!=public_key or not (staging/'KekeAssistantApp.exe').is_file():
-        raise ValueError('安装内容版本或发行身份不一致')
-    validated_config(staging/'_internal/public')
-    if folder.exists():
-        # Retries never merge partial files or overwrite a running version.
-        folder=root/'app'/(manifest['version']+'-'+secrets.token_hex(4))
-    os.replace(staging,folder)
-    launcher=root/'KekeAssistant.exe'
-    if not launcher.exists(): shutil.copyfile(sys.executable,launcher)
-    atomic_json(root/'installation.json',{'product':'koko-assistant','root':str(root)})
-    atomic_json(root/'active-version.json',{'directory':str(folder.relative_to(root)).replace('\\','/'),'version':manifest['version'],'revision':manifest.get('revision',0)})
-    archive.unlink(missing_ok=True)
-    trim_cache(root/'part-cache')
-    if os.name=='nt':
-        import winreg
-        with winreg.CreateKey(winreg.HKEY_CURRENT_USER,r'Software\Microsoft\Windows\CurrentVersion\Uninstall\KokoAssistant') as key:
-            for name,value in {'DisplayName':'可可助手','DisplayVersion':manifest['version'],'InstallLocation':str(root),
-                               'UninstallString':'"'+str(launcher)+'" --uninstall'}.items():
-                winreg.SetValueEx(key,name,0,winreg.REG_SZ,value)
-        try:shortcut(root)
-        except Exception:diagnostics.failure('开始菜单快捷方式创建失败')
-    return folder
+    try:
+        download_package(manifest['package'],archive,progress,cache_dir=root/'part-cache')
+        progress('正在解压并校验安装内容…')
+        safe_extract(archive,staging)
+        info=json.loads((staging/'_internal/release-info.json').read_text())
+        if info['version']!=manifest['version'] or info.get('revision',0)!=manifest.get('revision',0) or info['public_key']!=public_key or not (staging/'KekeAssistantApp.exe').is_file():
+            raise ValueError('安装内容版本或发行身份不一致')
+        validated_config(staging/'_internal/public')
+        if folder.exists():
+            # Retries never merge partial files or overwrite a running version.
+            folder=root/'app'/(manifest['version']+'-'+secrets.token_hex(4))
+        os.replace(staging,folder)
+        launcher=root/'KekeAssistant.exe'
+        if not launcher.exists(): shutil.copyfile(sys.executable,launcher)
+        atomic_json(root/'installation.json',{'product':'koko-assistant','root':str(root)})
+        atomic_json(root/'active-version.json',{'directory':str(folder.relative_to(root)).replace('\\','/'),'version':manifest['version'],'revision':manifest.get('revision',0)})
+        archive.unlink(missing_ok=True)
+        trim_cache(root/'part-cache')
+        if os.name=='nt':
+            import winreg
+            with winreg.CreateKey(winreg.HKEY_CURRENT_USER,r'Software\Microsoft\Windows\CurrentVersion\Uninstall\KokoAssistant') as key:
+                for name,value in {'DisplayName':'可可助手','DisplayVersion':manifest['version'],'InstallLocation':str(root),
+                                   'UninstallString':'"'+str(launcher)+'" --uninstall'}.items():
+                    winreg.SetValueEx(key,name,0,winreg.REG_SZ,value)
+            try:shortcut(root)
+            except Exception:diagnostics.failure('开始菜单快捷方式创建失败')
+        return folder
+    except BaseException:
+        # 失败重试不得把 GB 级 .stage-/下载包留在安装目录旁；成功路径此时两者都已不存在。
+        shutil.rmtree(staging,ignore_errors=True)
+        archive.unlink(missing_ok=True)
+        raise
 
 
 def launch(root):

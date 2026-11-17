@@ -81,6 +81,41 @@ const arcDriveCatalog = window.arcDriveKnowledge || { items: [], source: {} };
 const skyCurtainCatalog = window.skyCurtainKnowledge || { items: [], source: {} };
 const driverBlockCatalog = window.driverBlockKnowledge || { items: [], source: {}, mechanism_guide: {} };
 const teamTemplateKnowledge = window.teamTemplateKnowledge || { teams: [], source_catalog: {} };
+// 维护阵容记录只读共享：teamGuideStore.all() 每次调用都会深拷贝 762 条模板（约 3ms），
+// 推荐链路会在一次交互里调用上百次，因此按「一次交互内不变」的语义缓存。
+// 写入口（save/remove/import/restore）都会派发 guide-lineups-changed，届时失效。
+let teamTemplateRecordsCache = null;
+let teamTemplateCoreCountCache = null;
+let teamTemplateStoreRef;
+let teamTemplateRevisionRef;
+function teamTemplateRecords() {
+  const store = window.teamGuideStore || null;
+  const revision = typeof store?.revision === "function" ? store.revision() : null;
+  // store 被替换或被编辑（save/remove/import/restore）时缓存必须失效，否则会读到上一份模板。
+  if (teamTemplateRecordsCache && store === teamTemplateStoreRef && revision === teamTemplateRevisionRef) return teamTemplateRecordsCache;
+  teamTemplateStoreRef = store;
+  teamTemplateRevisionRef = revision;
+  teamTemplateRecordsCache = store ? store.all() : (teamTemplateKnowledge.teams || []);
+  teamTemplateCoreCountCache = null;
+  return teamTemplateRecordsCache;
+}
+// 每个角色 id 维护了多少条来源阵容；与原 all().filter(...).length 完全等价（不过滤 active）。
+function teamTemplateCoreCounts() {
+  if (!teamTemplateCoreCountCache) {
+    const counts = new Map();
+    for (const team of teamTemplateRecords()) {
+      const id = team.source_core_character_id;
+      if (id == null) continue;
+      counts.set(id, (counts.get(id) || 0) + 1);
+    }
+    teamTemplateCoreCountCache = counts;
+  }
+  return teamTemplateCoreCountCache;
+}
+function invalidateTeamTemplateCache() {
+  teamTemplateRecordsCache = null;
+  teamTemplateCoreCountCache = null;
+}
 const importedKnowledge = allKnowledge.zhenhong || null;
 let activeKnowledge = importedKnowledge;
 const importedAssetUrl = (asset) => {
@@ -2286,7 +2321,7 @@ function userTeamCanPin(name) {
   const data = characterData[name];
   if (!data) return false;
   if (userTeamRoleKind(data) === "main") return true;
-  return (window.teamGuideStore ? window.teamGuideStore.all() : (teamTemplateKnowledge.teams || [])).some((team) => team.source_core_character_id === data.id);
+  return (teamTemplateCoreCounts().get(data.id) || 0) > 0;
 }
 
 function userTeamInvestmentState(name) {
@@ -2324,11 +2359,12 @@ function userTeamInvestmentRank(name) {
 }
 
 function userTeamRankedMainCNames(names) {
+  const sourceCounts = teamTemplateCoreCounts();
   return names.filter(userTeamCanPin).sort((firstName, secondName) => {
     const firstData = characterData[firstName];
     const secondData = characterData[secondName];
-    const firstSourceCount = (window.teamGuideStore ? window.teamGuideStore.all() : (teamTemplateKnowledge.teams || [])).filter((team) => team.source_core_character_id === firstData.id).length;
-    const secondSourceCount = (window.teamGuideStore ? window.teamGuideStore.all() : (teamTemplateKnowledge.teams || [])).filter((team) => team.source_core_character_id === secondData.id).length;
+    const firstSourceCount = sourceCounts.get(firstData.id) || 0;
+    const secondSourceCount = sourceCounts.get(secondData.id) || 0;
     const firstScore = userTeamTierScore(firstData) + firstSourceCount * 0.25 + userTeamInvestmentRank(firstName);
     const secondScore = userTeamTierScore(secondData) + secondSourceCount * 0.25 + userTeamInvestmentRank(secondName);
     return secondScore - firstScore || firstName.localeCompare(secondName, "zh-CN");
@@ -2417,19 +2453,26 @@ function userTeamCreateCandidate(coreName, memberNames, options = {}) {
 function userTeamCollectPlans(coreName, blockedNames = new Set(), records = null) {
   const available = new Set(userTeamAvailableNames().filter((name) => !blockedNames.has(name)));
   if (!coreName || !available.has(coreName)) return [];
-  const templates = records || (window.teamGuideStore ? window.teamGuideStore.all() : (teamTemplateKnowledge.teams || []));
-  return templates.map((team, maintenanceIndex) => ({ team, maintenanceIndex,
-    orderedNames: Array.isArray(team.member_character_ids) ? team.member_character_ids.map((id) => userTeamNameById[id]) : [] }))
-    .filter(({ team, orderedNames }) => team.editorial?.active !== false
-      && team.source_core_character_id === characterData[coreName]?.id
-      && orderedNames.length === 4 && new Set(orderedNames).size === 4
-      && orderedNames.includes(coreName) && orderedNames.every((name) => name && available.has(name)))
-    .sort((first, second) => (first.team.source_order || 0) - (second.team.source_order || 0))
-    .map(({ team, orderedNames, maintenanceIndex }) => {
-      const candidate = userTeamCreateCandidate(coreName, orderedNames, { sourceRecord: team, orderedNames });
-      candidate.score += userTeamInvestmentRank(coreName) * 0.3;
-      return { ...candidate, maintenanceIndex };
-    });
+  const templates = records || teamTemplateRecords();
+  const coreId = characterData[coreName]?.id;
+  // 先按「启用 + 核心 id」做廉价筛选，再为命中项解析成员名：
+  // 原实现在 762 条模板上先 map 出 orderedNames 再 filter，单次交互会重复分配上万次数组。
+  const matched = [];
+  for (let maintenanceIndex = 0; maintenanceIndex < templates.length; maintenanceIndex++) {
+    const team = templates[maintenanceIndex];
+    if (team.editorial?.active === false) continue;
+    if (team.source_core_character_id !== coreId) continue;
+    const orderedNames = Array.isArray(team.member_character_ids) ? team.member_character_ids.map((id) => userTeamNameById[id]) : [];
+    if (orderedNames.length !== 4 || new Set(orderedNames).size !== 4) continue;
+    if (!orderedNames.includes(coreName) || !orderedNames.every((name) => name && available.has(name))) continue;
+    matched.push({ team, orderedNames, maintenanceIndex });
+  }
+  matched.sort((first, second) => (first.team.source_order || 0) - (second.team.source_order || 0));
+  return matched.map(({ team, orderedNames, maintenanceIndex }) => {
+    const candidate = userTeamCreateCandidate(coreName, orderedNames, { sourceRecord: team, orderedNames });
+    candidate.score += userTeamInvestmentRank(coreName) * 0.3;
+    return { ...candidate, maintenanceIndex };
+  });
 }
 
 function userTeamBuildPlans(coreName, blockedNames = new Set(), limit = 3) {
@@ -2487,7 +2530,7 @@ function userTeamMissingForCores(coreNames, records) {
 }
 
 function userTeamRecommendPairs(lockedCoreNames = [], limit = 3) {
-  const records = window.teamGuideStore ? window.teamGuideStore.all() : (teamTemplateKnowledge.teams || []);
+  const records = teamTemplateRecords();
   const owned = new Set(userTeamAvailableNames());
   const cores = [...new Set(records.filter((team) => team.editorial?.active !== false)
     .map((team) => userTeamNameById[team.source_core_character_id]).filter((name) => name && owned.has(name)))];
@@ -2502,6 +2545,16 @@ function userTeamRecommendPairs(lockedCoreNames = [], limit = 3) {
   if (!firstPlans.length) return failure("first", { missingNames: userTeamMissingForCores(firstCores, records) });
   if (!secondPlans.length) return failure("second", { missingNames: userTeamMissingForCores(secondCores, records) });
   const quality = new Map([...firstPlans, ...secondPlans].map((plan) => [plan, userTeamPairQuality(plan)]));
+  const planKey = new Map([...firstPlans, ...secondPlans].map((plan) => [plan, userTeamCandidateKey(plan.memberNames)]));
+  const coreRank = new Map(cores.map((name, index) => [name, index]));
+  const rankOf = (name) => (coreRank.has(name) ? coreRank.get(name) : -1);
+  // 同一批角色在本次计算内投资分不变，按名字记忆化，避免每个组合重算 8 次。
+  const investmentByName = new Map();
+  const investmentRank = (name) => {
+    let value = investmentByName.get(name);
+    if (value === undefined) { value = userTeamInvestmentRank(name); investmentByName.set(name, value); }
+    return value;
+  };
   const pairs = [];
   let closestConflicts = null;
   for (const first of firstPlans) {
@@ -2509,16 +2562,21 @@ function userTeamRecommendPairs(lockedCoreNames = [], limit = 3) {
     for (const second of secondPlans) {
       if (first.coreName === second.coreName) continue;
       // Without locks A+B and B+A represent one combination, ordered by maintained core order.
-      if (!lockedCoreNames.length && cores.indexOf(first.coreName) > cores.indexOf(second.coreName)) continue;
-      const conflicts = second.memberNames.filter((name) => members.has(name));
-      if (conflicts.length) {
-        if (!closestConflicts || conflicts.length < closestConflicts.length) closestConflicts = conflicts;
+      if (!lockedCoreNames.length && rankOf(first.coreName) > rankOf(second.coreName)) continue;
+      let conflictCount = 0;
+      for (const name of second.memberNames) if (members.has(name)) conflictCount++;
+      if (conflictCount) {
+        if (!closestConflicts || conflictCount < closestConflicts.length) closestConflicts = second.memberNames.filter((name) => members.has(name));
         continue;
       }
-      const scores = [quality.get(first), quality.get(second)];
+      const firstScore = quality.get(first);
+      const secondScore = quality.get(second);
+      let investment = 0;
+      for (const name of first.memberNames) investment += investmentRank(name);
+      for (const name of second.memberNames) investment += investmentRank(name);
       pairs.push({ first, second, id: JSON.stringify([first.id, second.id]),
-        weakest: Math.min(...scores), total: scores[0] + scores[1],
-        investment: [...first.memberNames, ...second.memberNames].reduce((sum, name) => sum + userTeamInvestmentRank(name), 0) });
+        weakest: Math.min(firstScore, secondScore), total: firstScore + secondScore,
+        investment });
     }
   }
   if (!pairs.length) return failure(closestConflicts ? "conflict" : "second", { conflictNames: closestConflicts || [] });
@@ -2529,7 +2587,7 @@ function userTeamRecommendPairs(lockedCoreNames = [], limit = 3) {
     || a.id.localeCompare(b.id));
   const seen = new Set();
   const unique = pairs.filter(({ first, second }) => {
-    const key = JSON.stringify([first.coreName, userTeamCandidateKey(first.memberNames), second.coreName, userTeamCandidateKey(second.memberNames)]);
+    const key = JSON.stringify([first.coreName, planKey.get(first), second.coreName, planKey.get(second)]);
     if (seen.has(key)) return false;
     seen.add(key);
     return true;
@@ -2999,6 +3057,7 @@ function bindUserCatalogRoutes() {
 
 bindGuideManager();
 window.addEventListener("guide-lineups-changed", () => {
+  invalidateTeamTemplateCache();
   userTeamSelectedCandidateIndexes = [0, 0];
   if (userActiveRoute === "team") renderUserTeamRoute();
 });

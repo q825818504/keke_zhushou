@@ -40,7 +40,10 @@ def ensure(manifest,root,progress):
         installer=Path(root)/DOWNLOADS[name][0]
         download_package(meta,installer,progress)
         args=['/silent','/install'] if name=='webview2' else ['/install','/passive','/norestart']
-        result=subprocess.run([str(installer),*args],timeout=600,creationflags=getattr(subprocess,'CREATE_NO_WINDOW',0))
-        if result.returncode not in (0,3010,1638) or not present(name):
-            raise RuntimeError('运行组件安装未完成，请处理系统安装提示后重试：'+name)
-        installer.unlink(missing_ok=True)
+        try:
+            result=subprocess.run([str(installer),*args],timeout=600,creationflags=getattr(subprocess,'CREATE_NO_WINDOW',0))
+            if result.returncode not in (0,3010,1638) or not present(name):
+                raise RuntimeError('运行组件安装未完成，请处理系统安装提示后重试：'+name)
+        finally:
+            # 失败重试不得把 220 MB 安装包留在安装根目录里。
+            installer.unlink(missing_ok=True)

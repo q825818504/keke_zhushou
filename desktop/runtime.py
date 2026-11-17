@@ -94,6 +94,34 @@ def public_server(root: Path, port: int, workspace=None, inventory=None, vision=
                     digest.update(str(source.stat().st_mtime_ns).encode())
         return digest.hexdigest()
 
+    # (stamp, payload, gzip_payload) 只按 single-key 赋值发布，读侧一次取出，避免并发读写撕裂。
+    config_cache = {'value': None}
+
+    def public_config_payload(directory):
+        """与原先的内联表达式逐字节一致；config.json 未变化时复用上次结果。
+
+        返回值第三项是可选的 gzip 副本：7.4 MB 的绑定脚本压缩后约 0.44 MB，
+        解码后与原字节完全相同，仅在客户端声明 Accept-Encoding: gzip 时使用。
+        """
+        try:
+            status = (Path(directory) / 'config.json').stat()
+            stamp = (status.st_mtime_ns, status.st_size)
+        except OSError:
+            stamp = None
+        cached = config_cache['value']
+        if stamp is not None and cached is not None and cached[0] == stamp:
+            return cached[1], cached[2]
+        from update_protocol import load_config
+        bindings = load_config(directory)['bindings']
+        payload = ('\n'.join('window['+json.dumps(key)+']=JSON.parse('+json.dumps(json.dumps(value,ensure_ascii=True))+');' for key,value in bindings.items())).encode('utf-8')
+        compressed = None
+        if len(payload) >= 4096:
+            import gzip as gzip_module
+            compressed = gzip_module.compress(payload, 6)
+        if stamp is not None:
+            config_cache['value'] = (stamp, payload, compressed)
+        return payload, compressed
+
     class ReadOnlyHandler(BaseHTTPRequestHandler):
         def handle_one_request(self):
             try: super().handle_one_request()
@@ -168,11 +196,14 @@ def public_server(root: Path, port: int, workspace=None, inventory=None, vision=
                     else:self.send_error(404)
                 except (ValueError,OSError):self.inventory_json({'error':'视觉批次或图片读取失败'},400)
                 return
+            encoding = None
             if relative == 'public-config.js' and (root/'config.json').is_file():
-                from update_protocol import load_config
-                bindings=load_config(configuration or root)['bindings']
-                payload=('\n'.join('window['+json.dumps(key)+']=JSON.parse('+json.dumps(json.dumps(value,ensure_ascii=True))+');' for key,value in bindings.items())).encode('utf-8')
+                payload, compressed = public_config_payload(configuration or root)
                 mime='application/javascript'
+                # WebView2 总是声明 Accept-Encoding: gzip；未声明的客户端（脚本/调试工具）仍拿原始字节。
+                if compressed is not None and 'gzip' in (self.headers.get('Accept-Encoding') or '').lower():
+                    payload = compressed
+                    encoding = 'gzip'
             elif relative == "local-data-version":
                 payload = json.dumps({"version": version()}).encode()
                 mime = "application/json"
@@ -190,6 +221,9 @@ def public_server(root: Path, port: int, workspace=None, inventory=None, vision=
             self.send_response(200)
             self.send_header("Content-Type", mime + ("; charset=utf-8" if mime.startswith("text/") else ""))
             self.send_header("Cache-Control", "no-store")
+            if encoding:
+                self.send_header("Content-Encoding", encoding)
+                self.send_header("Vary", "Accept-Encoding")
             self.send_header("Content-Length", str(len(payload)))
             self.end_headers()
             self.wfile.write(payload)

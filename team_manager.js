@@ -32,14 +32,19 @@
     return originals.filter(t => !removed.includes(t.id)).map(t => copy(edits[t.id] || t))
       .concat(Object.values(edits).filter(t => !ids.has(t.id) && !removed.includes(t.id)).map(copy));
   }
+  // 记录变更代数：读取方（推荐求解、列表渲染）用它判断自己缓存的那一份 all() 是否过期，
+  // 不依赖 guide-lineups-changed 是否真的被派发到（测试桩/无监听者的环境下同样可靠）。
+  let revision = 0;
   function commit(nextEdits, nextRemoved) {
     localStorage.setItem(key, JSON.stringify({ schema_version: "1.0.0", edits: nextEdits, removed: nextRemoved }));
     edits = nextEdits;
     removed = nextRemoved;
+    revision += 1;
     window.dispatchEvent(new Event("guide-lineups-changed"));
   }
   window.teamGuideStore = {
     all,
+    revision: () => revision,
     save(team) {
       validate(team);
       commit({ ...edits, [team.id]: copy(team) }, removed.filter(id => id !== team.id));

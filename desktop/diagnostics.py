@@ -109,6 +109,14 @@ def recent():
     with _lock:events=list(_events)
     return {'logs':redact('\n'.join(lines)),'crashes':events,'directory':str(ROOT),'hint':'仅记录系统确认的崩溃；没有记录不代表没有出错。'}
 
+def trim_exports(directory,keep=5):
+    """Keep only the newest diagnostic packages; the folder otherwise grows without bound."""
+    try:files=sorted((path for path in Path(directory).glob('可可助手诊断-*.zip') if path.is_file()),key=lambda path:path.stat().st_mtime_ns,reverse=True)
+    except OSError:return
+    for path in files[keep:]:
+        try:path.unlink()
+        except OSError:pass
+
 def export():
     refresh_windows_events()
     destination=ROOT/'exports';destination.mkdir(exist_ok=True)
@@ -118,4 +126,5 @@ def export():
             if source.is_file() and source.stat().st_size<=3*1024**2:
                 archive.writestr(source.name,redact(source.read_text(encoding='utf-8',errors='replace')))
         archive.writestr('system.json',json.dumps({'system':platform.platform(),'architecture':platform.machine(),'events':recent()['crashes'],'generated':datetime.now(timezone.utc).isoformat()},ensure_ascii=False,indent=2))
+    trim_exports(destination,keep=5)
     return path

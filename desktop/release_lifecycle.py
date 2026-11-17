@@ -85,10 +85,11 @@ def release_status(public_root, app_data):
     try:
         notes=json.loads((Path(public_root)/'release-notes.json').read_text(encoding='utf-8'))
     except (OSError,ValueError):return {'version':None,'notes':'','show':False}
-    try:seen=json.loads((Path(app_data)/'release-seen.json').read_text(encoding='utf-8'))['version']
-    except (OSError,ValueError,KeyError):seen=None
-    try:seen_revision=json.loads((Path(app_data)/'release-seen.json').read_text(encoding='utf-8')).get('revision',0)
-    except (OSError,ValueError):seen_revision=0
+    try:seen_document=json.loads((Path(app_data)/'release-seen.json').read_text(encoding='utf-8'))
+    except (OSError,ValueError):seen_document={}
+    try:seen=seen_document['version']
+    except KeyError:seen=None
+    seen_revision=seen_document.get('revision',0)
     try:history=json.loads((Path(public_root)/'release-history.json').read_text(encoding='utf-8'))
     except (OSError,ValueError):history=[{'version':notes['version'],'notes':notes['notes']}]
     from cloud_notes import cached

@@ -85,8 +85,22 @@ window.KekeRoleBuild = (() => {
     const value = String(item.rarity || '').toLowerCase();
     return /orange|gold|金/.test(value) ? 'gold' : /purple|紫/.test(value) ? 'purple' : 'blue';
   }
+  // Owner buckets are rebuilt only when the snapshot item array changes; the
+  // per-role lookup keeps the original array order inside each bucket.
+  let ownerBuckets = { items: null, length: -1, map: null };
   function equippedFor(role) {
-    return (snapshot?.items || []).filter(item => item.owner != null && String(item.owner) === role.id);
+    const items = snapshot?.items || [];
+    if (ownerBuckets.items !== items || ownerBuckets.length !== items.length) {
+      const map = new Map();
+      for (const item of items) {
+        if (item.owner == null) continue;
+        const key = String(item.owner);
+        const bucket = map.get(key);
+        if (bucket) bucket.push(item); else map.set(key, [item]);
+      }
+      ownerBuckets = { items, length: items.length, map };
+    }
+    return (ownerBuckets.map.get(role.id) || []).slice();
   }
   function tapeCatalogFor(item, role) {
     const catalog=window.skyCurtainKnowledge?.items||[];

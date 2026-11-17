@@ -132,6 +132,34 @@
     if(!Number.isFinite(score)) throw new TypeError('Equipment score overflow');
     return score;
   }
+  // Board geometry is independent of the remaining shape counts, so it is built
+  // once per active-slot set instead of once per candidate profile. The cached
+  // placement objects are read-only: placementsFor never mutates them and the
+  // returned plans only carry freshly created {id,shape_id,row,column} pieces.
+  const geometryCache = new Map();
+  function boardGeometry(b) {
+    const key = b.cells.map(s => `${s.row}:${s.column}`).join('|');
+    const cached = geometryCache.get(key);
+    if (cached) return cached;
+    const index = new Map(b.cells.map((s, i) => [`${s.row}:${s.column}`, i]));
+    const byShape = definitions.map(() => []);
+    for (let shapeIndex = 0; shapeIndex < definitions.length; shapeIndex++) {
+      const shape = definitions[shapeIndex], seen = new Set();
+      for (const cell of b.cells) for (const [dr, dc] of shape.cells) {
+        const row = cell.row - dr, column = cell.column - dc, ids = shape.cells.map(([r, c]) => index.get(`${row + r}:${column + c}`));
+        if (ids.some(i => i === undefined)) continue;
+        const mask = ids.reduce((m, i) => m | (1 << i), 0);
+        if (seen.has(mask)) continue;
+        seen.add(mask);
+        byShape[shapeIndex].push({ shapeIndex, shape_id: shape.id, row, column, mask, indices: ids.slice() });
+      }
+    }
+    const entry = { index, byShape };
+    // Reference terminals are few; bound the cache defensively.
+    if (geometryCache.size >= 64) geometryCache.clear();
+    geometryCache.set(key, entry);
+    return entry;
+  }
   function placementsFor(terminal,shapeCounts,{fixed=[],limit=1,maxNodes=100000}={}) {
     const b=board(terminal),seed={version:1,preferred_model:0,pieces:fixed};
     if(!b || !validate(terminal,seed).valid) throw new TypeError('Invalid terminal or fixed placements');
@@ -139,18 +167,11 @@
     const remaining=definitions.map(s=>shapeCounts[s.id]||0);
     for(const [id,n] of Object.entries(shapeCounts)) if(!byId.has(id)||!Number.isInteger(n)||n<0) throw new TypeError('Invalid shape counts');
     for(const piece of fixed) {const i=definitions.findIndex(s=>s.id===piece.shape_id);if(--remaining[i]<0) return {plans:[],complete:true,nodes:0};}
-    const index=new Map(b.cells.map((s,i)=>[`${s.row}:${s.column}`,i]));
+    const geometry=boardGeometry(b),index=geometry.index;
     const choices=b.cells.map(()=>[]);
     for(let shapeIndex=0;shapeIndex<definitions.length;shapeIndex++) {
       if(!remaining[shapeIndex]) continue;
-      const shape=definitions[shapeIndex],seen=new Set();
-      for(const cell of b.cells) for(const [dr,dc] of shape.cells) {
-        const row=cell.row-dr,column=cell.column-dc,ids=shape.cells.map(([r,c])=>index.get(`${row+r}:${column+c}`));
-        if(ids.some(i=>i===undefined)) continue;
-        const mask=ids.reduce((m,i)=>m|(1<<i),0);
-        if(seen.has(mask))continue;seen.add(mask);
-        const placement={shapeIndex,shape_id:shape.id,row,column,mask};ids.forEach(i=>choices[i].push(placement));
-      }
+      for(const placement of geometry.byShape[shapeIndex]) placement.indices.forEach(i=>choices[i].push(placement));
     }
     let available=(1<<b.cells.length)-1;
     fixed.flatMap(pieceCells).forEach(s=>{available &= ~(1<<index.get(`${s.row}:${s.column}`));});

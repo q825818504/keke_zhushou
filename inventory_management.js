@@ -161,16 +161,25 @@ window.KekeInventoryManagement = (() => {
   function normalizedName(value) {
     return String(value ?? '').normalize('NFKC').replace(/[「」『』【】\[\]()（）:：·\s]/g,'').toLocaleLowerCase();
   }
-  function cassetteFor(row) {
-    const catalog=window.skyCurtainKnowledge?.items || [];
-    const suitNames={Suit1:'迪亚波罗斯',Suit2:'森林萤火之心',Suit3:'恶魔之血诅咒',Suit4:'真红双生蝶',Suit5:'街头拳王',Suit6:'失落光芒',Suit7:'守卫王国',Suit8:'影之信条',Suit9:'缇娅的夜间酒馆',Suit10:'小小大冒险',Suit11:'音速蓝刺猬',Suit12:'静谧山庄'};
-    const setId=row.set_id ?? row.suit_id;
-    const suitKey=typeof setId==='number' || /^\d+$/.test(String(setId ?? '')) ? `Suit${setId}` : setId;
-    const candidates=[row.name,suitNames[suitKey]].map(normalizedName).filter(Boolean);
-    const names=catalog.flatMap(item=>[
+  // Suit id -> display name is a fixed table; the normalized name index is built
+  // once per catalog array identity and reused read-only by every card render.
+  const SUIT_NAMES={Suit1:'迪亚波罗斯',Suit2:'森林萤火之心',Suit3:'恶魔之血诅咒',Suit4:'真红双生蝶',Suit5:'街头拳王',Suit6:'失落光芒',Suit7:'守卫王国',Suit8:'影之信条',Suit9:'缇娅的夜间酒馆',Suit10:'小小大冒险',Suit11:'音速蓝刺猬',Suit12:'静谧山庄'};
+  let cassetteIndex={items:null,length:-1,entries:null};
+  function cassetteEntries(items) {
+    if(cassetteIndex.items===items && cassetteIndex.length===items.length && cassetteIndex.entries) return cassetteIndex.entries;
+    const entries=items.flatMap(item=>[
       {item,name:normalizedName(item.name)},
       {item,name:normalizedName(item.screenshot_name)}
     ]).filter(entry=>entry.name).sort((a,b)=>b.name.length-a.name.length);
+    cassetteIndex={items,length:items.length,entries};
+    return entries;
+  }
+  function cassetteFor(row) {
+    const catalog=window.skyCurtainKnowledge?.items || [];
+    const setId=row.set_id ?? row.suit_id;
+    const suitKey=typeof setId==='number' || /^\d+$/.test(String(setId ?? '')) ? `Suit${setId}` : setId;
+    const candidates=[row.name,SUIT_NAMES[suitKey]].map(normalizedName).filter(Boolean);
+    const names=cassetteEntries(catalog);
     return names.find(entry=>candidates.some(name=>name===entry.name || name.includes(entry.name)))?.item;
   }
   function driveFor(row) {
